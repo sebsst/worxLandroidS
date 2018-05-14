@@ -139,3 +139,21 @@ function addCmdToTable(_cmd) {
 		});
 	}
 }
+
+// Called by the plugin core to inform about the inclusion of an equipment
+$('body').off('worxLandroidS::includeEqpt').on('worxLandroidS::includeEqpt', function (_event,_options) {
+    if (modifyWithoutSave) {
+        $('#div_newEqptMsg').showAlert({message: '{{Un équipement vient d\'être inclu. Veuillez réactualiser la page}}', level: 'warning'});
+    }
+    else {
+	$('#div_newEqptMsg').showAlert({message: '{{Un équipement vient d\'être inclu. La page va se réactualiser.}}', level: 'warning'});
+	// Reload the page after a delay to let the user read the message
+	setTimeout(function() {
+            if (_options == '') {
+		window.location.reload();
+            } else {
+		window.location.href = 'index.php?v=d&p=worxLandroidS&m=worxLandroidS&id=' + _options;
+            }
+	}, 2000);
+    }
+});
