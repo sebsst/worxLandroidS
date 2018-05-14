@@ -324,8 +324,8 @@ sleep(30);
       $elogic = new worxLandroidS();
       $elogic->setEqType_name('worxLandroidS');
       $elogic->setLogicalId($nodeid);
-    //  $elogic->setEnable(1);
-    //  $eLogic->setIsVisible(1);
+      $elogic->setEnable(1);
+      $eLogic->setIsVisible(1);
 
       $elogic->setName('LandroidS-'. $json2_data->dat->mac);
       //$elogic->setConfiguration('topic', $nodeid);
