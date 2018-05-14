@@ -595,34 +595,34 @@ schedule: TimePeriod[];
 
 
     log::add('worxLandroidS', 'debug', 'Envoi du message ' . $_message . ' vers ' . $_subject. '/'.config::byKey('mqtt_endpoint', 'worxLandroidS'));
-  //  $publish = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS'));
+    $publish = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS')."a");
 
 
-    /*
-    $publish->onPublish(function($mid) {
-        worxLandroidS::confirm($mid);
-        //print_r(array('comfirm publish', MQ::$publish[$mid]));
-    });
-*/
-//    $publish->onMessage('worxLandroidS::message');
-//    $publish->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);
-    //$publish->onConnect('worxLandroidS::connect');
+    
+    //$publish->onPublish(function($mid) {
+    //    worxLandroidS::confirm($mid);
+    //    //print_r(array('comfirm publish', MQ::$publish[$mid]));
+    //});
+
+    $publish->onMessage('worxLandroidS::message');
+    $publish->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);
+    $publish->onConnect('worxLandroidS::connect');
 
 
-    //$publish->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), '8883', 10);
+    $publish->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), '8883', 10);
 
          // $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
     //$publish->publish($_subject, $_message, 0 , 0);
   //  $publish->publish($_subject, '{"rd":123}', 0 , 0);
 
 //  $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
-  //  $publish->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", '{"rd":100}', 0, 1);
+    //$publish->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", '{"rd":100}', 0, 0);
 
       //  log::add('worxLandroidS', 'debug', 'Envoi: ' . "DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn" . '{"rd":100}');
       //while (true) {
-      //	$publish->loop();
+    //  	$publish->loop();
       //  $msg = '{"rd":100}';
-        //$mid = $publish->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", '{"rd":100}', 0, 0);
+        $mid = $publish->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", '{"rd":100}', 0, 0);
   //      worxLandroidS::addPublish($mid, $msg);
         //sleep(1);
 
@@ -630,7 +630,7 @@ schedule: TimePeriod[];
       //	$publish->loop();
       //	sleep(2);
       //}
-      //$publish->disconnect();
+      $publish->disconnect();
       //unset($publish);
 
 
