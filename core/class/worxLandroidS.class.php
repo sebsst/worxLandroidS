@@ -334,8 +334,7 @@ sleep(30);
       
       $elogic->save();
 	    event::add('worxLandroidS::includeEqpt', $elogic->getId());
-      $elogic->setEnable(1);
-      $eLogic->setIsVisible(1);  
+
       $commandIn = 'DB510/'. $json2_data->dat->mac .'/commandIn';
       self::newAction($elogic,'setRainDelay', $commandIn, '{"rd":"#message#"}','message');
       self::newAction($elogic,'start',$commandIn,'{"cmd":"1"}','other');
