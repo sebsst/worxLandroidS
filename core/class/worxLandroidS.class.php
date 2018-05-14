@@ -595,7 +595,7 @@ schedule: TimePeriod[];
 
 
     log::add('worxLandroidS', 'debug', 'Envoi du message ' . $_message . ' vers ' . $_subject. '/'.config::byKey('mqtt_endpoint', 'worxLandroidS'));
-    $publish = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS'));
+    //$publish = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS'));
 
 
     
@@ -605,11 +605,11 @@ schedule: TimePeriod[];
     //});
 
     //$publish->onMessage('worxLandroidS::message');
-    $publish->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);
-    $publish->onConnect('worxLandroidS::connect');
+//    $publish->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);
+  //  $publish->onConnect('worxLandroidS::connect');
 
 
-    $publish->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), '8883', 10);
+    //$publish->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), '8883', 10);
 
          // $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
     //$publish->publish($_subject, $_message, 0 , 0);
@@ -622,15 +622,17 @@ schedule: TimePeriod[];
       //while (true) {
     //  	$publish->loop();
       //  $msg = '{"rd":100}';
-        $mid = $publish->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", '{"rd":100}', 0, 0);
-  //      worxLandroidS::addPublish($mid, $msg);
+        //$mid = $publish->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", '{"rd":100}', 0, 0);
+        $mid = $_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", '{"rd":100}', 0, 0);
+
+	  //      worxLandroidS::addPublish($mid, $msg);
         //sleep(1);
 
 
       //	$publish->loop();
       //	sleep(2);
       //}
-      $publish->disconnect();
+      //$publish->disconnect();
       //unset($publish);
 
 
