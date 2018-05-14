@@ -604,7 +604,7 @@ schedule: TimePeriod[];
     //    //print_r(array('comfirm publish', MQ::$publish[$mid]));
     //});
 
-    $publish->onMessage('worxLandroidS::message');
+    //$publish->onMessage('worxLandroidS::message');
     $publish->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);
     $publish->onConnect('worxLandroidS::connect');
 
