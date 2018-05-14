@@ -1,0 +1,12 @@
+{
+	"id" : "worxLandroidS",
+	"name" : "worxLandroidS",
+	"licence" : "AGPL",
+	"author" : "SSC",
+	"require" : "2.4",
+	"category" : "devicecommunication",
+	"hasDependency" : 1,
+	"hasOwnDeamon" : 1,
+	"changelog" : "https://sebsst.github.io/jeedom_docs/plugins/worxLandoirdS/changelog.html",
+	"documentation" : "https://lunarok.github.io/jeedom_docs/plugins/worxLandroidS/"
+}
