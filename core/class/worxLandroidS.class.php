@@ -701,6 +701,10 @@ schedule: TimePeriod[];
      //           $client->loop(1);
      //       }
      //   }
+	  for ($i = 0; $i < 30; $i++) {
+                $client->loop(1);
+            }  
+	  
         $client->disconnect();
    //     log::add('worxLandroidS', 'debug', 'Message publié');
 	
