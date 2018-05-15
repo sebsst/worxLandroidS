@@ -605,7 +605,7 @@ schedule: TimePeriod[];
 
 
 
-   log::add('worxLandroidS', 'debug', 'Envoi du message ' . $_message . ' vers ' . $_subject. '/'.config::byKey('mqtt_endpoint', 'worxLandroidS'));
+   //log::add('worxLandroidS', 'debug', 'Envoi du message ' . $_message . ' vers ' . $_subject. '/'.config::byKey('mqtt_endpoint', 'worxLandroidS'));
     $publish = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS'));
 
 
@@ -632,7 +632,9 @@ schedule: TimePeriod[];
      try {
 		$publish->loop();
 		$mid = $publish->publish($_subject, '{"rd":123}', 0 , 0);
-		$publish->loop();
+ log::add('worxLandroidS', 'debug', 'Envoi du message ' . $mid );
+  
+	     $publish->loop();
 	     for ($i = 0; $i < 30; $i++) {
       // Loop around to permit the library to do its work
       $publish->loop(1);
