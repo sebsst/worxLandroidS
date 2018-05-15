@@ -631,7 +631,7 @@ schedule: TimePeriod[];
 
    //   	$publish->exitloop();
       //	sleep(2);
-      }
+    //  }
       //$publish->disconnect();
       //unset($publish);
 
@@ -650,7 +650,7 @@ schedule: TimePeriod[];
     //$publish->disconnect();
    // unset(self::$_client);
  */
-}
+//}
 
 	
 ////
