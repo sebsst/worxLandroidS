@@ -224,9 +224,20 @@ class worxLandroidS extends eqLogic {
 
 }
 
+	  
+	  
+// Loop on jMQTT equipments and get ones that subscribed to the current message
+        $elogics = array();
+        foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
+            //if ($message->topicMatchesSub($msgTopic, $eqpt->getConfiguration('topic'))) {
+		if ($eqpt->isEnable() == true){
+                $elogics[] = $eqpt;}
+            //}
+        }
+	  
 
        //log::add('worxLandroidS', 'info', 'mqtt_endpoint '.$root_ca);
- if(config::byKey('initCloud', 'worxLandroidS') ==  true){
+ if(config::byKey('initCloud', 'worxLandroidS') ==  true || empty($elogics) == false ){
 
     config::save('initCloud', 0 ,'worxLandroidS');
 
