@@ -701,7 +701,7 @@ schedule: TimePeriod[];
      //           $client->loop(1);
      //       }
      //   }
-    //    $client->disconnect();
+        $client->disconnect();
    //     log::add('worxLandroidS', 'debug', 'Message publié');
 	
 	
