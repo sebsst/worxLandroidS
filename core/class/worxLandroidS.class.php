@@ -230,7 +230,7 @@ class worxLandroidS extends eqLogic {
         $elogics = array();
         foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
             //if ($message->topicMatchesSub($msgTopic, $eqpt->getConfiguration('topic'))) {
-		if ($eqpt->isEnable() == true){
+		if ($eqpt->getIsEnable() == true){
                 $elogics[] = $eqpt;}
             //}
         }
