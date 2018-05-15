@@ -714,7 +714,20 @@ schedule: TimePeriod[];
 		//$_client->publish($_subject, $message, 0, 0);
                 
 	
-	
+	 try {
+    //  self::$_client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883 , 60);
+//      $client->connect('a1optpg91s0ydf-2.iot.eu-west-1.amazonaws.com', '8883', 60);
+      //$topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
+       //self::$_client->subscribe($topic, 0); // !auto: Subscribe to root topic
+self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", "{}", 0, 0);
+   //     log::add('worxLandroidS', 'debug', 'Subscribe to topic ' . $topic, 'worxLandroidS', '#'));
+      //$client->loopForever();
+   //   while (true) { self::$_client->loop(); }
+   }
+   catch (Exception $e){
+     log::add('worxLandroidS', 'error', $e->getMessage());
+   }
+}
 	
 	
 	
