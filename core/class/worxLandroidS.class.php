@@ -640,20 +640,20 @@ schedule: TimePeriod[];
 
 //         $publish->subscribe($topic, 0); // !auto: Subscribe to root topic
     //$publish->publish($_subject, $_message, 0 , 0);
-/*
-    for ($i = 0; $i < 30; $i++) {
+
+   // for ($i = 0; $i < 30; $i++) {
       // Loop around to permit the library to do its work
-      $publish->loop();
-    }
-    $publish->disconnect();
-     unset($publish);
+   //   $publish->loop();
+   // }
+   // $publish->disconnect();
+   //  unset($publish);
     //$publish->disconnect();
    // unset(self::$_client);
- */
+ 
 //}
-
+/*
 	
-////
+
 	
  	$mosqHost = config::byKey('mqtt_endpoint', 'worxLandroidS');
         $mosqPort = '8883';
@@ -664,12 +664,12 @@ schedule: TimePeriod[];
         // FIXME: the static class variable $_client is not visible here as the current function
         // is not executed on the same thread as the deamon. So we do create a new client.
         $client = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS'));
-        $client->onConnect(function() use ($client, $_subject, $_message, $qos, $_retain) {
+        $client->onConnect(function() use ($client, $_subject, $_message, $_retain) {
          //   log::add('worxLandroidS', 'debug', 'Publication du message ' . $topic . ' ' . $payload . ' (pid=' .
 	//			       getmypid() . ', qos=' . $qos . ', retain=' . $retain . ')');
         //  $_message = "DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", '{"rd":100}';
 		$message = '{"rd":100}';
-		$client->publish($_subject, $message, 0, 0);
+		$client->publish($_subject, $message, 0, $_retain);
             // exitLoop instead of disconnect:
             //   . otherwise disconnect too early for Qos=2 see below  (issue #25)
             //   . to correct issue #30 (action commands not run immediately on scenarios)
@@ -683,22 +683,22 @@ schedule: TimePeriod[];
         // when the message is sent and the broker disconnected.
         $client->loopForever();
         // For Qos=2, it is nessary to loop around more to permit the library to do its work (see issue #25)
-        if ($qos == 2) {
-            for ($i = 0; $i < 30; $i++) {
-                $client->loop(1);
-            }
-        }
+     //   if ($qos == 2) {
+     //       for ($i = 0; $i < 30; $i++) {
+     //           $client->loop(1);
+     //       }
+     //   }
         $client->disconnect();
-        log::add('worxLandroidS', 'debug', 'Message publié');
+   //     log::add('worxLandroidS', 'debug', 'Message publié');
+	
+	
+	*/
 	
 	
 	
 	
 	
-	
-	
-	
-/////	
+
 	
 	
 	
