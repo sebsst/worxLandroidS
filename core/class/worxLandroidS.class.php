@@ -586,7 +586,118 @@ schedule: TimePeriod[];
 
   public static function publishMosquitto($_id, $_subject, $_message, $_retain) {
 
+    $resource_path = realpath(dirname(__FILE__) . '/../../resources/');
 
+    $certfile = $resource_path.'/cert.pem';
+    $pkeyfile = $resource_path.'/pkey.pem';
+    $root_ca = $resource_path.'/vs-ca.pem';
+
+
+
+   // log::add('worxLandroidS', 'debug', 'Envoi du message ' . $_message . ' vers ' . $_subject. '/'.config::byKey('mqtt_endpoint', 'worxLandroidS'));
+    //$publish = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS'));
+
+
+    
+    //$publish->onPublish(function($mid) {
+    //    worxLandroidS::confirm($mid);
+    //    //print_r(array('comfirm publish', MQ::$publish[$mid]));
+    //});
+
+    //$publish->onMessage('worxLandroidS::message');
+//    $publish->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);
+  //  $publish->onConnect('worxLandroidS::connect');
+
+
+ //   $publish->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), '8883', 10);
+
+         // $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
+    //$publish->publish($_subject, $_message, 0 , 0);
+  //  $publish->publish($_subject, '{"rd":123}', 0 , 0);
+
+//  $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
+    //$publish->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", '{"rd":100}', 0, 0);
+
+      //  log::add('worxLandroidS', 'debug', 'Envoi: ' . "DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn" . '{"rd":100}');
+    //  while (true) {
+    //  	$publish->loop();
+      //  $msg = '{"rd":100}';
+        //$mid = $publish->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", '{"rd":100}', 0, 0);
+       // $mid = $_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", '{"rd":100}', 0, 0);
+
+	  //      worxLandroidS::addPublish($mid, $msg);
+   //     sleep(1);
+
+
+   //   	$publish->exitloop();
+      //	sleep(2);
+    //  }
+      //$publish->disconnect();
+      //unset($publish);
+
+
+
+
+//         $publish->subscribe($topic, 0); // !auto: Subscribe to root topic
+    //$publish->publish($_subject, $_message, 0 , 0);
+
+   // for ($i = 0; $i < 30; $i++) {
+      // Loop around to permit the library to do its work
+   //   $publish->loop();
+   // }
+   // $publish->disconnect();
+   //  unset($publish);
+    //$publish->disconnect();
+   // unset(self::$_client);
+ 
+//}
+/*
+	
+
+	
+ 	$mosqHost = config::byKey('mqtt_endpoint', 'worxLandroidS');
+        $mosqPort = '8883';
+        $qos = '0';
+        //$payloadMsg = (($payload == '') ? '(null)' : $payload);
+        //log::add('jMQTT', 'info', '<- ' . $eqName . '|' . $topic . ' ' . $payloadMsg);
+        $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS');
+        // FIXME: the static class variable $_client is not visible here as the current function
+        // is not executed on the same thread as the deamon. So we do create a new client.
+        $client = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS'));
+        $client->onConnect(function() use ($client, $_subject, $_message, $_retain) {
+         //   log::add('worxLandroidS', 'debug', 'Publication du message ' . $topic . ' ' . $payload . ' (pid=' .
+	//			       getmypid() . ', qos=' . $qos . ', retain=' . $retain . ')');
+        //  $_message = "DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", '{"rd":100}';
+		$message = '{"rd":100}';
+		$client->publish($_subject, $message, 0, $_retain);
+            // exitLoop instead of disconnect:
+            //   . otherwise disconnect too early for Qos=2 see below  (issue #25)
+            //   . to correct issue #30 (action commands not run immediately on scenarios)
+            $client->exitLoop();
+        });
+	$client->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);
+        // Connect to the broker
+        $client->connect($mosqHost, $mosqPort, 60);
+        // Loop around to permit the library to do its work
+        // This function will call the callback defined in `onConnect()` and exit properly
+        // when the message is sent and the broker disconnected.
+        $client->loopForever();
+        // For Qos=2, it is nessary to loop around more to permit the library to do its work (see issue #25)
+     //   if ($qos == 2) {
+     //       for ($i = 0; $i < 30; $i++) {
+     //           $client->loop(1);
+     //       }
+     //   }
+        $client->disconnect();
+   //     log::add('worxLandroidS', 'debug', 'Message publié');
+	
+	
+	*/
+	
+	
+	
+	
+	
 
 	
 	
