@@ -663,7 +663,7 @@ schedule: TimePeriod[];
         $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS');
         // FIXME: the static class variable $_client is not visible here as the current function
         // is not executed on the same thread as the deamon. So we do create a new client.
-        $client = self::newMosquittoClient($mosqId);
+        $client = new Mosquitto\Client($mosqId);
         $client->onConnect(function() use ($client, $_subject, $_message, $qos, $retain) {
          //   log::add('worxLandroidS', 'debug', 'Publication du message ' . $topic . ' ' . $payload . ' (pid=' .
 	//			       getmypid() . ', qos=' . $qos . ', retain=' . $retain . ')');
