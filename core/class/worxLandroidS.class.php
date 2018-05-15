@@ -663,12 +663,13 @@ schedule: TimePeriod[];
         $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS');
         // FIXME: the static class variable $_client is not visible here as the current function
         // is not executed on the same thread as the deamon. So we do create a new client.
-        $client = new Mosquitto\Client($mosqId);
-        $client->onConnect(function() use ($client, $_subject, $_message, $qos, $retain) {
+        $client = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS'));
+        $client->onConnect(function() use ($client, $_subject, $_message, $qos, $_retain) {
          //   log::add('worxLandroidS', 'debug', 'Publication du message ' . $topic . ' ' . $payload . ' (pid=' .
 	//			       getmypid() . ', qos=' . $qos . ', retain=' . $retain . ')');
-          $_message = "DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", '{"rd":100}';
-		$client->publish($_subject, $_message, 0, 0);
+        //  $_message = "DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", '{"rd":100}';
+		$message = '{"rd":100}';
+		$client->publish($_subject, $message, 0, 0);
             // exitLoop instead of disconnect:
             //   . otherwise disconnect too early for Qos=2 see below  (issue #25)
             //   . to correct issue #30 (action commands not run immediately on scenarios)
