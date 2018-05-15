@@ -651,7 +651,7 @@ schedule: TimePeriod[];
    // unset(self::$_client);
  
 //}
-/*
+
 	
 
 	
@@ -692,7 +692,7 @@ schedule: TimePeriod[];
    //     log::add('worxLandroidS', 'debug', 'Message publié');
 	
 	
-	*/
+	
 	
 	
 	
@@ -700,7 +700,7 @@ schedule: TimePeriod[];
 	
 
 	
-	
+  }	
 	
 	
 }
