@@ -633,6 +633,11 @@ schedule: TimePeriod[];
 		$publish->loop();
 		$mid = $publish->publish($_subject, '{"rd":123}', 0 , 0);
 		$publish->loop();
+	     for ($i = 0; $i < 30; $i++) {
+      // Loop around to permit the library to do its work
+      $publish->loop(1);
+    }
+	     
 		}catch(Mosquitto\Exception $e){
 log::add('worxLandroidS', 'debug', 'exception ' . $e );
   				return;
