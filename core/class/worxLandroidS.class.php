@@ -665,7 +665,7 @@ schedule: TimePeriod[];
 
 	
 
-	
+	/*
  	$mosqHost = config::byKey('mqtt_endpoint', 'worxLandroidS');
         $mosqPort = '8883';
         $qos = '0';
@@ -682,7 +682,7 @@ schedule: TimePeriod[];
 		
         //  $_message = "DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", '{"rd":100}';
 		$message = '{"rd":100}';
-		$client->publish($_subject, $message, 0, $_retain);
+		$client->publish($_subject, $message, 0, 0);
             // exitLoop instead of disconnect:
             //   . otherwise disconnect too early for Qos=2 see below  (issue #25)
             //   . to correct issue #30 (action commands not run immediately on scenarios)
@@ -704,7 +704,11 @@ schedule: TimePeriod[];
         $client->disconnect();
    //     log::add('worxLandroidS', 'debug', 'Message publié');
 	
-	
+	*/
+	  
+	  	$message = '{"rd":100}';
+		$_client->publish($_subject, $message, 0, 0);
+                
 	
 	
 	
