@@ -605,7 +605,7 @@ schedule: TimePeriod[];
 
 
 
-   // log::add('worxLandroidS', 'debug', 'Envoi du message ' . $_message . ' vers ' . $_subject. '/'.config::byKey('mqtt_endpoint', 'worxLandroidS'));
+   log::add('worxLandroidS', 'debug', 'Envoi du message ' . $_message . ' vers ' . $_subject. '/'.config::byKey('mqtt_endpoint', 'worxLandroidS'));
     //$publish = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS'));
 
 
@@ -678,8 +678,7 @@ schedule: TimePeriod[];
         $client->onConnect(function() use ($client, $_subject, $_message, $_retain) {
          //   log::add('worxLandroidS', 'debug', 'Publication du message ' . $topic . ' ' . $payload . ' (pid=' .
 	//			       getmypid() . ', qos=' . $qos . ', retain=' . $retain . ')');
-	   log::add('worxLandroidS', 'debug', 'Publication du message ' .$client . ' ' . $_subject . ' msg' .
-				       $_message., 'retain=' . $retain . ')');
+	   log::add('worxLandroidS', 'debug', 'Publication du message ' .$client . ' ' . $_subject . ' msg' . $_message. 'retain=' . $retain );
 		
         //  $_message = "DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", '{"rd":100}';
 		$message = '{"rd":100}';
