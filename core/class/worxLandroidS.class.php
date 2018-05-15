@@ -665,7 +665,7 @@ schedule: TimePeriod[];
 
 	
 
-	/*
+	
  	$mosqHost = config::byKey('mqtt_endpoint', 'worxLandroidS');
         $mosqPort = '8883';
         $qos = '0';
@@ -704,10 +704,10 @@ schedule: TimePeriod[];
         $client->disconnect();
    //     log::add('worxLandroidS', 'debug', 'Message publié');
 	
-	*/
+	
 	  
-	  	$message = '{"rd":100}';
-		$_client->publish($_subject, $message, 0, 0);
+	  	//$message = '{"rd":100}';
+		//$_client->publish($_subject, $message, 0, 0);
                 
 	
 	
