@@ -483,7 +483,7 @@ schedule: TimePeriod[];
         self::newInfo($elogic,'Planning/Saturday/Starttime',$json2_data->cfg->sc->d[6][0],'string',1);
   */
     }
-	  
+	  $elogic->refreshWidget();
 	  
     // $this->refreshWidget();
 	  
@@ -576,6 +576,7 @@ schedule: TimePeriod[];
     log::add('worxLandroidS', 'debug', 'Cmdlogic update'.$cmdId.$value);
 
     $elogic->checkAndUpdateCmd($cmdId,$value);
+	  
 
 
   }
