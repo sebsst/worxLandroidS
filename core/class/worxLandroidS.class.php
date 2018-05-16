@@ -729,8 +729,8 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 				
 				$replaceDay['#cutEdge#'] = is_object($cutEdge) ? $cutEdge->execCmd() : '';
 				if($replaceDay['#cutEdge#'] == '1')
-				{ $replaceDay['#cutEdge#'] = 'Edge'} 
-				else { $replaceDay['#cutEdge#'] = ''}
+				{ $replaceDay['#cutEdge#'] = 'Edge';} 
+				else { $replaceDay['#cutEdge#'] = '';}
 				
 				
 				//$replaceDay['#icone#'] = is_object($condition) ? self::getIconFromCondition($condition->execCmd()) : '';
