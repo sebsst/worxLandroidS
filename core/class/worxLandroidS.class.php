@@ -728,7 +728,11 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 				$replaceDay['#endTime#'] = $initDate->format("Hi");
 				
 				$replaceDay['#cutEdge#'] = is_object($cutEdge) ? $cutEdge->execCmd() : '';
-
+				if($replaceDay['#cutEdge#'] == '1')
+				{ $replaceDay['#cutEdge#'] = 'Edge'} 
+				else { $replaceDay['#cutEdge#'] = ''}
+				
+				
 				//$replaceDay['#icone#'] = is_object($condition) ? self::getIconFromCondition($condition->execCmd()) : '';
 				//$replaceDay['#conditionid#'] = is_object($condition) ? $condition->getId() : '';
 				$replace['#daySetup#'] .= template_replace($replaceDay, $worxStatus_template);
