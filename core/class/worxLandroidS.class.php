@@ -469,17 +469,19 @@ schedule: TimePeriod[];
 
       //  $schedule = json_decode($json2_data->cfg->sc->d,false);
 
-        self::newInfo($elogic,'Planning/Sunday/Starttime',$json2_data->cfg->sc->d[0][0],'string',1);
-        self::newInfo($elogic,'Planning/Sunday/Duration',$json2_data->cfg->sc->d[0][1],'string',1);
-        self::newInfo($elogic,'Planning/Sunday/CutEdge',$json2_data->cfg->sc->d[0][2],'string',1);	    
-	    
+	for ($i = 0; $i < 6; $i++) {
+         self::newInfo($elogic,'Planning/startTime/'.i,$json2_data->cfg->sc->d[i][0],'string',1);
+         self::newInfo($elogic,'Planning/duration/'.i,$json2_data->cfg->sc->d[i][1],'string',1);
+         self::newInfo($elogic,'Planning/cutEdge/'.i,$json2_data->cfg->sc->d[i][2],'string',1);	   
+	}
+	    /*
         self::newInfo($elogic,'Planning/Monday/Starttime',$json2_data->cfg->sc->d[1][0],'string',1);
         self::newInfo($elogic,'Planning/Tuesday/Starttime',$json2_data->cfg->sc->d[2][0],'string',1);
         self::newInfo($elogic,'Planning/wednesday/Starttime',$json2_data->cfg->sc->d[3][0],'string',1);
         self::newInfo($elogic,'Planning/Thursday/Starttime',$json2_data->cfg->sc->d[4][0],'string',1);
         self::newInfo($elogic,'Planning/Friday/Starttime',$json2_data->cfg->sc->d[5][0],'string',1);
         self::newInfo($elogic,'Planning/Saturday/Starttime',$json2_data->cfg->sc->d[6][0],'string',1);
-  
+  */
     }
   }
 
@@ -694,6 +696,92 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 
 	
   }	
+
+	
+	public function toHtml($_version = 'dashboard') {
+		$jour = array("Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi");
+		$replace = $this->preToHtml($_version);
+		if (!is_array($replace)) {
+			return $replace;
+		}
+		$version = jeedom::versionAlias($_version);
+		$replace['#worxStatus#'] = '';
+		if ($version != 'mobile' || $this->getConfiguration('fullMobileDisplay', 0) == 1) {
+			if ($this->getConfiguration('modeImage', 0) == 1) {
+				$worxStatus_template = getTemplate('core', $version, 'forecastIMG', 'weather');
+			} else {
+				$worxStatus_template = getTemplate('core', $version, 'worxLandroidS', 'worxLandroidS');
+			}
+			for ($i = 0; $i < 6; $i++) {
+				$replaceDay = array();
+				$replaceDay['#day#'] = $jour[$i];
+				$startTime = $this->getCmd(null, 'Planning/startTime/' . $i);
+				$cutEdge = $this->getCmd(null, 'Planning/cutEdge/' . $i);
+				$duration = $this->getCmd(null, 'Planning/duration/' . $i);				
+				$replaceDay['#startTime#'] = is_object($startTime) ? $startTime->execCmd() : '';
+				$replaceDay['#duration#'] = is_object($duration) ? $duration->execCmd() : '';
+				$replaceDay['#cutEdge#'] = is_object($cutEdge) ? $cutEdge->execCmd() : '';
+
+				//$replaceDay['#icone#'] = is_object($condition) ? self::getIconFromCondition($condition->execCmd()) : '';
+				//$replaceDay['#conditionid#'] = is_object($condition) ? $condition->getId() : '';
+				$replace['#worxStatus#'] .= template_replace($replaceDay, $worxStatus);
+			}
+		}
+		/*
+		$temperature = $this->getCmd(null, 'temperature');
+		$replace['#temperature#'] = is_object($temperature) ? $temperature->execCmd() : '';
+		$replace['#tempid#'] = is_object($temperature) ? $temperature->getId() : '';
+		$humidity = $this->getCmd(null, 'humidity');
+		$replace['#humidity#'] = is_object($humidity) ? $humidity->execCmd() : '';
+		$pressure = $this->getCmd(null, 'pressure');
+		$replace['#pressure#'] = is_object($pressure) ? $pressure->execCmd() : '';
+		$replace['#pressureid#'] = is_object($pressure) ? $pressure->getId() : '';
+		$wind_speed = $this->getCmd(null, 'wind_speed');
+		$replace['#windspeed#'] = is_object($wind_speed) ? $wind_speed->execCmd() : '';
+		$replace['#windid#'] = is_object($wind_speed) ? $wind_speed->getId() : '';
+		$sunrise = $this->getCmd(null, 'sunrise');
+		$replace['#sunrise#'] = is_object($sunrise) ? $sunrise->execCmd() : '';
+		$replace['#sunid#'] = is_object($sunrise) ? $sunrise->getId() : '';
+		if (strlen($replace['#sunrise#']) == 3) {
+			$replace['#sunrise#'] = substr($replace['#sunrise#'], 0, 1) . ':' . substr($replace['#sunrise#'], 1, 2);
+		} else if (strlen($replace['#sunrise#']) == 4) {
+			$replace['#sunrise#'] = substr($replace['#sunrise#'], 0, 2) . ':' . substr($replace['#sunrise#'], 2, 2);
+		}
+		$sunset = $this->getCmd(null, 'sunset');
+		$replace['#sunset#'] = is_object($sunset) ? $sunset->execCmd() : '';
+		if (strlen($replace['#sunset#']) == 3) {
+			$replace['#sunset#'] = substr($replace['#sunset#'], 0, 1) . ':' . substr($replace['#sunset#'], 1, 2);
+		} else if (strlen($replace['#sunset#']) == 4) {
+			$replace['#sunset#'] = substr($replace['#sunset#'], 0, 2) . ':' . substr($replace['#sunset#'], 2, 2);
+		}
+		$wind_direction = $this->getCmd(null, 'wind_direction');
+		$replace['#wind_direction#'] = is_object($wind_direction) ? $wind_direction->execCmd() : 0;
+		$refresh = $this->getCmd(null, 'refresh');
+		$replace['#refresh_id#'] = is_object($refresh) ? $refresh->getId() : '';
+		$sunset_time = is_object($sunset) ? $sunset->execCmd() : null;
+		$sunrise_time = is_object($sunrise) ? $sunrise->execCmd() : null;
+		$condition_id = $this->getCmd(null, 'condition_id');
+		if (is_object($condition_id)) {
+			$replace['#icone#'] = self::getIconFromCondition($condition_id->execCmd(), $sunrise_time, $sunset_time);
+		} else {
+			$replace['#icone#'] = '';
+		}
+		$condition = $this->getCmd(null, 'condition');
+		if (is_object($condition)) {
+			$replace['#condition#'] = $condition->execCmd();
+			$replace['#conditionid#'] = $condition->getId();
+		} else {
+			$replace['#condition#'] = '';
+			$replace['#collectDate#'] = '';
+		}
+		*/
+		if ($this->getConfiguration('modeImage', 0) == 1) {
+			return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'currentIMG', 'weather')));
+		} else {
+			return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'current', 'worxLandroidS')));
+		}
+	}	
+	
 	
 	
 }
