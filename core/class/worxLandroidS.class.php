@@ -473,12 +473,12 @@ schedule: TimePeriod[];
         self::newInfo($elogic,'Planning/Sunday/Duration',$json2_data->cfg->sc->d[0][1],'string',1);
         self::newInfo($elogic,'Planning/Sunday/CutEdge',$json2_data->cfg->sc->d[0][2],'string',1);	    
 	    
-        self::newInfo($elogic,'Planning/Monday/Starttime',strval($schedule[1]),'string',1);
-        self::newInfo($elogic,'Planning/Tuesday/Starttime',strval($schedule[2]),'string',1);
-        self::newInfo($elogic,'Planning/wednesday/Starttime',strval($schedule[3]),'string',1);
-        self::newInfo($elogic,'Planning/Thursday/Starttime',strval($schedule[4]),'string',1);
-        self::newInfo($elogic,'Planning/Friday/Starttime',strval($schedule[5]),'string',1);
-        self::newInfo($elogic,'Planning/Saturday/Starttime',strval($schedule[6]),'string',1);
+        self::newInfo($elogic,'Planning/Monday/Starttime',$json2_data->cfg->sc->d[1][0],'string',1);
+        self::newInfo($elogic,'Planning/Tuesday/Starttime',$json2_data->cfg->sc->d[2][0],'string',1);
+        self::newInfo($elogic,'Planning/wednesday/Starttime',$json2_data->cfg->sc->d[3][0],'string',1);
+        self::newInfo($elogic,'Planning/Thursday/Starttime',$json2_data->cfg->sc->d[4][0],'string',1);
+        self::newInfo($elogic,'Planning/Friday/Starttime',$json2_data->cfg->sc->d[5][0],'string',1);
+        self::newInfo($elogic,'Planning/Saturday/Starttime',$json2_data->cfg->sc->d[6][0],'string',1);
   
     }
   }
