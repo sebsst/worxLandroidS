@@ -483,6 +483,8 @@ schedule: TimePeriod[];
         self::newInfo($elogic,'Planning/Saturday/Starttime',$json2_data->cfg->sc->d[6][0],'string',1);
   */
     }
+	  
+	  $elogic->save();
 	  $elogic->refreshWidget();
 	  
     // $this->refreshWidget();
