@@ -712,7 +712,7 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 		$version = jeedom::versionAlias($_version);
 		$replace['#worxStatus#'] = '';
 		if ($version != 'mobile' || $this->getConfiguration('fullMobileDisplay', 0) == 1) {
-			$worxStatus_template = getTemplate('core', $version, 'worxLandroidS', 'worxLandroidS');
+			$worxStatus_template = getTemplate('core', $version, 'worxStatus', 'worxLandroidS');
 			for ($i = 0; $i < 6; $i++) {
 				$replaceDay = array();
 				$replaceDay['#day#'] = $jour[$i];
@@ -731,7 +731,15 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 		
 	        $lastDate = $this->getCmd(null, 'lastDate');
 		$replace['#lastDate#'] = is_object($lastDate) ? $lastDate->execCmd() : '';
-		//$replace['#tempid#'] = is_object($temperature) ? $temperature->getId() : '';
+		$replace['#lastDate#'] = is_object($lastDate) ? $lastDate->getId() : '';
+		
+	        $errorCode = $this->getCmd(null, 'errorCode');
+		$replace['#errorCode#'] = is_object($errorCode) ? $errorCode->execCmd() : '';
+		$replace['#errorCode#'] = is_object($errorCode) ? $errorCode->getId() : '';
+		
+	        $lastTime = $this->getCmd(null, 'lastTime');
+		$replace['#lastTime#'] = is_object($lastTime) ? $lastTime->execCmd() : '';
+		$replace['#lastTime#'] = is_object($lastTime) ? $lastTime->getId() : '';		
 		/*
 		$temperature = $this->getCmd(null, 'temperature');
 		$replace['#temperature#'] = is_object($temperature) ? $temperature->execCmd() : '';
