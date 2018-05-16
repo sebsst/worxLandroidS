@@ -271,7 +271,7 @@ self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/
 
    }
    catch (Exception $e){
-     log::add('worxLandroidS', 'error', $e->getMessage());
+     log::add('worxLandroidS', 'debug', $e->getMessage());
    }
 
 }
