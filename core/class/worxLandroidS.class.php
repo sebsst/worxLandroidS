@@ -735,6 +735,9 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 		
 	        $errorCode = $this->getCmd(null, 'errorCode');
 		$replace['#errorCode#'] = is_object($errorCode) ? $errorCode->execCmd() : '';
+		$replace['#errorColor#'] = 'white';
+		if($replace['#errorCode#'] != 0 ){$replace['#errorColor#'] = 'red';}
+		
 		$replace['#errorID#'] = is_object($errorCode) ? $errorCode->getId() : '';
 	        $errorDescription = $this->getCmd(null, 'errorDescription');
 		$replace['#errorDescription#'] = is_object($errorDescription) ? $errorDescription->execCmd() : '';
