@@ -291,6 +291,11 @@ sleep(30);
     log::add('worxLandroidS', 'info', 'Connexion à Mosquitto avec code ' . $r . ' ' . $message);
     config::save('status', '1',  'worxLandroidS');
   }
+	
+  public static function newconnect( $r, $message ) {
+    log::add('worxLandroidS', 'info', 'New Connexion à Mosquitto avec code ' . $r . ' ' . $message);
+    config::save('status', '1',  'worxLandroidS');
+  }	
 
   public static function disconnect( $r ) {
     log::add('worxLandroidS', 'debug', 'Déconnexion de Mosquitto avec code ' . $r);
@@ -636,7 +641,9 @@ schedule: TimePeriod[];
 
     //$publish->onMessage('worxLandroidS::message');
     $publish->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);
-    $publish->onConnect('worxLandroidS::connect');
+	  
+    $publish->setReconnectDelay(1, 16, true);	  
+    $publish->onConnect('worxLandroidS::newconnect');
 
 
     $publish->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), '8883', 70);
@@ -644,7 +651,7 @@ schedule: TimePeriod[];
          // $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
     //$publish->publish($_subject, $_message, 0 , 0);
     //$publish->publish($_subject, '{"rd":123}', 0 , 0);
-	  
+	  /*
 	  
      try {
 		$publish->loop();
@@ -664,7 +671,7 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
     $publish->disconnect();
 	unset($publish);	  
 	  
-
+*/
 //  $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
     //$publish->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", '{"rd":100}', 0, 0);
 
