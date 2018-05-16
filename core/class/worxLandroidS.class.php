@@ -707,11 +707,7 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 		$version = jeedom::versionAlias($_version);
 		$replace['#worxStatus#'] = '';
 		if ($version != 'mobile' || $this->getConfiguration('fullMobileDisplay', 0) == 1) {
-			if ($this->getConfiguration('modeImage', 0) == 1) {
-				$worxStatus_template = getTemplate('core', $version, 'forecastIMG', 'weather');
-			} else {
-				$worxStatus_template = getTemplate('core', $version, 'worxLandroidS', 'worxLandroidS');
-			}
+			$worxStatus_template = getTemplate('core', $version, 'worxLandroidS', 'worxLandroidS');
 			for ($i = 0; $i < 6; $i++) {
 				$replaceDay = array();
 				$replaceDay['#day#'] = $jour[$i];
@@ -775,11 +771,8 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 			$replace['#collectDate#'] = '';
 		}
 		*/
-		if ($this->getConfiguration('modeImage', 0) == 1) {
-			return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'currentIMG', 'weather')));
-		} else {
-			return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'current', 'worxLandroidS')));
-		}
+		return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'current', 'worxLandroidS')));
+
 	}	
 	
 	
