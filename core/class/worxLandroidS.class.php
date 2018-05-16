@@ -725,7 +725,7 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 
 				//$replaceDay['#icone#'] = is_object($condition) ? self::getIconFromCondition($condition->execCmd()) : '';
 				//$replaceDay['#conditionid#'] = is_object($condition) ? $condition->getId() : '';
-				$replace['#daySetup#'] .= template_replace($replaceDay, $worxStatus);
+				$replace['#daySetup#'] .= template_replace($replaceDay, $worxStatus_template);
 			}
 		}
 		
