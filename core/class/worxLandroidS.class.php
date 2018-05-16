@@ -485,7 +485,7 @@ schedule: TimePeriod[];
     }
 	  
 	  
-     $this->refreshWidget();
+    // $this->refreshWidget();
 	  
 	  
   }
