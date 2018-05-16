@@ -628,7 +628,7 @@ schedule: TimePeriod[];
 
 
    //log::add('worxLandroidS', 'debug', 'Envoi du message ' . $_message . ' vers ' . $_subject. '/'.config::byKey('mqtt_endpoint', 'worxLandroidS'));
-    $publish = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS'));
+    $publish = new Mosquitto\Client(config::byKey('mqtt_client_id'.'2', 'worxLandroidS'));
 
 
     
