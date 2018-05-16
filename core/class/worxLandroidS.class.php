@@ -470,9 +470,9 @@ schedule: TimePeriod[];
       //  $schedule = json_decode($json2_data->cfg->sc->d,false);
 
 	for ($i = 0; $i < 6; $i++) {
-         self::newInfo($elogic,'Planning/startTime/'.$i,$json2_data->cfg->sc->d[$i][0],'string',1);
-         self::newInfo($elogic,'Planning/duration/'.$i,$json2_data->cfg->sc->d[$i][1],'string',1);
-         self::newInfo($elogic,'Planning/cutEdge/'.$i,$json2_data->cfg->sc->d[$i][2],'string',1);	   
+         self::newInfo($elogic,'Planning/startTime/'.$i.'/',$json2_data->cfg->sc->d[$i][0],'string',1);
+         self::newInfo($elogic,'Planning/duration/'.$i.'/',$json2_data->cfg->sc->d[$i][1],'string',1);
+         self::newInfo($elogic,'Planning/cutEdge/'.$i.'/',$json2_data->cfg->sc->d[$i][2],'string',1);	   
 	}
 	    /*
         self::newInfo($elogic,'Planning/Monday/Starttime',$json2_data->cfg->sc->d[1][0],'string',1);
@@ -722,11 +722,11 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 				$replaceDay['#startTime#'] = is_object($startTime) ? $startTime->execCmd() : '';
 				$replaceDay['#duration#'] = is_object($duration) ? $duration->execCmd() : '';
 				
-				// transforme au format objet DateTime 
+				// transforme au format objet DateTime /*
 				$initDate = DateTime::createFromFormat('Hi', $replaceDay['#startTime#']);
 				$initDate->add(new DateInterval("PT".$replaceDay['#duration#']."M")); 
 				$replaceDay['#endTime#'] = $initDate->format("Hi");
-				
+				*/
 				$replaceDay['#cutEdge#'] = is_object($cutEdge) ? $cutEdge->execCmd() : '';
 				if($replaceDay['#cutEdge#'] == '1')
 				{ $replaceDay['#cutEdge#'] = 'Edge';} 
