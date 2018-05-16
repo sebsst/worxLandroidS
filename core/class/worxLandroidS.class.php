@@ -735,8 +735,8 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 		
 	        $errorCode = $this->getCmd(null, 'errorCode');
 		$replace['#errorCode#'] = is_object($errorCode) ? $errorCode->execCmd() : '';
-		$replace['#errorColor#'] = 'white';
-		if($replace['#errorCode#'] != 0 ){$replace['#errorColor#'] = 'red';}
+		$replace['#errorColor#'] = 'green';
+		if($replace['#errorCode#'] != 0 ){$replace['#errorColor#'] = 'orange';}
 		
 		$replace['#errorID#'] = is_object($errorCode) ? $errorCode->getId() : '';
 	        $errorDescription = $this->getCmd(null, 'errorDescription');
@@ -754,54 +754,8 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 		$replace['#lastCom#'] = is_object($lastTime) ? $lastTime->getId() : '';	
 	        $lastDate = $this->getCmd(null, 'lastDate');
 		$replace['#lastDate#'] = is_object($lastDate) ? $lastDate->execCmd() : '';		
-		/*
-		$temperature = $this->getCmd(null, 'temperature');
-		$replace['#temperature#'] = is_object($temperature) ? $temperature->execCmd() : '';
-		$replace['#tempid#'] = is_object($temperature) ? $temperature->getId() : '';
-		$humidity = $this->getCmd(null, 'humidity');
-		$replace['#humidity#'] = is_object($humidity) ? $humidity->execCmd() : '';
-		$pressure = $this->getCmd(null, 'pressure');
-		$replace['#pressure#'] = is_object($pressure) ? $pressure->execCmd() : '';
-		$replace['#pressureid#'] = is_object($pressure) ? $pressure->getId() : '';
-		$wind_speed = $this->getCmd(null, 'wind_speed');
-		$replace['#windspeed#'] = is_object($wind_speed) ? $wind_speed->execCmd() : '';
-		$replace['#windid#'] = is_object($wind_speed) ? $wind_speed->getId() : '';
-		$sunrise = $this->getCmd(null, 'sunrise');
-		$replace['#sunrise#'] = is_object($sunrise) ? $sunrise->execCmd() : '';
-		$replace['#sunid#'] = is_object($sunrise) ? $sunrise->getId() : '';
-		if (strlen($replace['#sunrise#']) == 3) {
-			$replace['#sunrise#'] = substr($replace['#sunrise#'], 0, 1) . ':' . substr($replace['#sunrise#'], 1, 2);
-		} else if (strlen($replace['#sunrise#']) == 4) {
-			$replace['#sunrise#'] = substr($replace['#sunrise#'], 0, 2) . ':' . substr($replace['#sunrise#'], 2, 2);
-		}
-		$sunset = $this->getCmd(null, 'sunset');
-		$replace['#sunset#'] = is_object($sunset) ? $sunset->execCmd() : '';
-		if (strlen($replace['#sunset#']) == 3) {
-			$replace['#sunset#'] = substr($replace['#sunset#'], 0, 1) . ':' . substr($replace['#sunset#'], 1, 2);
-		} else if (strlen($replace['#sunset#']) == 4) {
-			$replace['#sunset#'] = substr($replace['#sunset#'], 0, 2) . ':' . substr($replace['#sunset#'], 2, 2);
-		}
-		$wind_direction = $this->getCmd(null, 'wind_direction');
-		$replace['#wind_direction#'] = is_object($wind_direction) ? $wind_direction->execCmd() : 0;
-		$refresh = $this->getCmd(null, 'refresh');
-		$replace['#refresh_id#'] = is_object($refresh) ? $refresh->getId() : '';
-		$sunset_time = is_object($sunset) ? $sunset->execCmd() : null;
-		$sunrise_time = is_object($sunrise) ? $sunrise->execCmd() : null;
-		$condition_id = $this->getCmd(null, 'condition_id');
-		if (is_object($condition_id)) {
-			$replace['#icone#'] = self::getIconFromCondition($condition_id->execCmd(), $sunrise_time, $sunset_time);
-		} else {
-			$replace['#icone#'] = '';
-		}
-		$condition = $this->getCmd(null, 'condition');
-		if (is_object($condition)) {
-			$replace['#condition#'] = $condition->execCmd();
-			$replace['#conditionid#'] = $condition->getId();
-		} else {
-			$replace['#condition#'] = '';
-			$replace['#collectDate#'] = '';
-		}
-		*/
+	
+
 		return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'current', 'worxLandroidS')));
 
 	}	
