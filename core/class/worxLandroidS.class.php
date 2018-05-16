@@ -723,11 +723,11 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 				$replaceDay['#duration#'] = is_object($duration) ? $duration->execCmd() : '';
 				
 				// transforme au format objet DateTime 
-				/*
-				$initDate = DateTime::createFromFormat('Hi', $replaceDay['#startTime#']);
+				
+				$initDate = DateTime::createFromFormat('H:i', $replaceDay['#startTime#']);
 				$initDate->add(new DateInterval("PT".$replaceDay['#duration#']."M")); 
-				$replaceDay['#endTime#'] = $initDate->format("Hi");
-				*/
+				$replaceDay['#endTime#'] = $initDate->format("H:i");
+				
 				$replaceDay['#cutEdge#'] = is_object($cutEdge) ? $cutEdge->execCmd() : '';
 				if($replaceDay['#cutEdge#'] == '1')
 				{ $replaceDay['#cutEdge#'] = 'Edge';} 
