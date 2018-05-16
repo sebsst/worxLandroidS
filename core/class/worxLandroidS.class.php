@@ -344,7 +344,7 @@ sleep(30);
 	    // Advise the desktop page (javascript) that a new equipment has been addedv
 
       $elogic->save();
-      event::add('worxLandroidS::includeEqpt', $elogic->getId());
+
       $elogic->setIsVisible(1);
       $elogic->setIsEnable(1);	    
       $elogic->checkAndUpdateCmd();
@@ -353,6 +353,8 @@ sleep(30);
       self::newAction($elogic,'start',$commandIn,'{"cmd":"1"}','other');
       self::newAction($elogic,'stop',$commandIn,'{"cmd":"3"}','other');
       self::newAction($elogic,'refreshValue',$commandIn,'{}','other');
+      event::add('worxLandroidS::includeEqpt', $elogic->getId());
+	    
 
     }
     $elogic->setStatus('lastCommunication', date('Y-m-d H:i:s'));
