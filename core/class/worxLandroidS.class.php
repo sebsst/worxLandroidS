@@ -725,7 +725,7 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 
 				//$replaceDay['#icone#'] = is_object($condition) ? self::getIconFromCondition($condition->execCmd()) : '';
 				//$replaceDay['#conditionid#'] = is_object($condition) ? $condition->getId() : '';
-				$replace['#worxStatus#'] .= template_replace($replaceDay, $worxStatus);
+				$replace['#daySetup#'] .= template_replace($replaceDay, $worxStatus);
 			}
 		}
 		
@@ -741,7 +741,9 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 		
 	        $lastTime = $this->getCmd(null, 'lastTime');
 		$replace['#lastTime#'] = is_object($lastTime) ? $lastTime->execCmd() : '';
-		$replace['#lastTime#'] = is_object($lastTime) ? $lastTime->getId() : '';		
+		$replace['#lastCom#'] = is_object($lastTime) ? $lastTime->getId() : '';	
+	        $lastDate = $this->getCmd(null, 'lastDate');
+		$replace['#lastDate#'] = is_object($lastDate) ? $lastDate->execCmd() : '';		
 		/*
 		$temperature = $this->getCmd(null, 'temperature');
 		$replace['#temperature#'] = is_object($temperature) ? $temperature->execCmd() : '';
