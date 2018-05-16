@@ -470,9 +470,9 @@ schedule: TimePeriod[];
       //  $schedule = json_decode($json2_data->cfg->sc->d,false);
 
 	for ($i = 0; $i < 6; $i++) {
-         self::newInfo($elogic,'Planning/startTime/'.i,$json2_data->cfg->sc->d[$i][0],'string',1);
-         self::newInfo($elogic,'Planning/duration/'.i,$json2_data->cfg->sc->d[$i][1],'string',1);
-         self::newInfo($elogic,'Planning/cutEdge/'.i,$json2_data->cfg->sc->d[$i][2],'string',1);	   
+         self::newInfo($elogic,'Planning/startTime/'.$i,$json2_data->cfg->sc->d[$i][0],'string',1);
+         self::newInfo($elogic,'Planning/duration/'.$i,$json2_data->cfg->sc->d[$i][1],'string',1);
+         self::newInfo($elogic,'Planning/cutEdge/'.$i,$json2_data->cfg->sc->d[$i][2],'string',1);	   
 	}
 	    /*
         self::newInfo($elogic,'Planning/Monday/Starttime',$json2_data->cfg->sc->d[1][0],'string',1);
