@@ -735,7 +735,9 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 		
 	        $errorCode = $this->getCmd(null, 'errorCode');
 		$replace['#errorCode#'] = is_object($errorCode) ? $errorCode->execCmd() : '';
-		$replace['#errorCode#'] = is_object($errorCode) ? $errorCode->getId() : '';
+		$replace['#errorID#'] = is_object($errorCode) ? $errorCode->getId() : '';
+	        $errorDescription = $this->getCmd(null, 'errorDescription');
+		$replace['#errorDescription#'] = is_object($errorDescription) ? $errorDescription->execCmd() : '';
 		
 	        $lastTime = $this->getCmd(null, 'lastTime');
 		$replace['#lastTime#'] = is_object($lastTime) ? $lastTime->execCmd() : '';
