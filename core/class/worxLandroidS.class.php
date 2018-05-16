@@ -647,7 +647,7 @@ schedule: TimePeriod[];
 
 
     $publish->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), '8883', 70);
-
+   $publish->loopForever();
          // $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
     //$publish->publish($_subject, $_message, 0 , 0);
     //$publish->publish($_subject, '{"rd":123}', 0 , 0);
