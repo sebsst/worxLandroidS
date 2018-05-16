@@ -721,6 +721,12 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 				$duration = $this->getCmd(null, 'Planning/duration/' . $i);				
 				$replaceDay['#startTime#'] = is_object($startTime) ? $startTime->execCmd() : '';
 				$replaceDay['#duration#'] = is_object($duration) ? $duration->execCmd() : '';
+				
+				// transforme au format objet DateTime 
+				$initDate = DateTime::createFromFormat('Hi', $replaceDay['#startTime#']);
+				$initDate->add(new DateInterval("PT".$replaceDay['#duration#']."M")); 
+				$replaceDay['#endTime#'] = $initDate->format("Hi");
+				
 				$replaceDay['#cutEdge#'] = is_object($cutEdge) ? $cutEdge->execCmd() : '';
 
 				//$replaceDay['#icone#'] = is_object($condition) ? self::getIconFromCondition($condition->execCmd()) : '';
