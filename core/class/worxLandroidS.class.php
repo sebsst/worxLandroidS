@@ -722,7 +722,8 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 				$replaceDay['#startTime#'] = is_object($startTime) ? $startTime->execCmd() : '';
 				$replaceDay['#duration#'] = is_object($duration) ? $duration->execCmd() : '';
 				
-				// transforme au format objet DateTime /*
+				// transforme au format objet DateTime 
+				/*
 				$initDate = DateTime::createFromFormat('Hi', $replaceDay['#startTime#']);
 				$initDate->add(new DateInterval("PT".$replaceDay['#duration#']."M")); 
 				$replaceDay['#endTime#'] = $initDate->format("Hi");
@@ -730,7 +731,6 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 				$replaceDay['#cutEdge#'] = is_object($cutEdge) ? $cutEdge->execCmd() : '';
 				if($replaceDay['#cutEdge#'] == '1')
 				{ $replaceDay['#cutEdge#'] = 'Edge';} 
-				else { $replaceDay['#cutEdge#'] = '';}
 				
 				
 				//$replaceDay['#icone#'] = is_object($condition) ? self::getIconFromCondition($condition->execCmd()) : '';
