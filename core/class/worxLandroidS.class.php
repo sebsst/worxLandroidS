@@ -445,14 +445,14 @@ schedule: TimePeriod[];
         self::newInfo($elogic,'errorCode',$json2_data->dat->le,'string',1);
         self::newInfo($elogic,'errorDescription',self::getErrorDescription($json2_data->dat->le),'string',1);
         self::newInfo($elogic,'statusCode',$json2_data->dat->ls,'string',1);
-        self::newInfo($elogic,'StatusDescription',self::getStatusDescription($json2_data->dat->ls),'string',1);
+        self::newInfo($elogic,'statusDescription',self::getStatusDescription($json2_data->dat->ls),'string',1);
         self::newInfo($elogic,'batteryLevel',$json2_data->dat->bt->p,'numeric',1);
-        self::newInfo($elogic,'Langue',$json2_data->cfg->lg,'string',0);
+        self::newInfo($elogic,'langue',$json2_data->cfg->lg,'string',0);
 
-        self::newInfo($elogic,'Lastdate',$json2_data->cfg->dt,'string',1);
-        self::newInfo($elogic,'LastTime',$json2_data->cfg->tm,'string',1);
+        self::newInfo($elogic,'lastDate',$json2_data->cfg->dt,'string',1);
+        self::newInfo($elogic,'lastTime',$json2_data->cfg->tm,'string',1);
 
-        self::newInfo($elogic,'Firmware',$json2_data->dat->fw,'string',0);
+        self::newInfo($elogic,'firmware',$json2_data->dat->fw,'string',0);
         self::newInfo($elogic,'wifiQuality',$json2_data->dat->rsi,'string',0);
         self::newInfo($elogic,'rainDelay',$json2_data->cfg->rd,'string',1);
 
@@ -723,6 +723,10 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 				$replace['#worxStatus#'] .= template_replace($replaceDay, $worxStatus);
 			}
 		}
+		
+	        $lastDate = $this->getCmd(null, 'lastDate');
+		$replace['#lastDate#'] = is_object($lastDate) ? $lastDate->execCmd() : '';
+		//$replace['#tempid#'] = is_object($temperature) ? $temperature->getId() : '';
 		/*
 		$temperature = $this->getCmd(null, 'temperature');
 		$replace['#temperature#'] = is_object($temperature) ? $temperature->execCmd() : '';
