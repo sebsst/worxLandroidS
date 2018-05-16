@@ -341,10 +341,11 @@ sleep(30);
 // ajout des actions par défaut
       log::add('worxLandroidS', 'info', 'Saving device ' . $nodeid);
       
-	    // Advise the desktop page (javascript) that a new equipment has been added
-      
+	    // Advise the desktop page (javascript) that a new equipment has been addedv
+      $elogic->setIsVisible(true);
+      $elogic->setIsEnable(true);
       $elogic->save();
-	    event::add('worxLandroidS::includeEqpt', $elogic->getId());
+      event::add('worxLandroidS::includeEqpt', $elogic->getId());
 
       $commandIn = 'DB510/'. $json2_data->dat->mac .'/commandIn';
       self::newAction($elogic,'setRainDelay', $commandIn, '{"rd":"#message#"}','message');
