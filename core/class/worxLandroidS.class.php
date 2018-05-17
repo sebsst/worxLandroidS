@@ -726,7 +726,7 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 		}
 		$version = jeedom::versionAlias($_version);
 		$replace['#worxStatus#'] = '';
-		if ($version != 'mobile' || $this->getConfiguration('fullMobileDisplay', 0) == 1) {
+		//if ($version != 'mobile' || $this->getConfiguration('fullMobileDisplay', 0) == 1) {
 			$worxStatus_template = getTemplate('core', $version, 'worxStatus', 'worxLandroidS');
 			for ($i = 0; $i < 6; $i++) {
 				$replaceDay = array();
@@ -766,7 +766,12 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 		$replace['#errorID#'] = is_object($errorCode) ? $errorCode->getId() : '';
 	        $errorDescription = $this->getCmd(null, 'errorDescription');
 		$replace['#errorDescription#'] = is_object($errorDescription) ? $errorDescription->execCmd() : '';
-		
+
+		$replace['#rainDelayId#'] = is_object($rainDelay) ? $rainDelay->getId() : '';
+	        $rainDelay = $this->getCmd(null, 'rainDelay');
+		$replace['#rainDelay#'] = is_object($rainDelay) ? $rainDelay->execCmd() : '';
+
+	
 	        $statusCode = $this->getCmd(null, 'statusCode');
 		$replace['#statusCode#'] = is_object($statusCode) ? $statusCode->execCmd() : '';
 		$replace['#status#'] = is_object($statusCode) ? $statusCode->getId() : '';
@@ -783,7 +788,7 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 
 		return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'current', 'worxLandroidS')));
 
-	}	
+	//}	
 	
 	
 	
