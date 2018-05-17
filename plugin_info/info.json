@@ -7,6 +7,6 @@
 	"category" : "devicecommunication",
 	"hasDependency" : 1,
 	"hasOwnDeamon" : 1,
-	"changelog" : "https://sebsst.github.io/jeedom_docs/plugins/worxLandoirdS/changelog.html",
-	"documentation" : "https://lunarok.github.io/jeedom_docs/plugins/worxLandroidS/"
+	"changelog" : "https://sebsst.github.io/jeedom_docs/plugins/worxLandroidS/changelog.html",
+	"documentation" : "https://sebsst.github.io/jeedom_docs/plugins/worxLandroidS/"
 }
