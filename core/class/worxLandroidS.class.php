@@ -726,7 +726,7 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 		}
 		$version = jeedom::versionAlias($_version);
 		$replace['#worxStatus#'] = '';
-		//if ($version != 'mobile' || $this->getConfiguration('fullMobileDisplay', 0) == 1) {
+		if ($version != 'mobile' || $this->getConfiguration('fullMobileDisplay', 0) == 1) {
 			$worxStatus_template = getTemplate('core', $version, 'worxStatus', 'worxLandroidS');
 			for ($i = 0; $i < 6; $i++) {
 				$replaceDay = array();
@@ -788,7 +788,7 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 
 		return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'current', 'worxLandroidS')));
 
-	//}	
+	}	
 	
 	
 	
