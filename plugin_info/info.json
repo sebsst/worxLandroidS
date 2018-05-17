@@ -8,5 +8,5 @@
 	"hasDependency" : 1,
 	"hasOwnDeamon" : 1,
 	"changelog" : "https://sebsst.github.io/jeedom_docs/plugins/worxLandroidS/changelog.html",
-	"documentation" : "https://sebsst.github.io/jeedom_docs/plugins/worxLandroidS/"
+	"documentation" : "https://sebsst.github.io/jeedom_docs/plugins/worxLandroidS/docs/index.md"
 }
