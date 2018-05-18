@@ -690,14 +690,15 @@ while (true) {
 
         }catch(Mosquitto\Exception $e){
             //echo"{$e}" ;
-                return;
+		log::add('worxLandroidS', 'debug', 'Publication du message ' . $e);
+               // return;
         }
         sleep(2);
 }
-
+/*
 $client->disconnect();
 unset($client);
-
+*/
 
 
 	  
