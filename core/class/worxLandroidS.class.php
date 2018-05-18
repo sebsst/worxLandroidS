@@ -631,7 +631,7 @@ schedule: TimePeriod[];
     $root_ca = $resource_path.'/vs-ca.pem';
 
 
-/*
+
    //log::add('worxLandroidS', 'debug', 'Envoi du message ' . $_message . ' vers ' . $_subject. '/'.config::byKey('mqtt_endpoint', 'worxLandroidS'));
     $publish = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS').'2');
 
@@ -654,9 +654,9 @@ schedule: TimePeriod[];
     $publish->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), '8883', 70);
    $publish->publish($_subject, '{"rd":123}', 0 , 0);
    $publish->loopForever();
-*/
+
 	  
-	  worxLandroidS::$_client->publish($_subject, '{"rd":122}', 0 , 0);
+
 	  
 	  
 	  
