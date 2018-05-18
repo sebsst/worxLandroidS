@@ -670,7 +670,7 @@ schedule: TimePeriod[];
             // exitLoop instead of disconnect:
             //   . otherwise disconnect too early for Qos=2 see below  (issue #25)
             //   . to correct issue #30 (action commands not run immediately on scenarios)
-         $sleep(10);
+         sleep(10);
 		$client->disconnect();
         });	  
 	  
