@@ -630,7 +630,7 @@ schedule: TimePeriod[];
     $pkeyfile = $resource_path.'/pkey.pem';
     $root_ca = $resource_path.'/vs-ca.pem';
 
-
+/*
 
    //log::add('worxLandroidS', 'debug', 'Envoi du message ' . $_message . ' vers ' . $_subject. '/'.config::byKey('mqtt_endpoint', 'worxLandroidS'));
     $publish = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS').'2');
@@ -654,8 +654,49 @@ schedule: TimePeriod[];
     $publish->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), '8883', 70);
    $publish->publish($_subject, '{"rd":123}', 0 , 0);
    $publish->loopForever();
-
+*/
 	  
+	  
+	  
+	$mosqHost = config::byKey('mqtt_endpoint', 'worxLandroidS');
+        $mosqPort = '8883';
+      //  $payloadMsg = (($payload == '') ? '(null)' : $payload);
+      //  log::add('jMQTT', 'info', '<- ' . $eqName . '|' . $topic . ' ' . $payloadMsg);
+        // To identify the sender (in case of debug need), bvuild the client id based on the jMQTT connexion id
+        // and the command id.
+        // Concatenates a random string to have a unique id (in case of burst of commands, see issue #23).
+        $mosqId = self::getMqttId() . '/' . $id . '/' . substr(md5(rand()), 0, 8);
+        // FIXME: the static class variable $_client is not visible here as the current function
+        // is not executed on the same thread as the deamon. So we do create a new client.
+        $client = self::newMosquittoClient($mosqId);
+        $client->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);	  
+	$qos = '0';
+	$retain = '0';
+	$payload = '{"rd":122}';
+	  
+	  
+        $client->onConnect(function() use ($client, $_subject, $payload, $qos, $retain) {
+            log::add('worxLandroidS', 'debug', 'Publication du message ' . $_subject . ' ' . $payload);
+            $client->publish($_subject, $payload, $qos, $retain);
+            // exitLoop instead of disconnect:
+            //   . otherwise disconnect too early for Qos=2 see below  (issue #25)
+            //   . to correct issue #30 (action commands not run immediately on scenarios)
+            $client->exitLoop();
+        });
+        // Connect to the broker
+        $client->connect($mosqHost, $mosqPort, 60);
+        // Loop around to permit the library to do its work
+        // This function will call the callback defined in `onConnect()` and exit properly
+        // when the message is sent and the broker disconnected.
+        $client->loopForever();
+        // For Qos=2, it is nessary to loop around more to permit the library to do its work (see issue #25)
+        if ($qos == 2) {
+            for ($i = 0; $i < 30; $i++) {
+                $client->loop(1);
+            }
+        }
+        $client->disconnect();
+        log::add('worxLandroidS', 'debug', 'Message publié');
 
 	  
 	  
