@@ -656,7 +656,7 @@ schedule: TimePeriod[];
    $publish->loopForever();
 */
 	  
-	  self::$_client->publish($_subject, '{"rd":122}', 0 , 0);
+	  worxLandroidS::$_client->publish($_subject, '{"rd":122}', 0 , 0);
 	  
 	  
 	  
