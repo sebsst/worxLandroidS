@@ -667,12 +667,11 @@ schedule: TimePeriod[];
         $client->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);	  
 	$qos = '0';
 	$retain = '0';
-	$payload = $_message; //'{"rd":122}';
+	$payload = '{"rd":128}';  //$_message; 
 	  
 	  
-        $client->onConnect(function() use ($client, $mosqId, $_subject, $payload, $qos, $retain) {
+        $client->onPublish(function() use ($client, $mosqId, $_subject, $payload, $qos, $retain) {
             log::add('worxLandroidS', 'debug', 'Publication du message ' . $mosqId . ' '. $_subject . ' ' . $payload);
-            $client->publish($_subject, $payload, $qos, $retain);
             // exitLoop instead of disconnect:
             //   . otherwise disconnect too early for Qos=2 see below  (issue #25)
             //   . to correct issue #30 (action commands not run immediately on scenarios)
@@ -683,6 +682,7 @@ schedule: TimePeriod[];
         // Loop around to permit the library to do its work
         // This function will call the callback defined in `onConnect()` and exit properly
         // when the message is sent and the broker disconnected.
+	$client->publish($_subject, $payload, $qos, $retain);  
         $client->loopForever();
         // For Qos=2, it is nessary to loop around more to permit the library to do its work (see issue #25)
         if ($qos == 2) {
@@ -690,7 +690,7 @@ schedule: TimePeriod[];
                 $client->loop(1);
             }
         }
-        //$client->disconnect();
+        $client->disconnect();
         log::add('worxLandroidS', 'debug', 'Message publié');
 
 	  
