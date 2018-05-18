@@ -670,8 +670,8 @@ schedule: TimePeriod[];
 	$payload = '{"rd":122}';
 	  
 	  
-        $client->onConnect(function() use ($client, $_subject, $payload, $qos, $retain) {
-            log::add('worxLandroidS', 'debug', 'Publication du message ' . $_subject . ' ' . $payload);
+        $client->onConnect(function() use ($client, $mosqId, $_subject, $payload, $qos, $retain) {
+            log::add('worxLandroidS', 'debug', 'Publication du message ' . $mosqId . ' '. $_subject . ' ' . $payload);
             $client->publish($_subject, $payload, $qos, $retain);
             // exitLoop instead of disconnect:
             //   . otherwise disconnect too early for Qos=2 see below  (issue #25)
@@ -690,7 +690,7 @@ schedule: TimePeriod[];
                 $client->loop(1);
             }
         }
-        $client->disconnect();
+        //$client->disconnect();
         log::add('worxLandroidS', 'debug', 'Message publié');
 
 	  
