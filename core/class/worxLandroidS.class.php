@@ -670,7 +670,7 @@ schedule: TimePeriod[];
             // exitLoop instead of disconnect:
             //   . otherwise disconnect too early for Qos=2 see below  (issue #25)
             //   . to correct issue #30 (action commands not run immediately on scenarios)
-        $client->disconnect();
+         $client->exitLoop();
         });	  
 	  
 //$client->onPublish('publish');
@@ -690,7 +690,7 @@ while (true) {
 
         }catch(Mosquitto\Exception $e){
             //echo"{$e}" ;
-		//log::add('worxLandroidS', 'debug', 'Publication du message ' . $e);
+		log::add('worxLandroidS', 'debug', 'exception ' . $e);
                 return;
         }
         sleep(2);
