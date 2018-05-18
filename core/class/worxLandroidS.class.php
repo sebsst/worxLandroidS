@@ -906,9 +906,11 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 
 class worxLandroidSCmd extends cmd {
 	
-
-  //public static $_widgetPossibility = array('custom' => false);	
-	
+public static $_widgetPossibility = array('custom' => array(
+      'visibility' => true,
+      'displayName' => array('dashboard' => true, 'view' => true),
+      'optionalParameters' => true,
+));
 	
   public function execute($_options = null) {
     switch ($this->getType()) {
