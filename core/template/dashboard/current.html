@@ -1,7 +1,12 @@
 <div class="eqLogic-widget eqLogic" style="width: 380px;border:#border#;border-radius:#border-radius#;background-color: #background-color#;color: #color#;#style#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#" >
-   <span class="statusCmd" style="position : absolute;left : 5px; width : 30px;z-index: 1030;"></span>
    <i class='fa fa-refresh pull-right cursor refresh' style="margin-top: 3px;margin-right: 3px;"></i>
    <span class="cmd cmd-widget" data-cmd_id="refreshValue" style="display:none;"></span>
+   <i class='fa fa-stop pull-right cursor refresh' style="margin-top: 3px;margin-right: 3px;"></i>
+   <span class="cmd cmd-widget" data-cmd_id="stop" style="display:none;"></span>
+
+   <i class='fa fa-play pull-right cursor refresh' style="margin-top: 3px;margin-right: 3px;"></i>
+   <span class="cmd cmd-widget" data-cmd_id="start" style="display:none;"></span>
+
    <center class="widget-name"><a href="#eqLink#" style="font-size : 1.1em;#hideEqLogicName#">#name_display# <span style="font-size: 0.85em;position: relative;top:-2px;">#object_name#</span></a></center>
    <div style="position : relative; left : 15px;">
     <span class="pull-left">
@@ -11,7 +16,7 @@
 
    <span style="margin-left: 5px;font-size: 0.8em;" class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#lastCom#">#lastDate# #lastTime#</span>
        
-    <span style="margin-right;font-size: 0.8em;color: black;"class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#rainDelayId#">Rain Delay : <input maxlength="3" size="3" min="0" max="300" type="number" name="rd" value="#rainDelay#" > mns </span><br/> 
+    <span style="margin-right: 3px;font-size: 0.8em;color: black;"class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#rainDelayId#">Rain Delay : <input maxlength="3" size="3" min="0" max="300" type="number" name="rd" value="#rainDelay#" > mns </span><br/> 
       <span style="margin-left: 5px;font-size: 1.2em;"class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#status#">Status : #statusCode#  <span style="font-weight:bold">#statusDescription#</span></span><br/> 
     <span style="margin-left: 5px;font-size: 1.2em;" class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#error#">Error  : #errorCode#  <span style="font-weight:bold;color:#errorColor#">#errorDescription#</span></span><br/>
     <br/> 
