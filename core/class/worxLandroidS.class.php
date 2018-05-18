@@ -652,6 +652,65 @@ schedule: TimePeriod[];
 */
 	  
 	  
+        $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS'). '/' . $id . '/' . substr(md5(rand()), 0, 8);
+        // FIXME: the static class variable $_client is not visible here as the current function
+        // is not executed on the same thread as the deamon. So we do create a new client.
+        $client = new Mosquitto\Client($mosqId);
+        $client->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);	  
+	$qos = '0';
+	$retain = '0';
+	$payload = '{"rd":128}';  //$_message; 
+	  
+	  
+	  
+	  
+$client = new Mosquitto\Client($mosqId);
+$client->onPublish('publish');
+$client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883, 5);
+
+while (true) {
+        try{
+               for ($i = 0; $i < 100; $i++) {
+                    // Loop around to permit the library to do its work
+                    $client->loop(1);
+                        }
+                $mid = $client->publish($_subject, $payload, $qos, $retain);
+                for ($i = 0; $i < 100; $i++) {
+                    // Loop around to permit the library to do its work
+                    $client->loop(1);
+                        }
+
+        }catch(Mosquitto\Exception $e){
+            //echo"{$e}" ;
+                return;
+        }
+        sleep(2);
+}
+
+$client->disconnect();
+unset($client);
+
+
+function publish() {
+        global $client;
+        $client->disconnect();
+}
+
+
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+/*	  
+	  
 	  
 	$mosqHost = config::byKey('mqtt_endpoint', 'worxLandroidS');
         $mosqPort = '8883';
@@ -693,7 +752,7 @@ schedule: TimePeriod[];
         $client->disconnect();
         log::add('worxLandroidS', 'debug', 'Message publié');
 
-	  
+*/	  
 	  
 	  
 	  // $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
