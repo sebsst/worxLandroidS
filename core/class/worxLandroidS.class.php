@@ -478,7 +478,7 @@ schedule: TimePeriod[];
 
       //  date début + durée + bordure
 
-	for ($i = 0; $i < 6; $i++) {
+	for ($i = 0; $i < 7; $i++) {
          self::newInfo($elogic,'Planning/startTime/'.$i,$json2_data->cfg->sc->d[$i][0],'string',1);
          self::newInfo($elogic,'Planning/duration/'.$i,$json2_data->cfg->sc->d[$i][1],'string',1);
          self::newInfo($elogic,'Planning/cutEdge/'.$i,$json2_data->cfg->sc->d[$i][2],'string',1);	   
@@ -839,7 +839,7 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 		$replace['#worxStatus#'] = '';
 		if ($version != 'mobile' || $this->getConfiguration('fullMobileDisplay', 0) == 1) {
 			$worxStatus_template = getTemplate('core', $version, 'worxStatus', 'worxLandroidS');
-			for ($i = 0; $i < 6; $i++) {
+			for ($i = 0; $i <= 6; $i++) {
 				$replaceDay = array();
 				$replaceDay['#day#'] = $jour[$i];
 				$startTime = $this->getCmd(null, 'Planning/startTime/' . $i);
