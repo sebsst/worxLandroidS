@@ -665,7 +665,7 @@ schedule: TimePeriod[];
         // To identify the sender (in case of debug need), bvuild the client id based on the jMQTT connexion id
         // and the command id.
         // Concatenates a random string to have a unique id (in case of burst of commands, see issue #23).
-        $mosqId = self::getMqttId() . '/' . $id . '/' . substr(md5(rand()), 0, 8);
+        $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS'). '/' . $id . '/' . substr(md5(rand()), 0, 8);
         // FIXME: the static class variable $_client is not visible here as the current function
         // is not executed on the same thread as the deamon. So we do create a new client.
         $client = self::newMosquittoClient($mosqId);
