@@ -245,7 +245,6 @@ class worxLandroidS extends eqLogic {
     self::$_client->onConnect('worxLandroidS::connect');
     self::$_client->onDisconnect('worxLandroidS::disconnect');
     self::$_client->onSubscribe('worxLandroidS::subscribe');
-    self::$_client->onPublish('worxLandroidS::publish');	    
     self::$_client->onMessage('worxLandroidS::message');
     self::$_client->onLog('worxLandroidS::logmq');
     self::$_client->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);
@@ -307,10 +306,6 @@ sleep(30);
     log::add('worxLandroidS', 'debug', 'Subscribe to topics');
   }
 	
-  public static function publish( ) {
-    log::add('worxLandroidS', 'debug', 'published something');
-  }	
-
   public static function logmq( $code, $str ) {
     if (strpos($str,'PINGREQ') === false && strpos($str,'PINGRESP') === false) {
       log::add('worxLandroidS', 'debug', $code . ' : ' . $str);
@@ -668,7 +663,7 @@ schedule: TimePeriod[];
         $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS'). '/' . $id . '/' . substr(md5(rand()), 0, 8);
         // FIXME: the static class variable $_client is not visible here as the current function
         // is not executed on the same thread as the deamon. So we do create a new client.
-        $client = self::newMosquittoClient($mosqId);
+        $client = new Mosquitto\Client($mosqId);
         $client->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);	  
 	$qos = '0';
 	$retain = '0';
