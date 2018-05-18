@@ -667,7 +667,7 @@ schedule: TimePeriod[];
         $client->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);	  
 	$qos = '0';
 	$retain = '0';
-	$payload = '{"rd":122}';
+	$payload = $_message; //'{"rd":122}';
 	  
 	  
         $client->onConnect(function() use ($client, $mosqId, $_subject, $payload, $qos, $retain) {
