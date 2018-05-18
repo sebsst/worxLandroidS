@@ -245,6 +245,7 @@ class worxLandroidS extends eqLogic {
     self::$_client->onConnect('worxLandroidS::connect');
     self::$_client->onDisconnect('worxLandroidS::disconnect');
     self::$_client->onSubscribe('worxLandroidS::subscribe');
+    self::$_client->onPublish('worxLandroidS::publish');	    
     self::$_client->onMessage('worxLandroidS::message');
     self::$_client->onLog('worxLandroidS::logmq');
     self::$_client->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);
@@ -305,6 +306,10 @@ sleep(30);
   public static function subscribe( ) {
     log::add('worxLandroidS', 'debug', 'Subscribe to topics');
   }
+	
+  public static function publish( ) {
+    log::add('worxLandroidS', 'debug', 'published something');
+  }	
 
   public static function logmq( $code, $str ) {
     if (strpos($str,'PINGREQ') === false && strpos($str,'PINGRESP') === false) {
@@ -626,7 +631,7 @@ schedule: TimePeriod[];
     $root_ca = $resource_path.'/vs-ca.pem';
 
 
-
+/*
    //log::add('worxLandroidS', 'debug', 'Envoi du message ' . $_message . ' vers ' . $_subject. '/'.config::byKey('mqtt_endpoint', 'worxLandroidS'));
     $publish = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS').'2');
 
@@ -649,7 +654,13 @@ schedule: TimePeriod[];
     $publish->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), '8883', 70);
    $publish->publish($_subject, '{"rd":123}', 0 , 0);
    $publish->loopForever();
-         // $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
+*/
+	  
+	  self::$_client->publish($_subject, '{"rd":122}', 0 , 0);
+	  
+	  
+	  
+	  // $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
     //$publish->publish($_subject, $_message, 0 , 0);
     
 	  /*
