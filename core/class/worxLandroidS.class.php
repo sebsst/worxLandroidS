@@ -930,7 +930,8 @@ class worxLandroidSCmd extends cmd {
       }
       $request = str_replace('\\', '', jeedom::evaluateExpression($request));
       $request = cmd::cmdToValue($request);
-
+log::add('worxLandroidS', 'debug', 'Envoi de l action: ' . $topic. ' ' . $request );
+  
       worxLandroidS::publishMosquitto($this->getId(), $topic, $request, $this->getConfiguration('retain','0'));
       }
       return true;
