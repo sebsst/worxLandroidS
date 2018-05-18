@@ -670,7 +670,7 @@ schedule: TimePeriod[];
             // exitLoop instead of disconnect:
             //   . otherwise disconnect too early for Qos=2 see below  (issue #25)
             //   . to correct issue #30 (action commands not run immediately on scenarios)
-         sleep(5);
+         sleep(2);
 		$client->disconnect();
         });	  
 	  
@@ -694,7 +694,7 @@ while (true) {
 		log::add('worxLandroidS', 'debug', 'exception ' . $e);
                 return;
         }
-        sleep(2);
+        sleep(6);
 }
 
 $client->disconnect();
