@@ -828,7 +828,6 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 	
   }	
 
-	/*
 	public function toHtml($_version = 'dashboard') {
 		$jour = array("Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi");
 		$replace = $this->preToHtml($_version);
@@ -901,7 +900,7 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 
 	}	
 	
-	*/
+
 	
 }
 
