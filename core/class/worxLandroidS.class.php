@@ -665,7 +665,15 @@ schedule: TimePeriod[];
 	  
 	  
 $client = new Mosquitto\Client($mosqId);
-$client->onPublish('publish');
+        $client->onPublish(function() use ($client, $mosqId, $_subject, $payload, $qos, $retain) {
+            log::add('worxLandroidS', 'debug', 'Publication du message ' . $mosqId . ' '. $_subject . ' ' . $payload);
+            // exitLoop instead of disconnect:
+            //   . otherwise disconnect too early for Qos=2 see below  (issue #25)
+            //   . to correct issue #30 (action commands not run immediately on scenarios)
+        $client->disconnect();
+        });	  
+	  
+//$client->onPublish('publish');
 $client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883, 5);
 
 while (true) {
@@ -690,11 +698,6 @@ while (true) {
 $client->disconnect();
 unset($client);
 
-
-function publish() {
-        global $client;
-        $client->disconnect();
-}
 
 
 	  
