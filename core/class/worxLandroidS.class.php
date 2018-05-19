@@ -908,6 +908,10 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
                 $replace['#' . $cmd->getLogicalId() . '_history#'] = 'history cursor';
             }
         }
+	foreach ($this->getCmd('action') as $cmd) {
+            $replace['#' . $cmd->getLogicalId() . '_id#'] = $cmd->getId();
+        }	
+		
 		
 		
 		
