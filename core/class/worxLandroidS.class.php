@@ -659,7 +659,7 @@ schedule: TimePeriod[];
         $client->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);	  
 	$qos = '0';
 	$retain = '0';
-	$payload = '{"rd":128}';  //$_message; 
+	$payload = $_message; 
 	  
 	  
 	  
