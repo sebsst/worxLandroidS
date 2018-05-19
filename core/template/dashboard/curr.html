@@ -1,1 +1,50 @@
+<div class="eqLogic-widget eqLogic" style="width: 480px;border:#border#;border-radius:#border-radius#;background-color: #background-color#;color: #color#;#style#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#" >
 
+   <i class='fa fa-play pull-right cursor start' style="margin-top: 3px;margin-right: 3px;"></i>
+   <span class="cmd cmd-widget" data-cmd_id=#start_id# style="display:none;"></span>
+
+   <a class="btn cmd" style="display:inline" data-cmd_id="#start_id#" title="Start" onclick="jeedom.cmd.execute({id: #start_id#});"><i class="fa fa-play" style="margin-top: 3px;margin-right: 3px;"></i></a>
+   <a class="btn cmd" style="display:inline" data-cmd_id="#stop_id#" title="Home" onclick="jeedom.cmd.execute({id: #stop_id#});"><i class="fa fa-home" style="margin-top: 3px;margin-right: 3px;"></i></a>
+
+
+   <i class='fa fa-refresh pull-right cursor refresh' style="margin-top: 3px;margin-right: 3px;"></i>
+   <span class="cmd cmd-widget" data-cmd_id="refreshValue" style="display:none;"></span>
+
+   
+   <center class="widget-name"><a href="#eqLink#" style="font-size : 1.1em;#hideEqLogicName#">#name_display# <span style="font-size: 0.85em;position: relative;top:-2px;">#object_name#</span></a></center>
+   <div style="position : relative; left : 15px;">
+    <span class="pull-left">
+        <i class="#icone#" style="font-size: 3.5em;"></i>
+    </span>
+
+
+   <span style="margin-left: 5px;font-size: 0.8em;" class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#lastCom#">#lastDate# #lastTime#</span>
+      <br/>    
+    <span style="margin-right: 125px;font-size: 0.8em;color: black;"class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#rainDelayId#">Rain Delay : <input maxlength="3" size="3" min="0" max="300" type="number" name="rd" value="#rainDelay#" > mns </span><br/> 
+   
+      <span class="pull-left">
+      <i class='fa meteo-pluie pull-right cursor rd'"></i>
+                                                     </span>                                                  
+   <span class="cmd cmd-widget" data-cmd_id="rd" style="display:none;"></span>
+
+      
+      <span style="margin-left: 5px;font-size: 1.2em;"class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#status#">Status : #statusCode#  <span style="font-weight:bold;margin-left: 125px">#statusDescription#</span></span><br/> 
+    <span style="margin-left: 5px;font-size: 1.2em;" class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#error#">Error  : #errorCode#  <span style="font-weight:bold;color:#errorColor;margin-left: 125px#">#errorDescription#</span></span><br/>
+    <span style="margin-left: 5px;font-size: 1.2em;" class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#batteryLevel#">Battery  : #batteryLevel# %</span><br/>
+
+<br/> 
+
+
+</div><br/>
+
+<div style="margin-top: -15px;">
+    <center>#daySetup#</center>
+</div>
+<script>
+   $('.eqLogic[data-eqLogic_uid=#uid#] .refresh').on('click', function () {
+    jeedom.cmd.execute({id: 'refreshValue'});
+
+ 
+   }); 
+</script>
+</div>
