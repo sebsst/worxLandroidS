@@ -948,9 +948,11 @@ public static $_widgetPossibility = array('custom' => array(
         $request = str_replace('#message#', $_options['message'], $request);
         break;
       }
+      log::add('worxLandroidS', 'debug', 'Envoi de l action: ' . $topic. ' ' . $request );
+
       $request = str_replace('\\', '', jeedom::evaluateExpression($request));
       $request = cmd::cmdToValue($request);
-log::add('worxLandroidS', 'debug', 'Envoi de l action: ' . $topic. ' ' . $request );
+      log::add('worxLandroidS', 'debug', 'Envoi de l action: ' . $topic. ' ' . $request );
   
       worxLandroidS::publishMosquitto($this->getId(), $topic, $request, $this->getConfiguration('retain','0'));
       }
