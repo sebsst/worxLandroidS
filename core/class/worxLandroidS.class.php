@@ -355,9 +355,9 @@ sleep(30);
       $elogic->checkAndUpdateCmd();
       $commandIn = 'DB510/'. $json2_data->dat->mac .'/commandIn';
       self::newAction($elogic,'setRainDelay', $commandIn, '{"rd":"#message#"}','message');
-      self::newAction($elogic,'start',$commandIn,json_encode('{"cmd":"1"}', JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK),'other');
-      self::newAction($elogic,'stop',$commandIn,json_encode('{"cmd":"3"}', JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK),'other');
-      self::newAction($elogic,'refreshValue',$commandIn,json_encode('{}', JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK),'other');
+      self::newAction($elogic,'start',$commandIn,json_encode(array('cmd' => 1), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK),'other');
+      self::newAction($elogic,'stop',$commandIn,json_encode(array('cmd' => 3), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK),'other');
+      self::newAction($elogic,'refreshValue',$commandIn,json_encode('', JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK),'other');
       event::add('worxLandroidS::includeEqpt', $elogic->getId());
 	    
 
