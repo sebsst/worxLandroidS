@@ -1,10 +1,10 @@
 <div class="eqLogic-widget eqLogic" style="width: 480px;border:#border#;border-radius:#border-radius#;background-color: #background-color#;color: #color#;#style#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#" >
 
    <i class='fa fa-play pull-right cursor start' style="margin-top: 3px;margin-right: 3px;"></i>
-   <span class="cmd cmd-widget" data-cmd_id="start" style="display:none;"></span>
+   <span class="cmd cmd-widget" data-cmd_id=#start_id# style="display:none;"></span>
 
    <i class='fa fa-stop pull-right cursor stop' style="margin-top: 3px;margin-right: 3px;"></i>
-   <span class="cmd cmd-widget" data-cmd_id="stop" style="display:none;"></span>
+   <span class="cmd cmd-widget" data-cmd_id=#stop_id#" style="display:none;"></span>
 
    <i class='fa fa-refresh pull-right cursor refresh' style="margin-top: 3px;margin-right: 3px;"></i>
    <span class="cmd cmd-widget" data-cmd_id="refreshValue" style="display:none;"></span>
@@ -35,6 +35,8 @@
 
 
 </div><br/>
+<a class="btn cmd" style="display:inline" data-cmd_id="#stop_id#" title="Home" onclick="jeedom.cmd.execute({id: #stop_id#});"><i class="fa fa-home"></i></a>
+
 <div style="margin-top: -15px;">
     <center>#daySetup#</center>
 </div>
@@ -42,16 +44,7 @@
    $('.eqLogic[data-eqLogic_uid=#uid#] .refresh').on('click', function () {
     jeedom.cmd.execute({id: 'refreshValue'});
 
-   $('.eqLogic[data-eqLogic_uid=#uid#] .start').on('click', function () {
-    jeedom.cmd.execute({id: 'start'});
-      
-   $('.eqLogic[data-eqLogic_uid=#uid#] .stop').on('click', function () {
-    jeedom.cmd.execute({id: 'stop'});
-      
-   $('.eqLogic[data-eqLogic_uid=#uid#] .stop').on('click', function () {
-    jeedom.cmd.execute({id: 'rd'});
-   
-   });
  
+   }); 
 </script>
 </div>
