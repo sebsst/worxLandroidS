@@ -1,5 +1,9 @@
 <div style="display: inline-block;font-size: 0.75em;margin-right : 4px;" class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#daySetup#">
     <center>#day#</center>
-    <center>#cutEdge#</center>	
+    <center>#cutEdge#
+    <a class="btn cmd" style="display:inline" data-cmd_id=#on/##daynum##_id#" title="Home" onclick="jeedom.cmd.execute({id: #on/##daynum##_id#});"><i class="fa fa-check"></i></a>
+    <a class="btn cmd" style="display:inline" data-cmd_id=#off/##daynum##_id#" title="Home" onclick="jeedom.cmd.execute({id: #off/##daynum##_id#});"><i class="fa fa-times"></i></a>
+
+</center>	
     <center class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#startTime#" style="font-size:0.8em;" >#startTime# | #endTime#</center>
 </div>
