@@ -355,9 +355,9 @@ sleep(30);
       $elogic->checkAndUpdateCmd();
       $commandIn = 'DB510/'. $json2_data->dat->mac .'/commandIn';
       self::newAction($elogic,'setRainDelay', $commandIn, '{"rd":"#message#"}','message');
-      self::newAction($elogic,'start',$commandIn,json_encode(array('cmd' => 1), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK),'other');
-      self::newAction($elogic,'stop',$commandIn,json_encode(array('cmd' => 3), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK),'other');
-      self::newAction($elogic,'refreshValue',$commandIn,json_encode('', JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK),'other');
+      self::newAction($elogic,'start',$commandIn,"cmd:1",'other');
+      self::newAction($elogic,'stop',$commandIn,"cmd:3",'other');
+      self::newAction($elogic,'refreshValue',$commandIn,"",'other');
 
 	for ($i = 0; $i < 7; $i++) {
          self::newAction($elogic,'on/'.$i,'','string','other');
