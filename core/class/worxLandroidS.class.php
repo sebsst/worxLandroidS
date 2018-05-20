@@ -358,6 +358,14 @@ sleep(30);
       self::newAction($elogic,'start',$commandIn,json_encode(array('cmd' => 1), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK),'other');
       self::newAction($elogic,'stop',$commandIn,json_encode(array('cmd' => 3), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK),'other');
       self::newAction($elogic,'refreshValue',$commandIn,json_encode('', JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK),'other');
+
+	for ($i = 0; $i < 7; $i++) {
+         self::newAction($elogic,'on/'.$i,'','string','other');
+         self::newAction($elogic,'off/'.$i,'','string','other');
+	}      
+	    
+	    
+	    
       event::add('worxLandroidS::includeEqpt', $elogic->getId());
 	    
 
