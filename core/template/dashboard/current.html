@@ -8,19 +8,23 @@
  
 <br/>      
     <span style="float:left;margin-left: 5px;font-size: 1.2em;"class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#status#">
-       Status : <span style="margin-left: 55px;">#statusCode#</span>  
-       <span style="font-weight:bold;margin-left: 85px;">#statusDescription#</span></span>
+       Status : <span style="margin-left: 35px;">#statusCode#</span>  
+       <span style="font-weight:bold;margin-left: 75px;">#statusDescription#</span></span>
    <span style="float:right;margin-rigt: 5px;font-size: 0.8em;" class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#lastCom#">#lastDate# #lastTime#</span> <br/>
 
-    <span style="float:left;margin-left: 5px;font-size: 1.2em;" class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#error#">Error  : <span style="margin-left: 45px;">#errorCode#  </span><span style="font-weight:bold;color:#errorColor#;float:left;margin-left: 115px;">#errorDescription#</span></span><br/>
-    <span style="margin-left: 5px;font-size: 1.2em;" class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#batteryLevel#">Battery  : <span style="margin-left: 45px;">#batteryLevel# %</span></span><br/>
+    <span style="float:left;margin-left: 5px;font-size: 1.2em;" class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#error#">
+       Error  : <span style="margin-left: 35px;">#errorCode#  
+       </span><span style="font-weight:bold;color:#errorColor#;margin-left: 75px;">#errorDescription#</span></span><br/>
+   <br/> 
+   <span style="margin-left: 5px;font-size: 1.2em;" class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#batteryLevel#">
+      Battery  : <span style="margin-left: 35px;">#batteryLevel# %</span></span><br/>
 
 <br/> 
 
 
 </div><br/>
 
-    <center>#daySetup#</center>
+    <center style="display:none">#daySetup#</center>
 
 <script>
    $('.eqLogic[data-eqLogic_uid=#uid#] .refresh').on('click', function () {
