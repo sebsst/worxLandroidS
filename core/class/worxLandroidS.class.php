@@ -489,7 +489,7 @@ schedule: TimePeriod[];
 	for ($i = 0; $i < 7; $i++) {
          self::newInfo($elogic,'Planning/startTime/'.$i,$json2_data->cfg->sc->d[$i][0],'string',1);
          self::newInfo($elogic,'Planning/duration/'.$i,$json2_data->cfg->sc->d[$i][1],'string',1);
-         self::newInfo($elogic,'Planning/cutEdge/'.$i,$json2_data->cfg->sc->d[$i][2],'string',1);	   
+         self::newInfo($elogic,'Planning/cutEdge/'.$i,$json2_data->cfg->sc->d[$i][2],'string',1);
 	}
 	    /*
         self::newInfo($elogic,'Planning/Monday/Starttime',$json2_data->cfg->sc->d[1][0],'string',1);
@@ -587,7 +587,18 @@ schedule: TimePeriod[];
       $cmdlogic->setType('info');
       $cmdlogic->setName( $cmdId );
       $cmdlogic->setIsVisible($visible);
+      if(substr_compare($cmdId,"Planning/duration, 0, 17)==0 && $value!='00:00' ){
+	      $cmdlogic->setConfiguration('savedValue', $value);
+      	 }
+      if(substr_compare($cmdId,"Planning/startTime, 0, 17)==0 && $value!=0 ){
+	      $cmdlogic->setConfiguration('savedValue', $value);
+      	 }
+		
+		
 
+	    
+	    
+	    
       $cmdlogic->setConfiguration('topic', $value);
       //$cmdlogic->setValue($value);
       $cmdlogic->save();
