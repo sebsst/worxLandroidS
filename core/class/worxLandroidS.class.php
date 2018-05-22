@@ -923,7 +923,7 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 		
 		
 		
-		return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'current', 'worxLandroidS')));
+		return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'worxMain', 'worxLandroidS')));
 
 	}	
 	
