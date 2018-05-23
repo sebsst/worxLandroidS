@@ -933,6 +933,8 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 				$replaceDay['#startTime#'] = is_object($startTime) ? $startTime->execCmd() : '';
 				$replaceDay['#duration#'] = is_object($duration) ? $duration->execCmd() : '';
 				
+			        $replaceDay['#on_id#'] = this->getCmd('action', 'on/'.$i);
+			        $replaceDay['#off_id#'] = this->getCmd('action', 'off/'.$i);				
 				// transforme au format objet DateTime 
 				
 				$initDate = DateTime::createFromFormat('H:i', $replaceDay['#startTime#']);
