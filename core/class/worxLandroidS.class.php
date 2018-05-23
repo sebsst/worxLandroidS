@@ -516,6 +516,7 @@ schedule: TimePeriod[];
 
     switch ($errorcode) {
 
+	/*
       case '0': return 'No error';         break;
       case '1': return  'Trapped';         break;
       case '2': return  'Lifted';         break;
@@ -535,6 +536,29 @@ schedule: TimePeriod[];
 
 
       default: return 'Unknown';
+      
+      */
+      case '0': return __('Aucune erreur',__FILE__);         break;
+      case '1': return  __('Bloquée',__FILE__);         break;
+      case '2': return  __('Soulevée',__FILE__);         break;
+      case '3': return  __('Câble non trouvé',__FILE__);         break;
+      case '4': return  __('En dehors des limites',__FILE__);        break;
+      case '5': return  __('Délai pluie',__FILE__);  break;
+      case '6': return  'Close door to mow';        break;
+      case '7': return  'Close door to go home';    break;
+      case '8': return  __('Moteur lames bloqué',__FILE__);       break;
+      case '9': return  __('Moteur roues bloqué',__FILE__);       break;
+      case '10': return  __('Timeout après blocage',__FILE__);         break;
+      case '11': return  __('Renversée',__FILE__);         break;
+      case '12': return  __('Batterie faible',__FILE__);         break;
+      case '13': return  __('Câble inversé',__FILE__);         break;
+      case '14': return  __('Erreur charge batterie',__FILE__);         break;
+      case '15': return  __('Delai recherche station dépassé',__FILE__);        break;
+
+
+      default: return 'Unknown';		    
+		    
+		    
         // code...
         break;
     }
