@@ -687,8 +687,8 @@ schedule: TimePeriod[];
   }
 
   public static function setSchedule($_id, $schedule) {	
-  	  $json = '{"sc":'.json_encode(array('d'=>$schedule))."}";
-	  $_id->publishMosquitto($_id, $_subject, $_message, 0);
+  	  $_message = '{"sc":'.json_encode(array('d'=>$schedule))."}";
+	  $_id->publishMosquitto($_id, "DB510/".$_id->getConfiguration('mac_address','worxLandroidS')."/commandIn", $_message, 0);
   }	
 	
 
