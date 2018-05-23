@@ -973,9 +973,9 @@ public static $_widgetPossibility = array('custom' => array(
       $request = cmd::cmdToValue($request);
       log::add('worxLandroidS', 'debug', 'Envoi de l action: ' . $topic. ' ' . $request );
 // save schedule if setting to 0 - and retrieve from saved value (new values must be set from smartphone
-      if(substr_compare($topic,'on/', 0, 3)===0){
+      //if(substr_compare($topic,'on/', 0, 3)===0){
       //  $this->saveConfiguration('savedValue',
-      }	    
+      //}	    
 		    
 		    
 		    
