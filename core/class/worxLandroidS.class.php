@@ -658,7 +658,42 @@ schedule: TimePeriod[];
 
 
     }
+	
+  public static function getSchedule($_id) {	
+	for ($i = 0; $i < 7; $i++) {
 
+	 $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName()($_id,'Planning/startTime/'.$i);
+	 $day[0] = $cmdlogic->getConfiguration('savedValue', '10:00');
+         $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName()($elogic->getId(),'Planning/duration/'.$i);	
+	 $day[1] = $cmdlogic->getConfiguration('savedValue', 420);		
+	 $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName()($elogic->getId(),'Planning/cutEdge/'.$i);		
+	 $day[2] = $cmdlogic->getConfiguration('topic', 0);	
+	
+         $schedule[$i] = $day;
+	}
+	return $schedule;
+	  
+	  
+  }
+	
+
+  public static function setSchedule($_id, $schedule) {	
+  	  $json = '{"sc":'.json_encode(array('d'=>$schedule))."}";
+	  $_id->publishMosquitto($_id, $_subject, $_message, 0);
+  }	
+	
+
+  public static function setDaySchedule($_id, $daynumber, $daySchedule) {	
+	  
+	  $schedule = $_id->getSchedule();
+	  $daySchedule[3] = $schedule[$daynumber][3];
+	  $schedule[$daynumber] = $daySchedule;
+	  
+	  $_id->setSchedule($_id, $schedule);
+  
+	
+  }
+	
   public static function publishMosquitto($_id, $_subject, $_message, $_retain) {
 
     $resource_path = realpath(dirname(__FILE__) . '/../../resources/');
