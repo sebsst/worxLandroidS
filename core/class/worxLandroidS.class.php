@@ -659,13 +659,23 @@ schedule: TimePeriod[];
 
     }
 	
+  public static function getSavedDaySchedule($_id,$i) {	
+	 $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName()($_id,'Planning/startTime/'.$i);
+	 $day[0] = $cmdlogic->getConfiguration('SavedValue', '10:00');
+         $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName()($elogic->getId(),'Planning/duration/'.$i);	
+	 $day[1] = $cmdlogic->getConfiguration('SavedValue', 420);		
+	 $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName()($elogic->getId(),'Planning/cutEdge/'.$i);		
+	 $day[2] = $cmdlogic->getConfiguration('topic', 0);	
+	
+         return $day;
+  }
   public static function getSchedule($_id) {	
 	for ($i = 0; $i < 7; $i++) {
 
 	 $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName()($_id,'Planning/startTime/'.$i);
-	 $day[0] = $cmdlogic->getConfiguration('savedValue', '10:00');
+	 $day[0] = $cmdlogic->getConfiguration('topic', '10:00');
          $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName()($elogic->getId(),'Planning/duration/'.$i);	
-	 $day[1] = $cmdlogic->getConfiguration('savedValue', 420);		
+	 $day[1] = $cmdlogic->getConfiguration('topic', 420);		
 	 $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName()($elogic->getId(),'Planning/cutEdge/'.$i);		
 	 $day[2] = $cmdlogic->getConfiguration('topic', 0);	
 	
@@ -675,7 +685,6 @@ schedule: TimePeriod[];
 	  
 	  
   }
-	
 
   public static function setSchedule($_id, $schedule) {	
   	  $json = '{"sc":'.json_encode(array('d'=>$schedule))."}";
@@ -1031,13 +1040,14 @@ public static $_widgetPossibility = array('custom' => array(
       $request = cmd::cmdToValue($request);
       log::add('worxLandroidS', 'debug', 'Envoi de l action: ' . $topic. ' ' . $request );
 // save schedule if setting to 0 - and retrieve from saved value (new values must be set from smartphone
-      //if(substr_compare($topic,'on/', 0, 3)===0){
-      //  $this->saveConfiguration('savedValue',
-      //}	    
-		    
-		    
-		    
+      if(substr_compare($topic,'off/', 0, 4)==0){
+	$sched = array('00:00', 0);
+        worxLandroidS::setDaySchedule($this->getId(), $sched, intval(substr($topic,4,1)));//  $this->saveConfiguration('savedValue',
+      }	    
+	else
+     {	    
       worxLandroidS::publishMosquitto($this->getId(), $topic, $request, $this->getConfiguration('retain','0'));
+	}
       }
       return true;
     }
