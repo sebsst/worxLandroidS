@@ -571,22 +571,21 @@ schedule: TimePeriod[];
 
     switch ($statuscode) {
 
-      case '0': return "Idle";       break;
-      case '1': return "Home";      break;
-      case '2': return "Start sequence";       break;
-      case '3': return "Leaving home"; break;
-      case '4': return "Follow wire"; break;
-      case '5': return "Searching home"; break;
-      case '6': return "Searching wire"; break;
-      case '7': return "Mowing"; break;
-      case '8': return "Lifted"; break;
-      case '9': return "Trapped"; break;
-      case '10': return "Blade blocked"; break;
+      case '0': return __("Inactive",__FILE__);       break;
+      case '1': return __("Maison",__FILE__);      break;
+      case '2': return __("Séquence de démarrage",__FILE__);       break;
+      case '3': return __("Quitte la maison",__FILE__); break;
+      case '4': return __("Suit le câble",__FILE__); break;
+      case '5': return __("Recherche de la maison",__FILE__); break;
+      case '6': return __("Recherche du câble",__FILE__); break;
+      case '7': return __("En cours de tonte",__FILE__); break;
+      case '8': return __("Soulevée",__FILE__); break;
+      case '9': return __("Coincée",__FILE__); break;
+      case '10': return __("Lames bloquées",__FILE__); break;
       case '11': return "Debug"; break;
-      case '12': return "Remote control"; break;
-      case '30': return "Going home"; break;
-      case '32': return "Cutting edge"; break;
-
+      case '12': return __("Remote control",__FILE__); break;
+      case '30': return __("Retour maison",__FILE__); break;
+      case '32': return __("Coupe la bordure",__FILE__); break;
 
       default: return 'unkown';
         // code...
