@@ -587,10 +587,10 @@ schedule: TimePeriod[];
       $cmdlogic->setType('info');
       $cmdlogic->setName( $cmdId );
       $cmdlogic->setIsVisible($visible);
-      if(substr_compare($cmdId,"Planning/duration, 0, 17)==0 && $value!='00:00' ){
+      if(substr_compare($cmdId,"Planning/duration", 0, 17)==0 && $value!='00:00' ){
 	      $cmdlogic->setConfiguration('savedValue', $value);
       	 }
-      if(substr_compare($cmdId,"Planning/startTime, 0, 17)==0 && $value!=0 ){
+      if(substr_compare($cmdId,"Planning/startTime", 0, 18)==0 && $value!=0 ){
 	      $cmdlogic->setConfiguration('savedValue', $value);
       	 }
 		
