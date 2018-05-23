@@ -82,6 +82,22 @@
 "Câble inversé":"Reverse wire      ",
 "Erreur charge batterie":"Charge error      ",
 "Delai recherche station dépassé":"Timeout finding home",
+"Inactive":"Idle",
+"Maison":"Home",
+"Séquence de démarrage":"Start sequence",
+"Quitte la maison":"Leaving home",
+"Suit le câble":"Follow wire",
+"Recherche de la maison":"Searching home",
+"Recherche du câble":"Searching wire",
+"En cours de tonte":"Mowing",
+"Soulevée":"Lifted",
+"Coincée":"Trapped",
+"Lames bloquées":"Blade blocked",
+"Debug":"Debug",
+"Contrôle à distance":"Remote control",
+"Retour maison":"Going home",
+"Coupe la bordure":"Cutting edge",
+        
         "Topic": "Topic"
     },
     "plugins\/worxLandroidS\/desktop\/js\/worxLandroidS.js": {
