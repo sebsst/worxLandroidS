@@ -360,8 +360,8 @@ sleep(30);
       self::newAction($elogic,'refreshValue',$commandIn,"",'other');
 
 	for ($i = 0; $i < 7; $i++) {
-         self::newAction($elogic,'on/'.$i,'','string','other');
-         self::newAction($elogic,'off/'.$i,'','string','other');
+         self::newAction($elogic,'on_'.$i,'','string','other');
+         self::newAction($elogic,'off_'.$i,'','string','other');
 	}      
 	    
 	    
@@ -933,8 +933,8 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 				$replaceDay['#startTime#'] = is_object($startTime) ? $startTime->execCmd() : '';
 				$replaceDay['#duration#'] = is_object($duration) ? $duration->execCmd() : '';
 				$replaceDay['#daynum#'] = $i;
-			        $replaceDay['#on/'.$i.'_id#'] = $this->getCmd('action', 'on/'.$i);
-			        $replaceDay['#off/'.$i.'_id#'] = $this->getCmd('action', 'off/'.$i);				
+			        $replaceDay['#on_'.$i.'_id#'] = $this->getCmd('action', 'on_'.$i);
+			        $replaceDay['#off_'.$i.'_id#'] = $this->getCmd('action', 'off_'.$i);				
 				// transforme au format objet DateTime 
 				
 				$initDate = DateTime::createFromFormat('H:i', $replaceDay['#startTime#']);
@@ -1042,7 +1042,7 @@ public static $_widgetPossibility = array('custom' => array(
       $request = cmd::cmdToValue($request);
       log::add('worxLandroidS', 'debug', 'Envoi de l action: ' . $topic. ' ' . $request );
 // save schedule if setting to 0 - and retrieve from saved value (new values must be set from smartphone
-      if(substr_compare($topic,'off/', 0, 4)==0){
+      if(substr_compare($topic,'off_', 0, 4)==0){
 	$sched = array('00:00', 0);
         worxLandroidS::setDaySchedule($this->getId(), $sched, intval(substr($topic,4,1)));//  $this->saveConfiguration('savedValue',
       }	    
