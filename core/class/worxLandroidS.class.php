@@ -1048,7 +1048,7 @@ public static $_widgetPossibility = array('custom' => array(
       log::add('worxLandroidS', 'debug', 'Envoi de l action: ' . $topic. ' ' . $request );
 
 	      $sched = array('00:00', 0);
-        worxLandroidS::setDaySchedule($this->getId(), $sched, intval(substr($topic,4,1)));//  $this->saveConfiguration('savedValue',
+        worxLandroidS::setDaySchedule($this->getId(), $sched, intval(substr($topic,3,1)));//  $this->saveConfiguration('savedValue',
       }	    
 	else
      {	    
