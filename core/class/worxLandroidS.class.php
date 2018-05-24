@@ -360,8 +360,8 @@ sleep(30);
       self::newAction($elogic,'refreshValue',$commandIn,"",'other');
 
 	for ($i = 0; $i < 7; $i++) {
-         self::newAction($elogic,'on_'.$i,'','string','other');
-         self::newAction($elogic,'off_'.$i,'','string','other');
+         self::newAction($elogic,'on_'.$i,$commandIn,'on_'.$i,'other');
+         self::newAction($elogic,'off_'.$i,$commandIn,'off_'.$i,'other');
 	}      
 	    
 	    
