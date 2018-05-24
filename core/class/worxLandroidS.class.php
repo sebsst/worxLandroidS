@@ -695,11 +695,11 @@ schedule: TimePeriod[];
 	
 
   public static function setDaySchedule($_id, $daynumber, $daySchedule) {	
-	 log::add('worxLandroidS', 'debug', 'setDay' . $daynumber. ' ' . $daySchedule );
   
 	  $schedule = worxLandroidS::getSchedule($_id);
 	  $daySchedule[3] = $schedule[$daynumber][3];
 	  $schedule[$daynumber] = $daySchedule;
+	 log::add('worxLandroidS', 'debug', 'setDay' . $daynumber. ' ' . $daySchedule );
 	  
 	  worxLandroidS::setSchedule($_id, $schedule);
   
