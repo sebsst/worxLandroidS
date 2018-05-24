@@ -1036,14 +1036,15 @@ public static $_widgetPossibility = array('custom' => array(
         $request = str_replace('#message#', $_options['message'], $request);
         break;
       }
-      log::add('worxLandroidS', 'debug', 'Envoi de l action: ' . $topic. ' ' . $request );
 
       $request = str_replace('\\', '', jeedom::evaluateExpression($request));
       $request = cmd::cmdToValue($request);
-      log::add('worxLandroidS', 'debug', 'Envoi de l action: ' . $topic. ' ' . $request );
+      //log::add('worxLandroidS', 'debug', 'Envoi de l action: ' . $topic. ' ' . $request );
 // save schedule if setting to 0 - and retrieve from saved value (new values must be set from smartphone
       if(substr_compare($topic,'off_', 0, 4)==0){
-	$sched = array('00:00', 0);
+      log::add('worxLandroidS', 'debug', 'Envoi de l action: ' . $topic. ' ' . $request );
+
+	      $sched = array('00:00', 0);
         worxLandroidS::setDaySchedule($this->getId(), $sched, intval(substr($topic,4,1)));//  $this->saveConfiguration('savedValue',
       }	    
 	else
