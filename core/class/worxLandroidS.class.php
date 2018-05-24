@@ -690,18 +690,18 @@ schedule: TimePeriod[];
   	  $_message = '{"sc":'.json_encode(array('d'=>$schedule))."}";
 
 	 log::add('worxLandroidS', 'debug', 'message à publier' . $_message);	  
-	  $_id->publishMosquitto($_id, "DB510/".$_id->getConfiguration('mac_address','worxLandroidS')."/commandIn", $_message, 0);
+	  worxLandroidS::publishMosquitto($_id, "DB510/".$_id->getConfiguration('mac_address','worxLandroidS')."/commandIn", $_message, 0);
   }	
 	
 
   public static function setDaySchedule($_id, $daynumber, $daySchedule) {	
 	 log::add('worxLandroidS', 'debug', 'setDay' . $daynumber. ' ' . $daySchedule );
   
-	  $schedule = $_id->getSchedule();
+	  $schedule = worxLandroidS::getSchedule($_id);
 	  $daySchedule[3] = $schedule[$daynumber][3];
 	  $schedule[$daynumber] = $daySchedule;
 	  
-	  $_id->setSchedule($_id, $schedule);
+	  worxLandroidS::setSchedule($_id, $schedule);
   
 	
   }
