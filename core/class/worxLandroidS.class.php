@@ -701,7 +701,7 @@ schedule: TimePeriod[];
 
   public static function setDaySchedule($_id, $daynumber, $daySchedule) {	
           $schedule = array();
-	 log::add('worxLandroidS', 'debug', 'setDayScheduleeqlogic name' . $_id->getName() );	  
+	 log::add('worxLandroidS', 'debug', 'setDayScheduleeqlogic name' . $daynumber );	  
 	  $schedule = self::getSchedule($_id);
 	  $daySchedule[3] = $schedule[intval($daynumber)][3];
 	  $schedule[intval($daynumber)] = $daySchedule;
@@ -728,8 +728,8 @@ schedule: TimePeriod[];
 	$sched = array('00:00', 0, 1);
 	//$eqlogic = $this->getEqLogic();
         //log::add('worxLandroidS', 'debug', 'Eqlogicname: ' . $eqlogic->getName() );
-              log::add('worxLandroidS', 'debug', 'payload: ' . substr($_message,3,1) . $_message );
-        $payload = self::setDaySchedule($_id, substr($_message,3,1), $sched);//  $this->saveConfiguration('savedValue',
+              log::add('worxLandroidS', 'debug', 'payload: ' . substr($_message,4,1) . $_message );
+        $payload = self::setDaySchedule($_id, substr($_message,4,1), $sched);//  $this->saveConfiguration('savedValue',
         log::add('worxLandroidS', 'debug', 'payload: ' . $payload );
       }	    
 	  
