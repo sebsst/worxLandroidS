@@ -681,6 +681,8 @@ schedule: TimePeriod[];
 	
          $schedule[$i] = $day;
 	}
+	   log::add('worxLandroidS', 'debug', 'getschedule' . $schedule );
+	
 	return $schedule;
 	  
 	  
