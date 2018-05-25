@@ -788,7 +788,7 @@ schedule: TimePeriod[];
             // exitLoop instead of disconnect:
             //   . otherwise disconnect too early for Qos=2 see below  (issue #25)
             //   . to correct issue #30 (action commands not run immediately on scenarios)
-         sleep(2);
+         sleep(10);
 		$client->disconnect();
         });	  
 	  
@@ -801,7 +801,7 @@ while (true) {
                     // Loop around to permit the library to do its work
                     $client->loop(1);
                         }
-                $mid = $_client->publish($_subject, $payload, $qos, $retain);
+                $mid = $client->publish($_subject, $payload, $qos, $retain);
                 for ($i = 0; $i < 100; $i++) {
                     // Loop around to permit the library to do its work
                     $client->loop(1);
