@@ -676,9 +676,7 @@ schedule: TimePeriod[];
 	for ($i = 0; $i < 7; $i++) {
 
 	 $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id,'Planning/startTime/'.$i);
-	   log::add('worxLandroidS', 'debug', 'getschedule cmdname' . $cmdlogic->getName() );			
 	 $day[0] = $cmdlogic->getConfiguration('topic', '10:00');
-	   log::add('worxLandroidS', 'debug', 'getschedule time' . $day[0] );			
          $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id,'Planning/duration/'.$i);	
 	 $day[1] = intval($cmdlogic->getConfiguration('topic', 420));		
 	 $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id,'Planning/cutEdge/'.$i);		
@@ -686,17 +684,13 @@ schedule: TimePeriod[];
 	
          $schedule[$i] = $day;
 	}
-	   log::add('worxLandroidS', 'debug', 'getschedule' . $schedule );
-	
 	return $schedule;
-	  
 	  
   }
 
   public static function setSchedule($_id, $schedule) {	
   	  $_message = '{"sc":'.json_encode(array('d'=>$schedule))."}";
-
-	 log::add('worxLandroidS', 'debug', 'message à publier' . $_message);	  
+  	 log::add('worxLandroidS', 'debug', 'message à publier' . $_message);	  
 	  worxLandroidS::publishMosquitto($_id, "DB510/".$_id->getConfiguration('mac_address','worxLandroidS')."/commandIn", $_message, 0);
   }	
 	
@@ -704,16 +698,9 @@ schedule: TimePeriod[];
   public static function setDaySchedule($_id, $daynumber, $daySchedule) {	
           $schedule = array();
  	 // $elogic = self::byLogicalId($nodeid, 'worxLandroidS');	  
-	
-	  $cmd = worxLandroidSCmd::byId($_id);
-	 log::add('worxLandroidS', 'debug', 'setDayScheduleeqlogic id' . $_id );	  	  
-	  $eqlogicid = $cmd->getEqLogic_id();
-	 log::add('worxLandroidS', 'debug', 'setDayScheduleeqlogic id' . $eqlogicid );	  
-	  $schedule = worxLandroidS::getSchedule($eqlogicid);
-	 log::add('worxLandroidS', 'debug', 'setDayScheduleeqlogic name' . $daynumber );	  
+	  $schedule = worxLandroidS::getSchedule($_id);
 	  $daySchedule[2] = $schedule[intval($daynumber)][2];
 	  $schedule[intval($daynumber)] = $daySchedule;
-	 log::add('worxLandroidS', 'debug', 'setDay' . $daynumber. ' ' . $daySchedule );
 	  $_message = '{"sc":'.json_encode(array('d'=>$schedule))."}" ;
 	  return $_message ;
 	//  worxLandroidS::setSchedule($eqlogic, $schedule);
@@ -730,6 +717,8 @@ schedule: TimePeriod[];
     $root_ca = $resource_path.'/vs-ca.pem';
 
 // save schedule if setting to 0 - and retrieve from saved value (new values must be set from smartphone
+      $cmd = worxLandroidSCmd::byId($_id);
+      $eqlogicid = $cmd->getEqLogic_id();
       if(substr_compare($playload,'off', 0, 3)==0){
       log::add('worxLandroidS', 'debug', 'Envoi du message OFF: ' . $_message);
 
@@ -738,12 +727,22 @@ schedule: TimePeriod[];
         //log::add('worxLandroidS', 'debug', 'Eqlogicname: ' . $eqlogic->getName() );
         log::add('worxLandroidS', 'debug', 'payload: ' . substr($_message,4,1) . $_message );
 
-	$_message = self::setDaySchedule($_id, substr($_message,4,1), $sched);//  $this->saveConfiguration('savedValue',
+	$_message = self::setDaySchedule($eqlogicid, substr($_message,4,1), $sched);//  $this->saveConfiguration('savedValue',
         log::add('worxLandroidS', 'debug', 'payload: ' . $payload );
       }	    
+      if(substr_compare($playload,'on', 0, 2)==0){
+      log::add('worxLandroidS', 'debug', 'Envoi du message On: ' . $_message);
+
+	$sched = self:getSavedDaySchedule($_id, 1);
+        //log::add('worxLandroidS', 'debug', 'Eqlogicname: ' . $eqlogic->getName() );
+        log::add('worxLandroidS', 'debug', 'payload: ' . substr($_message,3,1) . $_message );
+
+	$_message = self::setDaySchedule($eqlogicid, substr($_message,3,1), $sched);//  $this->saveConfiguration('savedValue',
+        log::add('worxLandroidS', 'debug', 'payload: ' . $payload );
+      }	    
+
 	  
-	  
-/*
+	 /*
 
    //log::add('worxLandroidS', 'debug', 'Envoi du message ' . $_message . ' vers ' . $_subject. '/'.config::byKey('mqtt_endpoint', 'worxLandroidS'));
     $publish = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS').'2');
@@ -825,19 +824,6 @@ while (true) {
 $client->disconnect();
 unset($client);
 
-
-
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
 	  
 /*	  
 	  
@@ -1080,22 +1066,10 @@ public static $_widgetPossibility = array('custom' => array(
       $request = cmd::cmdToValue($request);
       //log::add('worxLandroidS', 'debug', 'Envoi de l action: ' . $topic. ' ' . $request );
 // save schedule if setting to 0 - and retrieve from saved value (new values must be set from smartphone
-      if(substr_compare($request,'11off', 0, 3)==0){
-      log::add('worxLandroidS', 'debug', 'Envoi de l action: ' . $topic. ' ' . $request );
-
-	      $sched = array('00:00', 0);
-	$eqlogic = $this->getEqLogic();
-        log::add('worxLandroidS', 'debug', 'Eqlogicname: ' . $eqlogic->getName() );
-      
-        worxLandroidS::setDaySchedule($eqlogic->getId(), substr($topic,3,1), $sched);//  $this->saveConfiguration('savedValue',
-      }	    
-	else
-     {	    
-		
+  
 	$eqlogic = $this->getEqLogic();
         log::add('worxLandroidS', 'debug', 'Eqlogicname: ' . $eqlogic->getName() );		
-      worxLandroidS::publishMosquitto($this->getId(), $topic, $request, $this->getConfiguration('retain','0'));
-	}
+        worxLandroidS::publishMosquitto($this->getId(), $topic, $request, $this->getConfiguration('retain','0'));
       }
       return true;
     }
