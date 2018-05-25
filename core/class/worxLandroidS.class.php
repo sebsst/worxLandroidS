@@ -724,11 +724,11 @@ schedule: TimePeriod[];
       if(substr_compare($playload,'off', 0, 3)==0){
       log::add('worxLandroidS', 'debug', 'Envoi du message: ' . $_message);
 
-	$sched = array('00:00', '0');
+	$sched = array('00:00', '0', '1');
 	//$eqlogic = $this->getEqLogic();
         //log::add('worxLandroidS', 'debug', 'Eqlogicname: ' . $eqlogic->getName() );
       
-        $payload = worxLandroidS::setDaySchedule($_id, substr($topic,3,1), $sched);//  $this->saveConfiguration('savedValue',
+        $payload = self::setDaySchedule($_id, substr($topic,3,1), $sched);//  $this->saveConfiguration('savedValue',
         log::add('worxLandroidS', 'debug', 'payload: ' . $payload );
       }	    
 	  
