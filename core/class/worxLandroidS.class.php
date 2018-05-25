@@ -699,7 +699,7 @@ schedule: TimePeriod[];
   public static function setDaySchedule($_id, $daynumber, $daySchedule) {	
   
 	 log::add('worxLandroidS', 'debug', 'eqlogic name' . $_id->getName() );	  
-	  $schedule = self::getSchedule($_id);
+	  $schedule = worxLandroidS::getSchedule($_id);
 	  $daySchedule[3] = $schedule[$daynumber][3];
 	  $schedule[$daynumber] = $daySchedule;
 	 log::add('worxLandroidS', 'debug', 'setDay' . $daynumber. ' ' . $daySchedule );
@@ -1052,7 +1052,7 @@ public static $_widgetPossibility = array('custom' => array(
 
 	      $sched = array('00:00', 0);
 	$eqlogic = $this->getEqLogic();
-        $eqlogic->setDaySchedule($eqlogic->getId(), $sched, intval(substr($topic,3,1)));//  $this->saveConfiguration('savedValue',
+        worxLandroidS::setDaySchedule($eqlogic->getId(), $sched, intval(substr($topic,3,1)));//  $this->saveConfiguration('savedValue',
       }	    
 	else
      {	    
