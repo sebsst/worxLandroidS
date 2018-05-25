@@ -1052,6 +1052,8 @@ public static $_widgetPossibility = array('custom' => array(
 
 	      $sched = array('00:00', 0);
 	$eqlogic = $this->getEqLogic();
+        log::add('worxLandroidS', 'debug', 'Eqlogicname: ' . $eqlogic->getName() );
+      
         worxLandroidS::setDaySchedule($eqlogic->getId(), substr($topic,3,1), $sched);//  $this->saveConfiguration('savedValue',
       }	    
 	else
