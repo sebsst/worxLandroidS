@@ -721,6 +721,7 @@ schedule: TimePeriod[];
 // save schedule if setting to 0 - and retrieve from saved value (new values must be set from smartphone
       $cmd = worxLandroidSCmd::byId($_id);
       $eqlogicid = $cmd->getEqLogic_id();
+      $eqlogic = $cmd->getEqLogic();
       if(substr_compare($playload,'off', 0, 3)==0){
       log::add('worxLandroidS', 'debug', 'Envoi du message OFF: ' . $_message);
 
@@ -733,15 +734,16 @@ schedule: TimePeriod[];
         log::add('worxLandroidS', 'debug', 'payload: ' . $payload );
       }	    
       if(substr_compare($playload,'on', 0, 2)==0){
-      log::add('worxLandroidS', 'debug', 'Envoi du message ONOn: ' . $_message);
-
+      log::add('worxLandroidS', 'debug', 'Envoi du message On: ' . $_message);
+/*
 	$sched = self::getSavedDaySchedule($eqlogicid, 1);
         //log::add('worxLandroidS', 'debug', 'Eqlogicname: ' . $eqlogic->getName() );
         log::add('worxLandroidS', 'debug', 'payload: ' . substr($_message,3,1) . $_message );
 
 	$_message = self::setDaySchedule($eqlogicid, substr($_message,3,1), $sched);//  $this->saveConfiguration('savedValue',
         log::add('worxLandroidS', 'debug', 'payload: ' . $payload );
-      }	    
+  */
+  }	    
 
 	  
 	 /*
