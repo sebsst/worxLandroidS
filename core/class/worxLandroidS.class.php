@@ -710,7 +710,7 @@ schedule: TimePeriod[];
   }
 	
   public static function publishMosquitto($_id, $_subject, $_message, $_retain) {
-
+         log::add('worxLandroidS', 'debug', 'Publication du message ' . $mosqId . ' '. $_subject . ' ' . $payload);
     $resource_path = realpath(dirname(__FILE__) . '/../../resources/');
 
     $certfile = $resource_path.'/cert.pem';
