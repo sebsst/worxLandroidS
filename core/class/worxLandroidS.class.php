@@ -781,7 +781,7 @@ schedule: TimePeriod[];
 	$qos = '0';
 	$retain = '0';
 	$payload = $_message; 
-	  
+	self::$client->onConnect('worxLandroidS::newconnect');
 	  
 	  
         $client->onPublish(function() use ($client, $mosqId, $_subject, $payload, $qos, $retain) {
