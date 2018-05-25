@@ -675,12 +675,12 @@ schedule: TimePeriod[];
         $day = array();
 	for ($i = 0; $i < 7; $i++) {
  	 log::add('worxLandroidS', 'debug', 'getschedule cmdname' . $cmdlogic->getName() );	
-	 $cmdlogic = self::byEqLogicIdCmdName($_id,'Planning/startTime/'.$i);
+	 $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id,'Planning/startTime/'.$i);
 	   log::add('worxLandroidS', 'debug', 'getschedule cmdname' . $cmdlogic->getName() );			
 	 $day[0] = $cmdlogic->getConfiguration('topic', '10:00');
-         $cmdlogic = self::byEqLogicIdCmdName($_id,'Planning/duration/'.$i);	
+         $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id,'Planning/duration/'.$i);	
 	 $day[1] = $cmdlogic->getConfiguration('topic', 420);		
-	 $cmdlogic = self::byEqLogicIdCmdName($_id,'Planning/cutEdge/'.$i);		
+	 $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id,'Planning/cutEdge/'.$i);		
 	 $day[2] = $cmdlogic->getConfiguration('topic', 0);	
 	
          $schedule[$i] = $day;
