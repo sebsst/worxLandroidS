@@ -801,7 +801,7 @@ while (true) {
                     // Loop around to permit the library to do its work
                     $client->loop(1);
                         }
-                $mid = $client->publish($_subject, $payload, $qos, $retain);
+                $mid = $_client->publish($_subject, $payload, $qos, $retain);
                 for ($i = 0; $i < 100; $i++) {
                     // Loop around to permit the library to do its work
                     $client->loop(1);
