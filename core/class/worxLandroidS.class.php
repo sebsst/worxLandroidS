@@ -660,11 +660,11 @@ schedule: TimePeriod[];
     }
 	
   public static function getSavedDaySchedule($_id,$i) {	
-	 $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName()($_id,'Planning/startTime/'.$i);
+	 $cmdlogic = worxLandroidS::byEqLogicIdCmdName()($_id,'Planning/startTime/'.$i);
 	 $day[0] = $cmdlogic->getConfiguration('SavedValue', '10:00');
-         $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName()($elogic->getId(),'Planning/duration/'.$i);	
+         $cmdlogic = worxLandroidS::byEqLogicIdCmdName()($elogic->getId(),'Planning/duration/'.$i);	
 	 $day[1] = $cmdlogic->getConfiguration('SavedValue', 420);		
-	 $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName()($elogic->getId(),'Planning/cutEdge/'.$i);		
+	 $cmdlogic = worxLandroidS::byEqLogicIdCmdName()($elogic->getId(),'Planning/cutEdge/'.$i);		
 	 $day[2] = $cmdlogic->getConfiguration('topic', 0);	
 	
          return $day;
@@ -672,11 +672,11 @@ schedule: TimePeriod[];
   public static function getSchedule($_id) {	
 	for ($i = 0; $i < 7; $i++) {
 
-	 $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName()($_id,'Planning/startTime/'.$i);
+	 $cmdlogic = worxLandroidS::byEqLogicIdCmdName()($_id,'Planning/startTime/'.$i);
 	 $day[0] = $cmdlogic->getConfiguration('topic', '10:00');
-         $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName()($elogic->getId(),'Planning/duration/'.$i);	
+         $cmdlogic = worxLandroidS::byEqLogicIdCmdName()($elogic->getId(),'Planning/duration/'.$i);	
 	 $day[1] = $cmdlogic->getConfiguration('topic', 420);		
-	 $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName()($elogic->getId(),'Planning/cutEdge/'.$i);		
+	 $cmdlogic = worxLandroidS::byEqLogicIdCmdName()($elogic->getId(),'Planning/cutEdge/'.$i);		
 	 $day[2] = $cmdlogic->getConfiguration('topic', 0);	
 	
          $schedule[$i] = $day;
