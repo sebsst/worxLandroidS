@@ -703,8 +703,8 @@ schedule: TimePeriod[];
           $schedule = array();
 	 log::add('worxLandroidS', 'debug', 'setDayScheduleeqlogic name' . $_id->getName() );	  
 	  $schedule = self::getSchedule($_id);
-	  $daySchedule[3] = $schedule[$daynumber][3];
-	  $schedule[$daynumber] = $daySchedule;
+	  $daySchedule[3] = $schedule[intval($daynumber)][3];
+	  $schedule[intval($daynumber)] = $daySchedule;
 	 log::add('worxLandroidS', 'debug', 'setDay' . $daynumber. ' ' . $daySchedule );
 	  $_message = '{"sc":'.json_encode(array('d'=>$schedule))."}" ;
 	  return $_message ;
@@ -725,7 +725,7 @@ schedule: TimePeriod[];
       if(substr_compare($playload,'off', 0, 3)==0){
       log::add('worxLandroidS', 'debug', 'Envoi du message OFF: ' . $_message);
 
-	$sched = array('00:00', '0', '1');
+	$sched = array('00:00', 0, 1);
 	//$eqlogic = $this->getEqLogic();
         //log::add('worxLandroidS', 'debug', 'Eqlogicname: ' . $eqlogic->getName() );
       
