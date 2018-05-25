@@ -706,7 +706,7 @@ schedule: TimePeriod[];
 	  $daySchedule[3] = $schedule[$daynumber][3];
 	  $schedule[$daynumber] = $daySchedule;
 	 log::add('worxLandroidS', 'debug', 'setDay' . $daynumber. ' ' . $daySchedule );
-	  $_message = = '{"sc":'.json_encode(array('d'=>$schedule))."}" 
+	  $_message = '{"sc":'.json_encode(array('d'=>$schedule))."}" ;
 	  return $_message ;
 	//  worxLandroidS::setSchedule($eqlogic, $schedule);
   
