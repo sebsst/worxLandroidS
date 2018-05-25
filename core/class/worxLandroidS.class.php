@@ -701,12 +701,13 @@ schedule: TimePeriod[];
 
   public static function setDaySchedule($_id, $daynumber, $daySchedule) {	
           $schedule = array();
-	 log::add('worxLandroidS', 'debug', 'eqlogic name' . $_id->getName() );	  
-	  $schedule = worxLandroidS::getSchedule($_id);
+	 log::add('worxLandroidS', 'debug', 'setDayScheduleeqlogic name' . $_id->getName() );	  
+	  $schedule = self::getSchedule($_id);
 	  $daySchedule[3] = $schedule[$daynumber][3];
 	  $schedule[$daynumber] = $daySchedule;
 	 log::add('worxLandroidS', 'debug', 'setDay' . $daynumber. ' ' . $daySchedule );
-	  return $_message = '{"sc":'.json_encode(array('d'=>$schedule))."}";
+	  $_message = = '{"sc":'.json_encode(array('d'=>$schedule))."}" 
+	  return $_message ;
 	//  worxLandroidS::setSchedule($eqlogic, $schedule);
   
 	
@@ -722,7 +723,7 @@ schedule: TimePeriod[];
 
 // save schedule if setting to 0 - and retrieve from saved value (new values must be set from smartphone
       if(substr_compare($playload,'off', 0, 3)==0){
-      log::add('worxLandroidS', 'debug', 'Envoi du message: ' . $_message);
+      log::add('worxLandroidS', 'debug', 'Envoi du message OFF: ' . $_message);
 
 	$sched = array('00:00', '0', '1');
 	//$eqlogic = $this->getEqLogic();
