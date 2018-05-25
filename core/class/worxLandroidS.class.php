@@ -794,15 +794,21 @@ $client = new Mosquitto\Client($mosqId);
 	  
 //$client->onPublish('publish');
 $client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883, 60);
-
+       log::add('worxLandroidS', 'debug', 'Publication du message ' . config::byKey('mqtt_endpoint', 'worxLandroidS') . ' ' . $payload);
+     
+	  
+	  
+	  
 while (true) {
         try{
                for ($i = 0; $i < 100; $i++) {
                     // Loop around to permit the library to do its work
                     $client->loop(1);
                         }
-                $mid = $client->publish($_subject, $payload, $qos, $retain);
-                for ($i = 0; $i < 100; $i++) {
+                //$mid = $client->publish($_subject, $payload, $qos, $retain);
+                $mid = $client->publish($_subject, $payload, 0, 0);
+                
+		for ($i = 0; $i < 100; $i++) {
                     // Loop around to permit the library to do its work
                     $client->loop(1);
                         }
