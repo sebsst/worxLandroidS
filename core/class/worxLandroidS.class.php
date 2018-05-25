@@ -660,11 +660,11 @@ schedule: TimePeriod[];
     }
 	
   public static function getSavedDaySchedule($_id,$i) {	
-	 $cmdlogic = worxLandroidS::byEqLogicIdCmdName()($_id,'Planning/startTime/'.$i);
+	 $cmdlogic = worxLandroidS::byEqLogicIdCmdName($_id,'Planning/startTime/'.$i);
 	 $day[0] = $cmdlogic->getConfiguration('SavedValue', '10:00');
-         $cmdlogic = worxLandroidS::byEqLogicIdCmdName()($_id,'Planning/duration/'.$i);	
+         $cmdlogic = worxLandroidS::byEqLogicIdCmdName($_id,'Planning/duration/'.$i);	
 	 $day[1] = $cmdlogic->getConfiguration('SavedValue', 420);		
-	 $cmdlogic = worxLandroidS::byEqLogicIdCmdName()($_id,'Planning/cutEdge/'.$i);		
+	 $cmdlogic = worxLandroidS::byEqLogicIdCmdName($_id,'Planning/cutEdge/'.$i);		
 	 $day[2] = $cmdlogic->getConfiguration('topic', 0);	
 	
          return $day;
@@ -675,12 +675,12 @@ schedule: TimePeriod[];
         $day = array();
 	for ($i = 0; $i < 7; $i++) {
  
-	 $cmdlogic = $_id->byEqLogicIdCmdName()($_id,'Planning/startTime/'.$i);
+	 $cmdlogic = $_id->byEqLogicIdCmdName($_id,'Planning/startTime/'.$i);
 	   log::add('worxLandroidS', 'debug', 'getschedule cmdname' . $cmdlogic->getName() );			
 	 $day[0] = $cmdlogic->getConfiguration('topic', '10:00');
-         $cmdlogic = $_id->byEqLogicIdCmdName()($_id,'Planning/duration/'.$i);	
+         $cmdlogic = $_id->byEqLogicIdCmdName($_id,'Planning/duration/'.$i);	
 	 $day[1] = $cmdlogic->getConfiguration('topic', 420);		
-	 $cmdlogic = $_id->byEqLogicIdCmdName()($_id,'Planning/cutEdge/'.$i);		
+	 $cmdlogic = $_id->byEqLogicIdCmdName($_id,'Planning/cutEdge/'.$i);		
 	 $day[2] = $cmdlogic->getConfiguration('topic', 0);	
 	
          $schedule[$i] = $day;
@@ -703,7 +703,7 @@ schedule: TimePeriod[];
   public static function setDaySchedule($_id, $daynumber, $daySchedule) {	
           $schedule = array();
 	 log::add('worxLandroidS', 'debug', 'setDayScheduleeqlogic name' . $daynumber );	  
-	  $schedule = self::getSchedule($_id);
+	  $schedule = $_id->getSchedule($_id);
 	  $daySchedule[3] = $schedule[intval($daynumber)][3];
 	  $schedule[intval($daynumber)] = $daySchedule;
 	 log::add('worxLandroidS', 'debug', 'setDay' . $daynumber. ' ' . $daySchedule );
