@@ -733,7 +733,7 @@ schedule: TimePeriod[];
       if(substr_compare($playload,'on', 0, 2)==0){
       log::add('worxLandroidS', 'debug', 'Envoi du message On: ' . $_message);
 
-	$sched = self:getSavedDaySchedule($_id, 1);
+	$sched = self::getSavedDaySchedule($eqlogicid, 1);
         //log::add('worxLandroidS', 'debug', 'Eqlogicname: ' . $eqlogic->getName() );
         log::add('worxLandroidS', 'debug', 'payload: ' . substr($_message,3,1) . $_message );
 
