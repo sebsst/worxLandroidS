@@ -812,7 +812,7 @@ while (true) {
 		log::add('worxLandroidS', 'debug', 'exception ' . $e);
                 return;
         }
-        sleep(6);
+        sleep(15);
 }
 
 $client->disconnect();
