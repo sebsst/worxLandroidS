@@ -1058,6 +1058,9 @@ public static $_widgetPossibility = array('custom' => array(
       }	    
 	else
      {	    
+		
+	$eqlogic = $this->getEqLogic();
+        log::add('worxLandroidS', 'debug', 'Eqlogicname: ' . $eqlogic->getName() );		
       worxLandroidS::publishMosquitto($this->getId(), $topic, $request, $this->getConfiguration('retain','0'));
 	}
       }
