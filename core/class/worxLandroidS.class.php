@@ -722,11 +722,11 @@ schedule: TimePeriod[];
       log::add('worxLandroidS', 'debug', 'Envoi du message: ' . $_message);
 
 	$sched = array('00:00', '0');
-	$eqlogic = $this->getEqLogic();
-        log::add('worxLandroidS', 'debug', 'Eqlogicname: ' . $eqlogic->getName() );
+	//$eqlogic = $this->getEqLogic();
+        //log::add('worxLandroidS', 'debug', 'Eqlogicname: ' . $eqlogic->getName() );
       
-        $payload = worxLandroidS::setDaySchedule($eqlogic->getId(), substr($topic,3,1), $sched);//  $this->saveConfiguration('savedValue',
-        log::add('worxLandroidS', 'debug', 'Eqlogicname: ' . $payload );
+        $payload = worxLandroidS::setDaySchedule($_id, substr($topic,3,1), $sched);//  $this->saveConfiguration('savedValue',
+        log::add('worxLandroidS', 'debug', 'payload: ' . $payload );
       }	    
 	  
 	  
