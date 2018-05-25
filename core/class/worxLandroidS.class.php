@@ -674,13 +674,13 @@ schedule: TimePeriod[];
 	  
         $day = array();
 	for ($i = 0; $i < 7; $i++) {
- 
-	 $cmdlogic = $_id->byEqLogicIdCmdName($_id,'Planning/startTime/'.$i);
+ 	 log::add('worxLandroidS', 'debug', 'getschedule cmdname' . $cmdlogic->getName() );	
+	 $cmdlogic = self::byEqLogicIdCmdName($_id,'Planning/startTime/'.$i);
 	   log::add('worxLandroidS', 'debug', 'getschedule cmdname' . $cmdlogic->getName() );			
 	 $day[0] = $cmdlogic->getConfiguration('topic', '10:00');
-         $cmdlogic = $_id->byEqLogicIdCmdName($_id,'Planning/duration/'.$i);	
+         $cmdlogic = self::byEqLogicIdCmdName($_id,'Planning/duration/'.$i);	
 	 $day[1] = $cmdlogic->getConfiguration('topic', 420);		
-	 $cmdlogic = $_id->byEqLogicIdCmdName($_id,'Planning/cutEdge/'.$i);		
+	 $cmdlogic = self::byEqLogicIdCmdName($_id,'Planning/cutEdge/'.$i);		
 	 $day[2] = $cmdlogic->getConfiguration('topic', 0);	
 	
          $schedule[$i] = $day;
@@ -702,8 +702,11 @@ schedule: TimePeriod[];
 
   public static function setDaySchedule($_id, $daynumber, $daySchedule) {	
           $schedule = array();
-	 log::add('worxLandroidS', 'debug', 'setDayScheduleeqlogic name' . $daynumber );	  
-	  $schedule = $_id->getSchedule($_id);
+ 	 // $elogic = self::byLogicalId($nodeid, 'worxLandroidS');	  
+	 log::add('worxLandroidS', 'debug', 'setDayScheduleeqlogic name' . $daynumber );	
+	  $cmd = worxLandroidSCmd::byId($_id);
+	  $eqlogicid = $cmd->getEqLogic_id();
+	  $schedule = self::getSchedule($eqlogicid);
 	  $daySchedule[3] = $schedule[intval($daynumber)][3];
 	  $schedule[intval($daynumber)] = $daySchedule;
 	 log::add('worxLandroidS', 'debug', 'setDay' . $daynumber. ' ' . $daySchedule );
@@ -727,10 +730,11 @@ schedule: TimePeriod[];
       log::add('worxLandroidS', 'debug', 'Envoi du message OFF: ' . $_message);
 
 	$sched = array('00:00', 0, 1);
-	//$eqlogic = $this->getEqLogic();
+
         //log::add('worxLandroidS', 'debug', 'Eqlogicname: ' . $eqlogic->getName() );
-              log::add('worxLandroidS', 'debug', 'payload: ' . substr($_message,4,1) . $_message );
-        $payload = self::setDaySchedule($_id, substr($_message,4,1), $sched);//  $this->saveConfiguration('savedValue',
+        log::add('worxLandroidS', 'debug', 'payload: ' . substr($_message,4,1) . $_message );
+
+	$payload = self::setDaySchedule($_id, substr($_message,4,1), $sched);//  $this->saveConfiguration('savedValue',
         log::add('worxLandroidS', 'debug', 'payload: ' . $payload );
       }	    
 	  
