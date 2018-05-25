@@ -662,7 +662,9 @@ schedule: TimePeriod[];
   public static function getSavedDaySchedule($_id,$i) {	
 	 $cmdlogic = worxLandroidS::byEqLogicIdCmdName($_id,'Planning/startTime/'.$i);
 	 $day[0] = $cmdlogic->getConfiguration('SavedValue', '10:00');
-         $cmdlogic = worxLandroidS::byEqLogicIdCmdName($_id,'Planning/duration/'.$i);	
+        log::add('worxLandroidS', 'debug', 'savedtime: ' . $day[0] );
+   
+	  $cmdlogic = worxLandroidS::byEqLogicIdCmdName($_id,'Planning/duration/'.$i);	
 	 $day[1] = $cmdlogic->getConfiguration('SavedValue', 420);		
 	 $cmdlogic = worxLandroidS::byEqLogicIdCmdName($_id,'Planning/cutEdge/'.$i);		
 	 $day[2] = $cmdlogic->getConfiguration('topic', 0);	
@@ -731,7 +733,7 @@ schedule: TimePeriod[];
         log::add('worxLandroidS', 'debug', 'payload: ' . $payload );
       }	    
       if(substr_compare($playload,'on', 0, 2)==0){
-      log::add('worxLandroidS', 'debug', 'Envoi du message On: ' . $_message);
+      log::add('worxLandroidS', 'debug', 'Envoi du message ONOn: ' . $_message);
 
 	$sched = self::getSavedDaySchedule($eqlogicid, 1);
         //log::add('worxLandroidS', 'debug', 'Eqlogicname: ' . $eqlogic->getName() );
