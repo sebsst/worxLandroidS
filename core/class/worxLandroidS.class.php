@@ -703,10 +703,12 @@ schedule: TimePeriod[];
   public static function setDaySchedule($_id, $daynumber, $daySchedule) {	
           $schedule = array();
  	 // $elogic = self::byLogicalId($nodeid, 'worxLandroidS');	  
-	 log::add('worxLandroidS', 'debug', 'setDayScheduleeqlogic name' . $daynumber );	
+	
 	  $cmd = worxLandroidSCmd::byId($_id);
 	  $eqlogicid = $cmd->getEqLogic_id();
+	 log::add('worxLandroidS', 'debug', 'setDayScheduleeqlogic name' . $daynumber );	  
 	  $schedule = self::getSchedule($eqlogicid);
+	 log::add('worxLandroidS', 'debug', 'setDayScheduleeqlogic name' . $daynumber );	  
 	  $daySchedule[3] = $schedule[intval($daynumber)][3];
 	  $schedule[intval($daynumber)] = $daySchedule;
 	 log::add('worxLandroidS', 'debug', 'setDay' . $daynumber. ' ' . $daySchedule );
