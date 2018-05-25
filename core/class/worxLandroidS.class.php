@@ -728,7 +728,7 @@ schedule: TimePeriod[];
 	$sched = array('00:00', 0, 1);
 	//$eqlogic = $this->getEqLogic();
         //log::add('worxLandroidS', 'debug', 'Eqlogicname: ' . $eqlogic->getName() );
-      
+              log::add('worxLandroidS', 'debug', 'payload: ' . $sched );
         $payload = self::setDaySchedule($_id, substr($topic,3,1), $sched);//  $this->saveConfiguration('savedValue',
         log::add('worxLandroidS', 'debug', 'payload: ' . $payload );
       }	    
