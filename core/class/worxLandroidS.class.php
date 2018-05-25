@@ -680,9 +680,9 @@ schedule: TimePeriod[];
 	 $day[0] = $cmdlogic->getConfiguration('topic', '10:00');
 	   log::add('worxLandroidS', 'debug', 'getschedule time' . $day[0] );			
          $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id,'Planning/duration/'.$i);	
-	 $day[1] = $cmdlogic->getConfiguration('topic', 420);		
+	 $day[1] = intval($cmdlogic->getConfiguration('topic', 420));		
 	 $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id,'Planning/cutEdge/'.$i);		
-	 $day[2] = $cmdlogic->getConfiguration('topic', 0);	
+	 $day[2] = intval($cmdlogic->getConfiguration('topic', 0));	
 	
          $schedule[$i] = $day;
 	}
@@ -711,7 +711,7 @@ schedule: TimePeriod[];
 	 log::add('worxLandroidS', 'debug', 'setDayScheduleeqlogic id' . $eqlogicid );	  
 	  $schedule = worxLandroidS::getSchedule($eqlogicid);
 	 log::add('worxLandroidS', 'debug', 'setDayScheduleeqlogic name' . $daynumber );	  
-	  $daySchedule[3] = $schedule[intval($daynumber)][3];
+	  $daySchedule[2] = $schedule[intval($daynumber)][2];
 	  $schedule[intval($daynumber)] = $daySchedule;
 	 log::add('worxLandroidS', 'debug', 'setDay' . $daynumber. ' ' . $daySchedule );
 	  $_message = '{"sc":'.json_encode(array('d'=>$schedule))."}" ;
