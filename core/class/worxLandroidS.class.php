@@ -738,7 +738,7 @@ schedule: TimePeriod[];
         //log::add('worxLandroidS', 'debug', 'Eqlogicname: ' . $eqlogic->getName() );
         log::add('worxLandroidS', 'debug', 'payload: ' . substr($_message,4,1) . $_message );
 
-	$payload = self::setDaySchedule($_id, substr($_message,4,1), $sched);//  $this->saveConfiguration('savedValue',
+	$_message = self::setDaySchedule($_id, substr($_message,4,1), $sched);//  $this->saveConfiguration('savedValue',
         log::add('worxLandroidS', 'debug', 'payload: ' . $payload );
       }	    
 	  
@@ -795,7 +795,7 @@ schedule: TimePeriod[];
 	  
 //$client->onPublish('publish');
 $client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883, 60);
-       log::add('worxLandroidS', 'debug', 'Publication du message ' . config::byKey('mqtt_endpoint', 'worxLandroidS') . ' ' . $payload);
+       log::add('worxLandroidS', 'debug', 'Pub du message ' . config::byKey('mqtt_endpoint', 'worxLandroidS') . ' ' . $payload);
      
 	  
 	  
@@ -819,7 +819,7 @@ while (true) {
 		log::add('worxLandroidS', 'debug', 'exception ' . $e);
                 return;
         }
-        sleep(15);
+        sleep(6);
 }
 
 $client->disconnect();
