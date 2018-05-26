@@ -661,11 +661,11 @@ schedule: TimePeriod[];
 	
   public static function getSavedDaySchedule($_id,$i) {	
 	 $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id,'Planning/startTime/'.$i);
-	 $day[0] = $cmdlogic->getConfiguration('SavedValue', '10:00');
+	 $day[0] = $cmdlogic->getConfiguration('savedValue', '10:00');
         log::add('worxLandroidS', 'debug', 'savedtime: ' . $day[0] );
    
 	  $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id,'Planning/duration/'.$i);	
-	 $day[1] = intval($cmdlogic->getConfiguration('SavedValue', 420));		
+	 $day[1] = intval($cmdlogic->getConfiguration('savedValue', 420));		
 	 $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id,'Planning/cutEdge/'.$i);		
 	 $day[2] = intval($cmdlogic->getConfiguration('topic', 0));	
 	
