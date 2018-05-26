@@ -961,9 +961,9 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 				$duration = $this->getCmd(null, 'Planning/duration/' . $i);				
 				$replaceDay['#startTime#'] = is_object($startTime) ? $startTime->execCmd() : '';
 				$replaceDay['#duration#'] = is_object($duration) ? $duration->execCmd() : '';
-				$cmd = this->getCmd('action','on_'.$i);
+				$cmd = $this->getCmd('action','on_'.$i);
 				$replaceDay['#on_daynum_id#'] = $cmd->getId();
-				$cmd = this->getCmd('action','off_'.$i);
+				$cmd = $this->getCmd('action','off_'.$i);
 				$replaceDay['#off_daynum_id#'] = $cmd->getId();
 
 				//$replaceDay['#on_id#'] = $this->getCmd('action', 'on_1');
