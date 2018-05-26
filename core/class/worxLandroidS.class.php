@@ -613,9 +613,11 @@ schedule: TimePeriod[];
       if(substr_compare($cmdId,"Planning/startTime", 0, 18)==0 && $value!='00:00' ){
 	      
     log::add('worxLandroidS', 'debug', 'savedValue'. $value);
-	      $cmdlogic->setConfiguration('savedValue', $value);
+	      $cmdlogic->setConfiguration('savedValue time', $value);
       	 }
       if(substr_compare($cmdId,"Planning/duration", 0, 17)==0 && $value!=0 ){
+    log::add('worxLandroidS', 'debug', 'savedValue duration'. $value);
+
 	      $cmdlogic->setConfiguration('savedValue', $value);
       	 }
 		
