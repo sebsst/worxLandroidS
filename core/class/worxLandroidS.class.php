@@ -635,9 +635,9 @@ schedule: TimePeriod[];
         $cmdlogic->save();
 
       }
-      //$cmdlogic->setConfiguration('topic', $value);
+      $cmdlogic->setConfiguration('topic', $value);
       //$cmdlogic->setValue($value);
-      //$cmdlogic->save();
+      $cmdlogic->save();
 	  
     $elogic->checkAndUpdateCmd($cmdId,$value);
 	  
