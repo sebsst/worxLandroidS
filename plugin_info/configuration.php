@@ -44,7 +44,7 @@ if (!isConnect()) {
 					</div>   
 
 	    <div class="form-group">
-		<label class="col-sm-4 control-label">{{Initialiser données cloud worx : }}</label>
+		<label class="col-sm-4 control-label">{{Initialiser/réactualiser données cloud worx : }}</label>
 		<div class="col-sm-2">
 		    <input id="mosquitto_por" type="checkbox" class="configKey autoCheck" data-l1key="initCloud"  />
 		</div>
