@@ -690,6 +690,7 @@ schedule: TimePeriod[];
 
 	 $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id,'Planning/startTime/'.$i);
 	 $day[0] = $cmdlogic->getConfiguration('topic', '10:00');
+  	 log::add('worxLandroidS', 'debug', 'valeur actuelle J'. $i. 't'. $day[0]);	
          $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id,'Planning/duration/'.$i);	
 	 $day[1] = intval($cmdlogic->getConfiguration('topic', 420));		
 	 $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id,'Planning/cutEdge/'.$i);		
