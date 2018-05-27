@@ -742,7 +742,7 @@ schedule: TimePeriod[];
         log::add('worxLandroidS', 'debug', 'payload: ' . substr($_message,4,1) . $_message );
 
 	$_message = self::setDaySchedule($eqlogicid, substr($_message,4,1), $sched);//  $this->saveConfiguration('savedValue',
-        log::add('worxLandroidS', 'debug', 'payload: ' . $payload );
+        log::add('worxLandroidS', 'debug', 'payload: ' . $_message );
       }	    
       if(substr_compare($_message,'on', 0, 2)==0){
       log::add('worxLandroidS', 'debug', 'Envoi du message On: ' . $_message);
@@ -752,7 +752,7 @@ schedule: TimePeriod[];
         log::add('worxLandroidS', 'debug', 'payload: ' . substr($_message,3,1) . $_message );
 
 	$_message = self::setDaySchedule($eqlogicid, substr($_message,3,1), $sched);//  $this->saveConfiguration('savedValue',
-        log::add('worxLandroidS', 'debug', 'payload: ' . $payload );
+        log::add('worxLandroidS', 'debug', 'payload: ' . $_message );
   
   }	    
 
