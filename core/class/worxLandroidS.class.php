@@ -623,16 +623,18 @@ schedule: TimePeriod[];
     log::add('worxLandroidS', 'debug', 'Cmdlogic update'.$cmdId.$value);
       if(strpos($cmdId,"Planning/startTime")!= false && $value!='00:00' ){
     log::add('worxLandroidS', 'debug', 'savedValue time'. $value);
-	      $cmdlogic->setConfiguration('savedValue', $value);
+      $cmdlogic->setConfiguration('savedValue', $value);
       $cmdlogic->save();
       }
       if(strpos($cmdId,"Planning/duration") != false && $value!=0 ){
     log::add('worxLandroidS', 'debug', 'savedValue duration'. $value);
-	      $cmdlogic->setConfiguration('savedValue', $value);
-      $cmdlogic->save();
+	$cmdlogic->setConfiguration('savedValue', $value);
+        $cmdlogic->save();
 
       }
-
+      $cmdlogic->setConfiguration('topic', $value);
+      //$cmdlogic->setValue($value);
+      $cmdlogic->save();
 	  
     $elogic->checkAndUpdateCmd($cmdId,$value);
 	  
