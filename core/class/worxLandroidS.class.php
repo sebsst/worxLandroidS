@@ -305,7 +305,7 @@ sleep(30);
   public static function subscribe( ) {
     log::add('worxLandroidS', 'debug', 'Subscribe to topics');
   }
-
+	
   public static function logmq( $code, $str ) {
     if (strpos($str,'PINGREQ') === false && strpos($str,'PINGRESP') === false) {
       log::add('worxLandroidS', 'debug', $code . ' : ' . $str);
@@ -355,9 +355,17 @@ sleep(30);
       $elogic->checkAndUpdateCmd();
       $commandIn = 'DB510/'. $json2_data->dat->mac .'/commandIn';
       self::newAction($elogic,'setRainDelay', $commandIn, '{"rd":"#message#"}','message');
-      self::newAction($elogic,'start',$commandIn,'{"cmd":"1"}','other');
-      self::newAction($elogic,'stop',$commandIn,'{"cmd":"3"}','other');
-      self::newAction($elogic,'refreshValue',$commandIn,'{}','other');
+      self::newAction($elogic,'start',$commandIn,array(cmd=>1),'other');
+      self::newAction($elogic,'stop',$commandIn,array(cmd=>3),'other');
+      self::newAction($elogic,'refreshValue',$commandIn,"",'other');
+
+	for ($i = 0; $i < 7; $i++) {
+         self::newAction($elogic,'on_'.$i,$commandIn,'on_'.$i,'other');
+         self::newAction($elogic,'off_'.$i,$commandIn,'off_'.$i,'other');
+	}      
+	    
+	    
+	    
       event::add('worxLandroidS::includeEqpt', $elogic->getId());
 	    
 
@@ -478,10 +486,10 @@ schedule: TimePeriod[];
 
       //  date début + durée + bordure
 
-	for ($i = 0; $i < 6; $i++) {
+	for ($i = 0; $i < 7; $i++) {
          self::newInfo($elogic,'Planning/startTime/'.$i,$json2_data->cfg->sc->d[$i][0],'string',1);
          self::newInfo($elogic,'Planning/duration/'.$i,$json2_data->cfg->sc->d[$i][1],'string',1);
-         self::newInfo($elogic,'Planning/cutEdge/'.$i,$json2_data->cfg->sc->d[$i][2],'string',1);	   
+         self::newInfo($elogic,'Planning/cutEdge/'.$i,$json2_data->cfg->sc->d[$i][2],'string',1);
 	}
 	    /*
         self::newInfo($elogic,'Planning/Monday/Starttime',$json2_data->cfg->sc->d[1][0],'string',1);
@@ -508,6 +516,7 @@ schedule: TimePeriod[];
 
     switch ($errorcode) {
 
+	/*
       case '0': return 'No error';         break;
       case '1': return  'Trapped';         break;
       case '2': return  'Lifted';         break;
@@ -527,6 +536,29 @@ schedule: TimePeriod[];
 
 
       default: return 'Unknown';
+      
+      */
+      case '0': return __('Aucune erreur',__FILE__);         break;
+      case '1': return  __('Bloquée',__FILE__);         break;
+      case '2': return  __('Soulevée',__FILE__);         break;
+      case '3': return  __('Câble non trouvé',__FILE__);         break;
+      case '4': return  __('En dehors des limites',__FILE__);        break;
+      case '5': return  __('Délai pluie',__FILE__);  break;
+      case '6': return  'Close door to mow';        break;
+      case '7': return  'Close door to go home';    break;
+      case '8': return  __('Moteur lames bloqué',__FILE__);       break;
+      case '9': return  __('Moteur roues bloqué',__FILE__);       break;
+      case '10': return  __('Timeout après blocage',__FILE__);         break;
+      case '11': return  __('Renversée',__FILE__);         break;
+      case '12': return  __('Batterie faible',__FILE__);         break;
+      case '13': return  __('Câble inversé',__FILE__);         break;
+      case '14': return  __('Erreur charge batterie',__FILE__);         break;
+      case '15': return  __('Delai recherche station dépassé',__FILE__);        break;
+
+
+      default: return 'Unknown';		    
+		    
+		    
         // code...
         break;
     }
@@ -539,22 +571,21 @@ schedule: TimePeriod[];
 
     switch ($statuscode) {
 
-      case '0': return "Idle";       break;
-      case '1': return "Home";      break;
-      case '2': return "Start sequence";       break;
-      case '3': return "Leaving home"; break;
-      case '4': return "Follow wire"; break;
-      case '5': return "Searching home"; break;
-      case '6': return "Searching wire"; break;
-      case '7': return "Mowing"; break;
-      case '8': return "Lifted"; break;
-      case '9': return "Trapped"; break;
-      case '10': return "Blade blocked"; break;
+      case '0': return __("Inactive",__FILE__);       break;
+      case '1': return __("Maison",__FILE__);      break;
+      case '2': return __("Séquence de démarrage",__FILE__);       break;
+      case '3': return __("Quitte la maison",__FILE__); break;
+      case '4': return __("Suit le câble",__FILE__); break;
+      case '5': return __("Recherche de la maison",__FILE__); break;
+      case '6': return __("Recherche du câble",__FILE__); break;
+      case '7': return __("En cours de tonte",__FILE__); break;
+      case '8': return __("Soulevée",__FILE__); break;
+      case '9': return __("Coincée",__FILE__); break;
+      case '10': return __("Lames bloquées",__FILE__); break;
       case '11': return "Debug"; break;
-      case '12': return "Remote control"; break;
-      case '30': return "Going home"; break;
-      case '32': return "Cutting edge"; break;
-
+      case '12': return __("Remote control",__FILE__); break;
+      case '30': return __("Retour maison",__FILE__); break;
+      case '32': return __("Coupe la bordure",__FILE__); break;
 
       default: return 'unkown';
         // code...
@@ -579,13 +610,31 @@ schedule: TimePeriod[];
       $cmdlogic->setType('info');
       $cmdlogic->setName( $cmdId );
       $cmdlogic->setIsVisible($visible);
-
+		
+	    
       $cmdlogic->setConfiguration('topic', $value);
       //$cmdlogic->setValue($value);
       $cmdlogic->save();
     }
+	  
+	  
     log::add('worxLandroidS', 'debug', 'Cmdlogic update'.$cmdId.$value);
 
+	  if(strstr($cmdId,"Planning/startTime") && $value != '00:00' ){
+   // log::add('worxLandroidS', 'debug', 'savedValue time'. $value);
+      $cmdlogic->setConfiguration('savedValue', $value);
+      $cmdlogic->save();
+      }
+      if(strstr($cmdId,"Planning/duration") && $value != 0 ){
+    //log::add('worxLandroidS', 'debug', 'savedValue duration'. $value);
+	$cmdlogic->setConfiguration('savedValue', $value);
+        $cmdlogic->save();
+
+      }
+      $cmdlogic->setConfiguration('topic', $value);
+      //$cmdlogic->setValue($value);
+      $cmdlogic->save();
+	  
     $elogic->checkAndUpdateCmd($cmdId,$value);
 	  
 
@@ -610,22 +659,93 @@ schedule: TimePeriod[];
         //$cmdlogic->setValue($value);
         $cmdlogic->save();
       }
-      log::add('worxLandroidS', 'debug', 'Cmdlogic update'.$cmdId.$value);
+//      log::add('worxLandroidS', 'debug', 'Cmdlogic update'.$cmdId.$value);
 
       $elogic->checkAndUpdateCmd($cmdId,$value);
 
 
     }
+	
+  public static function getSavedDaySchedule($_id,$i) {	
+	 $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id,'Planning/startTime/'.$i);
+	 $day[0] = $cmdlogic->getConfiguration('savedValue', '10:00');
+ 
+	  $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id,'Planning/duration/'.$i);	
+	 $day[1] = intval($cmdlogic->getConfiguration('savedValue', 420));		
+	 $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id,'Planning/cutEdge/'.$i);		
+	 $day[2] = intval($cmdlogic->getConfiguration('topic', 0));	
+	
+         return $day;
+  }
+  public static function getSchedule($_id) {	
+	$schedule = array();
+	  
+        $day = array();
+	for ($i = 0; $i < 7; $i++) {
 
+	 $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id,'Planning/startTime/'.$i);
+	 $day[0] = $cmdlogic->getConfiguration('topic', '10:00');
+         $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id,'Planning/duration/'.$i);	
+	 $day[1] = intval($cmdlogic->getConfiguration('topic', 420));		
+	 $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id,'Planning/cutEdge/'.$i);		
+	 $day[2] = intval($cmdlogic->getConfiguration('topic', 0));	
+	
+         $schedule[$i] = $day;
+	}
+	return $schedule;
+	  
+  }
+
+  public static function setSchedule($_id, $schedule) {	
+  	  $_message = '{"sc":'.json_encode(array('d'=>$schedule))."}";
+  	 log::add('worxLandroidS', 'debug', 'message à publier' . $_message);	  
+	  worxLandroidS::publishMosquitto($_id, "DB510/".$_id->getConfiguration('mac_address','worxLandroidS')."/commandIn", $_message, 0);
+  }	
+	
+
+  public static function setDaySchedule($_id, $daynumber, $daySchedule) {	
+          $schedule = array();
+ 	 // $elogic = self::byLogicalId($nodeid, 'worxLandroidS');	  
+	  $schedule = worxLandroidS::getSchedule($_id);
+	  $daySchedule[2] = $schedule[intval($daynumber)][2];
+	  $schedule[intval($daynumber)] = $daySchedule;
+	  $_message = '{"sc":'.json_encode(array('d'=>$schedule))."}" ;
+	  return $_message ;
+	//  worxLandroidS::setSchedule($eqlogic, $schedule);
+  
+	
+  }
+	
   public static function publishMosquitto($_id, $_subject, $_message, $_retain) {
-
+         log::add('worxLandroidS', 'debug', 'Publication du message ' . $mosqId . ' '. $_subject . ' ' . $_message);
     $resource_path = realpath(dirname(__FILE__) . '/../../resources/');
 
     $certfile = $resource_path.'/cert.pem';
     $pkeyfile = $resource_path.'/pkey.pem';
     $root_ca = $resource_path.'/vs-ca.pem';
 
+// save schedule if setting to 0 - and retrieve from saved value (new values must be set from smartphone
+      $cmd = worxLandroidSCmd::byId($_id);
+      $eqlogicid = $cmd->getEqLogic_id();
+      $eqlogic = $cmd->getEqLogic();
+      if(substr_compare($_message,'off', 0, 3)==0){
+        log::add('worxLandroidS', 'debug', 'Envoi du message OFF: ' . $_message);
 
+        $sched = array('00:00', 0, 1);
+	$_message = self::setDaySchedule($eqlogicid, substr($_message,4,1), $sched);//  $this->saveConfiguration('savedValue',
+      }	    
+      if(substr_compare($_message,'on', 0, 2)==0){
+      log::add('worxLandroidS', 'debug', 'Envoi du message On: ' . $_message);
+
+	$sched = self::getSavedDaySchedule($eqlogicid,  substr($_message,3,1));
+	$_message = self::setDaySchedule($eqlogicid, substr($_message,3,1), $sched);//  $this->saveConfiguration('savedValue',
+  
+  }	    
+	  
+	  if($_id == 'start'){ $_message = json_encode(array('cmd'=>1));}
+	  if($_id == 'stop'){ $_message = json_encode(array('cmd'=>3));}
+	  
+	 /*
 
    //log::add('worxLandroidS', 'debug', 'Envoi du message ' . $_message . ' vers ' . $_subject. '/'.config::byKey('mqtt_endpoint', 'worxLandroidS'));
     $publish = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS').'2');
@@ -649,7 +769,112 @@ schedule: TimePeriod[];
     $publish->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), '8883', 70);
    $publish->publish($_subject, '{"rd":123}', 0 , 0);
    $publish->loopForever();
-         // $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
+*/
+	  
+	  
+        $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS'). '' . $id . '' . substr(md5(rand()), 0, 8);
+        // FIXME: the static class variable $_client is not visible here as the current function
+        // is not executed on the same thread as the deamon. So we do create a new client.
+      //  $client = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS'));
+
+	  
+        $client = new Mosquitto\Client($mosqId);	  
+        $client->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);	  
+	$qos = '0';
+	$retain = '0';
+	$payload = $_message; 
+	$client->onConnect('worxLandroidS::newconnect');
+	  
+	  
+        $client->onPublish(function() use ($client, $mosqId, $_subject, $payload, $qos, $retain) {
+            log::add('worxLandroidS', 'debug', 'Publication du message ' . $_subject . ' ' . $payload);
+            // exitLoop instead of disconnect:
+            //   . otherwise disconnect too early for Qos=2 see below  (issue #25)
+            //   . to correct issue #30 (action commands not run immediately on scenarios)
+         sleep(10);
+		$client->disconnect();
+        });	  
+	  
+//$client->onPublish('publish');
+$client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883, 60);
+       log::add('worxLandroidS', 'debug', 'Pub du message ' . config::byKey('mqtt_endpoint', 'worxLandroidS') . ' ' . $payload);
+     
+	  
+	  
+	  
+while (true) {
+        try{
+               for ($i = 0; $i < 100; $i++) {
+                    // Loop around to permit the library to do its work
+                    $client->loop(1);
+                        }
+                //$mid = $client->publish($_subject, $payload, $qos, $retain);
+                $mid = $client->publish($_subject, $payload, 0, 0);
+                
+		for ($i = 0; $i < 100; $i++) {
+                    // Loop around to permit the library to do its work
+                    $client->loop(1);
+                        }
+
+        }catch(Mosquitto\Exception $e){
+            //echo"{$e}" ;
+		log::add('worxLandroidS', 'debug', 'exception ' . $e);
+                return;
+        }
+        sleep(6);
+}
+
+$client->disconnect();
+unset($client);
+
+	  
+/*	  
+	  
+	  
+	$mosqHost = config::byKey('mqtt_endpoint', 'worxLandroidS');
+        $mosqPort = '8883';
+      //  $payloadMsg = (($payload == '') ? '(null)' : $payload);
+      //  log::add('jMQTT', 'info', '<- ' . $eqName . '|' . $topic . ' ' . $payloadMsg);
+        // To identify the sender (in case of debug need), bvuild the client id based on the jMQTT connexion id
+        // and the command id.
+        // Concatenates a random string to have a unique id (in case of burst of commands, see issue #23).
+        $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS'). '/' . $id . '/' . substr(md5(rand()), 0, 8);
+        // FIXME: the static class variable $_client is not visible here as the current function
+        // is not executed on the same thread as the deamon. So we do create a new client.
+        $client = new Mosquitto\Client($mosqId);
+        $client->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);	  
+	$qos = '0';
+	$retain = '0';
+	$payload = '{"rd":128}';  //$_message; 
+	  
+	  
+        $client->onPublish(function() use ($client, $mosqId, $_subject, $payload, $qos, $retain) {
+            log::add('worxLandroidS', 'debug', 'Publication du message ' . $mosqId . ' '. $_subject . ' ' . $payload);
+            // exitLoop instead of disconnect:
+            //   . otherwise disconnect too early for Qos=2 see below  (issue #25)
+            //   . to correct issue #30 (action commands not run immediately on scenarios)
+            $client->exitLoop();
+        });
+        // Connect to the broker
+        $client->connect($mosqHost, $mosqPort, 60);
+        // Loop around to permit the library to do its work
+        // This function will call the callback defined in `onConnect()` and exit properly
+        // when the message is sent and the broker disconnected.
+	$client->publish($_subject, $payload, $qos, $retain);  
+        $client->loopForever();
+        // For Qos=2, it is nessary to loop around more to permit the library to do its work (see issue #25)
+        if ($qos == 2) {
+            for ($i = 0; $i < 30; $i++) {
+                $client->loop(1);
+            }
+        }
+        $client->disconnect();
+        log::add('worxLandroidS', 'debug', 'Message publié');
+
+*/	  
+	  
+	  
+	  // $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
     //$publish->publish($_subject, $_message, 0 , 0);
     
 	  /*
@@ -717,7 +942,6 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 	
   }	
 
-	
 	public function toHtml($_version = 'dashboard') {
 		$jour = array("Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi");
 		$replace = $this->preToHtml($_version);
@@ -728,7 +952,7 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 		$replace['#worxStatus#'] = '';
 		if ($version != 'mobile' || $this->getConfiguration('fullMobileDisplay', 0) == 1) {
 			$worxStatus_template = getTemplate('core', $version, 'worxStatus', 'worxLandroidS');
-			for ($i = 0; $i < 6; $i++) {
+			for ($i = 0; $i <= 6; $i++) {
 				$replaceDay = array();
 				$replaceDay['#day#'] = $jour[$i];
 				$startTime = $this->getCmd(null, 'Planning/startTime/' . $i);
@@ -736,7 +960,13 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 				$duration = $this->getCmd(null, 'Planning/duration/' . $i);				
 				$replaceDay['#startTime#'] = is_object($startTime) ? $startTime->execCmd() : '';
 				$replaceDay['#duration#'] = is_object($duration) ? $duration->execCmd() : '';
-				
+				$cmd = $this->getCmd('action','on_'.$i);
+				$replaceDay['#on_daynum_id#'] = $cmd->getId();
+				$cmd = $this->getCmd('action','off_'.$i);
+				$replaceDay['#off_daynum_id#'] = $cmd->getId();
+
+				//$replaceDay['#on_id#'] = $this->getCmd('action', 'on_1');
+			        //$replaceDay['#off_id#'] = $this->getCmd('action', 'off_1');				
 				// transforme au format objet DateTime 
 				
 				$initDate = DateTime::createFromFormat('H:i', $replaceDay['#startTime#']);
@@ -786,19 +1016,40 @@ log::add('worxLandroidS', 'debug', 'exception ' . $e );
 		$replace['#lastDate#'] = is_object($lastDate) ? $lastDate->execCmd() : '';		
 	
 
-		return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'current', 'worxLandroidS')));
+	foreach ($this->getCmd('info') as $cmd) {
+            $replace['#' . $cmd->getLogicalId() . '_history#'] = '';
+            $replace['#' . $cmd->getLogicalId() . '_id#'] = $cmd->getId();
+            $replace['#' . $cmd->getLogicalId() . '#'] = $cmd->execCmd();
+            $replace['#' . $cmd->getLogicalId() . '_collect#'] = $cmd->getCollectDate();
+            if ($cmd->getLogicalId() == 'encours'){
+                $replace['#batteryLevel#'] = $cmd->getDisplay('icon');
+            }
+            if ($cmd->getIsHistorized() == 1) {
+                $replace['#' . $cmd->getLogicalId() . '_history#'] = 'history cursor';
+            }
+        }
+	foreach ($this->getCmd('action') as $cmd) {
+            $replace['#' . $cmd->getLogicalId() . '_id#'] = $cmd->getId();
+        }	
+		
+		
+		
+		
+		return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'worxMain', 'worxLandroidS')));
 
 	}	
 	
-	
+
 	
 }
 
 class worxLandroidSCmd extends cmd {
 	
-
-  //public static $_widgetPossibility = array('custom' => false);	
-	
+public static $_widgetPossibility = array('custom' => array(
+      'visibility' => true,
+      'displayName' => array('dashboard' => true, 'view' => true),
+      'optionalParameters' => true,
+));
 	
   public function execute($_options = null) {
     switch ($this->getType()) {
@@ -817,10 +1068,15 @@ class worxLandroidSCmd extends cmd {
         $request = str_replace('#message#', $_options['message'], $request);
         break;
       }
+
       $request = str_replace('\\', '', jeedom::evaluateExpression($request));
       $request = cmd::cmdToValue($request);
-
-      worxLandroidS::publishMosquitto($this->getId(), $topic, $request, $this->getConfiguration('retain','0'));
+      //log::add('worxLandroidS', 'debug', 'Envoi de l action: ' . $topic. ' ' . $request );
+// save schedule if setting to 0 - and retrieve from saved value (new values must be set from smartphone
+  
+	$eqlogic = $this->getEqLogic();
+        log::add('worxLandroidS', 'debug', 'Eqlogicname: ' . $eqlogic->getName() );		
+        worxLandroidS::publishMosquitto($this->getId(), $topic, $request, $this->getConfiguration('retain','0'));
       }
       return true;
     }

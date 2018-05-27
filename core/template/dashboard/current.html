@@ -1,28 +1,34 @@
-<div class="eqLogic-widget eqLogic" style="width: 380px;border:#border#;border-radius:#border-radius#;background-color: #background-color#;color: #color#;#style#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#" >
-   <span class="statusCmd" style="position : absolute;left : 5px; width : 30px;z-index: 1030;"></span>
-   <i class='fa fa-refresh pull-right cursor refresh' style="margin-top: 3px;margin-right: 3px;"></i>
-   <span class="cmd cmd-widget" data-cmd_id="#refresh_id#" style="display:none;"></span>
-   <center class="widget-name"><a href="#eqLink#" style="font-size : 1.1em;#hideEqLogicName#">#name_display# <span style="font-size: 0.85em;position: relative;top:-2px;">#object_name#</span></a></center>
-   <div style="position : relative; left : 15px;">
-    <span class="pull-left">
-        <i class="#icone#" style="font-size: 3.5em;"></i>
-    </span>
+<div class="eqLogic-widget eqLogic" style="width: 480px;border:#border#;border-radius:#border-radius#;background-color: #background-color#;color: #color#;#style#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#" >
+   
 
-    <span style="margin-left: 5px;font-size: 0.8em;" class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#lastCom#">#lastDate# #lastTime#</span>
-    <span style="margin-right;font-size: 0.8em;"class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#rainDelayId#">Rain Delay : #rainDelay#  mns </span><br/> 
-      <span style="margin-left: 5px;font-size: 1.2em;"class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#status#">Status : #statusCode#  <span style="font-weight:bold">#statusDescription#</span></span><br/> 
-    <span style="margin-left: 5px;font-size: 1.2em;" class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#error#">Error  : #errorCode#  <span style="font-weight:bold;color:#errorColor#">#errorDescription#</span></span><br/>
-    <br/> 
+ <center class="widget-name display:inline"><a href="#eqLink#" style="font-size : 1.1em;#hideEqLogicName#">#name_display# #object_name#</a>
+   <a class="btn cmd" data-cmd_id="#start_id#" title="Start" onclick="jeedom.cmd.execute({id: #start_id#});"><i class="fa fa-play pull-right" ></i></a>
+   <a class="btn cmd" data-cmd_id="#stop_id#" title="Home" onclick="jeedom.cmd.execute({id: #stop_id#});"><i class="fa fa-home pull-right" ></i></a>
+</center>
+ 
+<br/>      
+    <span style="width:20px;font-size: 1.2em;"class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#status#">
+       Status : <span style="width:10px;">#statusCode#</span>  
+       <span style="font-weight:bold;width 75px;">#statusDescription#</span></span>
+   <span style="float:right;margin-rigt: 10px;font-size: 0.8em;" class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#lastCom#">#lastDate# #lastTime#</span> <br/>
+
+    <span style="float:left;width:20px;font-size: 1.2em;" class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#error#">Error  : 
+       <span style="width: 10px;">#errorCode#  
+       </span><span style="font-weight:bold;color:#errorColor#;width: 75px;">#errorDescription#</span></span><br/>
+   <span style="width:20px;font-size: 1.2em;" class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#batteryLevel#">Battery  : <span style="width: 35px;">#batteryLevel# %</span></span><br/>
+
+<br/> 
 
 
 </div><br/>
-<div style="margin-top: -15px;">
-    <center>#daySetup#</center>
-</div>
+
+    <center style="display:none">#daySetup#</center>
+
 <script>
    $('.eqLogic[data-eqLogic_uid=#uid#] .refresh').on('click', function () {
-    jeedom.cmd.execute({id: '#refresh_id#'});
-});
+    jeedom.cmd.execute({id: 'refreshValue'});
+
  
+   }); 
 </script>
 </div>
