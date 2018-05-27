@@ -355,8 +355,8 @@ sleep(30);
       $elogic->checkAndUpdateCmd();
       $commandIn = 'DB510/'. $json2_data->dat->mac .'/commandIn';
       self::newAction($elogic,'setRainDelay', $commandIn, '{"rd":"#message#"}','message');
-      self::newAction($elogic,'start',$commandIn,"cmd:1",'other');
-      self::newAction($elogic,'stop',$commandIn,"cmd:3",'other');
+      self::newAction($elogic,'start',$commandIn,array(cmd=>1),'other');
+      self::newAction($elogic,'stop',$commandIn,array(cmd=>3),'other');
       self::newAction($elogic,'refreshValue',$commandIn,"",'other');
 
 	for ($i = 0; $i < 7; $i++) {
