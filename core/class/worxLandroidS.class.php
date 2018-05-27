@@ -611,10 +611,6 @@ schedule: TimePeriod[];
       $cmdlogic->setName( $cmdId );
       $cmdlogic->setIsVisible($visible);
 		
-		
-
-	    
-	    
 	    
       $cmdlogic->setConfiguration('topic', $value);
       //$cmdlogic->setValue($value);
@@ -663,7 +659,7 @@ schedule: TimePeriod[];
         //$cmdlogic->setValue($value);
         $cmdlogic->save();
       }
-      log::add('worxLandroidS', 'debug', 'Cmdlogic update'.$cmdId.$value);
+//      log::add('worxLandroidS', 'debug', 'Cmdlogic update'.$cmdId.$value);
 
       $elogic->checkAndUpdateCmd($cmdId,$value);
 
@@ -673,8 +669,7 @@ schedule: TimePeriod[];
   public static function getSavedDaySchedule($_id,$i) {	
 	 $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id,'Planning/startTime/'.$i);
 	 $day[0] = $cmdlogic->getConfiguration('savedValue', '10:00');
-        log::add('worxLandroidS', 'debug', 'savedtime: ' . $day[0] );
-   
+ 
 	  $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id,'Planning/duration/'.$i);	
 	 $day[1] = intval($cmdlogic->getConfiguration('savedValue', 420));		
 	 $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id,'Planning/cutEdge/'.$i);		
@@ -690,7 +685,6 @@ schedule: TimePeriod[];
 
 	 $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id,'Planning/startTime/'.$i);
 	 $day[0] = $cmdlogic->getConfiguration('topic', '10:00');
-  	 log::add('worxLandroidS', 'debug', 'valeur actuelle J'. $i. 't'. $day[0]);	
          $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id,'Planning/duration/'.$i);	
 	 $day[1] = intval($cmdlogic->getConfiguration('topic', 420));		
 	 $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id,'Planning/cutEdge/'.$i);		
@@ -735,28 +729,21 @@ schedule: TimePeriod[];
       $eqlogicid = $cmd->getEqLogic_id();
       $eqlogic = $cmd->getEqLogic();
       if(substr_compare($_message,'off', 0, 3)==0){
-      log::add('worxLandroidS', 'debug', 'Envoi du message OFF: ' . $_message);
+        log::add('worxLandroidS', 'debug', 'Envoi du message OFF: ' . $_message);
 
-	$sched = array('00:00', 0, 1);
-
-        //log::add('worxLandroidS', 'debug', 'Eqlogicname: ' . $eqlogic->getName() );
-        log::add('worxLandroidS', 'debug', 'payload: ' . substr($_message,4,1) . $_message );
-
+        $sched = array('00:00', 0, 1);
 	$_message = self::setDaySchedule($eqlogicid, substr($_message,4,1), $sched);//  $this->saveConfiguration('savedValue',
-        log::add('worxLandroidS', 'debug', 'payload: ' . $_message );
       }	    
       if(substr_compare($_message,'on', 0, 2)==0){
       log::add('worxLandroidS', 'debug', 'Envoi du message On: ' . $_message);
 
 	$sched = self::getSavedDaySchedule($eqlogicid,  substr($_message,3,1));
-        //log::add('worxLandroidS', 'debug', 'Eqlogicname: ' . $eqlogic->getName() );
-        log::add('worxLandroidS', 'debug', 'payload: ' . substr($_message,3,1) . $_message );
-
 	$_message = self::setDaySchedule($eqlogicid, substr($_message,3,1), $sched);//  $this->saveConfiguration('savedValue',
-        log::add('worxLandroidS', 'debug', 'payload: ' . $_message );
   
   }	    
-
+	  
+	  if($_id == 'start'){ $_message = json_encode(array(cmd=>1));}
+	  if($_id == 'stop'){ $_message = json_encode(array(cmd=>3));}
 	  
 	 /*
 
