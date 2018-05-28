@@ -145,7 +145,8 @@ class worxLandroidS extends eqLogic {
 			event::add('jeedom::alert', array(
 				'level' => 'warning',
 				'page' => 'worxLandroidS',
-				'message' => __('Données de connexion incorrectes', __FILE__),		
+				'message' => __('Données de connexion incorrectes', __FILE__),	
+					));
           //$this->checkAndUpdateCmd('communicationStatus',false);
           //return false;
         } else
