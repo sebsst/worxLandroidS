@@ -48,7 +48,7 @@ $eqLogics = eqLogic::byType('worxLandroidS');
         <center>
           <i class="fa fa-plus-circle" style="font-size : 7em;color:#00979c;"></i>
         </center>
-        <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;"><center>{{Ajouter}}</center></span>
+        <span style="font-size : 1.1em;position:relative; top : 15px;display:none;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;"><center>{{Ajouter}}</center></span>
       </div>
       <?php
       $dir = dirname(__FILE__) . '/../../doc/images/';
