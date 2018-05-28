@@ -4,7 +4,8 @@ Robots tondeuses Worx Landroid modèles S
 ##Présentation
 Ce plugin permet de se connecter aux tondeuses worx Landroid modèles S.
 
-##Configuration du plugin
+# Configuration du plugin
+
 La connexion vers la tondeuse se fait à partir d'un serveur cloud en utilisant le compte utilisé lors de l'enregistrement de la tondeuse.
 
 Les identifiants correspondent à ceux de l'application mobile. Vous devez attendre la fin de l'activation des dépendances pour permettre la communication avec la tondeuse par le protocole Mosquitto.
@@ -13,7 +14,8 @@ Une fois la sauvegarde effectuée, un nouvel équipement tondeuse va être cré�
 
 L'arrêt du daemon permet de stopper la connexion avec la tondeuse. En cas du défaillance il se peut que le Daemon soit à l'arrêt et vous pouvez tenter un redémarrage.
 
-## utilisation
+# utilisation
+
 Le nom par défaut = LandroidS+adress Mac de la tondeuse
 
 Le dashboard affiche:
@@ -26,7 +28,7 @@ Le dashboard affiche:
 -L'autre bouton permet de récupérer les derniers horaires communiqués au plugin (10H - 17h par défaut)
 -Edge signifie la coupe des bordures est planifié
 
-##FAQ
+# FAQ
 
 >quels sont les modèles compatibles?
 
