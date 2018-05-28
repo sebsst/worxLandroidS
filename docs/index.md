@@ -21,6 +21,8 @@ En cas du défaillance il se peut que le Daemon soit à l'arrêt et vous pouvez 
 Le nom par défaut = LandroidS+adress Mac de la tondeuse
 
 Le dashboard affiche:
+- bouton de retour maison
+- bouton de démarrage
 - la date et heure de la dernière communication
 - Etat de la tondeuse avec le code correspondant
 - Description de l'erreur avec le code correspondant
@@ -34,8 +36,7 @@ Le dashboard affiche:
 
 >Est-ce que je peux démarrer ou arrêter la tondeuse à partir du plugin? 
 
-Non, pour le moment le plugin permet de récupérer les informations de la tondeuse.
-Dans une prochaine version du plugin, il sera également possible de piloter la tondeuse.
+Oui à partir des boutons en haut à droite
 
 >quels sont les modèles compatibles?
 
