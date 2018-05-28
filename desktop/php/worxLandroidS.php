@@ -44,7 +44,7 @@ $eqLogics = eqLogic::byType('worxLandroidS');
     <legend><i class="fa fa-table"></i>  {{Mes worxLandroidS}}
     </legend>
     <div class="eqLogicThumbnailContainer">
-      <div class="cursor eqLogicAction" data-action="add" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >
+      <div class="cursor eqLogicAction" data-action="add" style="background-color : #ffffff; display:none;height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >
         <center>
           <i class="fa fa-plus-circle" style="font-size : 7em;color:#00979c;"></i>
         </center>
