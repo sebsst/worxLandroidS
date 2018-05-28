@@ -742,8 +742,14 @@ schedule: TimePeriod[];
   
   }	    
 	  
-	  if($_id == 'start'){ $_message = '{"cmd":1}';}//json_encode(array('cmd'=>1));}
-	  if($_id == 'stop'){ $_message = '{"cmd":3}';} //json_encode(array('cmd'=>3));}
+	  if($_message == 'cmd:1')
+	  { 
+		  $_message = '{"cmd":1}';
+	  }//json_encode(array('cmd'=>1));}
+	  if($_message == 'cmd:3')
+	  { 
+		  $_message = '{"cmd":3}';
+	  } //json_encode(array('cmd'=>3));}
 	  
 	 /*
 
