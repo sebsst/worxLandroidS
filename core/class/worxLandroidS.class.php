@@ -141,6 +141,11 @@ class worxLandroidS extends eqLogic {
         if (is_null($json))
         {
           log::add('worxLandroidS', 'info', 'Connexion KO for '.$equipement.' ('.$ip.')');
+		
+			event::add('jeedom::alert', array(
+				'level' => 'warning',
+				'page' => 'worxLandroidS',
+				'message' => __('Données de connexion incorrectes', __FILE__),		
           //$this->checkAndUpdateCmd('communicationStatus',false);
           //return false;
         } else
