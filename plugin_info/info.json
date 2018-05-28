@@ -7,6 +7,6 @@
 	"category" : "devicecommunication",
 	"hasDependency" : 1,
 	"hasOwnDeamon" : 1,
-	"changelog" : "https://sebsst.github.io/worxLandroidS/docs/changelog.html",
-	"documentation" : "https://sebsst.github.io/worxLandroidS/docs/index.md"
+	"changelog" : "https://sebsst.github.io/worxLandroidS/",
+	"documentation" : "https://sebsst.github.io/worxLandroidS/"
 }
