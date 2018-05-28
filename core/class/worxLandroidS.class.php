@@ -742,35 +742,16 @@ schedule: TimePeriod[];
   
   }	    
 	  
-	  if($_id == 'start'){ $_message = json_encode(array('cmd'=>1));}
-	  if($_id == 'stop'){ $_message = json_encode(array('cmd'=>3));}
+	  if($_message == 'cmd:1')
+	  { 
+		  $_message = '{"cmd":1}';
+	  }//json_encode(array('cmd'=>1));}
+	  if($_message == 'cmd:3')
+	  { 
+		  $_message = '{"cmd":3}';
+	  } //json_encode(array('cmd'=>3));}
 	  
-	 /*
-
-   //log::add('worxLandroidS', 'debug', 'Envoi du message ' . $_message . ' vers ' . $_subject. '/'.config::byKey('mqtt_endpoint', 'worxLandroidS'));
-    $publish = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS').'2');
-
-
-    
-    $publish->onPublish(function($mid) {
-    //    worxLandroidS::confirm($mid);
-   log::add('worxLandroidS', 'debug', 'Envoi du message ' . $mid );
   
-	    //    //print_r(array('comfirm publish', MQ::$publish[$mid]));
-    });
-
-    //$publish->onMessage('worxLandroidS::message');
-    $publish->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);
-	  
-    $publish->setReconnectDelay(1, 16, true);	  
-    $publish->onConnect('worxLandroidS::newconnect');
-
-
-    $publish->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), '8883', 70);
-   $publish->publish($_subject, '{"rd":123}', 0 , 0);
-   $publish->loopForever();
-*/
-	  
 	  
         $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS'). '' . $id . '' . substr(md5(rand()), 0, 8);
         // FIXME: the static class variable $_client is not visible here as the current function
@@ -818,7 +799,7 @@ while (true) {
 
         }catch(Mosquitto\Exception $e){
             //echo"{$e}" ;
-		log::add('worxLandroidS', 'debug', 'exception ' . $e);
+		log::add('worxLandroidS', 'debug', 'exception (msg sent then disconnected) ' . $e);
                 return;
         }
         sleep(6);
@@ -827,113 +808,7 @@ while (true) {
 $client->disconnect();
 unset($client);
 
-	  
-/*	  
-	  
-	  
-	$mosqHost = config::byKey('mqtt_endpoint', 'worxLandroidS');
-        $mosqPort = '8883';
-      //  $payloadMsg = (($payload == '') ? '(null)' : $payload);
-      //  log::add('jMQTT', 'info', '<- ' . $eqName . '|' . $topic . ' ' . $payloadMsg);
-        // To identify the sender (in case of debug need), bvuild the client id based on the jMQTT connexion id
-        // and the command id.
-        // Concatenates a random string to have a unique id (in case of burst of commands, see issue #23).
-        $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS'). '/' . $id . '/' . substr(md5(rand()), 0, 8);
-        // FIXME: the static class variable $_client is not visible here as the current function
-        // is not executed on the same thread as the deamon. So we do create a new client.
-        $client = new Mosquitto\Client($mosqId);
-        $client->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);	  
-	$qos = '0';
-	$retain = '0';
-	$payload = '{"rd":128}';  //$_message; 
-	  
-	  
-        $client->onPublish(function() use ($client, $mosqId, $_subject, $payload, $qos, $retain) {
-            log::add('worxLandroidS', 'debug', 'Publication du message ' . $mosqId . ' '. $_subject . ' ' . $payload);
-            // exitLoop instead of disconnect:
-            //   . otherwise disconnect too early for Qos=2 see below  (issue #25)
-            //   . to correct issue #30 (action commands not run immediately on scenarios)
-            $client->exitLoop();
-        });
-        // Connect to the broker
-        $client->connect($mosqHost, $mosqPort, 60);
-        // Loop around to permit the library to do its work
-        // This function will call the callback defined in `onConnect()` and exit properly
-        // when the message is sent and the broker disconnected.
-	$client->publish($_subject, $payload, $qos, $retain);  
-        $client->loopForever();
-        // For Qos=2, it is nessary to loop around more to permit the library to do its work (see issue #25)
-        if ($qos == 2) {
-            for ($i = 0; $i < 30; $i++) {
-                $client->loop(1);
-            }
-        }
-        $client->disconnect();
-        log::add('worxLandroidS', 'debug', 'Message publié');
-
-*/	  
-	  
-	  
-	  // $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
-    //$publish->publish($_subject, $_message, 0 , 0);
-    
-	  /*
-	  
-     try {
-		$publish->loop();
-		$mid = $publish->publish($_subject, '{"rd":123}', 0 , 0);
- log::add('worxLandroidS', 'debug', 'Envoi du message ' . $mid );
-  
-	     $publish->loop();
-	     for ($i = 0; $i < 30; $i++) {
-      // Loop around to permit the library to do its work
-      $publish->loop(1);
-    }
-	     
-		}catch(Mosquitto\Exception $e){
-log::add('worxLandroidS', 'debug', 'exception ' . $e );
-  				return;
-			}
-    $publish->disconnect();
-	unset($publish);	  
-	  
-*/
-//  $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
-    //$publish->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", '{"rd":100}', 0, 0);
-
-      //  log::add('worxLandroidS', 'debug', 'Envoi: ' . "DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn" . '{"rd":100}');
-    //  while (true) {
-    //  	$publish->loop();
-      //  $msg = '{"rd":100}';
-        //$mid = $publish->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", '{"rd":100}', 0, 0);
-       // $mid = $_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", '{"rd":100}', 0, 0);
-
-	  //      worxLandroidS::addPublish($mid, $msg);
-   //     sleep(1);
-
-
-   //   	$publish->exitloop();
-      //	sleep(2);
-    //  }
-      //$publish->disconnect();
-      //unset($publish);
-
-
-
-
-//         $publish->subscribe($topic, 0); // !auto: Subscribe to root topic
-    //$publish->publish($_subject, $_message, 0 , 0);
-
-   // for ($i = 0; $i < 30; $i++) {
-      // Loop around to permit the library to do its work
-   //   $publish->loop();
-   // }
-   // $publish->disconnect();
-   //  unset($publish);
-    //$publish->disconnect();
-   // unset(self::$_client);
- 
-//}
+	
 
 	
 
