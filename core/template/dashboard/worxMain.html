@@ -4,7 +4,8 @@
  <center class="widget-name display:inline"><a href="#eqLink#" style="font-size : 1.1em;#hideEqLogicName#">#name_display# #object_name#</a>
    <a class="btn cmd" data-cmd_id="#start_id#" style= "position : absolute;right : 2px; width : 5px" title="Start" onclick="jeedom.cmd.execute({id: #start_id#});"><i class="fa fa-play pull-right" ></i></a>
    <a class="btn cmd" data-cmd_id="#stop_id#" style= "position : absolute;right : 20px; width : 5 px" title="Home" onclick="jeedom.cmd.execute({id: #stop_id#});"><i class="fa fa-home pull-right" ></i></a>
-
+   <span style="font-size: 1em;position : absolute;left : 2px;" class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#batteryLevel#">
+      Batt.  : #batteryLevel# %</span><br/>
  <br/>
 
       <span style="font-size: 0.8em;" class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#lastCom#">
@@ -13,7 +14,7 @@
        
        <span style="font-weight:bold">#statusDescription# (#statusCode#) </span></span>
     <span style="font-size: 1.2em;" class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#error#">
-       <span style="font-weight:bold;color:#errorColor#">#errorDescription# (#errorCode#)</span></span><br/>
+       <span style="font-weight:bold;color:#errorColor#">    #errorDescription# (#errorCode#)</span></span><br/>
    <span style="font-size: 1.2em;" class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#batteryLevel#">
       Batt.  : #batteryLevel# %</span><br/>
  </center>                                                                                                                           
