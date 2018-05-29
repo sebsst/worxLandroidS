@@ -578,11 +578,11 @@ schedule: TimePeriod[];
     switch ($statuscode) {
 
       case '0': return __("Inactive",__FILE__);       break;
-      case '1': return __("Maison",__FILE__);      break;
+      case '1': return __("Sur la base",__FILE__);      break;
       case '2': return __("Séquence de démarrage",__FILE__);       break;
-      case '3': return __("Quitte la maison",__FILE__); break;
+      case '3': return __("Quitte la base",__FILE__); break;
       case '4': return __("Suit le câble",__FILE__); break;
-      case '5': return __("Recherche de la maison",__FILE__); break;
+      case '5': return __("Recherche de la base",__FILE__); break;
       case '6': return __("Recherche du câble",__FILE__); break;
       case '7': return __("En cours de tonte",__FILE__); break;
       case '8': return __("Soulevée",__FILE__); break;
@@ -590,7 +590,7 @@ schedule: TimePeriod[];
       case '10': return __("Lames bloquées",__FILE__); break;
       case '11': return "Debug"; break;
       case '12': return __("Remote control",__FILE__); break;
-      case '30': return __("Retour maison",__FILE__); break;
+      case '30': return __("Retour à la base",__FILE__); break;
       case '32': return __("Coupe la bordure",__FILE__); break;
 
       default: return 'unkown';
