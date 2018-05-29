@@ -928,7 +928,7 @@ class worxLandroidSCmd extends cmd {
 	
 public static $_widgetPossibility = array('custom' => array(
       'visibility' => true,
-      'displayName' => array('dashboard' => true, 'view' => true),
+      'displayName' => true,
       'optionalParameters' => true,
 ));
 	
