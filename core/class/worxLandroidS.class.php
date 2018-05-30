@@ -873,6 +873,7 @@ unset($client);
 					$replace['#todayEndTime#'] = $initDate->format("H:i");
 					if($replace['#cutEdge#'] == '1')
 					{ $replace['#cutEdge#'] = 'Bord.';} 
+					$replace['#today#'] = $jour[$i];
 				}
 				
 				
