@@ -831,6 +831,7 @@ unset($client);
 		}
 		$version = jeedom::versionAlias($_version);
 		$replace['#worxStatus#'] = '';
+	        $today = date('w');
 		if ($version != 'mobile' || $this->getConfiguration('fullMobileDisplay', 0) == 1) {
 			$worxStatus_template = getTemplate('core', $version, 'worxStatus', 'worxLandroidS');
 			for ($i = 0; $i <= 6; $i++) {
@@ -841,10 +842,10 @@ unset($client);
 				$duration = $this->getCmd(null, 'Planning/duration/' . $i);				
 				$replaceDay['#startTime#'] = is_object($startTime) ? $startTime->execCmd() : '';
 				$replaceDay['#duration#'] = is_object($duration) ? $duration->execCmd() : '';
-				$cmd = $this->getCmd('action','on_'.$i);
-				$replaceDay['#on_daynum_id#'] = $cmd->getId();
-				$cmd = $this->getCmd('action','off_'.$i);
-				$replaceDay['#off_daynum_id#'] = $cmd->getId();
+				$cmdS = $this->getCmd('action','on_'.$i);
+				$replaceDay['#on_daynum_id#'] = $cmdS->getId();
+				$cmdE = $this->getCmd('action','off_'.$i);
+				$replaceDay['#off_daynum_id#'] = $cmdE->getId();
 
 				//$replaceDay['#on_id#'] = $this->getCmd('action', 'on_1');
 			        //$replaceDay['#off_id#'] = $this->getCmd('action', 'off_1');				
@@ -856,14 +857,31 @@ unset($client);
 				
 				$replaceDay['#cutEdge#'] = is_object($cutEdge) ? $cutEdge->execCmd() : '';
 				if($replaceDay['#cutEdge#'] == '1')
-				{ $replaceDay['#cutEdge#'] = 'Edge';} 
+				{ $replaceDay['#cutEdge#'] = 'Bord.';} 
 				
 				
 				//$replaceDay['#icone#'] = is_object($condition) ? self::getIconFromCondition($condition->execCmd()) : '';
 				//$replaceDay['#conditionid#'] = is_object($condition) ? $condition->getId() : '';
 				$replace['#daySetup#'] .= template_replace($replaceDay, $worxStatus_template);
+
+				if( $today == $i) 
+				{
+					$replace['#todayStartTime#'] = is_object($startTime) ? $startTime->execCmd() : '';
+					$replace['#todayDuration#'] = is_object($duration) ? $duration->execCmd() : '';
+					$replace['#today_on_daynum_id#'] = $cmdS->getId();
+					$replace['#today_off_daynum_id#'] = $cmdE->getId();
+					$replace['#todayEndTime#'] = $initDate->format("H:i");
+					if($replace['#cutEdge#'] == '1')
+					{ $replace['#cutEdge#'] = 'Bord.';} 
+				}
+				
+				
+				
 			}
 		}
+		
+	
+		
 		
 	        $lastDate = $this->getCmd(null, 'lastDate');
 		$replace['#lastDate#'] = is_object($lastDate) ? $lastDate->execCmd() : '';
