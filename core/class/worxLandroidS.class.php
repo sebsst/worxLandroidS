@@ -50,7 +50,7 @@ class worxLandroidS extends eqLogic {
 
 	
 	
-function template_update() {
+function worxLandroidS_update() {
   	self::deamon_start();  
   }	
   public static function deamon_start($_debug = false) {
