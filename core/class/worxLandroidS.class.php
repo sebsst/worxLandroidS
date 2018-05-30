@@ -48,6 +48,11 @@ class worxLandroidS extends eqLogic {
     return $return;
   }
 
+	
+	
+function template_update() {
+  	self::deamon_start();  
+  }	
   public static function deamon_start($_debug = false) {
     self::deamon_stop();
     $deamon_info = self::deamon_info();
