@@ -48,7 +48,8 @@ class worxLandroidS extends eqLogic {
     return $return;
   }
 
-  public static function deamon_start($_debug = false) {
+	
+    public static function deamon_start($_debug = false) {
     self::deamon_stop();
     $deamon_info = self::deamon_info();
     if ($deamon_info['launchable'] != 'ok') {
@@ -141,6 +142,12 @@ class worxLandroidS extends eqLogic {
         if (is_null($json))
         {
           log::add('worxLandroidS', 'info', 'Connexion KO for '.$equipement.' ('.$ip.')');
+		
+			event::add('jeedom::alert', array(
+				'level' => 'warning',
+				'page' => 'worxLandroidS',
+				'message' => __('Données de connexion incorrectes', __FILE__),	
+					));
           //$this->checkAndUpdateCmd('communicationStatus',false);
           //return false;
         } else
@@ -572,11 +579,11 @@ schedule: TimePeriod[];
     switch ($statuscode) {
 
       case '0': return __("Inactive",__FILE__);       break;
-      case '1': return __("Maison",__FILE__);      break;
+      case '1': return __("Sur la base",__FILE__);      break;
       case '2': return __("Séquence de démarrage",__FILE__);       break;
-      case '3': return __("Quitte la maison",__FILE__); break;
+      case '3': return __("Quitte la base",__FILE__); break;
       case '4': return __("Suit le câble",__FILE__); break;
-      case '5': return __("Recherche de la maison",__FILE__); break;
+      case '5': return __("Recherche de la base",__FILE__); break;
       case '6': return __("Recherche du câble",__FILE__); break;
       case '7': return __("En cours de tonte",__FILE__); break;
       case '8': return __("Soulevée",__FILE__); break;
@@ -584,7 +591,7 @@ schedule: TimePeriod[];
       case '10': return __("Lames bloquées",__FILE__); break;
       case '11': return "Debug"; break;
       case '12': return __("Remote control",__FILE__); break;
-      case '30': return __("Retour maison",__FILE__); break;
+      case '30': return __("Retour à la base",__FILE__); break;
       case '32': return __("Coupe la bordure",__FILE__); break;
 
       default: return 'unkown';
@@ -825,7 +832,8 @@ unset($client);
 		}
 		$version = jeedom::versionAlias($_version);
 		$replace['#worxStatus#'] = '';
-		if ($version != 'mobile' || $this->getConfiguration('fullMobileDisplay', 0) == 1) {
+	        $today = date('w');
+		//if ($version != 'mobile' || $this->getConfiguration('fullMobileDisplay', 0) == 1) {
 			$worxStatus_template = getTemplate('core', $version, 'worxStatus', 'worxLandroidS');
 			for ($i = 0; $i <= 6; $i++) {
 				$replaceDay = array();
@@ -835,10 +843,10 @@ unset($client);
 				$duration = $this->getCmd(null, 'Planning/duration/' . $i);				
 				$replaceDay['#startTime#'] = is_object($startTime) ? $startTime->execCmd() : '';
 				$replaceDay['#duration#'] = is_object($duration) ? $duration->execCmd() : '';
-				$cmd = $this->getCmd('action','on_'.$i);
-				$replaceDay['#on_daynum_id#'] = $cmd->getId();
-				$cmd = $this->getCmd('action','off_'.$i);
-				$replaceDay['#off_daynum_id#'] = $cmd->getId();
+				$cmdS = $this->getCmd('action','on_'.$i);
+				$replaceDay['#on_daynum_id#'] = $cmdS->getId();
+				$cmdE = $this->getCmd('action','off_'.$i);
+				$replaceDay['#off_daynum_id#'] = $cmdE->getId();
 
 				//$replaceDay['#on_id#'] = $this->getCmd('action', 'on_1');
 			        //$replaceDay['#off_id#'] = $this->getCmd('action', 'off_1');				
@@ -850,14 +858,32 @@ unset($client);
 				
 				$replaceDay['#cutEdge#'] = is_object($cutEdge) ? $cutEdge->execCmd() : '';
 				if($replaceDay['#cutEdge#'] == '1')
-				{ $replaceDay['#cutEdge#'] = 'Edge';} 
+				{ $replaceDay['#cutEdge#'] = 'Bord.';} else {  $replaceDay['#cutEdge#'] = '.'; }
 				
 				
 				//$replaceDay['#icone#'] = is_object($condition) ? self::getIconFromCondition($condition->execCmd()) : '';
 				//$replaceDay['#conditionid#'] = is_object($condition) ? $condition->getId() : '';
 				$replace['#daySetup#'] .= template_replace($replaceDay, $worxStatus_template);
+
+				if( $today == $i) 
+				{
+					$replace['#todayStartTime#'] = is_object($startTime) ? $startTime->execCmd() : '';
+					$replace['#todayDuration#'] = is_object($duration) ? $duration->execCmd() : '';
+					$replace['#today_on_daynum_id#'] = $cmdS->getId();
+					$replace['#today_off_daynum_id#'] = $cmdE->getId();
+					$replace['#todayEndTime#'] = $initDate->format("H:i");
+					if($replace['#cutEdge#'] == '1')
+					{ $replace['#cutEdge#'] = 'Bord.';} 
+					$replace['#today#'] = $jour[$i];
+				}
+				
+				
+				
 			}
-		}
+		//}
+		
+	
+		
 		
 	        $lastDate = $this->getCmd(null, 'lastDate');
 		$replace['#lastDate#'] = is_object($lastDate) ? $lastDate->execCmd() : '';
@@ -922,7 +948,7 @@ class worxLandroidSCmd extends cmd {
 	
 public static $_widgetPossibility = array('custom' => array(
       'visibility' => true,
-      'displayName' => array('dashboard' => true, 'view' => true),
+      'displayName' => true,
       'optionalParameters' => true,
 ));
 	
