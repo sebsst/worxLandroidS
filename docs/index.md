@@ -43,7 +43,7 @@ Oui à partir des boutons en haut à droite
 Le plugin est compatible avec les modèle S worx Landroid WR10xSx. 
 Un autre plugin worxLandroid est disponible pour les modèles M.
 
->Quels sont les codes erreur
+>Liste des codes erreur:
 - 1: Bloquée
 - 2: Soulevée
 - 3: Câble non trouvé
@@ -60,7 +60,7 @@ Un autre plugin worxLandroid est disponible pour les modèles M.
 - 14: Erreur charge batterie
 - 15: Delai recherche station dépassé
 
->Quels sont les codes statut
+>Liste des codes statut:
 - 0: Inactive
 - 1: Sur la base
 - 2: Séquence de démarrage
