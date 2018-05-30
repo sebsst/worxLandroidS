@@ -857,7 +857,7 @@ unset($client);
 				
 				$replaceDay['#cutEdge#'] = is_object($cutEdge) ? $cutEdge->execCmd() : '';
 				if($replaceDay['#cutEdge#'] == '1')
-				{ $replaceDay['#cutEdge#'] = 'Bord.';} 
+				{ $replaceDay['#cutEdge#'] = 'Bord.';} else {  $replaceDay['#cutEdge#'] = ''; }
 				
 				
 				//$replaceDay['#icone#'] = is_object($condition) ? self::getIconFromCondition($condition->execCmd()) : '';
