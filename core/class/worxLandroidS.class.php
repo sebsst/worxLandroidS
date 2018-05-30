@@ -832,7 +832,7 @@ unset($client);
 		$version = jeedom::versionAlias($_version);
 		$replace['#worxStatus#'] = '';
 	        $today = date('w');
-		if ($version != 'mobile' || $this->getConfiguration('fullMobileDisplay', 0) == 1) {
+		//if ($version != 'mobile' || $this->getConfiguration('fullMobileDisplay', 0) == 1) {
 			$worxStatus_template = getTemplate('core', $version, 'worxStatus', 'worxLandroidS');
 			for ($i = 0; $i <= 6; $i++) {
 				$replaceDay = array();
@@ -878,7 +878,7 @@ unset($client);
 				
 				
 			}
-		}
+		//}
 		
 	
 		
