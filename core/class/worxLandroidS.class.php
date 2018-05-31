@@ -724,7 +724,7 @@ schedule: TimePeriod[];
   }
 	
   public static function publishMosquitto($_id, $_subject, $_message, $_retain) {
-         log::add('worxLandroidS', 'debug', 'Publication du message ' . $mosqId . ' '. $_subject . ' ' . $_message);
+
     $resource_path = realpath(dirname(__FILE__) . '/../../resources/');
 
     $certfile = $resource_path.'/cert.pem';
@@ -733,8 +733,10 @@ schedule: TimePeriod[];
 
 // save schedule if setting to 0 - and retrieve from saved value (new values must be set from smartphone
       $cmd = worxLandroidSCmd::byId($_id);
+     log::add('worxLandroidS', 'debug', 'Publication du message ' . $mosqId . ' '. $cmd->getHumanName() . ' ' . $_message);
       $eqlogicid = $cmd->getEqLogic_id();
-      $eqlogic = $cmd->getEqLogic();
+      $eqlogic = $cmd->getEqLogic();  
+	  
       if(substr_compare($_message,'off', 0, 3)==0){
         log::add('worxLandroidS', 'debug', 'Envoi du message OFF: ' . $_message);
 
@@ -746,17 +748,19 @@ schedule: TimePeriod[];
 
 	$sched = self::getSavedDaySchedule($eqlogicid,  substr($_message,3,1));
 	$_message = self::setDaySchedule($eqlogicid, substr($_message,3,1), $sched);//  $this->saveConfiguration('savedValue',
-  
-  }	    
+       }	    
+	
 	  
+	  // send start command
 	  if($_message == 'cmd:1')
 	  { 
 		  $_message = '{"cmd":1}';
-	  }//json_encode(array('cmd'=>1));}
+	  }
+	  // send stop
 	  if($_message == 'cmd:3')
 	  { 
 		  $_message = '{"cmd":3}';
-	  } //json_encode(array('cmd'=>3));}
+	  }
 	  
   
 	  
