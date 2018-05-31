@@ -733,7 +733,7 @@ schedule: TimePeriod[];
 
 // save schedule if setting to 0 - and retrieve from saved value (new values must be set from smartphone
       $cmd = worxLandroidSCmd::byId($_id);
-     log::add('worxLandroidS', 'debug', 'Publication du message ' . $mosqId . ' '. $cmd->getHumanName() . ' ' . $_message);
+     log::add('worxLandroidS', 'debug', 'Publication du message ' . $mosqId . ' '. $cmd->getName() . ' ' . $_message);
       $eqlogicid = $cmd->getEqLogic_id();
       $eqlogic = $cmd->getEqLogic();  
 	  
