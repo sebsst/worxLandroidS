@@ -750,6 +750,7 @@ schedule: TimePeriod[];
 	$_message = self::setDaySchedule($eqlogicid, substr($_message,3,1), $sched);//  $this->saveConfiguration('savedValue',
        }	    
 	
+	  if($cmd->getName()=='refreshValue'){ $_message = {};}
 	  
 	  // send start command
 	  if($_message == 'cmd:1')
