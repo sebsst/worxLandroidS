@@ -43,6 +43,10 @@ function worxLandroidS_update() {
         $cron->setSchedule('*/10 * * * *');
         $cron->setTimeout('1440');
         $cron->save();
+    } else
+    {
+        $cron->halt;
+        $cron->run;
     }
 }
 
