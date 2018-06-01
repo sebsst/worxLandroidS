@@ -120,7 +120,7 @@ class worxLandroidS extends eqLogic {
       $token = "qiJNz3waS4I99FPvTaPt2C2R46WXYdhw";
       $content = "application/json";
       $ch = curl_init();
-      $data = array("email" => $email, "password" => $passwd, "uuid" => "uuid/v1" , "type"=> "app" , "platform"=> "android");
+      $data = array("email" => $email, "password" => $passwd, "uuid" => "uuid/v1.1" , "type"=> "app" , "platform"=> "android");
       $data_string = json_encode($data);
 
       $ch = curl_init($url);
