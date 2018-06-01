@@ -770,15 +770,15 @@ schedule: TimePeriod[];
         // is not executed on the same thread as the deamon. So we do create a new client.
       //  $client = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS'));
 
-	  
-        $client = new Mosquitto\Client($mosqId);	  
+	$mid = $_client->publish($_subject, $payload, 0, 0);	  
+    /*    $client = new Mosquitto\Client($mosqId);	  
         $client->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);	  
 	$qos = '0';
 	$retain = '0';
 	$payload = $_message; 
 	$client->onConnect('worxLandroidS::newconnect');
 	  
-	  
+
         $client->onPublish(function() use ($client, $mosqId, $_subject, $payload, $qos, $retain) {
             log::add('worxLandroidS', 'debug', 'Publication du message ' . $_subject . ' ' . $payload);
             // exitLoop instead of disconnect:
@@ -802,7 +802,7 @@ while (true) {
                     $client->loop(1);
                         }
                 //$mid = $client->publish($_subject, $payload, $qos, $retain);
-                $mid = $_client->publish($_subject, $payload, 0, 0);
+                $mid = $client->publish($_subject, $payload, 0, 0);
                 
 		for ($i = 0; $i < 100; $i++) {
                     // Loop around to permit the library to do its work
@@ -824,7 +824,7 @@ unset($client);
 
 	
 
-	
+	*/
 
 	
   }	
