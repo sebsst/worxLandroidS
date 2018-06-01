@@ -923,8 +923,15 @@ unset($client);
             if ($cmd->getLogicalId() == 'encours'){
                 $replace['#batteryLevel#'] = $cmd->getDisplay('icon');
             }
-		$replace['#visibility#'] = 'block';		
 		
+ 	    if($cmd->isvisible) {
+               $replace['#'.$cmd->getLogicalId(). '_visible#'] = 'block';		
+	    else {
+               $replace['#'.$cmd->getLogicalId(). '_visible#'] = 'none';		
+
+            {    
+		    
+
 		
             if ($cmd->getIsHistorized() == 1) {
                 $replace['#' . $cmd->getLogicalId() . '_history#'] = 'history cursor';
