@@ -923,7 +923,7 @@ unset($client);
             if ($cmd->getLogicalId() == 'encours'){
                 $replace['#batteryLevel#'] = $cmd->getDisplay('icon');
             }
-		$replace['#visibility#'] = 'none';		
+		$replace['#visibility#'] = 'block';		
 		
 		
             if ($cmd->getIsHistorized() == 1) {
