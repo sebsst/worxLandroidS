@@ -923,6 +923,9 @@ unset($client);
             if ($cmd->getLogicalId() == 'encours'){
                 $replace['#batteryLevel#'] = $cmd->getDisplay('icon');
             }
+		$replace['#visibility#'] = 'no';		
+		
+		
             if ($cmd->getIsHistorized() == 1) {
                 $replace['#' . $cmd->getLogicalId() . '_history#'] = 'history cursor';
             }
