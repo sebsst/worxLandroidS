@@ -1,7 +1,8 @@
 # worxLandroidS
 
 Robots tondeuses Worx Landroid modèles S
-##Présentation
+
+# Présentation
 Ce plugin permet de se connecter aux tondeuses worx Landroid modèles S.
 
 # Configuration du plugin
