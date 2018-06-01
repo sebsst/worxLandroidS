@@ -881,7 +881,7 @@ unset($client);
 		//}
 		
 	
-		
+		/*
 		
 	        $lastDate = $this->getCmd(null, 'lastDate');
 		$replace['#lastDate#'] = is_object($lastDate) ? $lastDate->execCmd() : '';
@@ -913,7 +913,7 @@ unset($client);
 		$replace['#lastCom#'] = is_object($lastTime) ? $lastTime->getId() : '';	
 	        $lastDate = $this->getCmd(null, 'lastDate');
 		$replace['#lastDate#'] = is_object($lastDate) ? $lastDate->execCmd() : '';		
-	
+	*/
 
 	foreach ($this->getCmd('info') as $cmd) {
             $replace['#' . $cmd->getLogicalId() . '_history#'] = '';
