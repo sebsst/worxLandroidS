@@ -924,10 +924,10 @@ unset($client);
                 $replace['#batteryLevel#'] = $cmd->getDisplay('icon');
             }
 		
- 	    if($cmd->getIsVisible) {
-               $replace['#'.$cmd->getLogicalId(). '_visible#'] = 'block';		
+ 	    if($cmd->getIsVisible == 1){
+               $replace['#' . $cmd->getLogicalId() . '_visible#'] = 'block';		
 	    else {
-               $replace['#'.$cmd->getLogicalId(). '_visible#'] = 'none';		
+               $replace['#' . $cmd->getLogicalId() . '_visible#'] = 'none';		
 
             {    
 		    
