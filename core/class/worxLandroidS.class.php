@@ -120,7 +120,7 @@ class worxLandroidS extends eqLogic {
       $token = "qiJNz3waS4I99FPvTaPt2C2R46WXYdhw";
       $content = "application/json";
       $ch = curl_init();
-      $data = array("email" => $email, "password" => $passwd, "uuid" => "uuid/v1" , "type"=> "app" , "platform"=> "android");
+      $data = array("email" => $email, "password" => $passwd, "uuid" => "uuid/v1.1" , "type"=> "app" , "platform"=> "android");
       $data_string = json_encode($data);
 
       $ch = curl_init($url);
@@ -724,7 +724,7 @@ schedule: TimePeriod[];
   }
 	
   public static function publishMosquitto($_id, $_subject, $_message, $_retain) {
-         log::add('worxLandroidS', 'debug', 'Publication du message ' . $mosqId . ' '. $_subject . ' ' . $_message);
+
     $resource_path = realpath(dirname(__FILE__) . '/../../resources/');
 
     $certfile = $resource_path.'/cert.pem';
@@ -733,8 +733,10 @@ schedule: TimePeriod[];
 
 // save schedule if setting to 0 - and retrieve from saved value (new values must be set from smartphone
       $cmd = worxLandroidSCmd::byId($_id);
+     log::add('worxLandroidS', 'debug', 'Publication du message ' . $mosqId . ' '. $cmd->getName() . ' ' . $_message);
       $eqlogicid = $cmd->getEqLogic_id();
-      $eqlogic = $cmd->getEqLogic();
+      $eqlogic = $cmd->getEqLogic();  
+	  
       if(substr_compare($_message,'off', 0, 3)==0){
         log::add('worxLandroidS', 'debug', 'Envoi du message OFF: ' . $_message);
 
@@ -746,17 +748,20 @@ schedule: TimePeriod[];
 
 	$sched = self::getSavedDaySchedule($eqlogicid,  substr($_message,3,1));
 	$_message = self::setDaySchedule($eqlogicid, substr($_message,3,1), $sched);//  $this->saveConfiguration('savedValue',
-  
-  }	    
+       }	    
+	
+	  if($cmd->getName()=='refreshValue'){ $_message = '{}';}
 	  
+	  // send start command
 	  if($_message == 'cmd:1')
 	  { 
 		  $_message = '{"cmd":1}';
-	  }//json_encode(array('cmd'=>1));}
+	  }
+	  // send stop
 	  if($_message == 'cmd:3')
 	  { 
 		  $_message = '{"cmd":3}';
-	  } //json_encode(array('cmd'=>3));}
+	  }
 	  
   
 	  
@@ -765,7 +770,7 @@ schedule: TimePeriod[];
         // is not executed on the same thread as the deamon. So we do create a new client.
       //  $client = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS'));
 
-	  
+	//$mid = $_client->publish($_subject, $payload, 0, 0);	  
         $client = new Mosquitto\Client($mosqId);	  
         $client->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);	  
 	$qos = '0';
@@ -773,7 +778,7 @@ schedule: TimePeriod[];
 	$payload = $_message; 
 	$client->onConnect('worxLandroidS::newconnect');
 	  
-	  
+
         $client->onPublish(function() use ($client, $mosqId, $_subject, $payload, $qos, $retain) {
             log::add('worxLandroidS', 'debug', 'Publication du message ' . $_subject . ' ' . $payload);
             // exitLoop instead of disconnect:
@@ -809,7 +814,7 @@ while (true) {
 		log::add('worxLandroidS', 'debug', 'exception (msg sent then disconnected) ' . $e);
                 return;
         }
-        sleep(6);
+        sleep(2);
 }
 
 $client->disconnect();
