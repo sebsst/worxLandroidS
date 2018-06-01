@@ -814,7 +814,7 @@ while (true) {
 		log::add('worxLandroidS', 'debug', 'exception (msg sent then disconnected) ' . $e);
                 return;
         }
-        sleep(6);
+        sleep(2);
 }
 
 $client->disconnect();
