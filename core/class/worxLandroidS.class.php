@@ -925,7 +925,7 @@ unset($client);
             }
 		
  	  //  if($cmd->getIsVisible){
-               $replace['#' . $cmd->getLogicalId() . '_visible#'] = 'block';	}	
+               $replace['#' . $cmd->getLogicalId() . '_visible#'] = 'block';	//}	
 	  //  else {
           //     $replace['#' . $cmd->getLogicalId() . '_visible#'] = 'none';		
 
