@@ -765,13 +765,13 @@ schedule: TimePeriod[];
 	  
   
 	  
-        $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS'); //. '' . $id . '' . substr(md5(rand()), 0, 8);
+        $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS'). '' . $id . '' . substr(md5(rand()), 0, 8);
         // FIXME: the static class variable $_client is not visible here as the current function
         // is not executed on the same thread as the deamon. So we do create a new client.
       //  $client = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS'));
 
-	$mid = $_client->publish($_subject, $payload, 0, 0);	  
-    /*    $client = new Mosquitto\Client($mosqId);	  
+	//$mid = $_client->publish($_subject, $payload, 0, 0);	  
+        $client = new Mosquitto\Client($mosqId);	  
         $client->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);	  
 	$qos = '0';
 	$retain = '0';
@@ -824,7 +824,7 @@ unset($client);
 
 	
 
-	*/
+	
 
 	
   }	
