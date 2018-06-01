@@ -152,19 +152,12 @@ class worxLandroidS extends eqLogic {
           //return false;
         } else
         {
-          //		config::save('created_at', $json['created_at'],'worxLandroid');
-          //		config::save('api_token', $json['api_token'],'worxLandroid');
-          //		config::save('mqtt_client_id', $json['mqtt_client_id'],'worxLandroid');
-          //		config::save('mqtt_endpoint', $json['mqtt_endpoint'],'worxLandroid');
-          //		config::save('id', $json['id'],'worxLandroid');
-
-
+   
           // get certificate
           $url =  "https://api.worxlandroid.com:443/api/v1/users/certificate";
           $api_token = $json['api_token'];
           $token = $json['api_token'];
-          //$token = "qiJNz3waS4I99FPvTaPt2C2R46WXYdhw";
-
+   
           $content = "application/json";
           $ch = curl_init($url);
           curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
