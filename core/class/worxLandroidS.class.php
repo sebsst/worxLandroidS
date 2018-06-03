@@ -96,7 +96,7 @@ class worxLandroidS extends eqLogic {
 
   public static function daemon() {
 
-      $cron->setDeamonSleepTime(120);	  
+      
 	  
       $resource_path = realpath(dirname(__FILE__) . '/../../resources/');
 
