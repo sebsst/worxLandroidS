@@ -26,6 +26,7 @@ function worxLandroidS_install() {
         $cron->setFunction('daemon');
         $cron->setEnable(1);
         $cron->setDeamon(1);
+        $cron->setDeamonSleepTime(120);
         $cron->setSchedule('* * * * *');
         $cron->setTimeout('1440');
         $cron->save();
@@ -40,11 +41,13 @@ function worxLandroidS_update() {
         $cron->setFunction('daemon');
         $cron->setEnable(1);
         $cron->setDeamon(1);
+        $cron->setDeamonSleepTime(120);
         $cron->setSchedule('* * * * *');
         $cron->setTimeout('1440');
         $cron->save();
     } else
     {
+        $cron->setDeamonSleepTime(120);
         $cron->halt;
         $cron->run;
     }
