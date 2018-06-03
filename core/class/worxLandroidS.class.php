@@ -267,7 +267,7 @@ self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/
 
    //     log::add('worxLandroidS', 'debug', 'Subscribe to topic ' . $topic, 'worxLandroidS', '#'));
       //$client->loopForever();
-      while (true) { self::$_client->loop(); }
+      while (true) { self::$_client->loop(5); }
 
    }
    catch (Exception $e){
