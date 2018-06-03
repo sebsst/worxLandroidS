@@ -35,6 +35,10 @@ function worxLandroidS_install() {
 
 function worxLandroidS_update() {
     $cron = cron::byClassAndFunction('worxLandroidS', 'daemon');
+    if (is_object($cron)) {
+    $cron->stop();
+    $cron->remove(); 
+    }
     if (!is_object($cron)) {
         $cron = new cron();
         $cron->setClass('worxLandroidS');
