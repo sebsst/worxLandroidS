@@ -355,6 +355,8 @@ self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/
 
       $elogic->save();
 
+      $elogic->setDisplay("width","450px");
+      $elogic->setDisplay("height","250px");	    
       $elogic->setIsVisible(1);
       $elogic->setIsEnable(1);	    
       $elogic->checkAndUpdateCmd();
