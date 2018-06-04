@@ -209,6 +209,7 @@ class worxLandroidS extends eqLogic {
         {
 
           config::save('mac_address', $json3[0]['mac_address'],'worxLandroidS');
+	  config::save('landroid_name', $json3[0]['name'],'worxLandroidS');
           log::add('worxLandroidS', 'info', 'mac_address '.$json3[0]['mac_address']);
         }
 
@@ -335,7 +336,7 @@ self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/
       $type = 'topic';
       log::add('worxLandroidS', 'info', 'Message texte : ' . $value . ' pour information : ' . $cmdId . ' sur : ' . $nodeid);
     }
-
+//config::save('landroid_name', $json3[0]['name'],'worxLandroidS');
 
 
     $elogic = self::byLogicalId($nodeid, 'worxLandroidS');
@@ -343,7 +344,8 @@ self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/
       $elogic = new worxLandroidS();
       $elogic->setEqType_name('worxLandroidS');
       $elogic->setLogicalId($nodeid);
-      $elogic->setName('LandroidS-'. $json2_data->dat->mac);
+      $elogic->setName(config::byKey('landroid_name', 'worxLandroidS', 'LandroidS'));
+      //$elogic->setName('LandroidS-'. $json2_data->dat->mac);
       //$elogic->setConfiguration('topic', $nodeid);
       //$elogic->setConfiguration('type', $type);
 // ajout des actions par défaut
