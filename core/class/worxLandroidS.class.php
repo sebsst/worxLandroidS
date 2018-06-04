@@ -355,6 +355,8 @@ self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/
 
       $elogic->save();
 
+      $elogic->setDisplay("width","450px");
+      $elogic->setDisplay("height","250px");	    
       $elogic->setIsVisible(1);
       $elogic->setIsEnable(1);	    
       $elogic->checkAndUpdateCmd();
@@ -882,7 +884,14 @@ schedule: TimePeriod[];
 				
 			}
 		//}
+                $errorCode = $this->getCmd(null, 'errorCode');
+		$replace['#errorCode#'] = is_object($errorCode) ? $errorCode->execCmd() : '';
+		$replace['#errorColor#'] = 'darkgreen';
+		if($replace['#errorCode#'] != 0 ){$replace['#errorColor#'] = 'orange';}
 		
+		$replace['#errorID#'] = is_object($errorCode) ? $errorCode->getId() : '';
+	        $errorDescription = $this->getCmd(null, 'errorDescription');
+		$replace['#errorDescription#'] = is_object($errorDescription) ? $errorDescription->execCmd() : '';
 	
 		/*
 		
