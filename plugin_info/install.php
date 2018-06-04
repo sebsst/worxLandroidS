@@ -38,6 +38,7 @@ function worxLandroidS_update() {
     $cron->stop();
     $cron->remove(); 
     unset($cron);    
+    config::save('initCloud', 1 ,'worxLandroidS');
 
     }
     $cron = cron::byClassAndFunction('worxLandroidS', 'daemon');
