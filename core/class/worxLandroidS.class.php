@@ -96,10 +96,13 @@ class worxLandroidS extends eqLogic {
 
   public static function daemon() {
 
+      
+	  
       $resource_path = realpath(dirname(__FILE__) . '/../../resources/');
 
       $certfile = $resource_path.'/cert.pem';
       $pkeyfile = $resource_path.'/pkey.pem';
+	  
       $root_ca = $resource_path.'/vs-ca.pem';
 
   log::add('worxLandroidS', 'info', 'client id: ' . config::byKey('mqtt_client_id', 'worxLandroidS'));
@@ -120,7 +123,7 @@ class worxLandroidS extends eqLogic {
       $token = "qiJNz3waS4I99FPvTaPt2C2R46WXYdhw";
       $content = "application/json";
       $ch = curl_init();
-      $data = array("email" => $email, "password" => $passwd, "uuid" => "uuid/v1.1" , "type"=> "app" , "platform"=> "android");
+      $data = array("email" => $email, "password" => $passwd, "uuid" => "uuid/v1" , "type"=> "app" , "platform"=> "android");
       $data_string = json_encode($data);
 
       $ch = curl_init($url);
@@ -152,19 +155,12 @@ class worxLandroidS extends eqLogic {
           //return false;
         } else
         {
-          //		config::save('created_at', $json['created_at'],'worxLandroid');
-          //		config::save('api_token', $json['api_token'],'worxLandroid');
-          //		config::save('mqtt_client_id', $json['mqtt_client_id'],'worxLandroid');
-          //		config::save('mqtt_endpoint', $json['mqtt_endpoint'],'worxLandroid');
-          //		config::save('id', $json['id'],'worxLandroid');
-
-
+   
           // get certificate
           $url =  "https://api.worxlandroid.com:443/api/v1/users/certificate";
           $api_token = $json['api_token'];
           $token = $json['api_token'];
-          //$token = "qiJNz3waS4I99FPvTaPt2C2R46WXYdhw";
-
+   
           $content = "application/json";
           $ch = curl_init($url);
           curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
@@ -262,7 +258,7 @@ class worxLandroidS extends eqLogic {
    //$client->setWill('/jeedom', "Client died :-(", 1, 0);
  try {
 
-      self::$_client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883 , 60);
+      self::$_client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883 , 5);
 //      $client->connect('a1optpg91s0ydf-2.iot.eu-west-1.amazonaws.com', '8883', 60);
 
       $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
@@ -274,7 +270,7 @@ self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/
 
    //     log::add('worxLandroidS', 'debug', 'Subscribe to topic ' . $topic, 'worxLandroidS', '#'));
       //$client->loopForever();
-      while (true) { self::$_client->loop(); }
+      while (true) { self::$_client->loop(5); }
 
    }
    catch (Exception $e){
@@ -282,7 +278,7 @@ self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/
    }
 
 }
-sleep(30);
+//sleep(30);
 
 
 
@@ -625,7 +621,7 @@ schedule: TimePeriod[];
     }
 	  
 	  
-    log::add('worxLandroidS', 'debug', 'Cmdlogic update'.$cmdId.$value);
+    //log::add('worxLandroidS', 'debug', 'Cmdlogic update'.$cmdId.$value);
 
 	  if(strstr($cmdId,"Planning/startTime") && $value != '00:00' ){
    // log::add('worxLandroidS', 'debug', 'savedValue time'. $value);
@@ -777,26 +773,29 @@ schedule: TimePeriod[];
 	$retain = '0';
 	$payload = $_message; 
 	$client->onConnect('worxLandroidS::newconnect');
-	  
+	$client->onMessage('worxLandroidS::message');  
 
         $client->onPublish(function() use ($client, $mosqId, $_subject, $payload, $qos, $retain) {
             log::add('worxLandroidS', 'debug', 'Publication du message ' . $_subject . ' ' . $payload);
             // exitLoop instead of disconnect:
             //   . otherwise disconnect too early for Qos=2 see below  (issue #25)
             //   . to correct issue #30 (action commands not run immediately on scenarios)
-         sleep(10);
+                sleep(2);
+                $client->clearWill();		
 		$client->disconnect();
+		unset($client);
         });	  
 	  
-//$client->onPublish('publish');
-$client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883, 60);
+         //$client->onPublish('publish');
+        $client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883, 60);
        log::add('worxLandroidS', 'debug', 'Pub du message ' . config::byKey('mqtt_endpoint', 'worxLandroidS') . ' ' . $payload);
-     
+       $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
+       $client->subscribe($topic, 0); // !auto: Subscribe to root topic	
 	  
 	  
 	  
-while (true) {
-        try{
+        while (true) {
+           try{
                for ($i = 0; $i < 100; $i++) {
                     // Loop around to permit the library to do its work
                     $client->loop(1);
@@ -809,25 +808,20 @@ while (true) {
                     $client->loop(1);
                         }
 
-        }catch(Mosquitto\Exception $e){
+          }catch(Mosquitto\Exception $e){
             //echo"{$e}" ;
 		log::add('worxLandroidS', 'debug', 'exception (msg sent then disconnected) ' . $e);
                 return;
+          }
+          sleep(2);
+
         }
-        sleep(2);
-}
 
-$client->disconnect();
-unset($client);
+        $client->disconnect();
+        unset($client);
 
 	
-
-	
-
-	
-
-	
-  }	
+       }	
 
 	public function toHtml($_version = 'dashboard') {
 		$jour = array("Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi");
@@ -888,7 +882,7 @@ unset($client);
 		//}
 		
 	
-		
+		/*
 		
 	        $lastDate = $this->getCmd(null, 'lastDate');
 		$replace['#lastDate#'] = is_object($lastDate) ? $lastDate->execCmd() : '';
@@ -920,7 +914,7 @@ unset($client);
 		$replace['#lastCom#'] = is_object($lastTime) ? $lastTime->getId() : '';	
 	        $lastDate = $this->getCmd(null, 'lastDate');
 		$replace['#lastDate#'] = is_object($lastDate) ? $lastDate->execCmd() : '';		
-	
+	*/
 
 	foreach ($this->getCmd('info') as $cmd) {
             $replace['#' . $cmd->getLogicalId() . '_history#'] = '';
@@ -930,6 +924,16 @@ unset($client);
             if ($cmd->getLogicalId() == 'encours'){
                 $replace['#batteryLevel#'] = $cmd->getDisplay('icon');
             }
+		
+ 	  //  if($cmd->getIsVisible){
+               $replace['#' . $cmd->getLogicalId() . '_visible#'] = 'block';	//}	
+	  //  else {
+          //     $replace['#' . $cmd->getLogicalId() . '_visible#'] = 'none';		
+
+	    //}    
+		    
+
+		
             if ($cmd->getIsHistorized() == 1) {
                 $replace['#' . $cmd->getLogicalId() . '_history#'] = 'history cursor';
             }

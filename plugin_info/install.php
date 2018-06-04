@@ -26,23 +26,37 @@ function worxLandroidS_install() {
         $cron->setFunction('daemon');
         $cron->setEnable(1);
         $cron->setDeamon(1);
-        $cron->setSchedule('*/10 * * * *');
+        $cron->setDeamonSleepTime(120);
+        $cron->setSchedule('* * * * *');
         $cron->setTimeout('1440');
         $cron->save();
     }
 }
 
 function worxLandroidS_update() {
+    if (is_object($cron)) {
+    $cron->stop();
+    $cron->remove(); 
+    unset($cron);    
+
+    }
     $cron = cron::byClassAndFunction('worxLandroidS', 'daemon');
+
     if (!is_object($cron)) {
         $cron = new cron();
         $cron->setClass('worxLandroidS');
         $cron->setFunction('daemon');
         $cron->setEnable(1);
         $cron->setDeamon(1);
-        $cron->setSchedule('*/10 * * * *');
+        $cron->setDeamonSleepTime(120);
+        $cron->setSchedule('* * * * *');
         $cron->setTimeout('1440');
         $cron->save();
+    } else
+    {
+        $cron->setDeamonSleepTime(120);
+        $cron->halt;
+        $cron->run;
     }
 }
 
