@@ -809,7 +809,7 @@ schedule: TimePeriod[];
 	  }
 	  
 	  
-	  self::connect_and_publish($_client_pub,$_message);
+	  self::connect_and_publish(self::$_client_pub,$_message);
 	  
   /*
 	  
