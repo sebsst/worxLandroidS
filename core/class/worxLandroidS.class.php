@@ -301,12 +301,11 @@ class worxLandroidS extends eqLogic {
 	 $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
          $client->subscribe($topic, 0); // !auto: Subscribe to root topic
 	   log::add('worxLandroidS', 'debug', 'Subscribe to mqtt ' . config::byKey('mqtt_endpoint', 'worxLandroidS') . ' msg ' . $msg);
-      //$client->loopForever();
-      while (true) { $client->loop();
         $client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", $msg, 0, 0);
-		    $client->loop();
+	      //$client->loopForever();
+      while (true) { $client->loop();
 		    sleep(2);
-		   
+   
 		   
 		   }
       }
