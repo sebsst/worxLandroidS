@@ -244,7 +244,7 @@ class worxLandroidS extends eqLogic {
  if(config::byKey('initCloud', 'worxLandroidS') ==  true || empty($elogics) == false ){
 
     config::save('initCloud', 0 ,'worxLandroidS');
-    self::connect_and_publish(self::$_client,"{}");	 
+    self::connect_and_publish(self::$_client, '{}');	 
 	 
 /*
     self::$_client = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS'));
@@ -359,8 +359,8 @@ class worxLandroidS extends eqLogic {
   }
 
   public static function message( $message ) {
-    if(isset(self::$_client){  self::$_client->disconnect(); }
-    if(isset(self::$_client_pub){ self::$_client_pub->disconnect(); }
+  //  if(isset(self::$_client){  self::$_client->disconnect(); }
+  //  if(isset(self::$_client_pub){ self::$_client_pub->disconnect(); }
     //unset(self::$_client());	  
     log::add('worxLandroidS', 'debug', 'Message ' . $message->payload . ' sur ' . $message->topic);
     if (is_string($message->payload) && is_array(json_decode($message->payload, true)) && (json_last_error() == JSON_ERROR_NONE)) {
@@ -809,7 +809,7 @@ schedule: TimePeriod[];
 	  }
 	  
 	  
-	  self::connect_and_publish(self::$_client_pub,$_message);
+	  self::connect_and_publish(self::$_client_pub, $_message);
 	  
   /*
 	  
