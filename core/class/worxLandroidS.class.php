@@ -19,6 +19,7 @@ require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 
 class worxLandroidS extends eqLogic {
   public static $_client;
+  public static $_client_pub;	
 
   public static function health() {
     $return = array();
@@ -102,7 +103,6 @@ class worxLandroidS extends eqLogic {
 
       $certfile = $resource_path.'/cert.pem';
       $pkeyfile = $resource_path.'/pkey.pem';
-	  
       $root_ca = $resource_path.'/vs-ca.pem';
 
   log::add('worxLandroidS', 'info', 'client id: ' . config::byKey('mqtt_client_id', 'worxLandroidS'));
@@ -244,7 +244,9 @@ class worxLandroidS extends eqLogic {
  if(config::byKey('initCloud', 'worxLandroidS') ==  true || empty($elogics) == false ){
 
     config::save('initCloud', 0 ,'worxLandroidS');
-
+    self::connect_and_publish(self::$_client,"{}");	 
+	 
+/*
     self::$_client = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS'));
     self::$_client->onConnect('worxLandroidS::connect');
     self::$_client->onDisconnect('worxLandroidS::disconnect');
@@ -257,28 +259,27 @@ class worxLandroidS extends eqLogic {
 
 
    //$client->setWill('/jeedom', "Client died :-(", 1, 0);
- try {
+      try {
 
-      self::$_client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883 , 5);
+         self::$_client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883 , 5);
 //      $client->connect('a1optpg91s0ydf-2.iot.eu-west-1.amazonaws.com', '8883', 60);
 
-      $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
-       self::$_client->subscribe($topic, 0); // !auto: Subscribe to root topic
+        $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
+         self::$_client->subscribe($topic, 0); // !auto: Subscribe to root topic
 
 
-self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", "{}", 0, 0);
+        self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", "{}", 0, 0);
 
 
    //     log::add('worxLandroidS', 'debug', 'Subscribe to topic ' . $topic, 'worxLandroidS', '#'));
       //$client->loopForever();
       while (true) { self::$_client->loop(5); }
-
-   }
-   catch (Exception $e){
-     log::add('worxLandroidS', 'debug', $e->getMessage());
-   }
-
-}
+      }
+       catch (Exception $e){
+       log::add('worxLandroidS', 'debug', $e->getMessage());
+      }
+*/
+    }
 //sleep(30);
 
 
@@ -288,8 +289,49 @@ self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/
 
 
 
-}
+  }
 
+  public static function connect_and_publish($client, $msg) {
+      $resource_path = realpath(dirname(__FILE__) . '/../../resources/');
+
+      $certfile = $resource_path.'/cert.pem';
+      $pkeyfile = $resource_path.'/pkey.pem';
+      $root_ca = $resource_path.'/vs-ca.pem';	  
+    $client = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS'));
+    $client->onConnect('worxLandroidS::connect');
+    $client->onDisconnect('worxLandroidS::disconnect');
+    $client->onSubscribe('worxLandroidS::subscribe');
+    $client->onMessage('worxLandroidS::message');
+    $client->onLog('worxLandroidS::logmq');
+    $client->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);
+
+
+
+
+   //$client->setWill('/jeedom', "Client died :-(", 1, 0);
+      try {
+
+         $client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883 , 5);
+//      $client->connect('a1optpg91s0ydf-2.iot.eu-west-1.amazonaws.com', '8883', 60);
+
+        $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
+         $client->subscribe($topic, 0); // !auto: Subscribe to root topic
+
+
+        $client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", $msg, 0, 0);
+
+
+   //     log::add('worxLandroidS', 'debug', 'Subscribe to topic ' . $topic, 'worxLandroidS', '#'));
+      //$client->loopForever();
+      while (true) { $client->loop(5); }
+      }
+       catch (Exception $e){
+       log::add('worxLandroidS', 'debug', $e->getMessage());
+      } 
+	  
+  }
+	
+	
 
   public static function connect( $r, $message ) {
     log::add('worxLandroidS', 'info', 'Connexion à Mosquitto avec code ' . $r . ' ' . $message);
@@ -317,8 +359,8 @@ self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/
   }
 
   public static function message( $message ) {
-	  
-    self::$_client->disconnect();
+    if(isset(self::$_client){  self::$_client->disconnect(); }
+    if(isset(self::$_client_pub){ self::$_client_pub->disconnect(); }
     //unset(self::$_client());	  
     log::add('worxLandroidS', 'debug', 'Message ' . $message->payload . ' sur ' . $message->topic);
     if (is_string($message->payload) && is_array(json_decode($message->payload, true)) && (json_last_error() == JSON_ERROR_NONE)) {
@@ -766,7 +808,10 @@ schedule: TimePeriod[];
 		  $_message = '{"cmd":3}';
 	  }
 	  
-  
+	  
+	  self::connect_and_publish($_client_pub,$_message);
+	  
+  /*
 	  
         $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS'). '' . $id . '' . substr(md5(rand()), 0, 8);
         // FIXME: the static class variable $_client is not visible here as the current function
@@ -784,13 +829,7 @@ schedule: TimePeriod[];
 
         $client->onPublish(function() use ($client, $mosqId, $_subject, $payload, $qos, $retain) {
             log::add('worxLandroidS', 'debug', 'Publication du message ' . $_subject . ' ' . $payload);
-            // exitLoop instead of disconnect:
-            //   . otherwise disconnect too early for Qos=2 see below  (issue #25)
-            //   . to correct issue #30 (action commands not run immediately on scenarios)
-                sleep(2);
-               // $client->clearWill();		
-		//$client->disconnect();
-		//unset($client);
+             sleep(2);
         });	  
 	  
          //$client->onPublish('publish');
@@ -833,7 +872,7 @@ schedule: TimePeriod[];
         $client->disconnect();
 
         unset($client);
-
+*/
 	
        }	
 
