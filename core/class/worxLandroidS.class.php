@@ -304,17 +304,11 @@ class worxLandroidS extends eqLogic {
     $client->onMessage('worxLandroidS::message');
     $client->onLog('worxLandroidS::logmq');
     $client->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);
-
-
-
-
-   //$client->setWill('/jeedom', "Client died :-(", 1, 0);
       try {
 
          $client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883 , 5);
-//      $client->connect('a1optpg91s0ydf-2.iot.eu-west-1.amazonaws.com', '8883', 60);
 
-        $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
+	 $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
          $client->subscribe($topic, 0); // !auto: Subscribe to root topic
 
 
@@ -323,7 +317,7 @@ class worxLandroidS extends eqLogic {
 
    
 	      
-	   log::add('worxLandroidS', 'debug', 'Subscribe to topic ' . $topic . ' msg ' . $msg);
+	   log::add('worxLandroidS', 'debug', 'Subscribe to mqtt ' . config::byKey('mqtt_endpoint', 'worxLandroidS') . ' msg ' . $msg);
       //$client->loopForever();
       while (true) { $client->loop(5); }
       }
