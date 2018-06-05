@@ -783,6 +783,9 @@ schedule: TimePeriod[];
 	//$client->onMessage('worxLandroidS::message');  
 	$client->onMessage(function($msg) {
 		self::message($msg);
+		$client->clearWill();		
+		$client->disconnect();
+		unset($client);
 	});
 
         $client->onPublish(function() use ($client, $mosqId, $_subject, $payload, $qos, $retain) {
