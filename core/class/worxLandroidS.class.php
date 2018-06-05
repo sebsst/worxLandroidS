@@ -791,9 +791,9 @@ schedule: TimePeriod[];
             //   . otherwise disconnect too early for Qos=2 see below  (issue #25)
             //   . to correct issue #30 (action commands not run immediately on scenarios)
                 sleep(2);
-                $client->clearWill();		
-		$client->disconnect();
-		unset($client);
+               // $client->clearWill();		
+		//$client->disconnect();
+		//unset($client);
         });	  
 	  
          //$client->onPublish('publish');
@@ -826,8 +826,9 @@ schedule: TimePeriod[];
           sleep(2);
 
         }
-
+	$client->clearWill();  
         $client->disconnect();
+
         unset($client);
 
 	
