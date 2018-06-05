@@ -293,8 +293,9 @@ class worxLandroidS extends eqLogic {
     $client->onConnect('worxLandroidS::connect');
     $client->onDisconnect('worxLandroidS::disconnect');
     $client->onSubscribe('worxLandroidS::subscribe');
-    $client->onMessage('worxLandroidS::message');
-    $client->onLog('worxLandroidS::logmq');
+    //$client->onMessage('worxLandroidS::message');
+    $client-onMessage(function() use($client, $message){   self::message($client, $message); });
+     $client->onLog('worxLandroidS::logmq');
     $client->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);
       try {
          $client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883 , 5);
@@ -345,7 +346,7 @@ class worxLandroidS extends eqLogic {
   }
 
   public static function message( $message ) {
-  //  self::$_client->disconnect();  
+   $client->disconnect();  
   //  if(isset(self::$_client_pub){ self::$_client_pub->disconnect(); }
     //unset(self::$_client());	  
     log::add('worxLandroidS', 'debug', 'Message ' . $message->payload . ' sur ' . $message->topic);
