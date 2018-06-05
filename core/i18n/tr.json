@@ -66,8 +66,8 @@
         "Multisensor": "Multisensor",
         "RFID": "RFID",
         "Thermostat": "Thermostat",
-        "Topic": "Topic"
-               "Bloquée": "Bloquée",
+        "Topic": "Topic",
+        "Bloquée": "Bloquée",
         "Soulevée": "Soulevée",
         "Câble non trouvé": "Câble non trouvé",
 "En dehors des limites": "En dehors des limites",
@@ -83,6 +83,8 @@
 "Erreur charge batterie": "Erreur charge batterie",
 "Delai recherche station dépassé": "Delai recherche station dépassé"
 
+        
+        
     },
     "plugins\/worxLandroidS\/desktop\/js\/worxLandroidS.js": {
         "Nom de l'info": "Nom de l'info",
