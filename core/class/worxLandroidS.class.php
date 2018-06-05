@@ -244,9 +244,8 @@ class worxLandroidS extends eqLogic {
  if(config::byKey('initCloud', 'worxLandroidS') ==  true || empty($elogics) == false ){
 
     config::save('initCloud', 0 ,'worxLandroidS');
-    self::connect_and_publish(self::$_client, '{}');	 
+    //self::connect_and_publish(self::$_client, '{}');	 
 	 
-/*
     self::$_client = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS'));
     self::$_client->onConnect('worxLandroidS::connect');
     self::$_client->onDisconnect('worxLandroidS::disconnect');
@@ -278,7 +277,7 @@ class worxLandroidS extends eqLogic {
        catch (Exception $e){
        log::add('worxLandroidS', 'debug', $e->getMessage());
       }
-*/
+
     }
 //sleep(30);
 
@@ -355,7 +354,7 @@ class worxLandroidS extends eqLogic {
   }
 
   public static function message( $message ) {
-   self::$_client->disconnect();  
+   // self::$_client->disconnect();  
   //  if(isset(self::$_client_pub){ self::$_client_pub->disconnect(); }
     //unset(self::$_client());	  
     log::add('worxLandroidS', 'debug', 'Message ' . $message->payload . ' sur ' . $message->topic);
