@@ -781,12 +781,6 @@ schedule: TimePeriod[];
 	$payload = $_message; 
 	$client->onConnect('worxLandroidS::newconnect');
 	//$client->onMessage('worxLandroidS::message');  
-	$client->onMessage(function($msg) {
-		self::message($msg);
-		$client->clearWill();		
-		$client->disconnect();
-		unset($client);
-	});
 
         $client->onPublish(function() use ($client, $mosqId, $_subject, $payload, $qos, $retain) {
             log::add('worxLandroidS', 'debug', 'Publication du message ' . $_subject . ' ' . $payload);
@@ -805,7 +799,13 @@ schedule: TimePeriod[];
        $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
        $client->subscribe($topic, 0); // !auto: Subscribe to root topic	
 	  
-	  
+	$client->onMessage(function($msg) {
+                log::add('worxLandroidS', 'debug', 'retour pub msg' . $msg);		
+		self::message($msg);
+		$client->clearWill();		
+		$client->disconnect();
+		unset($client);
+	});	  
 	  
         while (true) {
            try{
