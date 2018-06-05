@@ -323,7 +323,7 @@ class worxLandroidS extends eqLogic {
 
    
 	      
-	   log::add('worxLandroidS', 'debug', 'Subscribe to topic ' . $topic ' msg ' $msg));
+	   log::add('worxLandroidS', 'debug', 'Subscribe to topic ' . $topic . ' msg ' . $msg));
       //$client->loopForever();
       while (true) { $client->loop(5); }
       }
