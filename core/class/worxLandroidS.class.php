@@ -321,7 +321,9 @@ class worxLandroidS extends eqLogic {
         $client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", $msg, 0, 0);
 
 
-   //     log::add('worxLandroidS', 'debug', 'Subscribe to topic ' . $topic, 'worxLandroidS', '#'));
+   
+	      
+	   log::add('worxLandroidS', 'debug', 'Subscribe to topic ' . $topic ' msg ' $msg));
       //$client->loopForever();
       while (true) { $client->loop(5); }
       }
