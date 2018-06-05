@@ -244,7 +244,7 @@ class worxLandroidS extends eqLogic {
  if(config::byKey('initCloud', 'worxLandroidS') ==  true || empty($elogics) == false ){
 
     config::save('initCloud', 0 ,'worxLandroidS');
-    //self::connect_and_publish(self::$_client, '{}');	 
+    self::connect_and_publish(self::$_client, '{}');	 
 	 /*
     self::$_client = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS'));
     self::$_client->onConnect('worxLandroidS::connect');
