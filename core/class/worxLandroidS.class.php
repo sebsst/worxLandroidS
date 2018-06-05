@@ -361,7 +361,7 @@ class worxLandroidS extends eqLogic {
   }
 
   public static function message( $message ) {
-  //  if(isset(self::$_client){  self::$_client->disconnect(); }
+   self::$_client->disconnect();  
   //  if(isset(self::$_client_pub){ self::$_client_pub->disconnect(); }
     //unset(self::$_client());	  
     log::add('worxLandroidS', 'debug', 'Message ' . $message->payload . ' sur ' . $message->topic);
