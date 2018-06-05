@@ -319,7 +319,7 @@ self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/
   public static function message( $message ) {
 	  
     self::$_client->disconnect();
-    unset(self::$_client());	  
+    //unset(self::$_client());	  
     log::add('worxLandroidS', 'debug', 'Message ' . $message->payload . ' sur ' . $message->topic);
     if (is_string($message->payload) && is_array(json_decode($message->payload, true)) && (json_last_error() == JSON_ERROR_NONE)) {
       //json message
