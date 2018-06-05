@@ -297,25 +297,24 @@ class worxLandroidS extends eqLogic {
     $client->onLog('worxLandroidS::logmq');
     $client->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);
       try {
-
          $client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883 , 5);
-
 	 $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
          $client->subscribe($topic, 0); // !auto: Subscribe to root topic
-
-
-        $client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", $msg, 0, 0);
-
-
-   
-	      
 	   log::add('worxLandroidS', 'debug', 'Subscribe to mqtt ' . config::byKey('mqtt_endpoint', 'worxLandroidS') . ' msg ' . $msg);
       //$client->loopForever();
-      while (true) { $client->loop(5); }
+      while (true) { $client->loop();
+        $client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", $msg, 0, 0);
+		    $client->loop();
+		    sleep(2);
+		   
+		   
+		   }
       }
        catch (Exception $e){
        log::add('worxLandroidS', 'debug', $e->getMessage());
       } 
+     $client->disconnect();
+     unset($client);	  
 	  
   }
 	
@@ -347,7 +346,7 @@ class worxLandroidS extends eqLogic {
   }
 
   public static function message( $message ) {
-    self::$_client->disconnect();  
+  //  self::$_client->disconnect();  
   //  if(isset(self::$_client_pub){ self::$_client_pub->disconnect(); }
     //unset(self::$_client());	  
     log::add('worxLandroidS', 'debug', 'Message ' . $message->payload . ' sur ' . $message->topic);
