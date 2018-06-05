@@ -294,7 +294,7 @@ class worxLandroidS extends eqLogic {
     $client->onDisconnect('worxLandroidS::disconnect');
     $client->onSubscribe('worxLandroidS::subscribe');
     //$client->onMessage('worxLandroidS::message');
-    $client-onMessage(function() use($client, $message){   self::message($client, $message); });
+    $client->onMessage(function() use($client, $message){   self::message($client, $message); });
      $client->onLog('worxLandroidS::logmq');
     $client->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);
       try {
@@ -345,7 +345,7 @@ class worxLandroidS extends eqLogic {
     }
   }
 
-  public static function message( $message ) {
+  public static function message($client, $message ) {
    $client->disconnect();  
   //  if(isset(self::$_client_pub){ self::$_client_pub->disconnect(); }
     //unset(self::$_client());	  
