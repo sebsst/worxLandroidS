@@ -779,18 +779,18 @@ schedule: TimePeriod[];
 	$qos = '0';
 	$retain = '0';
 	$payload = $_message; 
-	$client->onConnect('worxLandroidS::newconnect');
-	$client->onMessage('worxLandroidS::message');  
+	$_client->onConnect('worxLandroidS::newconnect');
+	$_client->onMessage('worxLandroidS::message');  
 
-        $client->onPublish(function() use ($client, $mosqId, $_subject, $payload, $qos, $retain) {
+        $_client->onPublish(function() use ($_client, $mosqId, $_subject, $payload, $qos, $retain) {
             log::add('worxLandroidS', 'debug', 'Publication du message ' . $_subject . ' ' . $payload);
             // exitLoop instead of disconnect:
             //   . otherwise disconnect too early for Qos=2 see below  (issue #25)
             //   . to correct issue #30 (action commands not run immediately on scenarios)
                 sleep(2);
-                $client->clearWill();		
-		$client->disconnect();
-		unset($client);
+                $_client->clearWill();		
+		$_client->disconnect();
+		unset($_client);
         });	  
 	  
          //$client->onPublish('publish');
@@ -805,14 +805,14 @@ schedule: TimePeriod[];
            try{
                for ($i = 0; $i < 100; $i++) {
                     // Loop around to permit the library to do its work
-                    $client->loop(1);
+                    $_client->loop(1);
                         }
                 //$mid = $client->publish($_subject, $payload, $qos, $retain);
-                $mid = $client->publish($_subject, $payload, 0, 0);
+                $mid = $_client->publish($_subject, $payload, 0, 0);
                 
 		for ($i = 0; $i < 100; $i++) {
                     // Loop around to permit the library to do its work
-                    $client->loop(1);
+                    $_client->loop(1);
                         }
 
           }catch(Mosquitto\Exception $e){
@@ -824,8 +824,8 @@ schedule: TimePeriod[];
 
         }
 
-        $client->disconnect();
-        unset($client);
+        $_client->disconnect();
+        unset($_client);
 
 	
        }	
