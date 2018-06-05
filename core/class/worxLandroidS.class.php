@@ -294,7 +294,7 @@ class worxLandroidS extends eqLogic {
     $client->onDisconnect('worxLandroidS::disconnect');
     $client->onSubscribe('worxLandroidS::subscribe');
     //$client->onMessage('worxLandroidS::message');
-    $client->onMessage(function() use($client, $message){   
+    $client->onMessage(function() use($message){   
 	   log::add('worxLandroidS', 'debug', 'messsage reçu? ' . $message); 
 	    worxLandroidS::message($client, $message); });
      $client->onLog('worxLandroidS::logmq');
