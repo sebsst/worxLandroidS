@@ -286,10 +286,12 @@ class worxLandroidS extends eqLogic {
         foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
 		if ($eqpt->getIsEnable() == true){
 		    $i = date('w');
-	            $startTime = $eqpt->getCmd(null, 'Planning/startTime/' . $i);
-                    $duration = $eqpt->getCmd(null, 'Planning/duration/' . $i);	
-	            log::add('worxLandroidS', 'debug', 'starttime' . $starttime);
-	            $initDate = DateTime::createFromFormat('H:i', $startTime);
+	        $start = $eqpt->getCmd(null, 'Planning/startTime/' . $i);
+            $startTime = is_object($start) ? $start->execCmd() : '';
+            $dur = $eqpt->getCmd(null, 'Planning/duration/' . $i);	
+            $duration = is_object($dur) ? $dur->execCmd() : '';         
+	        log::add('worxLandroidS', 'debug', 'starttime' . $startTime);
+	        $initDate = DateTime::createFromFormat('H:i', $startTime);
 		    $initDate->add(new DateInterval("PT".$duration."M")); 
 		    $endTime = $initDate->format("H:i");
 	// refresh value each hours if mower is sleeping at home :-)
