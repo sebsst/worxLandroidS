@@ -275,11 +275,12 @@ class worxLandroidS extends eqLogic {
 
 	 
 	 	  
-       // $elogics = array();
-	if ($elogics->getIsEnable() == true){
+         $elogics = array();
+	foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
+	if ($eqpt->getIsEnable() == true){
 		    $i = date('w');
-	            $startTime = $elogics->getCmd(null, 'Planning/startTime/' . $i);
-                    $duration = $elogics->getCmd(null, 'Planning/duration/' . $i);	
+	            $startTime = $eqpt->getCmd(null, 'Planning/startTime/' . $i);
+                    $duration = $eqpt->getCmd(null, 'Planning/duration/' . $i);	
 	            
 	            $initDate = DateTime::createFromFormat('H:i', $startTime);
 		    $initDate->add(new DateInterval("PT".$duration."M")); 
@@ -292,7 +293,7 @@ class worxLandroidS extends eqLogic {
                        self::connect_and_publish($client, '{}');	 
 			
 		    }
-		
+	  }	
 	}	  
 
 	/* 
