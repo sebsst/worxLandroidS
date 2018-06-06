@@ -244,7 +244,9 @@ class worxLandroidS extends eqLogic {
  if(config::byKey('initCloud', 'worxLandroidS') ==  true || empty($elogics) == false ){
 
     config::save('initCloud', 0 ,'worxLandroidS');
-    self::connect_and_publish(self::$_client, '{}');	 
+    $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
+    $client = new Mosquitto\Client($mosqId);
+    self::connect_and_publish($client, '{}');	 
 	 /*
     self::$_client = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS'));
     self::$_client->onConnect('worxLandroidS::connect');
@@ -289,35 +291,29 @@ class worxLandroidS extends eqLogic {
       $certfile = $resource_path.'/cert.pem';
       $pkeyfile = $resource_path.'/pkey.pem';
       $root_ca = $resource_path.'/vs-ca.pem';	  
-    $client = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS'));
-    $client->onConnect('worxLandroidS::connect');
-    $client->onDisconnect('worxLandroidS::disconnect');
-    $client->onSubscribe('worxLandroidS::subscribe');
-    //$client->onMessage('worxLandroidS::message');
-    $client->onMessage(function() use($message){   
-	   log::add('worxLandroidS', 'debug', 'messsage reçu? ' . $message); 
-	    worxLandroidS::message($client, $message); });
-     $client->onLog('worxLandroidS::logmq');
-    $client->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);
+    self::$_client = $client;
+    self::$_client->clearWill();
+    self::$_client->onConnect('worxLandroidS::connect');
+    self::$_client->onDisconnect('worxLandroidS::disconnect');
+    self::$_client->onSubscribe('worxLandroidS::subscribe');
+    self::$_client->onMessage('worxLandroidS::message');
+    self::$_client->onLog('worxLandroidS::logmq');
+    self::$_client->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);
       try {
-         $client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883 , 5);
-	 $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
-         $client->subscribe($topic, 0); // !auto: Subscribe to root topic
+         $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
+         self::$_client->setWill("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", $msg, 0, 0);
+         self::$_client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883 , 5);
+         self::$_client->subscribe($topic, 0); // !auto: Subscribe to root topic
 	   log::add('worxLandroidS', 'debug', 'Subscribe to mqtt ' . config::byKey('mqtt_endpoint', 'worxLandroidS') . ' msg ' . $msg);
-        $client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", $msg, 0, 0);
-	      //$client->loopForever();
-      while (true) { $client->loop();
-		    sleep(2);
-   
-		   
-		   }
+    //self::$_client->loop();  
+    self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", $msg, 0, 0);
+      //self::$_client->loopForever();
+      while (true) { self::$_client->loop(1);		   }
       }
        catch (Exception $e){
-       log::add('worxLandroidS', 'debug', $e->getMessage());
-      } 
-     //$client->disconnect();
-     //unset($client);	  
-	  
+      // log::add('worxLandroidS', 'debug', $e->getMessage());
+     } 
+    
   }
 	
 	
@@ -347,10 +343,13 @@ class worxLandroidS extends eqLogic {
     }
   }
 
-  public static function message($client, $message ) {
-   $client->disconnect();  
+  public static function message($message) {
+    //self::$_client->exitloop();
+    //self::$_client->unsubscribe($message->topic);
+    self::$_client->disconnect();  
+
   //  if(isset(self::$_client_pub){ self::$_client_pub->disconnect(); }
-    //unset(self::$_client());	  
+   // unset(self::$_client);	  
     log::add('worxLandroidS', 'debug', 'Message ' . $message->payload . ' sur ' . $message->topic);
     if (is_string($message->payload) && is_array(json_decode($message->payload, true)) && (json_last_error() == JSON_ERROR_NONE)) {
       //json message
@@ -797,8 +796,9 @@ schedule: TimePeriod[];
 		  $_message = '{"cmd":3}';
 	  }
 	  
-	  
-	  self::connect_and_publish(self::$_client_pub, $_message);
+	  $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
+          $client = new Mosquitto\Client($mosqId);
+	  self::connect_and_publish($client, $_message);
 	  
   /*
 	  
