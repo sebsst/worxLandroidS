@@ -15,7 +15,7 @@ Une fois la sauvegarde effectuée, un nouvel équipement tondeuse va être cré�
 
 L'arrêt du daemon permet de stopper la connexion avec la tondeuse. En cas du défaillance il se peut que le Daemon soit à l'arrêt et vous pouvez tenter un redémarrage.
 
-# utilisation
+# Utilisation
 
 Le nom par défaut = LandroidS+adress Mac de la tondeuse
 

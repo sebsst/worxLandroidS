@@ -66,7 +66,25 @@
         "Multisensor": "Multisensor",
         "RFID": "RFID",
         "Thermostat": "Thermostat",
-        "Topic": "Topic"
+        "Topic": "Topic",
+        "Bloquée": "Bloquée",
+        "Soulevée": "Soulevée",
+        "Câble non trouvé": "Câble non trouvé",
+"En dehors des limites": "En dehors des limites",
+"Délai pluie": "Délai pluie",
+"Close door to mow": "Close door to mow",
+"Close door to go home": "Close door to go home",
+"Moteur lames bloqué": "Moteur lames bloqué",
+"Moteur roues bloqué": "Moteur roues bloqué",
+"Timeout après blocage": "Timeout après blocage",
+"Renversée": " Renversée",
+"Batterie faible": "Batterie faible",
+"Câble inversé": "Câble inversé",
+"Erreur charge batterie": "Erreur charge batterie",
+"Delai recherche station dépassé": "Delai recherche station dépassé"
+
+        
+        
     },
     "plugins\/worxLandroidS\/desktop\/js\/worxLandroidS.js": {
         "Nom de l'info": "Nom de l'info",
