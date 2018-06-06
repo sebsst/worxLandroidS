@@ -309,45 +309,7 @@ class worxLandroidS extends eqLogic {
 	   }	
 	 }
 	 
-	
-	/* 
-    config::save('initCloud', 0 ,'worxLandroidS');
-    $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
-    $client = new Mosquitto\Client($mosqId);
-    self::connect_and_publish($client, '{}');	 */
-	 /*
-    self::$_client = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS'));
-    self::$_client->onConnect('worxLandroidS::connect');
-    self::$_client->onDisconnect('worxLandroidS::disconnect');
-    self::$_client->onSubscribe('worxLandroidS::subscribe');
-    self::$_client->onMessage('worxLandroidS::message');
-    self::$_client->onLog('worxLandroidS::logmq');
-    self::$_client->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);
 
-
-
-
-   //$client->setWill('/jeedom', "Client died :-(", 1, 0);
-      try {
-
-         self::$_client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883 , 5);
-//      $client->connect('a1optpg91s0ydf-2.iot.eu-west-1.amazonaws.com', '8883', 60);
-
-        $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
-         self::$_client->subscribe($topic, 0); // !auto: Subscribe to root topic
-
-
-        self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", "{}", 0, 0);
-
-
-   //     log::add('worxLandroidS', 'debug', 'Subscribe to topic ' . $topic, 'worxLandroidS', '#'));
-      //$client->loopForever();
-      while (true) { self::$_client->loop(5); }
-      }
-       catch (Exception $e){
-       log::add('worxLandroidS', 'debug', $e->getMessage());
-      }
-*/
     }
 
 
@@ -611,9 +573,6 @@ schedule: TimePeriod[];
 	  
 	  $elogic->save();
 	  $elogic->refreshWidget();
-	  
-    // $this->refreshWidget();
-	  
 	  
   }
 
@@ -999,39 +958,6 @@ schedule: TimePeriod[];
 	        $errorDescription = $this->getCmd(null, 'errorDescription');
 		$replace['#errorDescription#'] = is_object($errorDescription) ? $errorDescription->execCmd() : '';
 	
-		/*
-		
-	        $lastDate = $this->getCmd(null, 'lastDate');
-		$replace['#lastDate#'] = is_object($lastDate) ? $lastDate->execCmd() : '';
-		$replace['#lastDate#'] = is_object($lastDate) ? $lastDate->getId() : '';
-		
-	        $errorCode = $this->getCmd(null, 'errorCode');
-		$replace['#errorCode#'] = is_object($errorCode) ? $errorCode->execCmd() : '';
-		$replace['#errorColor#'] = 'darkgreen';
-		if($replace['#errorCode#'] != 0 ){$replace['#errorColor#'] = 'orange';}
-		
-		$replace['#errorID#'] = is_object($errorCode) ? $errorCode->getId() : '';
-	        $errorDescription = $this->getCmd(null, 'errorDescription');
-		$replace['#errorDescription#'] = is_object($errorDescription) ? $errorDescription->execCmd() : '';
-
-		$replace['#rainDelayId#'] = is_object($rainDelay) ? $rainDelay->getId() : '';
-	        $rainDelay = $this->getCmd(null, 'rainDelay');
-		$replace['#rainDelay#'] = is_object($rainDelay) ? $rainDelay->execCmd() : '';
-
-	
-	        $statusCode = $this->getCmd(null, 'statusCode');
-		$replace['#statusCode#'] = is_object($statusCode) ? $statusCode->execCmd() : '';
-		$replace['#status#'] = is_object($statusCode) ? $statusCode->getId() : '';
-	        $statusDescription = $this->getCmd(null, 'statusDescription');
-		$replace['#statusDescription#'] = is_object($statusDescription) ? $statusDescription->execCmd() : '';		
-		
-		
-	        $lastTime = $this->getCmd(null, 'lastTime');
-		$replace['#lastTime#'] = is_object($lastTime) ? $lastTime->execCmd() : '';
-		$replace['#lastCom#'] = is_object($lastTime) ? $lastTime->getId() : '';	
-	        $lastDate = $this->getCmd(null, 'lastDate');
-		$replace['#lastDate#'] = is_object($lastDate) ? $lastDate->execCmd() : '';		
-	*/
 
 	foreach ($this->getCmd('info') as $cmd) {
             $replace['#' . $cmd->getLogicalId() . '_history#'] = '';
