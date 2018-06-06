@@ -33,6 +33,19 @@ class worxLandroidS extends eqLogic {
     );
     return $return;
   }
+	
+	
+
+//     * Fonction exécutée automatiquement toutes les heures par Jeedom
+  public static function cronHourly() {
+	  
+    $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
+    $client = new Mosquitto\Client($mosqId);
+    self::connect_and_publish($client, '{}');	 
+  
+  }
+     	
+	
 
   public static function deamon_info() {
     $return = array();
