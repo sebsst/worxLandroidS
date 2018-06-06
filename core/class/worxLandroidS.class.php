@@ -292,7 +292,7 @@ class worxLandroidS extends eqLogic {
             $startTime = is_object($start) ? $start->execCmd() : '';
             $dur = $eqpt->getCmd(null, 'Planning/duration/' . $i);	
             $duration = is_object($dur) ? $dur->execCmd() : '';         
-	        log::add('worxLandroidS', 'debug', 'starttime' . $startTime);
+	        //log::add('worxLandroidS', 'debug', 'starttime' . $startTime);
 	        $initDate = DateTime::createFromFormat('H:i', $startTime);
 		    $initDate->add(new DateInterval("PT".$duration."M")); 
 		    $endTime = $initDate->format("H:i");
