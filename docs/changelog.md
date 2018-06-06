@@ -4,10 +4,10 @@ En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que l
 
 ## 06/06/2018
 
-- Modification des fréquences de mise à jour des infos: 
-> Toutes les 2 minutes pendant la tonte sinon 
-> Toutes les heures en dehors des periodes de tonte
-> sur demande si besoin/envoi du mise à jour du planning de fonctionnement.
+Modification des fréquences de mise à jour des infos: 
+- Toutes les 2 minutes pendant la tonte
+- Toutes les heures en dehors des periodes de tonte
+- sur demande ou envoi du mise à jour du planning de fonctionnement.
 
 ## 04/06/2018
 
