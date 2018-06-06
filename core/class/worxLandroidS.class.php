@@ -349,12 +349,12 @@ class worxLandroidS extends eqLogic {
 	
 
   public static function connect( $r, $message ) {
-    log::add('worxLandroidS', 'info', 'Connexion à Mosquitto avec code ' . $r . ' ' . $message);
+    log::add('worxLandroidS', 'debug', 'Connexion à Mosquitto avec code ' . $r . ' ' . $message);
     config::save('status', '1',  'worxLandroidS');
   }
 	
   public static function newconnect( $r, $message ) {
-    log::add('worxLandroidS', 'info', 'New Connexion à Mosquitto avec code ' . $r . ' ' . $message);
+    log::add('worxLandroidS', 'debug', 'New Connexion à Mosquitto avec code ' . $r . ' ' . $message);
     config::save('status', '1',  'worxLandroidS');
   }	
 
@@ -388,7 +388,7 @@ class worxLandroidS extends eqLogic {
       $json2_data = json_decode($value);
 
       $type = 'json';
-      log::add('worxLandroidS', 'info', 'Message json : ' . $value . ' pour information sur : ' . $nodeid);
+      log::add('worxLandroidS', 'debug', 'Message json : ' . $value . ' pour information sur : ' . $nodeid);
     } else {
       $topicArray = explode("/", $message->topic);
       $cmdId = end($topicArray);
@@ -397,7 +397,7 @@ class worxLandroidS extends eqLogic {
       $nodeid = implode($topicArray,'/');
       $value = $message->payload;
       $type = 'topic';
-      log::add('worxLandroidS', 'info', 'Message texte : ' . $value . ' pour information : ' . $cmdId . ' sur : ' . $nodeid);
+      log::add('worxLandroidS', 'debug', 'Message texte : ' . $value . ' pour information : ' . $cmdId . ' sur : ' . $nodeid);
     }
 //config::save('landroid_name', $json3[0]['name'],'worxLandroidS');
 
