@@ -37,7 +37,7 @@ class worxLandroidS extends eqLogic {
 	
 
 //     * Fonction exécutée automatiquement toutes les heures par Jeedom
-  public static function cronHourly() {
+  public static function cron30() {
 	  
        // $elogics = array();
         foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
