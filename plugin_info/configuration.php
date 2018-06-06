@@ -50,7 +50,7 @@ if (!isConnect()) {
 		</div>
             </div>
 	    <div class="form-group">	    
-	    <label class="col-sm-4 control-label">{{En cas d'arrêt prolongé, il est conseillé d'arrêter et de désactiver le démarrage du démon }}</label>
+	    <label class="col-sm-4 control-label">{{En cas d'arrêt prolongé, il est conseillé d'arrêter et de désactiver le démarrage automatique du démon }}</label>
 	    </div>
 
 	</fieldset>
