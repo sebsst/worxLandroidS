@@ -272,29 +272,11 @@ class worxLandroidS extends eqLogic {
 
        //log::add('worxLandroidS', 'info', 'mqtt_endpoint '.$root_ca);
  if(config::byKey('initCloud', 'worxLandroidS') ==  true || empty($elogics) == false ){
-
-	 
-	 	  
-         $elogics = array();
-	foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
-	if ($eqpt->getIsEnable() == true){
-		    $i = date('w');
-	            $startTime = $eqpt->getCmd(null, 'Planning/startTime/' . $i);
-                    $duration = $eqpt->getCmd(null, 'Planning/duration/' . $i);	
-	 log::add('worxLandroidS', 'debug', ' starttime  ' . $starTime . 'durée' . $duration );           
-	            $initDate = DateTime::createFromFormat('H:i', $startTime);
-		    $initDate->add(new DateInterval("PT".$duration."M")); 
-		    $endTime = $initDate->format("H:i");
-	// refresh value each 2 minutes during work time :-)
-		    if($starTime <= date('H:i') or date('H:i') <= $endTime) {
 			
 		       $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
                        $client = new Mosquitto\Client($mosqId);
                        self::connect_and_publish($client, '{}');	 
-			
-		    }
-	  }	
-	}	  
+
 
 	/* 
     config::save('initCloud', 0 ,'worxLandroidS');
