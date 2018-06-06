@@ -39,13 +39,30 @@ class worxLandroidS extends eqLogic {
 //     * Fonction exécutée automatiquement toutes les heures par Jeedom
   public static function cronHourly() {
 	  
-    $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
-    $client = new Mosquitto\Client($mosqId);
-    self::connect_and_publish($client, '{}');	 
-  
+       // $elogics = array();
+        foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
+		if ($eqpt->getIsEnable() == true){
+		    $i = date('w');
+	            $startTime = $eqpt->getCmd(null, 'Planning/startTime/' . $i);
+                    $duration = $eqpt->getCmd(null, 'Planning/duration/' . $i);	
+	            
+	            $initDate = DateTime::createFromFormat('H:i', $startTime);
+		    $initDate->add(new DateInterval("PT".$duration."M")); 
+		    $endTime = $initDate->format("H:i");
+	// refresh value each hours if mower is sleeping at home :-)
+		    if($startTime == '00:00' or $starTime > date('H:i') or date('H:i') > $endTime) {
+			
+		       $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
+                       $client = new Mosquitto\Client($mosqId);
+                       self::connect_and_publish($client, '{}');	 
+			
+		    }
+		
+		}	  
+	 }
   }
      	
-	
+
 
   public static function deamon_info() {
     $return = array();
@@ -256,10 +273,33 @@ class worxLandroidS extends eqLogic {
        //log::add('worxLandroidS', 'info', 'mqtt_endpoint '.$root_ca);
  if(config::byKey('initCloud', 'worxLandroidS') ==  true || empty($elogics) == false ){
 
+	 
+	 	  
+       // $elogics = array();
+	if ($elogics->getIsEnable() == true){
+		    $i = date('w');
+	            $startTime = $elogics->getCmd(null, 'Planning/startTime/' . $i);
+                    $duration = $elogics->getCmd(null, 'Planning/duration/' . $i);	
+	            
+	            $initDate = DateTime::createFromFormat('H:i', $startTime);
+		    $initDate->add(new DateInterval("PT".$duration."M")); 
+		    $endTime = $initDate->format("H:i");
+	// refresh value each 2 minutes during work time :-)
+		    if($starTime <= date('H:i') or date('H:i') <= $endTime) {
+			
+		       $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
+                       $client = new Mosquitto\Client($mosqId);
+                       self::connect_and_publish($client, '{}');	 
+			
+		    }
+		
+	}	  
+
+	/* 
     config::save('initCloud', 0 ,'worxLandroidS');
     $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
     $client = new Mosquitto\Client($mosqId);
-    self::connect_and_publish($client, '{}');	 
+    self::connect_and_publish($client, '{}');	 */
 	 /*
     self::$_client = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS'));
     self::$_client->onConnect('worxLandroidS::connect');
