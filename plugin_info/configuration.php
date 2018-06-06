@@ -49,7 +49,11 @@ if (!isConnect()) {
 		    <input id="mosquitto_por" type="checkbox" class="configKey autoCheck" data-l1key="initCloud"  />
 		</div>
             </div>
+	    <div class="form-group">	
 
 
 	</fieldset>
 </form>
+		<legend>
+			 {{En cas d'arrêt prolongé, il est conseillé d'arrêter et de désactiver le démarrage automatique du démon }}
+		</legend>

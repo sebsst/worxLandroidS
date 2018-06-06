@@ -19,6 +19,7 @@ require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 
 class worxLandroidS extends eqLogic {
   public static $_client;
+  public static $_client_pub;	
 
   public static function health() {
     $return = array();
@@ -32,6 +33,38 @@ class worxLandroidS extends eqLogic {
     );
     return $return;
   }
+	
+	
+
+//     * Fonction exécutée automatiquement toutes les heures par Jeedom
+  public static function cronHourly() {
+	  
+       // $elogics = array();
+        foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
+		if ($eqpt->getIsEnable() == true){
+		    $i = date('w');
+	            $start = $eqpt->getCmd(null, 'Planning/startTime/' . $i);
+                    $startTime = is_object($start) ? $start->execCmd() : '';
+                    $dur = $eqpt->getCmd(null, 'Planning/duration/' . $i);	
+                    $duration = is_object($dur) ? $dur->execCmd() : '';         
+	           
+	            $initDate = DateTime::createFromFormat('H:i', $startTime);
+		    $initDate->add(new DateInterval("PT".$duration."M")); 
+		    $endTime = $initDate->format("H:i");
+	// refresh value each hours if mower is sleeping at home :-)
+		    if($startTime == '00:00' or $starTime > date('H:i') or date('H:i') > $endTime) {
+			
+		       $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
+                       $client = new Mosquitto\Client($mosqId);
+                       self::connect_and_publish($client, '{}');	 
+			
+		    }
+		
+		}	  
+	 }
+  }
+     	
+
 
   public static function deamon_info() {
     $return = array();
@@ -102,10 +135,9 @@ class worxLandroidS extends eqLogic {
 
       $certfile = $resource_path.'/cert.pem';
       $pkeyfile = $resource_path.'/pkey.pem';
-	  
       $root_ca = $resource_path.'/vs-ca.pem';
 
-  log::add('worxLandroidS', 'info', 'client id: ' . config::byKey('mqtt_client_id', 'worxLandroidS'));
+ // log::add('worxLandroidS', 'info', 'client id: ' . config::byKey('mqtt_client_id', 'worxLandroidS'));
 
 
 // init first connection
@@ -241,63 +273,88 @@ class worxLandroidS extends eqLogic {
 	  
 
        //log::add('worxLandroidS', 'info', 'mqtt_endpoint '.$root_ca);
- if(config::byKey('initCloud', 'worxLandroidS') ==  true || empty($elogics) == false ){
+ if(config::byKey('initCloud', 'worxLandroidS') ==  true || empty($elogics) == true ){
+        
+	 if ( empty($elogics) == true or config::byKey('initCloud', 'worxLandroidS') ==  true ) {
+           $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
+           $client = new Mosquitto\Client($mosqId);
+           self::connect_and_publish($client, '{}');	
+           config::save('initCloud', 0 ,'worxLandroidS');
+	 } else
+	 {
+	 
+	 $elogics = array();
+	 
+	 
+        foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
+		if ($eqpt->getIsEnable() == true){
+		    $i = date('w');
+	        $start = $eqpt->getCmd(null, 'Planning/startTime/' . $i);
+            $startTime = is_object($start) ? $start->execCmd() : '';
+            $dur = $eqpt->getCmd(null, 'Planning/duration/' . $i);	
+            $duration = is_object($dur) ? $dur->execCmd() : '';         
+	        //log::add('worxLandroidS', 'debug', 'starttime' . $startTime);
+	        $initDate = DateTime::createFromFormat('H:i', $startTime);
+		    $initDate->add(new DateInterval("PT".$duration."M")); 
+		    $endTime = $initDate->format("H:i");
+	// refresh value each hours if mower is sleeping at home :-)
+		    if($startTime != '00:00' && $starTime <= date('H:i') && date('H:i') <= $endTime) {			
+		       $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
+                       $client = new Mosquitto\Client($mosqId);
+                       self::connect_and_publish($client, '{}');	 
+			
+		    }
+		
+		}
+	   }	
+	 }
+	 
 
-    config::save('initCloud', 0 ,'worxLandroidS');
+    }
 
-    self::$_client = new Mosquitto\Client(config::byKey('mqtt_client_id', 'worxLandroidS'));
+
+  }
+
+  public static function connect_and_publish($client, $msg) {
+      $resource_path = realpath(dirname(__FILE__) . '/../../resources/');
+
+      $certfile = $resource_path.'/cert.pem';
+      $pkeyfile = $resource_path.'/pkey.pem';
+      $root_ca = $resource_path.'/vs-ca.pem';	  
+    self::$_client = $client;
+    self::$_client->clearWill();
     self::$_client->onConnect('worxLandroidS::connect');
     self::$_client->onDisconnect('worxLandroidS::disconnect');
     self::$_client->onSubscribe('worxLandroidS::subscribe');
     self::$_client->onMessage('worxLandroidS::message');
     self::$_client->onLog('worxLandroidS::logmq');
     self::$_client->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);
-
-
-
-
-   //$client->setWill('/jeedom', "Client died :-(", 1, 0);
- try {
-
-      self::$_client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883 , 5);
-//      $client->connect('a1optpg91s0ydf-2.iot.eu-west-1.amazonaws.com', '8883', 60);
-
-      $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
-       self::$_client->subscribe($topic, 0); // !auto: Subscribe to root topic
-
-
-self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", "{}", 0, 0);
-
-
-   //     log::add('worxLandroidS', 'debug', 'Subscribe to topic ' . $topic, 'worxLandroidS', '#'));
-      //$client->loopForever();
-      while (true) { self::$_client->loop(5); }
-
-   }
-   catch (Exception $e){
-     log::add('worxLandroidS', 'debug', $e->getMessage());
-   }
-
-}
-//sleep(30);
-
-
-
-
-
-
-
-
-}
-
+      try {
+         $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
+         self::$_client->setWill("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", $msg, 0, 0);
+         self::$_client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883 , 5);
+         self::$_client->subscribe($topic, 0); // !auto: Subscribe to root topic
+	   log::add('worxLandroidS', 'debug', 'Subscribe to mqtt ' . config::byKey('mqtt_endpoint', 'worxLandroidS') . ' msg ' . $msg);
+    //self::$_client->loop();  
+    self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", $msg, 0, 0);
+      //self::$_client->loopForever();
+      while (true) { self::$_client->loop(1);		   }
+      }
+       catch (Exception $e){
+      // log::add('worxLandroidS', 'debug', $e->getMessage());
+     } 
+    
+  }
+	
+	
 
   public static function connect( $r, $message ) {
-    log::add('worxLandroidS', 'info', 'Connexion à Mosquitto avec code ' . $r . ' ' . $message);
+    log::add('worxLandroidS', 'debug', 'Connexion à Mosquitto avec code ' . $r . ' ' . $message);
     config::save('status', '1',  'worxLandroidS');
   }
 	
   public static function newconnect( $r, $message ) {
-    log::add('worxLandroidS', 'info', 'New Connexion à Mosquitto avec code ' . $r . ' ' . $message);
+    log::add('worxLandroidS', 'debug', 'New Connexion à Mosquitto avec code ' . $r . ' ' . $message);
     config::save('status', '1',  'worxLandroidS');
   }	
 
@@ -316,7 +373,13 @@ self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/
     }
   }
 
-  public static function message( $message ) {
+  public static function message($message) {
+    //self::$_client->exitloop();
+    //self::$_client->unsubscribe($message->topic);
+    self::$_client->disconnect();  
+
+  //  if(isset(self::$_client_pub){ self::$_client_pub->disconnect(); }
+   // unset(self::$_client);	  
     log::add('worxLandroidS', 'debug', 'Message ' . $message->payload . ' sur ' . $message->topic);
     if (is_string($message->payload) && is_array(json_decode($message->payload, true)) && (json_last_error() == JSON_ERROR_NONE)) {
       //json message
@@ -325,7 +388,7 @@ self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/
       $json2_data = json_decode($value);
 
       $type = 'json';
-      log::add('worxLandroidS', 'info', 'Message json : ' . $value . ' pour information sur : ' . $nodeid);
+      log::add('worxLandroidS', 'debug', 'Message json : ' . $value . ' pour information sur : ' . $nodeid);
     } else {
       $topicArray = explode("/", $message->topic);
       $cmdId = end($topicArray);
@@ -334,7 +397,7 @@ self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/
       $nodeid = implode($topicArray,'/');
       $value = $message->payload;
       $type = 'topic';
-      log::add('worxLandroidS', 'info', 'Message texte : ' . $value . ' pour information : ' . $cmdId . ' sur : ' . $nodeid);
+      log::add('worxLandroidS', 'debug', 'Message texte : ' . $value . ' pour information : ' . $cmdId . ' sur : ' . $nodeid);
     }
 //config::save('landroid_name', $json3[0]['name'],'worxLandroidS');
 
@@ -510,9 +573,6 @@ schedule: TimePeriod[];
 	  
 	  $elogic->save();
 	  $elogic->refreshWidget();
-	  
-    // $this->refreshWidget();
-	  
 	  
   }
 
@@ -763,7 +823,11 @@ schedule: TimePeriod[];
 		  $_message = '{"cmd":3}';
 	  }
 	  
-  
+	  $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
+          $client = new Mosquitto\Client($mosqId);
+	  self::connect_and_publish($client, $_message);
+	  
+  /*
 	  
         $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS'). '' . $id . '' . substr(md5(rand()), 0, 8);
         // FIXME: the static class variable $_client is not visible here as the current function
@@ -777,17 +841,11 @@ schedule: TimePeriod[];
 	$retain = '0';
 	$payload = $_message; 
 	$client->onConnect('worxLandroidS::newconnect');
-	$client->onMessage('worxLandroidS::message');  
+	//$client->onMessage('worxLandroidS::message');  
 
         $client->onPublish(function() use ($client, $mosqId, $_subject, $payload, $qos, $retain) {
             log::add('worxLandroidS', 'debug', 'Publication du message ' . $_subject . ' ' . $payload);
-            // exitLoop instead of disconnect:
-            //   . otherwise disconnect too early for Qos=2 see below  (issue #25)
-            //   . to correct issue #30 (action commands not run immediately on scenarios)
-                sleep(2);
-                $client->clearWill();		
-		$client->disconnect();
-		unset($client);
+             sleep(2);
         });	  
 	  
          //$client->onPublish('publish');
@@ -796,7 +854,13 @@ schedule: TimePeriod[];
        $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
        $client->subscribe($topic, 0); // !auto: Subscribe to root topic	
 	  
-	  
+	$client->onMessage(function($msg) {
+                log::add('worxLandroidS', 'debug', 'retour pub msg' . $msg);		
+		self::message($msg);
+		$client->clearWill();		
+		$client->disconnect();
+		unset($client);
+	});	  
 	  
         while (true) {
            try{
@@ -820,10 +884,11 @@ schedule: TimePeriod[];
           sleep(2);
 
         }
-
+	$client->clearWill();  
         $client->disconnect();
-        unset($client);
 
+        unset($client);
+*/
 	
        }	
 
@@ -893,39 +958,6 @@ schedule: TimePeriod[];
 	        $errorDescription = $this->getCmd(null, 'errorDescription');
 		$replace['#errorDescription#'] = is_object($errorDescription) ? $errorDescription->execCmd() : '';
 	
-		/*
-		
-	        $lastDate = $this->getCmd(null, 'lastDate');
-		$replace['#lastDate#'] = is_object($lastDate) ? $lastDate->execCmd() : '';
-		$replace['#lastDate#'] = is_object($lastDate) ? $lastDate->getId() : '';
-		
-	        $errorCode = $this->getCmd(null, 'errorCode');
-		$replace['#errorCode#'] = is_object($errorCode) ? $errorCode->execCmd() : '';
-		$replace['#errorColor#'] = 'darkgreen';
-		if($replace['#errorCode#'] != 0 ){$replace['#errorColor#'] = 'orange';}
-		
-		$replace['#errorID#'] = is_object($errorCode) ? $errorCode->getId() : '';
-	        $errorDescription = $this->getCmd(null, 'errorDescription');
-		$replace['#errorDescription#'] = is_object($errorDescription) ? $errorDescription->execCmd() : '';
-
-		$replace['#rainDelayId#'] = is_object($rainDelay) ? $rainDelay->getId() : '';
-	        $rainDelay = $this->getCmd(null, 'rainDelay');
-		$replace['#rainDelay#'] = is_object($rainDelay) ? $rainDelay->execCmd() : '';
-
-	
-	        $statusCode = $this->getCmd(null, 'statusCode');
-		$replace['#statusCode#'] = is_object($statusCode) ? $statusCode->execCmd() : '';
-		$replace['#status#'] = is_object($statusCode) ? $statusCode->getId() : '';
-	        $statusDescription = $this->getCmd(null, 'statusDescription');
-		$replace['#statusDescription#'] = is_object($statusDescription) ? $statusDescription->execCmd() : '';		
-		
-		
-	        $lastTime = $this->getCmd(null, 'lastTime');
-		$replace['#lastTime#'] = is_object($lastTime) ? $lastTime->execCmd() : '';
-		$replace['#lastCom#'] = is_object($lastTime) ? $lastTime->getId() : '';	
-	        $lastDate = $this->getCmd(null, 'lastDate');
-		$replace['#lastDate#'] = is_object($lastDate) ? $lastDate->execCmd() : '';		
-	*/
 
 	foreach ($this->getCmd('info') as $cmd) {
             $replace['#' . $cmd->getLogicalId() . '_history#'] = '';
