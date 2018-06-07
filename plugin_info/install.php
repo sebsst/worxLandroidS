@@ -59,6 +59,16 @@ function worxLandroidS_update() {
         $cron->halt;
         $cron->run;
     }
+    
+    foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
+      // add actions if missing
+         self::newAction($eqpt,'off_today',$commandIn,"off_today",'other');
+         self::newAction($eqpt,'on_today',$commandIn,"on_today",'other');
+    }
+
+    
+    
+    
 }
 
 function worxLandroidS_remove() {
