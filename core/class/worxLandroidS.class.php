@@ -826,6 +826,16 @@ schedule: TimePeriod[];
 		  $_message = '{"cmd":3}';
 	  }
 	  
+// rain delay
+        if(substr_compare($cmd->getName(),'rain_delay', 0, 10)==0){
+		$_message = '{"rd":'.$_message.'}';
+	        log::add('worxLandroidS', 'debug', 'Envoi du message rain delay: ' . $_message);
+	}
+
+
+	  
+	  
+	  
 	  $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
           $client = new Mosquitto\Client($mosqId);
 	  self::connect_and_publish($client, $_message);
