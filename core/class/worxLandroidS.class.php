@@ -997,12 +997,18 @@ schedule: TimePeriod[];
 }
 
 class worxLandroidSCmd extends cmd {
-	/*
+	
 public static $_widgetPossibility = array('custom' => array(
       'visibility' => true,
       'displayName' => true,
-      'optionalParameters' => true,
-)); */
+      'displayObjectName' => true,
+      'optionalParameters' => false,
+      'background-color' => true,
+      'text-color' => true,
+      'border' => true,
+      'border-radius' => true,
+      'background-opacity' => true,
+)); 
 	
   public function execute($_options = null) {
     switch ($this->getType()) {
