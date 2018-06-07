@@ -428,6 +428,8 @@ class worxLandroidS extends eqLogic {
       self::newAction($elogic,'start',$commandIn,array(cmd=>1),'other');
       self::newAction($elogic,'stop',$commandIn,array(cmd=>3),'other');
       self::newAction($elogic,'refreshValue',$commandIn,"",'other');
+      self::newAction($elogic,'off_today',$commandIn,"off_today",'other');
+      self::newAction($elogic,'on_today',$commandIn,"on_today",'other');
 
 	for ($i = 0; $i < 7; $i++) {
          self::newAction($elogic,'on_'.$i,$commandIn,'on_'.$i,'other');
@@ -799,12 +801,18 @@ schedule: TimePeriod[];
 	  
       if(substr_compare($_message,'off', 0, 3)==0){
         log::add('worxLandroidS', 'debug', 'Envoi du message OFF: ' . $_message);
+	if($cmd->getName == 'off_today'){
+		$_message = 'off_' . date('w');
+	}
 
         $sched = array('00:00', 0, 1);
 	$_message = self::setDaySchedule($eqlogicid, substr($_message,4,1), $sched);//  $this->saveConfiguration('savedValue',
       }	    
       if(substr_compare($_message,'on', 0, 2)==0){
       log::add('worxLandroidS', 'debug', 'Envoi du message On: ' . $_message);
+	if($cmd->getName == 'on_today'){
+		$_message = 'on_' . date('w');
+	}
 
 	$sched = self::getSavedDaySchedule($eqlogicid,  substr($_message,3,1));
 	$_message = self::setDaySchedule($eqlogicid, substr($_message,3,1), $sched);//  $this->saveConfiguration('savedValue',
