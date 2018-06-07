@@ -7,7 +7,8 @@ En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que l
 Ajout de nouvelles actions: 
 - Ajout des délais de tonte après une pluie
 - Ajout des actions off_today / on_today pour faciliter la gestion de l'activité du jour par scénarios (pour les jours fériés par exemple)
-Widget désormais modifiable (couleur/transparence...)
+
+- Widget désormais modifiable (couleur/transparence...)
 
 ## 06/06/2018
 
