@@ -260,15 +260,10 @@ class worxLandroidS extends eqLogic {
 
 }
 
-	  
-	  
-// Loop on jMQTT equipments and get ones that subscribed to the current message
         $elogics = array();
         foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
-            //if ($message->topicMatchesSub($msgTopic, $eqpt->getConfiguration('topic'))) {
 		if ($eqpt->getIsEnable() == true){
                 $elogics[] = $eqpt;}
-            //}
         }
 	  
 
@@ -799,18 +794,18 @@ schedule: TimePeriod[];
       $eqlogicid = $cmd->getEqLogic_id();
       $eqlogic = $cmd->getEqLogic();  
 	  
-      if(substr_compare($_message,'off', 0, 3)==0){
+      if(substr_compare($cmd->getName(),'off', 0, 3)==0){
         log::add('worxLandroidS', 'debug', 'Envoi du message OFF: ' . $_message);
-	if($cmd->getName == 'off_today'){
+	if($cmd->getName() == 'off_today'){
 		$_message = 'off_' . date('w');
 	}
 
         $sched = array('00:00', 0, 1);
 	$_message = self::setDaySchedule($eqlogicid, substr($_message,4,1), $sched);//  $this->saveConfiguration('savedValue',
       }	    
-      if(substr_compare($_message,'on', 0, 2)==0){
+      if(substr_compare($cmd->getName(),'on', 0, 2)==0){
       log::add('worxLandroidS', 'debug', 'Envoi du message On: ' . $_message);
-	if($cmd->getName == 'on_today'){
+	if($cmd->getName() == 'on_today'){
 		$_message = 'on_' . date('w');
 	}
 
