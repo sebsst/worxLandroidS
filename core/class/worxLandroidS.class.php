@@ -37,7 +37,7 @@ class worxLandroidS extends eqLogic {
 	
 
 //     * Fonction exécutée automatiquement toutes les heures par Jeedom
-  public static function cronHourly() {
+  public static function cron30() {
 	  
        // $elogics = array();
         foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
@@ -52,13 +52,13 @@ class worxLandroidS extends eqLogic {
 		    $initDate->add(new DateInterval("PT".$duration."M")); 
 		    $endTime = $initDate->format("H:i");
 	// refresh value each hours if mower is sleeping at home :-)
-		    if($startTime == '00:00' or $starTime > date('H:i') or date('H:i') > $endTime) {
+		  //  if($startTime == '00:00' or $starTime > date('H:i') or date('H:i') > $endTime) {
 			
 		       $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
                        $client = new Mosquitto\Client($mosqId);
                        self::connect_and_publish($client, '{}');	 
 			
-		    }
+		  //  }
 		
 		}	  
 	 }
