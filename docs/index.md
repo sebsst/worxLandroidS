@@ -40,9 +40,20 @@ Le dashboard affiche:
 Vous pouvez masquer les infos suivantes:
 - errorCode, statusCode, totalDistance, batteryChargeCycle, rainDelay
 
+
+## Informations utiles pour les scénarios
+
 Pour les scénarios, il peut être intéressant d'utiliser les actions 'on_today' et 'off_today' empêcher le démarrage un jour férié.
 Penser à mettre off le matin et remettre à on avant minuit pour récupérer les horaires précédents
 
+Il faut éviter d'envoyer plusieurs demandes de changement de planning sur des jours différents à des intervalles rapides. En effet le changement n'est enregistré dans le plugin qu'à la réponse du serveur. Tout le planning est envoyé à chaque fois et par conséquent on pourrait perdre la précédente demande.
+Donc soit il faut attendre le l'actualisation de l'info dans l'équipement, soit il faut mettre une temporisation.
+
+Pour le planning, les commandes possibles sont: 
+- on_0 à on_6 où le chiffre représente le numéro du jour de la semaine (0 =dimanche)
+- off_0 à off_6
+- on_today pour activer le jour courant
+- off_today pour désactiver le jour courant
 
 ## FAQ
 
