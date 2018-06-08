@@ -526,9 +526,9 @@ schedule: TimePeriod[];
 //        log::add('worxLandroidS', 'Debug', 'Langue : ' . $json2_data->cfg->lg. ' pour information : ' . $cmdId);
 //        log::add('worxLandroidS', 'Debug', ' : ' . $json2_data->cfg->sc->m. ' pour information : ' . $cmdId);
 
-        self::newInfo($elogic,'errorCode',$json2_data->dat->le,'string',1);
+        self::newInfo($elogic,'errorCode',$json2_data->dat->le,'numeric',1);
         self::newInfo($elogic,'errorDescription',self::getErrorDescription($json2_data->dat->le),'string',1);
-        self::newInfo($elogic,'statusCode',$json2_data->dat->ls,'string',1);
+        self::newInfo($elogic,'statusCode',$json2_data->dat->ls,'numeric',1);
         self::newInfo($elogic,'statusDescription',self::getStatusDescription($json2_data->dat->ls),'string',1);
         self::newInfo($elogic,'batteryLevel',$json2_data->dat->bt->p,'numeric',1);
         self::newInfo($elogic,'langue',$json2_data->cfg->lg,'string',0);
@@ -540,10 +540,10 @@ schedule: TimePeriod[];
         self::newInfo($elogic,'wifiQuality',$json2_data->dat->rsi,'string',0);
         self::newInfo($elogic,'rainDelay',$json2_data->cfg->rd,'string',1);
 
-        self::newInfo($elogic,'totalTime',$json2_data->dat->st->wt,'string',0);
-        self::newInfo($elogic,'totalDistance',$json2_data->dat->st->d,'string',0);
+        self::newInfo($elogic,'totalTime',$json2_data->dat->st->wt,'numeric',0);
+        self::newInfo($elogic,'totalDistance',$json2_data->dat->st->d,'numeric',0);
         self::newInfo($elogic,'totalBladeTime',$json2_data->dat->st->b,'string',0);
-        self::newInfo($elogic,'batteryChargeCycle',$json2_data->dat->bt->nr,'string',0);
+        self::newInfo($elogic,'batteryChargeCycle',$json2_data->dat->bt->nr,'numeric',0);
         self::newInfo($elogic,'batteryCharging',$json2_data->dat->bt->c,'string',0);
         self::newInfo($elogic,'batteryVoltage',$json2_data->dat->bt->v,'string',0);
         self::newInfo($elogic,'batteryTemperature',$json2_data->dat->bt->t,'string',0);
