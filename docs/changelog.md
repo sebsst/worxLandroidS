@@ -2,20 +2,24 @@
 
 En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que la doc, les traductions et des corrections mineures
 
-## 07/06/2018
+## 09/06/2018
 
 Ajout de nouvelles actions: 
 - Ajout des délais de tonte après une pluie
 - Ajout des actions off_today / on_today pour faciliter la gestion de l'activité du jour par scénarios (pour les jours fériés par exemple)
 
+Autres modifications:
 - Widget désormais modifiable (couleur/transparence...)
+- Possibilité d'enlever certaines infos: errorCode, statusCode, totalDistance, batteryChargeCycle, rainDelay
+- Affichage de la prochaine zone de tonte. C'est la zone de départ de la prochaine tonte ou de celle en cours. 
+- Changement des infos en numérique pour permettre de faire des statistiques (évolution de la batterie par exemple)
 
 ## 06/06/2018
 
 Modification des fréquences de mise à jour des infos: 
 - Toutes les 2 minutes pendant la tonte
 - Toutes les 30 minutes en dehors des periodes de tonte
-- sur demande ou envoi du mise à jour du planning de fonctionnement.
+- sur demande ou envoi de mise à jour du planning de fonctionnement.
 
 ## 04/06/2018
 
