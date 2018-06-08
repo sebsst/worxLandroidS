@@ -93,7 +93,7 @@ Un autre plugin worxLandroid est disponible pour les modèles M.
 - 11: Debug
 - 12: Remote control
 - 30: Retour à la base
-- 31: Création zone de tonte
+- 31: Création des zones de tonte
 - 32: Coupe la bordure
 
 >La communication avec la tondeuse est perdue
