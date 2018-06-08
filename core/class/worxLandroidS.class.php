@@ -414,7 +414,7 @@ class worxLandroidS extends eqLogic {
       $elogic->save();
 
       $elogic->setDisplay("width","450px");
-      $elogic->setDisplay("height","250px");	    
+      $elogic->setDisplay("height","260px");	    
       $elogic->setIsVisible(1);
       $elogic->setIsEnable(1);	    
       $elogic->checkAndUpdateCmd();
