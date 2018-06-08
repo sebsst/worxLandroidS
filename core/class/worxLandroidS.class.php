@@ -997,12 +997,12 @@ public static $_widgetPossibility = array('custom' => array(
                 $replace['#batteryLevel#'] = $cmd->getDisplay('icon');
             }
 		
- 	  //  if($cmd->getIsVisible){
-               $replace['#' . $cmd->getLogicalId() . '_visible#'] = 'block';	//}	
-	  //  else {
-          //     $replace['#' . $cmd->getLogicalId() . '_visible#'] = 'none';		
+ 	    if($cmd->getIsVisible()){
+               $replace['#' . $cmd->getLogicalId() . '_visible#'] = '';	}	
+	    else {
+               $replace['#' . $cmd->getLogicalId() . '_visible#'] = 'display:none';		
 
-	    //}    
+	    }    
 		    
 
 		
