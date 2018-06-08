@@ -540,18 +540,18 @@ schedule: TimePeriod[];
         self::newInfo($elogic,'wifiQuality',$json2_data->dat->rsi,'string',0);
         self::newInfo($elogic,'rainDelay',$json2_data->cfg->rd,'string',1);
 
-        self::newInfo($elogic,'totalTime',$json2_data->dat->st->wt,'numeric',0);
+        self::newInfo($elogic,'totalTime',$json2_data->dat->st->wt,'numeric',1);
         self::newInfo($elogic,'totalDistance',$json2_data->dat->st->d,'numeric',0);
         self::newInfo($elogic,'totalBladeTime',$json2_data->dat->st->b,'string',0);
-        self::newInfo($elogic,'batteryChargeCycle',$json2_data->dat->bt->nr,'numeric',0);
+        self::newInfo($elogic,'batteryChargeCycle',$json2_data->dat->bt->nr,'numeric',1);
         self::newInfo($elogic,'batteryCharging',$json2_data->dat->bt->c,'string',0);
         self::newInfo($elogic,'batteryVoltage',$json2_data->dat->bt->v,'string',0);
         self::newInfo($elogic,'batteryTemperature',$json2_data->dat->bt->t,'string',0);
         self::newInfo($elogic,'zonesList',$json2_data->dat->mz,'string',0);
-	log::add('worxLandroidS', 'Debug', 'zone:' . $json2_data->cfg->mzv[$json2_data->dat->lz]+1 . ' / '.$json2_data->cfg->mz[1]);    
+	//log::add('worxLandroidS', 'Debug', 'zone:' . $json2_data->cfg->mzv[$json2_data->dat->lz]+1 . ' / '.$json2_data->cfg->mz[1]);    
 	if ($json2_data->cfg->mz[1] != 0){
-		 log::add('worxLandroidS', 'Debug', ' : zone' . $json2_data->cfg->mzv[$json2_data->dat->lz]);
-        	self::newInfo($elogic,'currentZone',$json2_data->cfg->mzv[$json2_data->dat->lz]+1,'numeric',0);	    
+		// log::add('worxLandroidS', 'Debug', ' : zone' . $json2_data->cfg->mzv[$json2_data->dat->lz]);
+        	self::newInfo($elogic,'currentZone',$json2_data->cfg->mzv[$json2_data->dat->lz]+1,'numeric',1);	    
 	}
 
 //        self::getStatusDescription($json2_data->dat->ls);
