@@ -37,6 +37,9 @@ Le dashboard affiche:
 - Le bouton on permet de récupérer les derniers horaires communiqués au plugin (10H - 17h par défaut)
 - 'Bord.' signifie la coupe des bordures est planifié 
 
+Vous pouvez masquer les infos suivantes:
+- errorCode, statusCode, totalDistance, batteryChargeCycle, rainDelay
+
 Pour les scénarios, il peut être intéressant d'utiliser les actions 'on_today' et 'off_today' empêcher le démarrage un jour férié.
 Penser à mettre off le matin et remettre à on avant minuit pour récupérer les horaires précédents
 
