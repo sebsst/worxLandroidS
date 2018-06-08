@@ -114,8 +114,8 @@ Un autre plugin worxLandroid est disponible pour les modèles M.
 
 >La communication avec la tondeuse est perdue
 
-Il peut arriver par moment de perdre la connexion avec la tondeuse. Ce n'est pas lié au plugin. 
-Toutefois dans certains cas, le fait de réactualiser le code WIFI peut résoudre le problème.
+Il peut arriver par moment de perdre la connexion avec la tondeuse, y compris avec l'application mobile.
+Dans certains cas, le fait de réactualiser le code WIFI peut résoudre le problème.
 (Faire comme si on voulait ajouter une nouvelle tondeuse sur l'appli mobile, appuyer 3 secondes sur le bouton OK de la tondeuse, renseigner le n° de série et le code WIFI correspondant)
 
 
