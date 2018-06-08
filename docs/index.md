@@ -18,21 +18,39 @@ En cas du défaillance il se peut que le Daemon soit à l'arrêt et vous pouvez 
 
 ### utilisation
 
-Le nom par défaut = LandroidS+adress Mac de la tondeuse
+Le nom par défaut = Nom de la tondeuse sur l'application mobile
 
 Le dashboard affiche:
+- Etat batterie
 - bouton de retour maison
 - bouton de démarrage
+- Rafraîchissement des infos courantes
 - la date et heure de la dernière communication
+- Distance et durée totale de fonctionnement
+- Nombres de cycles de recharge
+- Délai en minutes après la pluie
+- changement du délai pluie (0 = on peut tondre sous la pluie, 30, 60, 120, 240)
 - Etat de la tondeuse avec le code correspondant
 - Description de l'erreur avec le code correspondant
 - Le planning par jour avec l'heure de démarrage et d'arrêt
-- La croix permet de mettre les horaires à 0
-- L'autre bouton permet de récupérer les derniers horaires communiqués au plugin (10H - 17h par défaut)
-- Edge signifie la coupe des bordures est planifié 
+- Le bouton off permet de mettre les horaires à 0
+- Le bouton on permet de récupérer les derniers horaires communiqués au plugin (10H - 17h par défaut)
+- 'Bord.' signifie la coupe des bordures est planifié 
+
+Pour les scénarios, il peut être intéressant d'utiliser les actions 'on_today' et 'off_today' empêcher le démarrage un jour férié.
+Penser à mettre off le matin et remettre à on avant minuit pour récupérer les horaires précédents
 
 
 ## FAQ
+
+>A quelle fréquence, les données sont-elles réactualisées?
+
+Toutes les 2 minutes si la tondeuse est en activité et toutes les 30 minutes lorsqu'elle est en veille.
+
+>Le plugin m'indique que la tondeuse est coincée mais ce n'est pas le cas, pourquoi?
+
+Cela signifie que la tondeuse était coincée pendant quelques secondes et que le plugin a remonté l'info à ce moment là.
+Il est possible de rafraîchir le statut de la tondeuse en utilisant le bouton "refreshValue"
 
 >Est-ce que je peux démarrer ou arrêter la tondeuse à partir du plugin? 
 
@@ -75,7 +93,15 @@ Un autre plugin worxLandroid est disponible pour les modèles M.
 - 11: Debug
 - 12: Remote control
 - 30: Retour à la base
+- 31: Création zone de tonte
 - 32: Coupe la bordure
+
+>La communication avec la tondeuse est perdue
+
+Il peut arriver par moment de perdre la connexion avec la tondeuse. Ce n'est pas lié au plugin. 
+Toutefois dans certains cas, le fait de réactualiser le code WIFI peut résoudre le problème.
+(Faire comme si on voulait ajouter une nouvelle tondeuse sur l'appli mobile, appuyer 3 secondes sur le bouton OK de la tondeuse, renseigner le n° de série et le code WIFI correspondant)
+
 
 ## Fonctionnement détaillé
 
@@ -84,10 +110,7 @@ https://api.worxlandroid.com:443/api/v1/users/auth
 https://api.worxlandroid.com:443/api/v1/users/certificate
 https://api.worxlandroid.com:443/api/v1/product-items
 
-Connexion au broker Mosquitto en fonction des liens et paramètres récupérés à partir des API précédentes.
-
-
-
+Connexion au broker Mosquitto en fonction des liens et paramètres récupérés à partir des API précédentes
 
 
 La clé publique se trouve à ce lien:
