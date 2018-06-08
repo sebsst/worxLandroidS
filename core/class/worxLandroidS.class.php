@@ -541,7 +541,7 @@ schedule: TimePeriod[];
         self::newInfo($elogic,'rainDelay',$json2_data->cfg->rd,'string',1);
 
         self::newInfo($elogic,'totalTime',$json2_data->dat->st->wt,'numeric',1);
-        self::newInfo($elogic,'totalDistance',$json2_data->dat->st->d,'numeric',0);
+        self::newInfo($elogic,'totalDistance',$json2_data->dat->st->d,'numeric',1);
         self::newInfo($elogic,'totalBladeTime',$json2_data->dat->st->b,'string',0);
         self::newInfo($elogic,'batteryChargeCycle',$json2_data->dat->bt->nr,'numeric',1);
         self::newInfo($elogic,'batteryCharging',$json2_data->dat->bt->c,'string',0);
