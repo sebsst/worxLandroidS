@@ -650,6 +650,7 @@ schedule: TimePeriod[];
       case '11': return "Debug"; break;
       case '12': return __("Remote control",__FILE__); break;
       case '30': return __("Retour à la base",__FILE__); break;
+      case '30': return __("Création de zones",__FILE__); break;		    
       case '32': return __("Coupe la bordure",__FILE__); break;
 
       default: return 'unkown';
