@@ -288,11 +288,12 @@ class worxLandroidS extends eqLogic {
             $startTime = is_object($start) ? $start->execCmd() : '';
             $dur = $eqpt->getCmd(null, 'Planning/duration/' . $i);	
             $duration = is_object($dur) ? $dur->execCmd() : '';         
-	        log::add('worxLandroidS', 'debug', 'starttime' . $startTime);
+	       
 	        $initDate = DateTime::createFromFormat('H:i', $startTime);
 		    $initDate->add(new DateInterval("PT".$duration."M")); 
 		    $endTime = $initDate->format("H:i");
-	// refresh value each hours if mower is sleeping at home :-)
+ log::add('worxLandroidS', 'debug', 'current/start/end time' . $startTime . '/' . $endTime );
+			// refresh value each hours if mower is sleeping at home :-)
 		    if($startTime != '00:00' && $starTime <= date('H:i') && date('H:i') <= $endTime) {			
 		       $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
                        $client = new Mosquitto\Client($mosqId);
