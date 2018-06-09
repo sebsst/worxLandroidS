@@ -20,6 +20,7 @@ require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 function worxLandroidS_install() {
     $cron = cron::byClassAndFunction('worxLandroidS', 'daemon');
+    config::save('initCloud', 1 ,'worxLandroidS');
     if (!is_object($cron)) {
         $cron = new cron();
         $cron->setClass('worxLandroidS');
@@ -59,6 +60,23 @@ function worxLandroidS_update() {
         $cron->halt;
         $cron->run;
     }
+    
+    foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
+      // add actions if missing
+         worxLandroidS::newAction($eqpt,'off_today',$commandIn,"off_today",'other');
+         worxLandroidS::newAction($eqpt,'on_today',$commandIn,"on_today",'other');
+         worxLandroidS::newAction($eqpt,'rain_delay_0',$commandIn,"0",'other');
+         worxLandroidS::newAction($eqpt,'rain_delay_30',$commandIn,"30",'other');
+         worxLandroidS::newAction($eqpt,'rain_delay_60',$commandIn,"60",'other');
+         worxLandroidS::newAction($eqpt,'rain_delay_120',$commandIn,"120",'other');
+         worxLandroidS::newAction($eqpt,'rain_delay_240',$commandIn,"240",'other');
+
+ 
+    }
+
+    
+    
+    
 }
 
 function worxLandroidS_remove() {

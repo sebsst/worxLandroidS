@@ -55,5 +55,5 @@ if (!isConnect()) {
 	</fieldset>
 </form>
 		<legend>
-			 {{En cas d'arrêt prolongé, il est conseillé d'arrêter et de désactiver le démarrage automatique du démon }}
+			 {{En cas d'arrêt prolongé, il est conseillé de désactiver le plugin ou d'arrêter cron et démon }}
 		</legend>

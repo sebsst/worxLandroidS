@@ -260,21 +260,16 @@ class worxLandroidS extends eqLogic {
 
 }
 
-	  
-	  
-// Loop on jMQTT equipments and get ones that subscribed to the current message
         $elogics = array();
         foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
-            //if ($message->topicMatchesSub($msgTopic, $eqpt->getConfiguration('topic'))) {
 		if ($eqpt->getIsEnable() == true){
                 $elogics[] = $eqpt;}
-            //}
         }
 	  
 
        //log::add('worxLandroidS', 'info', 'mqtt_endpoint '.$root_ca);
  if(config::byKey('initCloud', 'worxLandroidS') ==  true || empty($elogics) == false ){
-        
+        //log::add('worxLandroidS', 'debug', empty($elogics));
 	 if ( empty($elogics) == true or config::byKey('initCloud', 'worxLandroidS') ==  true ) {
            $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
            $client = new Mosquitto\Client($mosqId);
@@ -290,20 +285,24 @@ class worxLandroidS extends eqLogic {
 		if ($eqpt->getIsEnable() == true){
 		    $i = date('w');
 	        $start = $eqpt->getCmd(null, 'Planning/startTime/' . $i);
-            $startTime = is_object($start) ? $start->execCmd() : '';
-            $dur = $eqpt->getCmd(null, 'Planning/duration/' . $i);	
-            $duration = is_object($dur) ? $dur->execCmd() : '';         
-	        //log::add('worxLandroidS', 'debug', 'starttime' . $startTime);
-	        $initDate = DateTime::createFromFormat('H:i', $startTime);
-		    $initDate->add(new DateInterval("PT".$duration."M")); 
-		    $endTime = $initDate->format("H:i");
-	// refresh value each hours if mower is sleeping at home :-)
-		    if($startTime != '00:00' && $starTime <= date('H:i') && date('H:i') <= $endTime) {			
+                $startTime = is_object($start) ? $start->execCmd() : '';
+                $dur = $eqpt->getCmd(null, 'Planning/duration/' . $i);	
+                $duration = is_object($dur) ? $dur->execCmd() : '';         
+	       
+	        $endTime = DateTime::createFromFormat('H:i', $startTime);
+		$endTime->add(new DateInterval("PT".$duration."M")); 
+		$endTimeA = $endTime->format("H:i");
+		$startTimeA = $startTime;
+		$currentTimeA = date('H:i');
+			
+ //log::add('worxLandroidS', 'debug', 'current/start/end time' . date('H:i') . date('H:i', $startTimeA) . '/' . date('H:i', $endTime) );
+			// refresh value each hours if mower is sleeping at home :-)
+		 if($startTime != '00:00' && $startTimeA <= $currentTimeA && $currentTimeA <= $endTimeA) {			
 		       $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
                        $client = new Mosquitto\Client($mosqId);
                        self::connect_and_publish($client, '{}');	 
 			
-		    }
+		 }
 		
 		}
 	   }	
@@ -419,7 +418,7 @@ class worxLandroidS extends eqLogic {
       $elogic->save();
 
       $elogic->setDisplay("width","450px");
-      $elogic->setDisplay("height","250px");	    
+      $elogic->setDisplay("height","260px");	    
       $elogic->setIsVisible(1);
       $elogic->setIsEnable(1);	    
       $elogic->checkAndUpdateCmd();
@@ -428,6 +427,8 @@ class worxLandroidS extends eqLogic {
       self::newAction($elogic,'start',$commandIn,array(cmd=>1),'other');
       self::newAction($elogic,'stop',$commandIn,array(cmd=>3),'other');
       self::newAction($elogic,'refreshValue',$commandIn,"",'other');
+      self::newAction($elogic,'off_today',$commandIn,"off_today",'other');
+      self::newAction($elogic,'on_today',$commandIn,"on_today",'other');
 
 	for ($i = 0; $i < 7; $i++) {
          self::newAction($elogic,'on_'.$i,$commandIn,'on_'.$i,'other');
@@ -529,9 +530,9 @@ schedule: TimePeriod[];
 //        log::add('worxLandroidS', 'Debug', 'Langue : ' . $json2_data->cfg->lg. ' pour information : ' . $cmdId);
 //        log::add('worxLandroidS', 'Debug', ' : ' . $json2_data->cfg->sc->m. ' pour information : ' . $cmdId);
 
-        self::newInfo($elogic,'errorCode',$json2_data->dat->le,'string',1);
+        self::newInfo($elogic,'errorCode',$json2_data->dat->le,'numeric',1);
         self::newInfo($elogic,'errorDescription',self::getErrorDescription($json2_data->dat->le),'string',1);
-        self::newInfo($elogic,'statusCode',$json2_data->dat->ls,'string',1);
+        self::newInfo($elogic,'statusCode',$json2_data->dat->ls,'numeric',1);
         self::newInfo($elogic,'statusDescription',self::getStatusDescription($json2_data->dat->ls),'string',1);
         self::newInfo($elogic,'batteryLevel',$json2_data->dat->bt->p,'numeric',1);
         self::newInfo($elogic,'langue',$json2_data->cfg->lg,'string',0);
@@ -543,14 +544,19 @@ schedule: TimePeriod[];
         self::newInfo($elogic,'wifiQuality',$json2_data->dat->rsi,'string',0);
         self::newInfo($elogic,'rainDelay',$json2_data->cfg->rd,'string',1);
 
-        self::newInfo($elogic,'totalTime',$json2_data->dat->st->wt,'string',0);
-        self::newInfo($elogic,'totalDistance',$json2_data->dat->st->d,'string',0);
+        self::newInfo($elogic,'totalTime',$json2_data->dat->st->wt,'numeric',1);
+        self::newInfo($elogic,'totalDistance',$json2_data->dat->st->d,'numeric',1);
         self::newInfo($elogic,'totalBladeTime',$json2_data->dat->st->b,'string',0);
-        self::newInfo($elogic,'batteryChargeCycle',$json2_data->dat->bt->nr,'string',0);
-        self::newInfo($elogic,'batteryCharging',$json2_data->dat->bt->c,'string',0);
+        self::newInfo($elogic,'batteryChargeCycle',$json2_data->dat->bt->nr,'numeric',1);
+        self::newInfo($elogic,'batteryCharging',$json2_data->dat->bt->c,'binary',1);
         self::newInfo($elogic,'batteryVoltage',$json2_data->dat->bt->v,'string',0);
         self::newInfo($elogic,'batteryTemperature',$json2_data->dat->bt->t,'string',0);
-
+        self::newInfo($elogic,'zonesList',$json2_data->dat->mz,'string',0);
+	//log::add('worxLandroidS', 'Debug', 'zone:' . $json2_data->cfg->mzv[$json2_data->dat->lz]+1 . ' / '.$json2_data->cfg->mz[1]);    
+	if ($json2_data->cfg->mz[1] != 0){
+		// log::add('worxLandroidS', 'Debug', ' : zone' . $json2_data->cfg->mzv[$json2_data->dat->lz]);
+        	self::newInfo($elogic,'currentZone',$json2_data->cfg->mzv[$json2_data->dat->lz]+1,'numeric',0);	    
+	}
 
 //        self::getStatusDescription($json2_data->dat->ls);
 
@@ -652,6 +658,7 @@ schedule: TimePeriod[];
       case '11': return "Debug"; break;
       case '12': return __("Remote control",__FILE__); break;
       case '30': return __("Retour à la base",__FILE__); break;
+      case '31': return __("Création de zones",__FILE__); break;		    
       case '32': return __("Coupe la bordure",__FILE__); break;
 
       default: return 'unkown';
@@ -797,14 +804,20 @@ schedule: TimePeriod[];
       $eqlogicid = $cmd->getEqLogic_id();
       $eqlogic = $cmd->getEqLogic();  
 	  
-      if(substr_compare($_message,'off', 0, 3)==0){
+      if(substr_compare($cmd->getName(),'off', 0, 3)==0){
         log::add('worxLandroidS', 'debug', 'Envoi du message OFF: ' . $_message);
+	if($cmd->getName() == 'off_today'){
+		$_message = 'off_' . date('w');
+	}
 
         $sched = array('00:00', 0, 1);
 	$_message = self::setDaySchedule($eqlogicid, substr($_message,4,1), $sched);//  $this->saveConfiguration('savedValue',
       }	    
-      if(substr_compare($_message,'on', 0, 2)==0){
+      if(substr_compare($cmd->getName(),'on', 0, 2)==0){
       log::add('worxLandroidS', 'debug', 'Envoi du message On: ' . $_message);
+	if($cmd->getName() == 'on_today'){
+		$_message = 'on_' . date('w');
+	}
 
 	$sched = self::getSavedDaySchedule($eqlogicid,  substr($_message,3,1));
 	$_message = self::setDaySchedule($eqlogicid, substr($_message,3,1), $sched);//  $this->saveConfiguration('savedValue',
@@ -822,6 +835,16 @@ schedule: TimePeriod[];
 	  { 
 		  $_message = '{"cmd":3}';
 	  }
+	  
+// rain delay
+        if(substr_compare($cmd->getName(),'rain_delay', 0, 10)==0){
+		$_message = '{"rd":'.$_message.'}';
+	        log::add('worxLandroidS', 'debug', 'Envoi du message rain delay: ' . $_message);
+	}
+
+
+	  
+	  
 	  
 	  $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
           $client = new Mosquitto\Client($mosqId);
@@ -978,12 +1001,12 @@ public static $_widgetPossibility = array('custom' => array(
                 $replace['#batteryLevel#'] = $cmd->getDisplay('icon');
             }
 		
- 	  //  if($cmd->getIsVisible){
-               $replace['#' . $cmd->getLogicalId() . '_visible#'] = 'block';	//}	
-	  //  else {
-          //     $replace['#' . $cmd->getLogicalId() . '_visible#'] = 'none';		
+ 	    if($cmd->getIsVisible()){
+               $replace['#' . $cmd->getLogicalId() . '_visible#'] = '';	}	
+	    else {
+               $replace['#' . $cmd->getLogicalId() . '_visible#'] = 'display:none';		
 
-	    //}    
+	    }    
 		    
 
 		
