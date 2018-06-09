@@ -285,21 +285,24 @@ class worxLandroidS extends eqLogic {
 		if ($eqpt->getIsEnable() == true){
 		    $i = date('w');
 	        $start = $eqpt->getCmd(null, 'Planning/startTime/' . $i);
-            $startTime = is_object($start) ? $start->execCmd() : '';
-            $dur = $eqpt->getCmd(null, 'Planning/duration/' . $i);	
-            $duration = is_object($dur) ? $dur->execCmd() : '';         
+                $startTime = is_object($start) ? $start->execCmd() : '';
+                $dur = $eqpt->getCmd(null, 'Planning/duration/' . $i);	
+                $duration = is_object($dur) ? $dur->execCmd() : '';         
 	       
-	        $initDate = DateTime::createFromFormat('H:i', $startTime);
-		    $initDate->add(new DateInterval("PT".$duration."M")); 
-		    $endTime = $initDate->format("H:i");
+	        $endTime = DateTime::createFromFormat('H:i', $startTime);
+		$endTime->add(new DateInterval("PT".$duration."M")); 
+		//$endTime = $endDate->format("H:i");
+		$startTimeA = DateTime::createFromFormat('H:i', $startTime);
+		$currentTime = DateTime::createFromFormat('H:i', date('H:i'));
+			
  log::add('worxLandroidS', 'debug', 'current/start/end time' . date('H:i') . $startTime . '/' . $endTime );
 			// refresh value each hours if mower is sleeping at home :-)
-		    if($startTime != '00:00' && $starTime <= date('H:i') && date('H:i') <= $endTime) {			
+		 if($startTime != '00:00' && $starTimeA <= $currentTime && $currentTime <= $endTime) {			
 		       $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
                        $client = new Mosquitto\Client($mosqId);
                        self::connect_and_publish($client, '{}');	 
 			
-		    }
+		 }
 		
 		}
 	   }	
