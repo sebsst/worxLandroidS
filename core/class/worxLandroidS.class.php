@@ -269,7 +269,7 @@ class worxLandroidS extends eqLogic {
 
        //log::add('worxLandroidS', 'info', 'mqtt_endpoint '.$root_ca);
  if(config::byKey('initCloud', 'worxLandroidS') ==  true || empty($elogics) == false ){
-        log::add('worxLandroidS', 'debug', empty($elogics));
+        //log::add('worxLandroidS', 'debug', empty($elogics));
 	 if ( empty($elogics) == true or config::byKey('initCloud', 'worxLandroidS') ==  true ) {
            $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
            $client = new Mosquitto\Client($mosqId);
@@ -295,7 +295,7 @@ class worxLandroidS extends eqLogic {
 		$startTimeA = DateTime::createFromFormat('H:i', $startTime);
 		$currentTime = DateTime::createFromFormat('H:i', date('H:i'));
 			
- log::add('worxLandroidS', 'debug', 'current/start/end time' . date('H:i') . $startTime . '/' . $endTime );
+ //log::add('worxLandroidS', 'debug', 'current/start/end time' . date('H:i') . $startTime . '/' . $endTime );
 			// refresh value each hours if mower is sleeping at home :-)
 		 if($startTime != '00:00' && $starTimeA <= $currentTime && $currentTime <= $endTime) {			
 		       $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
