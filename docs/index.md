@@ -16,7 +16,7 @@ Une fois la sauvegarde effectuée, un nouvel équipement tondeuse va être cré�
 L'arrêt du daemon permet de stopper la connexion avec la tondeuse.
 En cas du défaillance il se peut que le Daemon soit à l'arrêt et vous pouvez tenter un redémarrage.
 
-En cas d'arrêt prolongé, il faut arrêter le démon et désactiver le démarrage automatique.
+En cas d'arrêt prolongé, la meilleure solution est de désactiver le plugin.
 
 ### utilisation
 
