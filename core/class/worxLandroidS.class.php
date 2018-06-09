@@ -555,7 +555,7 @@ schedule: TimePeriod[];
 	//log::add('worxLandroidS', 'Debug', 'zone:' . $json2_data->cfg->mzv[$json2_data->dat->lz]+1 . ' / '.$json2_data->cfg->mz[1]);    
 	if ($json2_data->cfg->mz[1] != 0){
 		// log::add('worxLandroidS', 'Debug', ' : zone' . $json2_data->cfg->mzv[$json2_data->dat->lz]);
-        	self::newInfo($elogic,'currentZone',$json2_data->cfg->mzv[$json2_data->dat->lz]+1,'numeric',1);	    
+        	self::newInfo($elogic,'currentZone',$json2_data->cfg->mzv[$json2_data->dat->lz]+1,'numeric',0);	    
 	}
 
 //        self::getStatusDescription($json2_data->dat->ls);
