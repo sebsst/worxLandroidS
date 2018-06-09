@@ -295,7 +295,7 @@ class worxLandroidS extends eqLogic {
 		$startTimeA = DateTime::createFromFormat('H:i', $startTime);
 		$currentTime = DateTime::createFromFormat('H:i', date('H:i'));
 			
- //log::add('worxLandroidS', 'debug', 'current/start/end time' . date('H:i') . $startTime . '/' . $endTime );
+ log::add('worxLandroidS', 'debug', 'current/start/end time' . date('H:i') . date('H:i', $startTimeA) . '/' . date('H:i', $endTime) );
 			// refresh value each hours if mower is sleeping at home :-)
 		 if($startTime != '00:00' && $starTimeA <= $currentTime && $currentTime <= $endTime) {			
 		       $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
