@@ -144,7 +144,7 @@ class worxLandroidS extends eqLogic {
     if(config::byKey('initCloud', 'worxLandroidS') ==  true){
 
 
-    log::add('worxLandroidS', 'info', 'Paramètres utilisés, Host : ' . config::byKey('worxLandroidSAdress', 'worxLandroidS', '127.0.0.1') . ', Port : ' . config::byKey('worxLandroidSPort', 'worxLandroidS', '1883') . ', ID : ' . config::byKey('worxLandroidSId', 'worxLandroidS', 'Jeedom'));
+    //log::add('worxLandroidS', 'info', 'Paramètres utilisés, Host : ' . config::byKey('worxLandroidSAdress', 'worxLandroidS', '127.0.0.1') . ', Port : ' . config::byKey('worxLandroidSPort', 'worxLandroidS', '1883') . ', ID : ' . config::byKey('worxLandroidSId', 'worxLandroidS', 'Jeedom'));
 
 
       $email = config::byKey('email', 'worxLandroidS');
@@ -320,8 +320,8 @@ class worxLandroidS extends eqLogic {
       $certfile = $resource_path.'/cert.pem';
       $pkeyfile = $resource_path.'/pkey.pem';
       $root_ca = $resource_path.'/vs-ca.pem';	  
-    curl_setopt ('mqtts://' . config::byKey('mqtt_endpoint', 'worxLandroidS'), CURLOPT_CAINFO, $root_ca);   
-	  curl_setopt('mqtts://' . config::byKey('mqtt_endpoint', 'worxLandroidS'), CURLOPT_SSL_VERIFYPEER, false);
+    //curl_setopt ('mqtts://' . config::byKey('mqtt_endpoint', 'worxLandroidS'), CURLOPT_CAINFO, $root_ca);   
+    //	  curl_setopt('mqtts://' . config::byKey('mqtt_endpoint', 'worxLandroidS'), CURLOPT_SSL_VERIFYPEER, false);
     self::$_client = $client;
     self::$_client->clearWill();
     self::$_client->onConnect('worxLandroidS::connect');
