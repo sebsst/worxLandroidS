@@ -187,7 +187,7 @@ class worxLandroidS extends eqLogic {
           //return false;
         } else
         {
-   
+
           // get certificate
           $url =  "https://api.worxlandroid.com:443/api/v1/users/certificate";
           $api_token = $json['api_token'];
@@ -320,6 +320,7 @@ class worxLandroidS extends eqLogic {
       $certfile = $resource_path.'/cert.pem';
       $pkeyfile = $resource_path.'/pkey.pem';
       $root_ca = $resource_path.'/vs-ca.pem';	  
+    curl_setopt (config::byKey('mqtt_endpoint', 'worxLandroidS'), CURLOPT_CAINFO, $root_ca);   
     self::$_client = $client;
     self::$_client->clearWill();
     self::$_client->onConnect('worxLandroidS::connect');
