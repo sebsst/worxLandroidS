@@ -20,7 +20,14 @@ require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 class worxLandroidS extends eqLogic {
   public static $_client;
   public static $_client_pub;	
+	  
+  public static  $resource_path = realpath(dirname(__FILE__) . '/../../resources/');
 
+  public static    $certfile = $resource_path.'/cert.pem';
+  public static    $pkeyfile = $resource_path.'/pkey.pem';
+  public static    $root_ca = $resource_path.'/vs-ca.pem';
+	
+	
   public static function health() {
     $return = array();
     $socket = socket_create(AF_INET, SOCK_STREAM, 0);
@@ -130,12 +137,7 @@ class worxLandroidS extends eqLogic {
   public static function daemon() {
 
       
-	  
-      $resource_path = realpath(dirname(__FILE__) . '/../../resources/');
 
-      $certfile = $resource_path.'/cert.pem';
-      $pkeyfile = $resource_path.'/pkey.pem';
-      $root_ca = $resource_path.'/vs-ca.pem';
 
  // log::add('worxLandroidS', 'info', 'client id: ' . config::byKey('mqtt_client_id', 'worxLandroidS'));
 
