@@ -321,6 +321,7 @@ class worxLandroidS extends eqLogic {
       $pkeyfile = $resource_path.'/pkey.pem';
       $root_ca = $resource_path.'/vs-ca.pem';	  
     curl_setopt ('mqtts://' . config::byKey('mqtt_endpoint', 'worxLandroidS'), CURLOPT_CAINFO, $root_ca);   
+	  curl_setopt('mqtts://' . config::byKey('mqtt_endpoint', 'worxLandroidS'), CURLOPT_SSL_VERIFYPEER, false);
     self::$_client = $client;
     self::$_client->clearWill();
     self::$_client->onConnect('worxLandroidS::connect');
