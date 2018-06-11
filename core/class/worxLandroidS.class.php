@@ -137,7 +137,7 @@ class worxLandroidS extends eqLogic {
   $root_ca = $resource_path.'/vs-ca.pem';      
 
 
-  log::add('worxLandroidS', 'debug', 'resource_path: ' . $certfile);
+ // log::add('worxLandroidS', 'debug', 'resource_path: ' . $certfile);
 
 
 // init first connection
