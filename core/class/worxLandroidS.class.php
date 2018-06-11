@@ -387,7 +387,7 @@ class worxLandroidS extends eqLogic {
       $json2_data = json_decode($value);
 
       $type = 'json';
-      log::add('worxLandroidS', 'debug', 'Message json : ' . $value . ' pour information sur : ' . $nodeid);
+     // log::add('worxLandroidS', 'debug', 'Message json : ' . $value . ' pour information sur : ' . $nodeid);
     } else {
       $topicArray = explode("/", $message->topic);
       $cmdId = end($topicArray);
