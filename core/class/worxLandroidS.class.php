@@ -130,11 +130,11 @@ class worxLandroidS extends eqLogic {
 
   public static function daemon() {
 
-  public static  $resource_path = realpath(dirname(__FILE__) . '/../../resources/');
+   $resource_path = realpath(dirname(__FILE__) . '/../../resources/');
 
-  public static    $certfile = $resource_path.'/cert.pem';
-  public static    $pkeyfile = $resource_path.'/pkey.pem';
-  public static    $root_ca = $resource_path.'/vs-ca.pem';      
+  $certfile = $resource_path.'/cert.pem';
+  $pkeyfile = $resource_path.'/pkey.pem';
+  $root_ca = $resource_path.'/vs-ca.pem';      
 
 
   log::add('worxLandroidS', 'debug', 'resource_path: ' . $certfile);
