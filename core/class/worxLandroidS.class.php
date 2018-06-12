@@ -344,7 +344,7 @@ class worxLandroidS extends eqLogic {
        catch (Exception $e){
       // log::add('worxLandroidS', 'debug', $e->getMessage());
      } 
-    
+     self::$_client->disconnect(); 
   }
 	
 	
