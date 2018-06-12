@@ -56,7 +56,7 @@ class worxLandroidS extends eqLogic {
 		  //  if($startTime == '00:00' or $starTime > date('H:i') or date('H:i') > $endTime) {
 			
 		       $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
-                       $client = new Mosquitto\Client($mosqId);
+                       $client = new Mosquitto\Client($mosqId, true);
                        self::connect_and_publish($client, '{}');	 
 			
 		  //  }
@@ -272,7 +272,7 @@ class worxLandroidS extends eqLogic {
         //log::add('worxLandroidS', 'debug', empty($elogics));
 	 if ( empty($elogics) == true or config::byKey('initCloud', 'worxLandroidS') ==  true ) {
            $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
-           $client = new Mosquitto\Client($mosqId);
+           $client = new Mosquitto\Client($mosqId, true);
            self::connect_and_publish($client, '{}');	
            config::save('initCloud', 0 ,'worxLandroidS');
 	 } else
@@ -849,7 +849,7 @@ schedule: TimePeriod[];
 	  
 	  
 	  $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
-          $client = new Mosquitto\Client($mosqId);
+          $client = new Mosquitto\Client($mosqId, true);
 	  self::connect_and_publish($client, $_message);
 	  
   /*
