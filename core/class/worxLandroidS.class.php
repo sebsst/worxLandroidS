@@ -20,7 +20,8 @@ require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 class worxLandroidS extends eqLogic {
   public static $_client;
   public static $_client_pub;	
-
+	  
+	
   public static function health() {
     $return = array();
     $socket = socket_create(AF_INET, SOCK_STREAM, 0);
@@ -55,7 +56,7 @@ class worxLandroidS extends eqLogic {
 		  //  if($startTime == '00:00' or $starTime > date('H:i') or date('H:i') > $endTime) {
 			
 		       $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
-                       $client = new Mosquitto\Client($mosqId);
+                       $client = new Mosquitto\Client($mosqId, true);
                        self::connect_and_publish($client, '{}');	 
 			
 		  //  }
@@ -129,22 +130,21 @@ class worxLandroidS extends eqLogic {
 
   public static function daemon() {
 
-      
-	  
-      $resource_path = realpath(dirname(__FILE__) . '/../../resources/');
+   $resource_path = realpath(dirname(__FILE__) . '/../../resources/');
 
-      $certfile = $resource_path.'/cert.pem';
-      $pkeyfile = $resource_path.'/pkey.pem';
-      $root_ca = $resource_path.'/vs-ca.pem';
+  $certfile = $resource_path.'/cert.pem';
+  $pkeyfile = $resource_path.'/pkey.pem';
+  $root_ca = $resource_path.'/vs-ca.pem';      
 
- // log::add('worxLandroidS', 'info', 'client id: ' . config::byKey('mqtt_client_id', 'worxLandroidS'));
+
+ // log::add('worxLandroidS', 'debug', 'resource_path: ' . $certfile);
 
 
 // init first connection
     if(config::byKey('initCloud', 'worxLandroidS') ==  true){
 
 
-    log::add('worxLandroidS', 'info', 'Paramètres utilisés, Host : ' . config::byKey('worxLandroidSAdress', 'worxLandroidS', '127.0.0.1') . ', Port : ' . config::byKey('worxLandroidSPort', 'worxLandroidS', '1883') . ', ID : ' . config::byKey('worxLandroidSId', 'worxLandroidS', 'Jeedom'));
+    //log::add('worxLandroidS', 'info', 'Paramètres utilisés, Host : ' . config::byKey('worxLandroidSAdress', 'worxLandroidS', '127.0.0.1') . ', Port : ' . config::byKey('worxLandroidSPort', 'worxLandroidS', '1883') . ', ID : ' . config::byKey('worxLandroidSId', 'worxLandroidS', 'Jeedom'));
 
 
       $email = config::byKey('email', 'worxLandroidS');
@@ -187,7 +187,7 @@ class worxLandroidS extends eqLogic {
           //return false;
         } else
         {
-   
+
           // get certificate
           $url =  "https://api.worxlandroid.com:443/api/v1/users/certificate";
           $api_token = $json['api_token'];
@@ -272,7 +272,7 @@ class worxLandroidS extends eqLogic {
         //log::add('worxLandroidS', 'debug', empty($elogics));
 	 if ( empty($elogics) == true or config::byKey('initCloud', 'worxLandroidS') ==  true ) {
            $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
-           $client = new Mosquitto\Client($mosqId);
+           $client = new Mosquitto\Client($mosqId, true);
            self::connect_and_publish($client, '{}');	
            config::save('initCloud', 0 ,'worxLandroidS');
 	 } else
@@ -320,6 +320,8 @@ class worxLandroidS extends eqLogic {
       $certfile = $resource_path.'/cert.pem';
       $pkeyfile = $resource_path.'/pkey.pem';
       $root_ca = $resource_path.'/vs-ca.pem';	  
+    //curl_setopt ('mqtts://' . config::byKey('mqtt_endpoint', 'worxLandroidS'), CURLOPT_CAINFO, $root_ca);   
+    //	  curl_setopt('mqtts://' . config::byKey('mqtt_endpoint', 'worxLandroidS'), CURLOPT_SSL_VERIFYPEER, false);
     self::$_client = $client;
     self::$_client->clearWill();
     self::$_client->onConnect('worxLandroidS::connect');
@@ -337,12 +339,19 @@ class worxLandroidS extends eqLogic {
     //self::$_client->loop();  
     self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", $msg, 0, 0);
       //self::$_client->loopForever();
-      while (true) { self::$_client->loop(1);		   }
+      //while (true) { self::$_client->loop(1);		   }
+			for ($i = 0; $i < 12; $i++) {
+                    // Loop around to permit the library to do its work
+                    self::$_client->loop(1);
+				sleep(1);
+                        }      
+	      
+	      
       }
        catch (Exception $e){
       // log::add('worxLandroidS', 'debug', $e->getMessage());
      } 
-    
+     self::$_client->disconnect(); 
   }
 	
 	
@@ -375,7 +384,7 @@ class worxLandroidS extends eqLogic {
   public static function message($message) {
     //self::$_client->exitloop();
     //self::$_client->unsubscribe($message->topic);
-    self::$_client->disconnect();  
+    //self::$_client->disconnect();  
 
   //  if(isset(self::$_client_pub){ self::$_client_pub->disconnect(); }
    // unset(self::$_client);	  
@@ -387,7 +396,7 @@ class worxLandroidS extends eqLogic {
       $json2_data = json_decode($value);
 
       $type = 'json';
-      log::add('worxLandroidS', 'debug', 'Message json : ' . $value . ' pour information sur : ' . $nodeid);
+     // log::add('worxLandroidS', 'debug', 'Message json : ' . $value . ' pour information sur : ' . $nodeid);
     } else {
       $topicArray = explode("/", $message->topic);
       $cmdId = end($topicArray);
@@ -847,7 +856,7 @@ schedule: TimePeriod[];
 	  
 	  
 	  $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
-          $client = new Mosquitto\Client($mosqId);
+          $client = new Mosquitto\Client($mosqId, true);
 	  self::connect_and_publish($client, $_message);
 	  
   /*
