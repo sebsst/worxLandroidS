@@ -342,7 +342,7 @@ class worxLandroidS extends eqLogic {
       //while (true) { self::$_client->loop(1);		   }
 			for ($i = 0; $i < 12; $i++) {
                     // Loop around to permit the library to do its work
-                    $self::$_client->loop(1);
+                    self::$_client->loop(1);
 				sleep(1);
                         }      
 	      
