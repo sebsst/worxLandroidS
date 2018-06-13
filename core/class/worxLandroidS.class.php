@@ -669,6 +669,7 @@ schedule: TimePeriod[];
       case '30': return __("Retour à la base",__FILE__); break;
       case '31': return __("Création de zones",__FILE__); break;		    
       case '32': return __("Coupe la bordure",__FILE__); break;
+      case '33': return __("Départ vers zone de tonte",__FILE__); break;		    
 
       default: return 'unkown';
         // code...
