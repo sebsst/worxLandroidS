@@ -339,12 +339,19 @@ class worxLandroidS extends eqLogic {
     //self::$_client->loop();  
     self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", $msg, 0, 0);
       //self::$_client->loopForever();
-      while (true) { self::$_client->loop(1);		   }
+      //while (true) { self::$_client->loop(1);		   }
+			for ($i = 0; $i < 20; $i++) {
+                    // Loop around to permit the library to do its work
+                    $self::$_client->loop(1);
+				sleep(1);
+                        }      
+	      
+	      
       }
        catch (Exception $e){
       // log::add('worxLandroidS', 'debug', $e->getMessage());
      } 
-   //  self::$_client->disconnect(); 
+     self::$_client->disconnect(); 
   }
 	
 	
@@ -377,7 +384,7 @@ class worxLandroidS extends eqLogic {
   public static function message($message) {
     //self::$_client->exitloop();
     //self::$_client->unsubscribe($message->topic);
-    self::$_client->disconnect();  
+    //self::$_client->disconnect();  
 
   //  if(isset(self::$_client_pub){ self::$_client_pub->disconnect(); }
    // unset(self::$_client);	  
