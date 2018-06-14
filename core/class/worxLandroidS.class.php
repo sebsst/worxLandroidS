@@ -339,7 +339,12 @@ class worxLandroidS extends eqLogic {
     //self::$_client->loop();  
     self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", $msg, 0, 0);
       //self::$_client->loopForever();
-      while (true) { self::$_client->loop(1);		   }
+      $start_time = time();
+	      while (true) { 
+		      self::$_client->loop(1);		   
+		      if ((time() - $start_time) > 30) > { return false;})
+			      
+		   }
 		//	for ($i = 0; $i < 12; $i++) {
                     // Loop around to permit the library to do its work
                   //  self::$_client->loop(1);
