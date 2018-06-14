@@ -54,7 +54,7 @@ class worxLandroidS extends eqLogic {
 		    $endTime = $initDate->format("H:i");
 	// refresh value each hours if mower is sleeping at home :-)
 		  //  if($startTime == '00:00' or $starTime > date('H:i') or date('H:i') > $endTime) {
-			
+		    if(config::byKey('status','worxLandroidS') == '1'){self::$_client->disconnect();}
 		       $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
                        $client = new Mosquitto\Client($mosqId, true);
                        self::connect_and_publish($client, '{}');	 
