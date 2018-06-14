@@ -338,8 +338,8 @@ class worxLandroidS extends eqLogic {
 	   log::add('worxLandroidS', 'debug', 'Subscribe to mqtt ' . config::byKey('mqtt_endpoint', 'worxLandroidS') . ' msg ' . $msg);
     //self::$_client->loop();  
     self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", $msg, 0, 0);
-      self::$_client->loopForever();
-      //while (true) { self::$_client->loop(1);		   }
+      //self::$_client->loopForever();
+      while (true) { self::$_client->loop(1);		   }
 		//	for ($i = 0; $i < 12; $i++) {
                     // Loop around to permit the library to do its work
                   //  self::$_client->loop(1);
