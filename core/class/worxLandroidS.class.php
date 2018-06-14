@@ -342,7 +342,7 @@ class worxLandroidS extends eqLogic {
       $start_time = time();
 	      while (true) { 
 		      self::$_client->loop(1);		   
-		      if ((time() - $start_time) > 30) { 
+		      if ((time() - $start_time) > 45) { 
 	   log::add('worxLandroidS', 'debug', 'Timeout reached');
 			return false;			       
 		      }
