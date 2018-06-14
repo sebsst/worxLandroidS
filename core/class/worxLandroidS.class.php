@@ -338,20 +338,21 @@ class worxLandroidS extends eqLogic {
 	   log::add('worxLandroidS', 'debug', 'Subscribe to mqtt ' . config::byKey('mqtt_endpoint', 'worxLandroidS') . ' msg ' . $msg);
     //self::$_client->loop();  
     self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", $msg, 0, 0);
-      //self::$_client->loopForever();
+      self::$_client->loopForever();
       //while (true) { self::$_client->loop(1);		   }
-			for ($i = 0; $i < 12; $i++) {
+		//	for ($i = 0; $i < 12; $i++) {
                     // Loop around to permit the library to do its work
-                    self::$_client->loop(1);
-				sleep(1);
-                        }      
+                  //  self::$_client->loop(1);
+		//		sleep(1);
+                 //       }      
 	      
 	      
       }
        catch (Exception $e){
       // log::add('worxLandroidS', 'debug', $e->getMessage());
      } 
-     self::$_client->disconnect(); 
+     if(config::byKey('status','worxLandroidS')){	  
+     self::$_client->disconnect(); }
   }
 	
 	
@@ -384,7 +385,8 @@ class worxLandroidS extends eqLogic {
   public static function message($message) {
     //self::$_client->exitloop();
     //self::$_client->unsubscribe($message->topic);
-    //self::$_client->disconnect();  
+    if( config::byKey('status','worxLandroidS') == '1'){
+	  self::$_client->disconnect();  }
 
   //  if(isset(self::$_client_pub){ self::$_client_pub->disconnect(); }
    // unset(self::$_client);	  
