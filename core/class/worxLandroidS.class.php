@@ -54,7 +54,7 @@ class worxLandroidS extends eqLogic {
 		    $endTime = $initDate->format("H:i");
 	// refresh value each hours if mower is sleeping at home :-)
 		  //  if($startTime == '00:00' or $starTime > date('H:i') or date('H:i') > $endTime) {
-			
+		    if(config::byKey('status','worxLandroidS') == '1'){self::$_client->disconnect();}
 		       $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
                        $client = new Mosquitto\Client($mosqId, true);
                        self::connect_and_publish($client, '{}');	 
@@ -339,19 +339,29 @@ class worxLandroidS extends eqLogic {
     //self::$_client->loop();  
     self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", $msg, 0, 0);
       //self::$_client->loopForever();
-      //while (true) { self::$_client->loop(1);		   }
-			for ($i = 0; $i < 12; $i++) {
+      $start_time = time();
+	      while (true) { 
+		      self::$_client->loop(1);		   
+		      if ((time() - $start_time) > 45) { 
+	   log::add('worxLandroidS', 'debug', 'Timeout reached');
+			return false;			       
+		      }
+			      
+		   }
+		//	for ($i = 0; $i < 12; $i++) {
                     // Loop around to permit the library to do its work
-                    self::$_client->loop(1);
-				sleep(1);
-                        }      
+                  //  self::$_client->loop(1);
+		//		sleep(1);
+                 //       }      
 	      
 	      
       }
        catch (Exception $e){
       // log::add('worxLandroidS', 'debug', $e->getMessage());
      } 
-     self::$_client->disconnect(); 
+     if(config::byKey('status','worxLandroidS') == '1'){	
+	     self::$_client->disconnect(); }
+	 
   }
 	
 	
@@ -384,7 +394,8 @@ class worxLandroidS extends eqLogic {
   public static function message($message) {
     //self::$_client->exitloop();
     //self::$_client->unsubscribe($message->topic);
-    //self::$_client->disconnect();  
+    if( config::byKey('status','worxLandroidS') == '1'){
+	  self::$_client->disconnect();  }
 
   //  if(isset(self::$_client_pub){ self::$_client_pub->disconnect(); }
    // unset(self::$_client);	  
@@ -669,6 +680,7 @@ schedule: TimePeriod[];
       case '30': return __("Retour à la base",__FILE__); break;
       case '31': return __("Création de zones",__FILE__); break;		    
       case '32': return __("Coupe la bordure",__FILE__); break;
+      case '33': return __("Départ vers zone de tonte",__FILE__); break;		    
 
       default: return 'unkown';
         // code...
@@ -835,12 +847,12 @@ schedule: TimePeriod[];
 	  if($cmd->getName()=='refreshValue'){ $_message = '{}';}
 	  
 	  // send start command
-	  if($_message == 'cmd:1')
+	  if($cmd->getName() == 'start')
 	  { 
 		  $_message = '{"cmd":1}';
 	  }
 	  // send stop
-	  if($_message == 'cmd:3')
+	  if($cmd->getName() == 'stop')
 	  { 
 		  $_message = '{"cmd":3}';
 	  }

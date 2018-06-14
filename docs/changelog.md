@@ -2,6 +2,11 @@
 
 En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que la doc, les traductions et des corrections mineures
 
+## 14/06/2018
+
+- Corrections des fonctions démarrer/arrêter.
+- Modifications timeout si le serveur mosquitto n'envoie aucun message 
+
 ## 09/06/2018
 
 Ajout de nouvelles actions: 
