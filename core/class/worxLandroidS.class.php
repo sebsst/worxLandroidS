@@ -342,7 +342,7 @@ class worxLandroidS extends eqLogic {
       $start_time = time();
 	      while (true) { 
 		      self::$_client->loop(1);		   
-		      if ((time() - $start_time) > 30) { return false;})
+		      if ((time() - $start_time) > 30) { return false;}
 			      
 		   }
 		//	for ($i = 0; $i < 12; $i++) {
