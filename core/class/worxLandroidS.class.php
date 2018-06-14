@@ -361,9 +361,7 @@ class worxLandroidS extends eqLogic {
      } 
      if(config::byKey('status','worxLandroidS') == '1'){	
 	     self::$_client->disconnect(); }
-	  else {   
-     log::add('worxLandroidS', 'debug', 'Mosquitti Connexion not established');
-	  }
+	 
   }
 	
 	
