@@ -838,12 +838,12 @@ schedule: TimePeriod[];
 	  if($cmd->getName()=='refreshValue'){ $_message = '{}';}
 	  
 	  // send start command
-	  if($_message == 'cmd:1')
+	  if($cmd->getName() == 'start')
 	  { 
 		  $_message = '{"cmd":1}';
 	  }
 	  // send stop
-	  if($_message == 'cmd:3')
+	  if($cmd->getName() == 'stop')
 	  { 
 		  $_message = '{"cmd":3}';
 	  }
