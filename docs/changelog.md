@@ -4,8 +4,8 @@ En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que l
 
 ## 14/06/2018
 
-Corrections des fonctions démarrer/arrêter
-Modifications timeout si le serveur mosquitto n'envoie aucun message 
+- Corrections des fonctions démarrer/arrêter.
+- Modifications timeout si le serveur mosquitto n'envoie aucun message 
 
 ## 09/06/2018
 
