@@ -342,7 +342,9 @@ class worxLandroidS extends eqLogic {
       $start_time = time();
 	      while (true) { 
 		      self::$_client->loop(1);		   
-		      if ((time() - $start_time) > 30) { return false;}
+		      if ((time() - $start_time) > 30) { return false;
+	   log::add('worxLandroidS', 'debug', 'Timeout reached');
+						       }
 			      
 		   }
 		//	for ($i = 0; $i < 12; $i++) {
@@ -356,8 +358,11 @@ class worxLandroidS extends eqLogic {
        catch (Exception $e){
       // log::add('worxLandroidS', 'debug', $e->getMessage());
      } 
-     if(config::byKey('status','worxLandroidS')){	  
-     self::$_client->disconnect(); }
+     if(config::byKey('status','worxLandroidS') == '1'){	
+	     self::$_client->disconnect(); }
+	  else {   
+     log::add('worxLandroidS', 'debug', 'Mosquitti Connexion not established');
+	  }
   }
 	
 	
