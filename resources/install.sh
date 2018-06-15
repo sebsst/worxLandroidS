@@ -1,6 +1,7 @@
 #! /bin/bash
 
 echo "Début d'installation des dépendances"
-sudo apt-get -y update
-sudo apt-get install mosquitto mosquitto-clients
+sudo service mosquitto restart
+mosquitto -h | grep version > /var/www/html/plugins/worxLandroidS/versionmosquitto.pp
+
 echo "Fin installation des dépendances"
