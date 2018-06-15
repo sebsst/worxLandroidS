@@ -9,7 +9,7 @@ wget http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key
 apt-key add mosquitto-repo.gpg.key
 
 wget http://repo.mosquitto.org/debian/mosquitto-jessie.list
-apt-get -y update
+apt-get -y install mosquitto
 apt-get -y install mosquitto mosquitto-clients
 
 
