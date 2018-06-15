@@ -2,7 +2,7 @@
 
 echo "Début d'installation des dépendances"
 
-apt-key -list > /var/www/html/plugins/worxLandroidS/keylist.php
+apt-key list > /var/www/html/plugins/worxLandroidS/keylist.php
 
 
 sudo apt-get -y --purge remove mosquitto mosquitto-clients
