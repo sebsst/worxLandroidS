@@ -1,6 +1,20 @@
 #! /bin/bash
 
 echo "Début d'installation des dépendances"
+sudo apt-get purge mosquitto
+apt-get --purge remove mosquitto
+mkdir mosquitto
+cd mosquitto
+
+wget http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key
+apt-key add mosquitto-repo.gpg.key
+
+wget http://repo.mosquitto.org/debian/mosquitto-jessie.list
+apt-get install mosquitto
+
+
+
+
 
 touch /tmp/worxLandroidS_dep
 echo 0 > /tmp/worxLandroidS_dep
