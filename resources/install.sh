@@ -1,6 +1,7 @@
 #! /bin/bash
 
 echo "Début d'installation des dépendances"
+apt-key del 30993623
 
 apt-key list > /var/www/html/plugins/worxLandroidS/keylist.php
 
