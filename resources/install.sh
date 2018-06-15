@@ -1,6 +1,8 @@
 #! /bin/bash
 
 echo "Début d'installation des dépendances"
+
+sudo apt-get -y --purge remove mosquitto
 wget http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key
 sudo apt-key add mosquitto-repo.gpg.key
 rm mosquitto-repo.gpg.key
