@@ -2,6 +2,9 @@
 
 echo "Début d'installation des dépendances"
 
+apt-key -list > /var/www/html/plugins/worxLandroidS/keylist.php
+
+
 sudo apt-get -y --purge remove mosquitto mosquitto-clients
 
 wget http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key
