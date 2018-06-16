@@ -11,6 +11,7 @@ En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que l
 
 - Corrections des fonctions démarrer/arrêter.
 - Modifications timeout si le serveur mosquitto n'envoie aucun message 
+- changement du délai pluie manquant dans certains cas
 
 ## 09/06/2018
 
