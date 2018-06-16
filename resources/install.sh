@@ -32,9 +32,9 @@ apt-get -y install mosquitto mosquitto-clients libmosquitto-dev
 
 #si version est toujours 1.3 alors on essaye de compiler une version plus récente
 mosquitto -h | grep "version"
-version=`mosquitto -h | grep "version 1.4"`
+version=`mosquitto -h | grep "version 1.3"`
 if [ -n "$version" ]; then
- if [ `lsb_release -i -s` == "Raspbian" ]; then
+ if [ `lsb_release -i -s` == "Debian" ] || [ `lsb_release -i -s` == "Raspian" ]; then
 
 # if [ `lsb_release -i -s` == "Raspian" ]; then
 
@@ -42,7 +42,7 @@ if [ -n "$version" ]; then
 
 #   #  sudo apt-get -y install build-essential python quilt devscripts python-setuptools python3 libssl-dev cmake libc-ares-dev uuid-dev daemon
 #     apt-get -y purge mosquitto
-     echo "La version de mosquitto n'est pas compatible. tentative d'installation d'une version plus récente"
+     echo "La version de mosquitto $version n'est pas compatible. tentative d'installation d'une version plus récente"
      sudo apt-get -y install cmake libssl1.0-dev 
      sudo apt-get -y install libwebsockets-dev uuid-dev
      cd /tmp
@@ -54,7 +54,7 @@ if [ -n "$version" ]; then
      sudo make install
      apt-get -y install mosquitto mosquitto-clients
      service mosquitto restart
-     echo "un redémarrage du système peut-être nécessaire pour activer la nouvelle version de mosquitto"      
+  
 
 #   #fi
   fi
