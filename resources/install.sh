@@ -58,6 +58,7 @@ if [ -n "$version" ]; then
  fi
 
 
+service mosquitto restart
 
 echo 60 > /tmp/worxLandroidS_dep
 
