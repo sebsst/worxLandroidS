@@ -18,6 +18,8 @@ En cas du défaillance il se peut que le Daemon soit à l'arrêt et vous pouvez 
 
 En cas d'arrêt prolongé, la meilleure solution est de désactiver le plugin.
 
+Les versions mosquitto 1.3.x et antérieures ne sont pas compatibles avec le plugin.
+
 ### utilisation
 
 Le nom par défaut = Nom de la tondeuse sur l'application mobile
