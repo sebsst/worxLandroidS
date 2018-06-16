@@ -41,6 +41,7 @@ if [ -n "$version" ]; then
 #   if [ `lsb_release -c -s` == "jessie" ]; then
 
 #   #  sudo apt-get -y install build-essential python quilt devscripts python-setuptools python3 libssl-dev cmake libc-ares-dev uuid-dev daemon
+     apt-get -y purge mosquitto
      sudo apt-get -y install cmake libssl1.0-dev 
      sudo apt-get -y install libwebsockets-dev uuid-dev
      cd /tmp
