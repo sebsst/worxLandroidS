@@ -47,7 +47,7 @@ if [ -n "$version" ]; then
      sudo apt-get -y install libwebsockets-dev uuid-dev
      cd /tmp
      wget http://mosquitto.org/files/source/mosquitto-1.5.tar.gz
-     tar xavf mosquitto-1.4.14.tar.gz
+     tar xavf mosquitto-1.4.2.tar.gz
      cd mosquitto-1.4.14
      cmake -DWITH_WEBSOCKETS=YES .
      make -j4
