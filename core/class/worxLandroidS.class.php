@@ -141,7 +141,7 @@ class worxLandroidS extends eqLogic {
         log::add('worxLandroidS', 'info', 'Installation des dépendances, voir log dédié (' . self::$_depLogFile . ')');
         log::remove(self::$_depLogFile);
         return array(
-            'script' => dirname(__FILE__) . '/../../resources/install_#stype#.sh ' .
+            'script' => dirname(__FILE__) . '/../../resources/install.sh ' .
                       self::$_depProgressFile . ' ' . config::byKey('installMosquitto', 'worxLandroidS', 1),
             'log' => log::getPathToLog(self::$_depLogFile));
     }
