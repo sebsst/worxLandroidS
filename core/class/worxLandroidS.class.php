@@ -696,7 +696,7 @@ schedule: TimePeriod[];
     $cmdlogic = worxLandroidSCmd::byEqLogicIdAndLogicalId($elogic->getId(),$cmdId);
 
     if (!is_object($cmdlogic)) {
-      log::add('worxLandroidS', 'info', 'Cmdlogic n existe pas, creation');
+      //log::add('worxLandroidS', 'info', 'Cmdlogic n existe pas, creation');
       $cmdlogic = new worxLandroidSCmd();
       $cmdlogic->setEqLogic_id($elogic->getId());
       $cmdlogic->setEqType('worxLandroidS');
