@@ -37,26 +37,16 @@ if [ [ -n version ];then
 
    if [ `lsb_release -c -s` == "jessie" ]; then
 
-     sudo apt-get -y install build-essential python quilt devscripts python-setuptools python3 libssl-dev cmake libc-ares-dev uuid-dev daemon
-
-     wget https://libwebsockets.org/git/libwebsockets/snapshot/libwebsockets-1.4-chrome43-firefox-36.tar.gz
-     tar zxvf libwebsockets-1.4-chrome43-firefox-36.tar.gz
-     cd libwebsockets-1.4-chrome43-firefox-36
-     mkdir build
-     cd build
-     sudo apt-get install zlibc zlib1g zlib1g-dev
-     cmake ..
+   #  sudo apt-get -y install build-essential python quilt devscripts python-setuptools python3 libssl-dev cmake libc-ares-dev uuid-dev daemon
+     sudo apt-get install cmake libssl1.0-dev 
+     sudo apt-get install libwebsockets-dev uuid-dev
+     cd /tmp
+     wget http://mosquitto.org/files/source/mosquitto-1.4.14.tar.gz
+     tar xavf mosquitto-1.4.14.tar.gz
+     cd mosquitto-1.4.14
+     cmake -DWITH_WEBSOCKETS=ON .
+     make -j4
      sudo make install
-     sudo ldconfig
-     cd
-
-     wget http://mosquitto.org/files/source/mosquitto-1.4.2.tar.gz
-     tar zxvf mosquitto-1.4.2.tar.gz
-     cd mosquitto-1.4.2
-
-     make
-     sudo make install
-     sudo cp mosquitto.conf /etc/mosquitto
 
 
    fi
