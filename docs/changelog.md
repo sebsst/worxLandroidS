@@ -2,6 +2,11 @@
 
 En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que la doc, les traductions et des corrections mineures
 
+## 16/06/2018
+
+- modification du script d'installation pour tenter de résoudre les problème de version de mosquitto (version mini 1.4.1)
+- Installation version mosquitto 1.5 si version mosquitto 1.3
+
 ## 14/06/2018
 
 - Corrections des fonctions démarrer/arrêter.
