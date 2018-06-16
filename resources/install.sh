@@ -32,31 +32,32 @@ apt-get -y install mosquitto mosquitto-clients libmosquitto-dev
 
 #si version est toujours 1.3 alors on essaye de compiler une version plus récente
 mosquitto -h | grep "version"
-version=`mosquitto -h | grep "version 1.4.14"`
+version=`mosquitto -h | grep "version 1.3"`
 if [ -n "$version" ]; then
-# if [ `lsb_release -i -s` == "Debian" ]; then
+ if [ `lsb_release -i -s` == "Debian" ]; then
 
 # if [ `lsb_release -i -s` == "Raspian" ]; then
 
 #   if [ `lsb_release -c -s` == "jessie" ]; then
 
 #   #  sudo apt-get -y install build-essential python quilt devscripts python-setuptools python3 libssl-dev cmake libc-ares-dev uuid-dev daemon
-     apt-get -y purge mosquitto
+#     apt-get -y purge mosquitto
+     echo "La version de mosquitto n'est pas compatible. tentative d'installation d'une version plus récente"
      sudo apt-get -y install cmake libssl1.0-dev 
      sudo apt-get -y install libwebsockets-dev uuid-dev
      cd /tmp
-     wget http://mosquitto.org/files/source/mosquitto-1.4.2.tar.gz
+     wget http://mosquitto.org/files/source/mosquitto-1.5.tar.gz
      tar xavf mosquitto-1.4.14.tar.gz
      cd mosquitto-1.4.14
-     cmake -DWITH_WEBSOCKETS=ON .
+     cmake -DWITH_WEBSOCKETS=YES .
      make -j4
      sudo make install
      apt-get -y install mosquitto mosquitto-clients
      service mosquitto restart
-      
+     echo "un redémarrage du système peut-être nécessaire pour activer la nouvelle version de mosquitto"      
 
 #   #fi
-#  fi
+  fi
  fi
 
 echo 60 > /tmp/worxLandroidS_dep
