@@ -32,16 +32,16 @@ apt-get -y install mosquitto mosquitto-clients libmosquitto-dev
 
 #si version est toujours 1.3 alors on essaye de compiler une version plus récente
 version=`mosquitto -h | grep "version 1.4.10"`
-if [ -n $version ]; then
+if [ -n "$version" ]; then
 # if [ `lsb_release -i -s` == "Debian" ]; then
 
  if [ `lsb_release -i -s` == "Raspian" ]; then
 
-  # if [ `lsb_release -c -s` == "jessie" ]; then
+#   if [ `lsb_release -c -s` == "jessie" ]; then
 
-   #  sudo apt-get -y install build-essential python quilt devscripts python-setuptools python3 libssl-dev cmake libc-ares-dev uuid-dev daemon
-     sudo apt-get install cmake libssl1.0-dev 
-     sudo apt-get install libwebsockets-dev uuid-dev
+#   #  sudo apt-get -y install build-essential python quilt devscripts python-setuptools python3 libssl-dev cmake libc-ares-dev uuid-dev daemon
+     sudo apt-get -y install cmake libssl1.0-dev 
+     sudo apt-get -y install libwebsockets-dev uuid-dev
      cd /tmp
      wget http://mosquitto.org/files/source/mosquitto-1.4.14.tar.gz
      tar xavf mosquitto-1.4.14.tar.gz
@@ -51,7 +51,7 @@ if [ -n $version ]; then
      sudo make install
 
 
-   #fi
+#   #fi
   fi
  fi
 
