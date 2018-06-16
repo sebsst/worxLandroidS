@@ -449,6 +449,11 @@ class worxLandroidS extends eqLogic {
       self::newAction($elogic,'refreshValue',$commandIn,"",'other');
       self::newAction($elogic,'off_today',$commandIn,"off_today",'other');
       self::newAction($elogic,'on_today',$commandIn,"on_today",'other');
+      self::newAction($eqpt,'rain_delay_0',$commandIn,"0",'other');
+      self::newAction($eqpt,'rain_delay_30',$commandIn,"30",'other');
+      self::newAction($eqpt,'rain_delay_60',$commandIn,"60",'other');
+      self::newAction($eqpt,'rain_delay_120',$commandIn,"120",'other');
+      self::newAction($eqpt,'rain_delay_240',$commandIn,"240",'other');	    
 
 	for ($i = 0; $i < 7; $i++) {
          self::newAction($elogic,'on_'.$i,$commandIn,'on_'.$i,'other');
