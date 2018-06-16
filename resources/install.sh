@@ -29,13 +29,13 @@ echo 10 > /tmp/worxLandroidS_dep
 apt-get update
 echo 30 > /tmp/worxLandroidS_dep
 apt-get -y install mosquitto mosquitto-clients libmosquitto-dev
-echo 60 > /tmp/mqtt_dep
+echo 60 > /tmp/worxLandroidS_dep
 
 if [[ -d "/etc/php5/" ]]; then
   apt-get -y install php5-dev
   if [[ -d "/etc/php5/cli/" && ! `cat /etc/php5/cli/php.ini | grep "mosquitto"` ]]; then
   	echo "" | pecl install Mosquitto-alpha
-    echo 80 > /tmp/mqtt_dep
+    echo 80 > /tmp/worxLandroidS_dep
   	echo "extension=mosquitto.so" | tee -a /etc/php5/cli/php.ini
   fi
   if [[ -d "/etc/php5/fpm/" && ! `cat /etc/php5/fpm/php.ini | grep "mosquitto"` ]]; then
@@ -44,7 +44,7 @@ if [[ -d "/etc/php5/" ]]; then
   fi
   if [[ -d "/etc/php5/apache2/" && ! `cat /etc/php5/apache2/php.ini | grep "mosquitto"` ]]; then
   	echo "extension=mosquitto.so" | tee -a /etc/php5/apache2/php.ini
-    rm /tmp/mqtt_dep
+    rm /tmp/worxLandroidS_dep
     echo "Fin installation des dépendances"
     service apache2 restart
   fi
@@ -52,7 +52,7 @@ else
   apt-get -y install php7.0-dev
   if [[ -d "/etc/php/7.0/cli/" && ! `cat /etc/php/7.0/cli/php.ini | grep "mosquitto"` ]]; then
     echo "" | pecl install Mosquitto-alpha
-    echo 80 > /tmp/mqtt_dep
+    echo 80 > /tmp/worxLandroidS_dep
     echo "extension=mosquitto.so" | tee -a /etc/php/7.0/cli/php.ini
   fi
   if [[ -d "/etc/php/7.0/fpm/" && ! `cat /etc/php/7.0/fpm/php.ini | grep "mosquitto"` ]]; then
@@ -66,8 +66,7 @@ else
     service apache2 restart
   fi
 fi
-
-echo mosquitto -h | grep version
+mosquitto -h | grep version
 
 rm /tmp/worxLandroidS_dep
 
