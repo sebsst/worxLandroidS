@@ -9,7 +9,6 @@ INSTALL_MOSQUITTO=1
 if [ ! -z $2 ] && [ $2 -eq 1 -o $2 -eq 0 ]; then
     INSTALL_MOSQUITTO=$2
 fi
-
 echo 0 > ${PROGRESS_FILE}
 
 echo "********************************************************"
@@ -64,7 +63,6 @@ mosquitto -h | grep "version"
 version=`mosquitto -h | grep "version 1.3"`
 if [ -n "$version" ]; then
  if [ `lsb_release -i -s` == "Debian" ] || [ `lsb_release -i -s` == "Raspian" ]; then
-
 #   #  sudo apt-get -y install build-essential python quilt devscripts python-setuptools python3 libssl-dev cmake libc-ares-dev uuid-dev daemon
      echo "La version de mosquitto $version n'est pas compatible. tentative d'installation d'une version plus récente"
      sudo apt-get -y install cmake libssl1.0-dev 
@@ -79,12 +77,8 @@ if [ -n "$version" ]; then
      apt-get -y install mosquitto mosquitto-clients
      service mosquitto restart
   
-
   fi
  fi
-
-
-
 
 echo "*"
 echo "* Install php mosquitto wrapper"
@@ -122,8 +116,6 @@ else
 fi
 
 rm ${PROGRESS_FILE}
-
 echo "********************************************************"
 echo "*             End dependancy installation              *"
 echo "********************************************************"
-
