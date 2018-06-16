@@ -35,7 +35,7 @@ version=`mosquitto -h | grep "version 1.4.10"`
 if [ -n "$version" ]; then
 # if [ `lsb_release -i -s` == "Debian" ]; then
 
- if [ `lsb_release -i -s` == "Raspian" ]; then
+# if [ `lsb_release -i -s` == "Raspian" ]; then
 
 #   if [ `lsb_release -c -s` == "jessie" ]; then
 
@@ -52,7 +52,7 @@ if [ -n "$version" ]; then
 
 
 #   #fi
-  fi
+#  fi
  fi
 
 
