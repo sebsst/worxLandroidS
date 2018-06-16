@@ -32,7 +32,7 @@ apt-get -y install mosquitto mosquitto-clients libmosquitto-dev
 
 #si version est toujours 1.3 alors on essaye de compiler une version plus récente
 version=`mosquitto -h | grep "version 1.4.10"`
-if [ [ -n $version ];then
+if [ -n $version ];then
 # if [ `lsb_release -i -s` == "Debian" ]; then
 
  if [ `lsb_release -i -s` == "Raspian" ]; then
