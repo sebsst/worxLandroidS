@@ -1,34 +1,63 @@
 #! /bin/bash
 
-echo "Début d'installation des dépendances"
+PROGRESS_FILE=/tmp/worxLandroidS_dep;
+if [ ! -z $1 ]; then
+    PROGRESS_FILE=$1
+fi
 
-touch /tmp/worxLandroidS_dep
-echo 0 > /tmp/worxLandroidS_dep
+INSTALL_MOSQUITTO=1
+if [ ! -z $2 ] && [ $2 -eq 1 -o $2 -eq 0 ]; then
+    INSTALL_MOSQUITTO=$2
+fi
+
+echo 0 > ${PROGRESS_FILE}
+
+echo "********************************************************"
+echo "* Install dependancies                                 *"
+echo "********************************************************"
+echo "Progress file: " ${PROGRESS_FILE}
+echo "Install Mosquitto: " ${INSTALL_MOSQUITTO}
+echo "*"
+echo "* Update package source repository"
+echo "*"
 apt-get -y install lsb-release php-pear
 archi=`lscpu | grep Architecture | awk '{ print $2 }'`
+echo 10 > ${PROGRESS_FILE}
+
 
 if [ "$archi" == "x86_64" ]; then
-if [ `lsb_release -i -s` == "Debian" ]; then
-  wget http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key
-  apt-key add mosquitto-repo.gpg.key
-  cd /etc/apt/sources.list.d/
-  if [ `lsb_release -c -s` == "jessie" ]; then
-    wget http://repo.mosquitto.org/debian/mosquitto-jessie.list
-    rm /etc/apt/sources.list.d/mosquitto-jessie.list
-    cp -r mosquitto-jessie.list /etc/apt/sources.list.d/mosquitto-jessie.list
-  fi
-  if [ `lsb_release -c -s` == "stretch" ]; then
-    wget http://repo.mosquitto.org/debian/mosquitto-stretch.list
-    rm /etc/apt/sources.list.d/mosquitto-stretch.list
-    cp -r mosquitto-stretch.list /etc/apt/sources.list.d/mosquitto-stretch.list
-  fi
+    cd /tmp
+    if [ `lsb_release -i -s` == "Debian" ]; then
+	wget http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key
+	apt-key add mosquitto-repo.gpg.key
+	rm mosquitto-repo.gpg.key
+	if [ `lsb_release -c -s` == "jessie" ]; then
+	    wget http://repo.mosquitto.org/debian/mosquitto-jessie.list
+	    mv -f mosquitto-jessie.list /etc/apt/sources.list.d/mosquitto-jessie.list
+	fi
+	if [ `lsb_release -c -s` == "stretch" ]; then
+	    wget http://repo.mosquitto.org/debian/mosquitto-stretch.list
+	    mv -f mosquitto-stretch.list /etc/apt/sources.list.d/mosquitto-stretch.list
+	fi
+    fi
 fi
-fi
-echo 10 > /tmp/worxLandroidS_dep
+echo 20 > ${PROGRESS_FILE}
 
+echo "*"
+echo "* Synchronize the package index"
+echo "*"
 apt-get update
-echo 30 > /tmp/worxLandroidS_dep
-apt-get -y install mosquitto mosquitto-clients libmosquitto-dev
+echo 40 > ${PROGRESS_FILE}
+
+echo "*"
+echo "* Install Mosquitto"
+echo "*"
+if [ ${INSTALL_MOSQUITTO} -eq 1 ]; then
+    apt-get -y install mosquitto mosquitto-clients libmosquitto-dev
+else
+    apt-get -y install mosquitto-clients libmosquitto-dev
+fi
+echo 60 > ${PROGRESS_FILE}
 
 #si version est toujours 1.3 alors on essaye de compiler une version plus récente
 mosquitto -h | grep "version"
@@ -54,44 +83,46 @@ if [ -n "$version" ]; then
   fi
  fi
 
-echo 60 > /tmp/worxLandroidS_dep
 
+
+
+echo "*"
+echo "* Install php mosquitto wrapper"
+echo "*"
 if [[ -d "/etc/php5/" ]]; then
-  apt-get -y install php5-dev
-  if [[ -d "/etc/php5/cli/" && ! `cat /etc/php5/cli/php.ini | grep "mosquitto"` ]]; then
+    apt-get -y install php5-dev
+    echo 80 > ${PROGRESS_FILE}
+    if [[ -d "/etc/php5/cli/" && ! `cat /etc/php5/cli/php.ini | grep "mosquitto"` ]]; then
   	echo "" | pecl install Mosquitto-alpha
-    echo 80 > /tmp/worxLandroidS_dep
   	echo "extension=mosquitto.so" | tee -a /etc/php5/cli/php.ini
-  fi
-  if [[ -d "/etc/php5/fpm/" && ! `cat /etc/php5/fpm/php.ini | grep "mosquitto"` ]]; then
+    fi
+    if [[ -d "/etc/php5/fpm/" && ! `cat /etc/php5/fpm/php.ini | grep "mosquitto"` ]]; then
   	echo "extension=mosquitto.so" | tee -a /etc/php5/fpm/php.ini
-    service php5-fpm restart
-  fi
-  if [[ -d "/etc/php5/apache2/" && ! `cat /etc/php5/apache2/php.ini | grep "mosquitto"` ]]; then
-  	echo "extension=mosquitto.so" | tee -a /etc/php5/apache2/php.ini
-    rm /tmp/worxLandroidS_dep
-    echo "Fin installation des dépendances"
-    service apache2 restart
-  fi
+	service php5-fpm reload
+    fi
+    if [[ -d "/etc/php5/apache2/" && ! `cat /etc/php5/apache2/php.ini | grep "mosquitto"` ]]; then
+	echo "extension=mosquitto.so" | tee -a /etc/php5/apache2/php.ini
+	service apache2 reload
+    fi
 else
-  apt-get -y install php7.0-dev
-  if [[ -d "/etc/php/7.0/cli/" && ! `cat /etc/php/7.0/cli/php.ini | grep "mosquitto"` ]]; then
-    echo "" | pecl install Mosquitto-alpha
-    echo 80 > /tmp/worxLandroidS_dep
-    echo "extension=mosquitto.so" | tee -a /etc/php/7.0/cli/php.ini
-  fi
-  if [[ -d "/etc/php/7.0/fpm/" && ! `cat /etc/php/7.0/fpm/php.ini | grep "mosquitto"` ]]; then
-    echo "extension=mosquitto.so" | tee -a /etc/php/7.0/fpm/php.ini
-    service php5-fpm restart
-  fi
-  if [[ -d "/etc/php/7.0/apache2/" && ! `cat /etc/php/7.0/apache2/php.ini | grep "mosquitto"` ]]; then
-    echo "extension=mosquitto.so" | tee -a /etc/php/7.0/apache2/php.ini
-    rm /tmp/worxLandroidS_dep
-    echo "Fin installation des dépendances"
-    service apache2 restart
-  fi
+    apt-get -y install php7.0-dev
+    echo 80 > ${PROGRESS_FILE}
+    if [[ -d "/etc/php/7.0/cli/" && ! `cat /etc/php/7.0/cli/php.ini | grep "mosquitto"` ]]; then
+	echo "" | pecl install Mosquitto-alpha
+	echo "extension=mosquitto.so" | tee -a /etc/php/7.0/cli/php.ini
+    fi
+    if [[ -d "/etc/php/7.0/fpm/" && ! `cat /etc/php/7.0/fpm/php.ini | grep "mosquitto"` ]]; then
+	echo "extension=mosquitto.so" | tee -a /etc/php/7.0/fpm/php.ini
+	service php5-fpm reload
+    fi
+    if [[ -d "/etc/php/7.0/apache2/" && ! `cat /etc/php/7.0/apache2/php.ini | grep "mosquitto"` ]]; then
+	echo "extension=mosquitto.so" | tee -a /etc/php/7.0/apache2/php.ini
+	service apache2 reload
+    fi
 fi
 
-rm /tmp/worxLandroidS_dep
+rm ${PROGRESS_FILE}
 
-echo "Fin installation des dépendances"
+echo "********************************************************"
+echo "*             End dependancy installation              *"
+echo "********************************************************"
