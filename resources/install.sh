@@ -49,6 +49,7 @@ if [ -n "$version" ]; then
      cmake -DWITH_WEBSOCKETS=ON .
      make -j4
      sudo make install
+     service mosquitto restart
 
 
 #   #fi
