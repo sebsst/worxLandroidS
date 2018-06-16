@@ -18,8 +18,6 @@ En cas du défaillance il se peut que le Daemon soit à l'arrêt et vous pouvez 
 
 En cas d'arrêt prolongé, la meilleure solution est de désactiver le plugin.
 
-Les versions mosquitto 1.3.x et antérieures ne sont pas compatibles avec le plugin.
-
 ### utilisation
 
 Le nom par défaut = Nom de la tondeuse sur l'application mobile
@@ -119,6 +117,11 @@ Un autre plugin worxLandroid est disponible pour les modèles M.
 Il peut arriver par moment de perdre la connexion avec la tondeuse, y compris avec l'application mobile.
 Dans certains cas, le fait de réactualiser le code WIFI peut résoudre le problème.
 (Faire comme si on voulait ajouter une nouvelle tondeuse sur l'appli mobile, appuyer 3 secondes sur le bouton OK de la tondeuse, renseigner le n° de série et le code WIFI correspondant)
+
+>Version mosquitto
+Les versions mosquitto 1.3.x et antérieures ne sont pas compatibles avec le plugin. Le script d'installation (dépendances) doit pouvoir installer une version plus récente, toutefois il se peut que certaines distributions ne soient pas prises en compte. 
+Dans ce cas là, vous pouvez tenter de la mettre à jour manuellement et si possible m'informer afin que je puisse mettre à jour le script d'installation.
+
 
 
 ## Fonctionnement détaillé
