@@ -29,6 +29,24 @@ echo 10 > /tmp/worxLandroidS_dep
 apt-get update
 echo 30 > /tmp/worxLandroidS_dep
 apt-get -y install mosquitto mosquitto-clients libmosquitto-dev
+
+#si version est toujours 1.3 alors on essaye de compiler une version plus récente
+version=`mosquitto -h | grep version 1.3`
+if [ [ -n version ];then
+ if [ `lsb_release -i -s` == "Debian" ]; then
+   wget http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key
+   apt-key add mosquitto-repo.gpg.key
+   cd /etc/apt/sources.list.d/
+   if [ `lsb_release -c -s` == "jessie" ]; then
+    wget http://repo.mosquitto.org/debian/mosquitto-jessie.list
+    rm /etc/apt/sources.list.d/mosquitto-jessie.list
+    cp -r mosquitto-jessie.list /etc/apt/sources.list.d/mosquitto-jessie.list
+   fi
+  fi
+ fi
+
+
+
 echo 60 > /tmp/worxLandroidS_dep
 
 if [[ -d "/etc/php5/" ]]; then
@@ -66,7 +84,6 @@ else
     service apache2 restart
   fi
 fi
-mosquitto -h | grep version
 
 rm /tmp/worxLandroidS_dep
 
