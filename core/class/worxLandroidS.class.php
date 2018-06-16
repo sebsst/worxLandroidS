@@ -108,30 +108,47 @@ class worxLandroidS extends eqLogic {
     $cron->halt();
   }
 
-  public static function dependancy_info() {
-    $return = array();
-    $return['log'] = 'worxLandroidS_dep';
-    $return['state'] = 'nok';
-    $cmd = "dpkg -l | grep mosquitto";
-    exec($cmd, $output, $return_var);
-    //lib PHP exist
-    $libphp = extension_loaded('mosquitto');
-    if ($output[0] != "" && $libphp) {
-      $return['state'] = 'ok';
+  /**
+     * Provides dependancy information
+     */
+    public static function dependancy_info() {
+        if (!isset(self::$_depLogFile))
+            self::$_depLogFile = __CLASS__ . '_dep';
+        if (!isset(self::$_depProgresFile))
+            self::$_depProgressFile = jeedom::getTmpFolder(__CLASS__) . '/progress_dep.txt';
+        $return = array();
+        $return['log'] = log::getPathToLog(self::$_depLogFile);
+        $return['progress_file'] = self::$_depProgressFile;
+        // get number of mosquitto packages installed (should be 2 or 3 at least depending
+        // on the installMosquitto config parameter)
+        $mosq = exec(system::get('cmd_check') . 'mosquitto | wc -l');
+        $minMosq = config::byKey('installMosquitto', 'worxLandroidS', 1) ? 3 : 2;
+        // is lib PHP exists?
+        $libphp = extension_loaded('mosquitto');
+        // build the state status; if nok log debug information
+        if ($mosq >= $minMosq && $libphp) {
+            $return['state'] = 'ok';
+        }
+        else {
+            $return['state'] = 'nok';
+            log::add('worxLandroidS', 'debug', 'dependancy_info: NOK');
+            log::add('worxLandroidS', 'debug', '   * Nb of mosquitto related packaged installed: ' . $mosq .
+				       ' (shall be greater equal than ' . $minMosq . ')');
+            log::add('worxLandroidS', 'debug', '   * Mosquitto extension loaded: ' . $libphp);
+        }
+        return $return;
     }
-    return $return;
-  }
-
-  public static function dependancy_install() {
-    log::add('worxLandroidS','info','Installation des dépéndances');
-    $resource_path = realpath(dirname(__FILE__) . '/../../resources');
-
-
-
-    passthru('sudo /bin/bash ' . $resource_path . '/install.sh ' . $resource_path . ' > ' . log::getPathToLog('worxLandroidS_dep') . ' 2>&1 &');
-    return true;
-  }
-
+    /**
+     * Provides dependancy installation script
+     */
+    public static function dependancy_install() {
+        log::add('worxLandroidS', 'info', 'Installation des dépendances, voir log dédié (' . self::$_depLogFile . ')');
+        log::remove(self::$_depLogFile);
+        return array(
+            'script' => dirname(__FILE__) . '/../../resources/install.sh ' .
+                      self::$_depProgressFile . ' ' . config::byKey('installMosquitto', 'worxLandroidS', 1),
+            'log' => log::getPathToLog(self::$_depLogFile));
+    }
   public static function daemon() {
 
    $resource_path = realpath(dirname(__FILE__) . '/../../resources/');
