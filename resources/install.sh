@@ -35,7 +35,7 @@ version=`mosquitto -h | grep "version 1.4.10"`
 if [ [ -n version ];then
  if [ `lsb_release -i -s` == "Debian" ]; then
 
-   if [ `lsb_release -c -s` == "jessie" ]; then
+  # if [ `lsb_release -c -s` == "jessie" ]; then
 
    #  sudo apt-get -y install build-essential python quilt devscripts python-setuptools python3 libssl-dev cmake libc-ares-dev uuid-dev daemon
      sudo apt-get install cmake libssl1.0-dev 
@@ -49,7 +49,7 @@ if [ [ -n version ];then
      sudo make install
 
 
-   fi
+   #fi
   fi
  fi
 
