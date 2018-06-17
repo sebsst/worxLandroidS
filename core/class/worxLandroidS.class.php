@@ -53,7 +53,7 @@ class worxLandroidS extends eqLogic {
 	  
        // $elogics = array();
 
-       worxLandroidS::checkMowingTime();	  	
+       //worxLandroidS::checkMowingTime();	  	
   }
 
 	
