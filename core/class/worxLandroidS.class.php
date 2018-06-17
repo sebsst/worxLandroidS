@@ -46,7 +46,7 @@ class worxLandroidS extends eqLogic {
 	  
        // $elogics = array();
 
-       worxLandroid::refresh_values();	  	
+       worxLandroidS::refresh_values();	  	
   }
 
   public static function cron5() {
