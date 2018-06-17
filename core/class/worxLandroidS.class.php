@@ -77,7 +77,7 @@ class worxLandroidS extends eqLogic {
 		        config::save('mowingTime', '0' ,'worxLandroidS');
                         log::add('worxLandroidS', 'debug', 'mower sleeping ');
 	    
-		        if(config::byKey('status','worxLandroidS') == '1'){self::$_client->disconnect();}
+		        if(config::byKey('status','worxLandroidS') == '1' && isset($_client) ){self::$_client->disconnect();}
 		 
 		    }
 		    else { config::save('mowingTime', '1' ,'worxLandroidS'); }
