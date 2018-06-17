@@ -45,7 +45,21 @@ class worxLandroidS extends eqLogic {
   public static function cron30() {
 	  
        // $elogics = array();
-        foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
+
+       worxLandroid::refresh_values();	  	
+  }
+
+  public static function cron5() {
+	  
+       // $elogics = array();
+
+       worxLandroid::refresh_values();	  	
+  }
+	
+  
+  public static function refresh_values() {
+
+	        foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
 		if ($eqpt->getIsEnable() == true){
 		    $i = date('w');
 	            $start = $eqpt->getCmd(null, 'Planning/startTime/' . $i);
@@ -71,9 +85,11 @@ class worxLandroidS extends eqLogic {
 		
 		}	  
 	 }
-  }
-     	
-
+	  
+	  
+  }	  
+	
+	
 
   public static function deamon_info() {
     $return = array();
