@@ -80,14 +80,14 @@ class worxLandroidS extends eqLogic {
 		        if(config::byKey('status','worxLandroidS') == '1'){self::$_client->disconnect();}
 		 
 		    }
-		    else { config::save('mowingTime', '1' ,'worxLandroidS');
+		    else { config::save('mowingTime', '1' ,'worxLandroidS'); }
 		
 		}	  
 	 }
 	  
 	  
 	  
-       worxLandroidS::refresh_values();	  	
+	
   }
 	
   
