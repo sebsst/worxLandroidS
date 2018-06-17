@@ -417,10 +417,10 @@ class worxLandroidS extends eqLogic {
       $start_time = time();
 	      while (true) { 
 		      self::$_client->loop(1);		   
-		      if ((time() - $start_time) > 45) { 
-	   log::add('worxLandroidS', 'debug', 'Timeout reached');
-			return false;			       
-		      }
+//		      if ((time() - $start_time) > 45) { 
+//	   log::add('worxLandroidS', 'debug', 'Timeout reached');
+//			return false;			       
+//		      }
 			      
 		   }
 		//	for ($i = 0; $i < 12; $i++) {
@@ -953,6 +953,11 @@ schedule: TimePeriod[];
 	    self::connect_and_publish($client, $_message); 
 	  } else {
 	    self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", $_message, 0, 0);
+		for ($i = 0; $i < 100; $i++) {
+                    // Loop around to permit the library to do its work
+                    $_client->loop(1);
+                        }
+
 	  }
 		  
 	  
