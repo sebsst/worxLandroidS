@@ -953,9 +953,10 @@ schedule: TimePeriod[];
 	    self::connect_and_publish($client, $_message); 
 	  } else {
 	    self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", $_message, 0, 0);
-		for ($i = 0; $i < 100; $i++) {
+		for ($i = 0; $i < 10; $i++) {
                     // Loop around to permit the library to do its work
                     $_client->loop(1);
+			sleep(1);
                         }
 
 	  }
