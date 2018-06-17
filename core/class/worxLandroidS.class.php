@@ -53,6 +53,40 @@ class worxLandroidS extends eqLogic {
 	  
        // $elogics = array();
 
+       worxLandroidS::checkMowingTime();	  	
+  }
+
+	
+  public static function checkMowingTime() {
+	  
+       // $elogics = array();
+
+	foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
+	  if ($eqpt->getIsEnable() == true){
+		    $i = date('w');
+	            $start = $eqpt->getCmd(null, 'Planning/startTime/' . $i);
+                    $startTime = is_object($start) ? $start->execCmd() : '';
+                    $dur = $eqpt->getCmd(null, 'Planning/duration/' . $i);	
+                    $duration = is_object($dur) ? $dur->execCmd() : '';         
+	           
+	            $initDate = DateTime::createFromFormat('H:i', $startTime);
+		    $initDate->add(new DateInterval("PT".$duration."M")); 
+		    $endTime = $initDate->format("H:i");
+	// refresh value each hours if mower is sleeping at home :-)
+		    if($startTime == '00:00' or $starTime > date('H:i') or date('H:i') > $endTime) {
+		        config::save('mowingTime', '0' ,'worxLandroidS');
+                        log::add('worxLandroidS', 'debug', 'mower sleeping ');
+	    
+		        if(config::byKey('status','worxLandroidS') == '1'){self::$_client->disconnect();}
+		 
+		    }
+		    else { config::save('mowingTime', '1' ,'worxLandroidS');
+		
+		}	  
+	 }
+	  
+	  
+	  
        worxLandroidS::refresh_values();	  	
   }
 	
@@ -435,7 +469,7 @@ class worxLandroidS extends eqLogic {
   public static function message($message) {
     //self::$_client->exitloop();
     //self::$_client->unsubscribe($message->topic);
-    if( config::byKey('status','worxLandroidS') == '1'){
+    if( config::byKey('status','worxLandroidS') == '1' && config::byKey('mowingTime','worxLandroidS') == '0'){
 	  self::$_client->disconnect();  }
 
   //  if(isset(self::$_client_pub){ self::$_client_pub->disconnect(); }
@@ -914,8 +948,14 @@ schedule: TimePeriod[];
 	  
 	  
 	  $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
-          $client = new Mosquitto\Client($mosqId, true);
-	  self::connect_and_publish($client, $_message);
+          if ( config::byKey('mowingTime', 'worxLandroidS') == '0' ){
+	    $client = new Mosquitto\Client($mosqId, true);
+	    self::connect_and_publish($client, $_message); 
+	  } else {
+	    self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", $_message, 0, 0);
+	  }
+		  
+	  
 	  
   /*
 	  
