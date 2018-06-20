@@ -63,7 +63,7 @@ echo 60 > ${PROGRESS_FILE}
 mosquitto -h | grep "version"
 version=`mosquitto -h | grep "version 1.4"`
 if [ -n "$version" ]; then
-# if [ `lsb_release -i -s` == "Debian" ] || [ `lsb_release -i -s` == "Raspian" ]; then
+ if [ `lsb_release -i -s` == "Debian" ] || [ `lsb_release -i -s` == "Raspian" ]; then
 
 #   #  sudo apt-get -y install build-essential python quilt devscripts python-setuptools python3 libssl-dev cmake libc-ares-dev uuid-dev daemon
      echo "La version de mosquitto $version n'est pas compatible. tentative d'installation d'une version plus récente"
@@ -80,7 +80,7 @@ if [ -n "$version" ]; then
      service mosquitto restart
   
 
-#  fi
+  fi
  fi
 
 
