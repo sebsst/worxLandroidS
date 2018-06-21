@@ -73,7 +73,7 @@ class worxLandroidS extends eqLogic {
 		    $initDate->add(new DateInterval("PT".$duration."M")); 
 		    $endTime = $initDate->format("H:i");
 	// refresh value each hours if mower is sleeping at home :-)
-		    if($startTime == '00:00' or $starTime > date('H:i') or date('H:i') > $endTime) {
+		    if($startTime == '00:00' or $startTime > date('H:i') or date('H:i') > $endTime) {
 		        config::save('mowingTime', '0' ,'worxLandroidS');
                         log::add('worxLandroidS', 'debug', 'mower sleeping ');
 	    
@@ -104,8 +104,8 @@ class worxLandroidS extends eqLogic {
 	            $initDate = DateTime::createFromFormat('H:i', $startTime);
 		    $initDate->add(new DateInterval("PT".$duration."M")); 
 		    $endTime = $initDate->format("H:i");
-	// refresh value each hours if mower is sleeping at home :-)
-		    if($startTime == '00:00' or $starTime > date('H:i') or date('H:i') > $endTime) {
+	// refresh value each 30 minutes if mower is sleeping at home :-)
+		    if($startTime == '00:00' or $startTime > date('H:i') or date('H:i') > $endTime) {
 		        config::save('realTime', '0' ,'worxLandroidS');
                         log::add('worxLandroidS', 'debug', 'mower sleeping ');
 	    
@@ -418,7 +418,7 @@ class worxLandroidS extends eqLogic {
 	      while (true) { 
 		      self::$_client->loop(1);		   
 		      if ((time() - $start_time) > 45) { 
-	   log::add('worxLandroidS', 'debug', 'Timeout reached');
+	               log::add('worxLandroidS', 'debug', 'Timeout reached');
 			return false;			       
 		      }
 			      
