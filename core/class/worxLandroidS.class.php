@@ -45,8 +45,24 @@ class worxLandroidS extends eqLogic {
   public static function cron30() {
 	  
        // $elogics = array();
-        foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
-		if ($eqpt->getIsEnable() == true){
+
+       worxLandroidS::refresh_values();	  	
+  }
+
+  public static function cron5() {
+	  
+       // $elogics = array();
+
+       //worxLandroidS::checkMowingTime();	  	
+  }
+
+	
+  public static function checkMowingTime() {
+	  
+       // $elogics = array();
+
+	foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
+	  if ($eqpt->getIsEnable() == true){
 		    $i = date('w');
 	            $start = $eqpt->getCmd(null, 'Planning/startTime/' . $i);
                     $startTime = is_object($start) ? $start->execCmd() : '';
@@ -57,19 +73,57 @@ class worxLandroidS extends eqLogic {
 		    $initDate->add(new DateInterval("PT".$duration."M")); 
 		    $endTime = $initDate->format("H:i");
 	// refresh value each hours if mower is sleeping at home :-)
-		  //  if($startTime == '00:00' or $starTime > date('H:i') or date('H:i') > $endTime) {
+		    if($startTime == '00:00' or $startTime > date('H:i') or date('H:i') > $endTime) {
+		        config::save('mowingTime', '0' ,'worxLandroidS');
+                        log::add('worxLandroidS', 'debug', 'mower sleeping ');
+	    
+		        if(config::byKey('status','worxLandroidS') == '1' && isset($_client) ){self::$_client->disconnect();}
+		 
+		    }
+		    else { config::save('mowingTime', '1' ,'worxLandroidS'); }
+		
+		}	  
+	 }
+	  
+	  
+	  
+	
+  }
+	
+  
+  public static function refresh_values() {
+
+	        foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
+		if ($eqpt->getIsEnable() == true){
+		    $i = date('w');
+	            $start = $eqpt->getCmd(null, 'Planning/startTime/' . $i);
+                    $startTime = is_object($start) ? $start->execCmd() : '';
+                    $dur = $eqpt->getCmd(null, 'Planning/duration/' . $i);	
+                    $duration = is_object($dur) ? $dur->execCmd() : '';         
+	           
+	            $initDate = DateTime::createFromFormat('H:i', $startTime);
+		    $initDate->add(new DateInterval("PT".$duration."M")); 
+		    $endTime = $initDate->format("H:i");
+	// refresh value each 30 minutes if mower is sleeping at home :-)
+		    if($startTime == '00:00' or $startTime > date('H:i') or date('H:i') > $endTime) {
+		        config::save('realTime', '0' ,'worxLandroidS');
+                        log::add('worxLandroidS', 'debug', 'mower sleeping ');
+	    
+			    
 		    if(config::byKey('status','worxLandroidS') == '1'){self::$_client->disconnect();}
 		       $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
                        $client = new Mosquitto\Client($mosqId, true);
                        self::connect_and_publish($client, '{}');	 
 			
-		  //  }
+		    }
 		
 		}	  
 	 }
-  }
-     	
-
+	  
+	  
+  }	  
+	
+	
 
   public static function deamon_info() {
     $return = array();
@@ -364,7 +418,7 @@ class worxLandroidS extends eqLogic {
 	      while (true) { 
 		      self::$_client->loop(1);		   
 		      if ((time() - $start_time) > 45) { 
-	   log::add('worxLandroidS', 'debug', 'Timeout reached');
+	               log::add('worxLandroidS', 'debug', 'Timeout reached');
 			return false;			       
 		      }
 			      
@@ -415,7 +469,7 @@ class worxLandroidS extends eqLogic {
   public static function message($message) {
     //self::$_client->exitloop();
     //self::$_client->unsubscribe($message->topic);
-    if( config::byKey('status','worxLandroidS') == '1'){
+    if( config::byKey('status','worxLandroidS') == '1'){ //&& config::byKey('mowingTime','worxLandroidS') == '0'){
 	  self::$_client->disconnect();  }
 
   //  if(isset(self::$_client_pub){ self::$_client_pub->disconnect(); }
@@ -888,14 +942,22 @@ schedule: TimePeriod[];
 		$_message = '{"rd":'.$_message.'}';
 	        log::add('worxLandroidS', 'debug', 'Envoi du message rain delay: ' . $_message);
 	}
-
-
-	  
-	  
-	  
+  
 	  $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
-          $client = new Mosquitto\Client($mosqId, true);
-	  self::connect_and_publish($client, $_message);
+         // if ( config::byKey('mowingTime', 'worxLandroidS') == '0' ){
+	    $client = new Mosquitto\Client($mosqId, true);
+	    self::connect_and_publish($client, $_message); 
+	  //} else {
+	  //  self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", $_message, 0, 0);
+	  //	for ($i = 0; $i < 10; $i++) {
+          //          // Loop around to permit the library to do its work
+          //          $_client->loop(1);
+	//		sleep(1);
+          //              }
+          //
+	  //}
+		  
+	  
 	  
   /*
 	  
