@@ -505,7 +505,7 @@ class worxLandroidS extends eqLogic {
       $elogic->setName(config::byKey('landroid_name', 'worxLandroidS', 'LandroidS'));
       //$elogic->setName('LandroidS-'. $json2_data->dat->mac);
       //$elogic->setConfiguration('topic', $nodeid);
-      //$elogic->setConfiguration('type', $type);
+      $elogic->setConfiguration('errorRetryMode', true);
 // ajout des actions par défaut
       log::add('worxLandroidS', 'info', 'Saving device ' . $nodeid);
       
