@@ -49,12 +49,12 @@ class worxLandroidS extends eqLogic {
        worxLandroidS::refresh_values();	  	
   }
 
-  public static function cron5() {
+ // public static function cron5() {
 	  
        // $elogics = array();
 
        //worxLandroidS::checkMowingTime();	  	
-  }
+  //}
 
 	
   public static function checkMowingTime() {
