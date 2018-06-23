@@ -643,7 +643,7 @@ schedule: TimePeriod[];
 	   $elogic->setConfiguration('retryNr', $retryNr);	
 	   $elogic->save();
 		sleep(15);
-           self::connect_and_publish($_client, '{}'); 
+           worxLandroidS::refresh_values();	  
 	}    else {
    	    $elogic->setConfiguration('retryNr', 0);	
 	self::newInfo($elogic,'errorCode',$json2_data->dat->le,'numeric',1);
