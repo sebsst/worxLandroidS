@@ -630,7 +630,10 @@ schedule: TimePeriod[];
 //        log::add('worxLandroidS', 'Debug', ' : ' . $json2_data->cfg->sc->m. ' pour information : ' . $cmdId);
 
 	 $retryMode = $elogic->getConfiguration('errorRetryMode', false);
-	//if($json2_data->dat->le != '0' && $retryMode == true){ break;}    
+	if($json2_data->dat->le != 1 and $retryMode == false){ 
+        log::add('worxLandroidS', 'Debug', ' error wait for retry err code : ' . $json2_data->dat->le);
+	
+	}    else {
         if( config::byKey('status','worxLandroidS') == '1'){ //&& config::byKey('mowingTime','worxLandroidS') == '0'){
 	   self::$_client->disconnect();  }
 	self::newInfo($elogic,'errorCode',$json2_data->dat->le,'numeric',1);
@@ -679,8 +682,10 @@ schedule: TimePeriod[];
         self::newInfo($elogic,'Planning/Thursday/Starttime',$json2_data->cfg->sc->d[4][0],'string',1);
         self::newInfo($elogic,'Planning/Friday/Starttime',$json2_data->cfg->sc->d[5][0],'string',1);
         self::newInfo($elogic,'Planning/Saturday/Starttime',$json2_data->cfg->sc->d[6][0],'string',1);
+	
   */
-    }
+	}
+      }
 	  
 	  $elogic->save();
 	  $elogic->refreshWidget();
