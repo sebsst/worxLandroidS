@@ -630,7 +630,7 @@ schedule: TimePeriod[];
 //        log::add('worxLandroidS', 'Debug', ' : ' . $json2_data->cfg->sc->m. ' pour information : ' . $cmdId);
 
 	 $retryMode = $elogic->getConfiguration('errorRetryMode', false);
-	if($json2_data->dat->le != 1 and $retryMode == false){ 
+	if($json2_data->dat->le != 0 and $retryMode == false){ 
         log::add('worxLandroidS', 'Debug', ' error wait for retry err code : ' . $json2_data->dat->le);
 	
 	}    else {
