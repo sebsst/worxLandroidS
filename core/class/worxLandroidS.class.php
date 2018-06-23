@@ -470,8 +470,6 @@ class worxLandroidS extends eqLogic {
   public static function message($message) {
     //self::$_client->exitloop();
     //self::$_client->unsubscribe($message->topic);
-    if( config::byKey('status','worxLandroidS') == '1'){ //&& config::byKey('mowingTime','worxLandroidS') == '0'){
-	  self::$_client->disconnect();  }
 
   //  if(isset(self::$_client_pub){ self::$_client_pub->disconnect(); }
    // unset(self::$_client);	  
@@ -631,9 +629,15 @@ schedule: TimePeriod[];
 //        log::add('worxLandroidS', 'Debug', 'Langue : ' . $json2_data->cfg->lg. ' pour information : ' . $cmdId);
 //        log::add('worxLandroidS', 'Debug', ' : ' . $json2_data->cfg->sc->m. ' pour information : ' . $cmdId);
 
-        self::newInfo($elogic,'errorCode',$json2_data->dat->le,'numeric',1);
+	 $retryMode = $elogic->getConfiguration('errorRetryMode', false);
+	if($json2_data->dat->le != '0' && $retryMode == true) break;    
+        if( config::byKey('status','worxLandroidS') == '1'){ //&& config::byKey('mowingTime','worxLandroidS') == '0'){
+	   self::$_client->disconnect();  }
+	self::newInfo($elogic,'errorCode',$json2_data->dat->le,'numeric',1);
         self::newInfo($elogic,'errorDescription',self::getErrorDescription($json2_data->dat->le),'string',1);
-        self::newInfo($elogic,'statusCode',$json2_data->dat->ls,'numeric',1);
+
+	    
+	self::newInfo($elogic,'statusCode',$json2_data->dat->ls,'numeric',1);
         self::newInfo($elogic,'statusDescription',self::getStatusDescription($json2_data->dat->ls),'string',1);
         self::newInfo($elogic,'batteryLevel',$json2_data->dat->bt->p,'numeric',1);
         self::newInfo($elogic,'langue',$json2_data->cfg->lg,'string',0);
