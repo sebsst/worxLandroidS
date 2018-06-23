@@ -637,12 +637,12 @@ schedule: TimePeriod[];
 	$retryNr = $elogic->getConfiguration('retryNr', 0);	
 	$errorCode = 1; //$json2_data->dat->le ;  
 	
-	if($errorCode != 0 and $retryMode == true && $retryNr < 1){ 
+	if($errorCode != 0 and $retryMode && $retryNr < 1){ 
            log::add('worxLandroidS', 'Debug', ' error wait for retry err code : ' . $json2_data->dat->le);
 	   $retryNr++;   
 	   $elogic->setConfiguration('retryNr', $retryNr);	
 	   $elogic->save();
-		sleep(15);
+           sleep(15);
            worxLandroidS::refresh_values();	  
 	}    else {
    	    $elogic->setConfiguration('retryNr', 0);	
