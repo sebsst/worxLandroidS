@@ -637,7 +637,8 @@ schedule: TimePeriod[];
            log::add('worxLandroidS', 'Debug', ' error wait for retry err code : ' . $json2_data->dat->le);
 	   $retryNr++;   
 	   $elogic->setConfiguration('retryNr', $retryNr);	
-	
+	   sleep(15);
+           self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", '{}', 0, 0);
 	}    else {
    	    $elogic->setConfiguration('retryNr', 0);	
 
