@@ -629,21 +629,23 @@ schedule: TimePeriod[];
 //        log::add('worxLandroidS', 'Debug', 'Langue : ' . $json2_data->cfg->lg. ' pour information : ' . $cmdId);
 //        log::add('worxLandroidS', 'Debug', ' : ' . $json2_data->cfg->sc->m. ' pour information : ' . $cmdId);
 
-	$retryMode = $elogic->getConfiguration('errorRetryMode', false);
-	$retryNr = $elogic->getConfiguration('retryNr', 0);	
 	    
+	if( config::byKey('status','worxLandroidS') == '1'){ //&& config::byKey('mowingTime','worxLandroidS') == '0'){
+	   self::$_client->disconnect();  }
+
+	$retryMode = $elogic->getConfiguration('errorRetryMode', true);
+	$retryNr = $elogic->getConfiguration('retryNr', 0);	
+	$errorCode = 1; //$json2_data->dat->le ;  
 	
-	if($json2_data->dat->le != '0' and $retryMode == true && $retryNr < 1){ 
+	if($errorCode != 0 and $retryMode == true && $retryNr < 1){ 
            log::add('worxLandroidS', 'Debug', ' error wait for retry err code : ' . $json2_data->dat->le);
 	   $retryNr++;   
 	   $elogic->setConfiguration('retryNr', $retryNr);	
-	   sleep(15);
-           self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", '{}', 0, 0);
+	   $elogic->save();
+		sleep(15);
+           self::connect_and_publish($_client, '{}'); 
 	}    else {
    	    $elogic->setConfiguration('retryNr', 0);	
-
-	if( config::byKey('status','worxLandroidS') == '1'){ //&& config::byKey('mowingTime','worxLandroidS') == '0'){
-	   self::$_client->disconnect();  }
 	self::newInfo($elogic,'errorCode',$json2_data->dat->le,'numeric',1);
         self::newInfo($elogic,'errorDescription',self::getErrorDescription($json2_data->dat->le),'string',1);
 
