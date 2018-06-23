@@ -95,6 +95,7 @@ class worxLandroidS extends eqLogic {
 
 	        foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
 		if ($eqpt->getIsEnable() == true){
+	         if(config::byKey('status','worxLandroidS') == '0'){ //on se connecte seulement si on est pas déjà connecté
 		    $i = date('w');
 	            $start = $eqpt->getCmd(null, 'Planning/startTime/' . $i);
                     $startTime = is_object($start) ? $start->execCmd() : '';
@@ -114,9 +115,9 @@ class worxLandroidS extends eqLogic {
 		       $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
                        $client = new Mosquitto\Client($mosqId, true);
                        self::connect_and_publish($client, '{}');	 
-			
+		  
 		    }
-		
+		 }
 		}	  
 	 }
 	  
