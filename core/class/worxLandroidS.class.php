@@ -630,7 +630,7 @@ schedule: TimePeriod[];
 //        log::add('worxLandroidS', 'Debug', ' : ' . $json2_data->cfg->sc->m. ' pour information : ' . $cmdId);
 
 	 $retryMode = $elogic->getConfiguration('errorRetryMode', false);
-	if($json2_data->dat->le != '0' && $retryMode == true){ break;}    
+	//if($json2_data->dat->le != '0' && $retryMode == true){ break;}    
         if( config::byKey('status','worxLandroidS') == '1'){ //&& config::byKey('mowingTime','worxLandroidS') == '0'){
 	   self::$_client->disconnect();  }
 	self::newInfo($elogic,'errorCode',$json2_data->dat->le,'numeric',1);
