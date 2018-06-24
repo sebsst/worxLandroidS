@@ -635,15 +635,18 @@ schedule: TimePeriod[];
 
 	$retryMode = $elogic->getConfiguration('errorRetryMode', true);
 	$retryNr = $elogic->getConfiguration('retryNr', 0);	
-	$errorCode = 1; //$json2_data->dat->le ;  
+	$errorCode = $json2_data->dat->le ;  
 	
 	if($errorCode != 0 and $retryMode && $retryNr < 1){ 
            log::add('worxLandroidS', 'Debug', ' error wait for retry err code : ' . $json2_data->dat->le);
 	   $retryNr++;   
 	   $elogic->setConfiguration('retryNr', $retryNr);	
 	   $elogic->save();
-           sleep(15);
-           worxLandroidS::refresh_values();	  
+           // retry after 15seconds
+	   sleep(15);
+	   $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
+           $client = new Mosquitto\Client($mosqId, true);
+           self::connect_and_publish($client, '{}');	     
 	}    else {
    	    $elogic->setConfiguration('retryNr', 0);	
 	self::newInfo($elogic,'errorCode',$json2_data->dat->le,'numeric',1);
