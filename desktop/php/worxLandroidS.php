@@ -122,6 +122,8 @@ $eqLogics = eqLogic::byType('worxLandroidS');
               <div class="col-sm-8">
                 <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isEnable" checked/>{{Activer}}</label>
                 <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isVisible" checked/>{{Visible}}</label>
+                <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="errorRetryMode" checked/>{{retry Mode}}</label>
+
               </div>
             </div>
 
@@ -143,11 +145,11 @@ $eqLogics = eqLogic::byType('worxLandroidS');
         <thead>
           <tr>
             <th style="width: 50px;">#</th>
-            <th style="width: 150px;">{{Nom}}</th>
+            <th style="width: 350px;">{{Nom}}</th>
             <th style="width: 120px;">{{Sous-Type}}</th>
-            <th style="width: 400px;">{{Valeur}}</th>
-            <th style="width: 300px;">{{Payload}}</th>
-            <th style="width: 150px;">{{Paramètres}}</th>
+            <th style="width: 250px;">{{Valeur}}</th>
+            <th style="width: 150px;">{{Paramètres}}</th>            
+            <th style="width: 150px;">{{Payload}}</th>
             <th style="width: 150px;">{{Options}}</th>
 
             <th style="width: 80px;"></th>

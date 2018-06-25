@@ -49,12 +49,12 @@ class worxLandroidS extends eqLogic {
        worxLandroidS::refresh_values();	  	
   }
 
-  public static function cron5() {
+ // public static function cron5() {
 	  
        // $elogics = array();
 
        //worxLandroidS::checkMowingTime();	  	
-  }
+  //}
 
 	
   public static function checkMowingTime() {
@@ -470,8 +470,6 @@ class worxLandroidS extends eqLogic {
   public static function message($message) {
     //self::$_client->exitloop();
     //self::$_client->unsubscribe($message->topic);
-    if( config::byKey('status','worxLandroidS') == '1'){ //&& config::byKey('mowingTime','worxLandroidS') == '0'){
-	  self::$_client->disconnect();  }
 
   //  if(isset(self::$_client_pub){ self::$_client_pub->disconnect(); }
    // unset(self::$_client);	  
@@ -505,7 +503,7 @@ class worxLandroidS extends eqLogic {
       $elogic->setName(config::byKey('landroid_name', 'worxLandroidS', 'LandroidS'));
       //$elogic->setName('LandroidS-'. $json2_data->dat->mac);
       //$elogic->setConfiguration('topic', $nodeid);
-      //$elogic->setConfiguration('type', $type);
+      $elogic->setConfiguration('errorRetryMode', true);
 // ajout des actions par défaut
       log::add('worxLandroidS', 'info', 'Saving device ' . $nodeid);
       
@@ -631,9 +629,31 @@ schedule: TimePeriod[];
 //        log::add('worxLandroidS', 'Debug', 'Langue : ' . $json2_data->cfg->lg. ' pour information : ' . $cmdId);
 //        log::add('worxLandroidS', 'Debug', ' : ' . $json2_data->cfg->sc->m. ' pour information : ' . $cmdId);
 
-        self::newInfo($elogic,'errorCode',$json2_data->dat->le,'numeric',1);
+	    
+	if( config::byKey('status','worxLandroidS') == '1'){ //&& config::byKey('mowingTime','worxLandroidS') == '0'){
+	   self::$_client->disconnect();  }
+
+	$retryMode = $elogic->getConfiguration('errorRetryMode', true);
+	$retryNr = $elogic->getConfiguration('retryNr', 0);	
+	$errorCode = $json2_data->dat->le ;  
+	
+	if($errorCode != 0 and $retryMode && $retryNr < 1){ 
+           log::add('worxLandroidS', 'Debug', ' error wait for retry err code : ' . $json2_data->dat->le);
+	   $retryNr++;   
+	   $elogic->setConfiguration('retryNr', $retryNr);	
+	   $elogic->save();
+           // retry after 15seconds
+	   sleep(15);
+	   $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
+           $client = new Mosquitto\Client($mosqId, true);
+           self::connect_and_publish($client, '{}');	     
+	}    else {
+   	    $elogic->setConfiguration('retryNr', 0);	
+	self::newInfo($elogic,'errorCode',$json2_data->dat->le,'numeric',1);
         self::newInfo($elogic,'errorDescription',self::getErrorDescription($json2_data->dat->le),'string',1);
-        self::newInfo($elogic,'statusCode',$json2_data->dat->ls,'numeric',1);
+
+	    
+	self::newInfo($elogic,'statusCode',$json2_data->dat->ls,'numeric',1);
         self::newInfo($elogic,'statusDescription',self::getStatusDescription($json2_data->dat->ls),'string',1);
         self::newInfo($elogic,'batteryLevel',$json2_data->dat->bt->p,'numeric',1);
         self::newInfo($elogic,'langue',$json2_data->cfg->lg,'string',0);
@@ -675,8 +695,10 @@ schedule: TimePeriod[];
         self::newInfo($elogic,'Planning/Thursday/Starttime',$json2_data->cfg->sc->d[4][0],'string',1);
         self::newInfo($elogic,'Planning/Friday/Starttime',$json2_data->cfg->sc->d[5][0],'string',1);
         self::newInfo($elogic,'Planning/Saturday/Starttime',$json2_data->cfg->sc->d[6][0],'string',1);
+	
   */
-    }
+	}
+      }
 	  
 	  $elogic->save();
 	  $elogic->refreshWidget();
