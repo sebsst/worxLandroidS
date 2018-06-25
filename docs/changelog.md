@@ -2,6 +2,11 @@
 
 En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que la doc, les traductions et des corrections mineures
 
+## 25/06/2018
+
+- correction bug message sur cron30
+- nouvelle tentative en cas après 15 secondes pour éviter certaines fausses alertes
+
 ## 16/06/2018
 
 - modification du script d'installation pour tenter de résoudre les problème de version de mosquitto (version mini 1.4.1)
