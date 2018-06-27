@@ -1086,8 +1086,11 @@ public static $_widgetPossibility = array('custom' => array(
 				// transforme au format objet DateTime 
 				
 				$initDate = DateTime::createFromFormat('H:i', $replaceDay['#startTime#']);
+				if($replaceDay['#duration#'] != ''){
 				$initDate->add(new DateInterval("PT".$replaceDay['#duration#']."M")); 
 				$replaceDay['#endTime#'] = $initDate->format("H:i");
+				}
+				else { $replaceDay['#endTime#'] = '00:00'; }
 				
 				$replaceDay['#cutEdge#'] = is_object($cutEdge) ? $cutEdge->execCmd() : '';
 				if($replaceDay['#cutEdge#'] == '1')
@@ -1104,7 +1107,11 @@ public static $_widgetPossibility = array('custom' => array(
 					$replace['#todayDuration#'] = is_object($duration) ? $duration->execCmd() : '';
 					$replace['#today_on_daynum_id#'] = $cmdS->getId();
 					$replace['#today_off_daynum_id#'] = $cmdE->getId();
-					$replace['#todayEndTime#'] = $initDate->format("H:i");
+					if($replaceDay['#duration#'] != ''){
+					 $replace['#todayEndTime#'] = $initDate->format("H:i"); 
+					} else {$replace['#todayEndTime#'] = '00:00'; }
+					
+					
 					if($replace['#cutEdge#'] == '1')
 					{ $replace['#cutEdge#'] = 'Bord.';} 
 					$replace['#today#'] = $jour[$i];
