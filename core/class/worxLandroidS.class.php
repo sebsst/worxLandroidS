@@ -506,6 +506,7 @@ class worxLandroidS extends eqLogic {
       $elogic->setConfiguration('errorRetryMode', true);
 // ajout des actions par défaut
       log::add('worxLandroidS', 'info', 'Saving device ' . $nodeid);
+      message::add('worxLandroidS', 'Tondeuse ajoutée: ' . $elogic->getName(), null, null);	    
       
 	    // Advise the desktop page (javascript) that a new equipment has been addedv
 
