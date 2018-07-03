@@ -454,6 +454,10 @@ class worxLandroidS extends eqLogic {
 
   public static function disconnect( $r ) {
     log::add('worxLandroidS', 'debug', 'Déconnexion de Mosquitto avec code ' . $r);
+    if($r == '14'){
+	  message::add('worxLandroidS', "La version actuelle de mosquitto n'est pas compatible (version minimum 1.4 requise)");	    
+    }
+	
     config::save('status', '0',  'worxLandroidS');
   }
 
