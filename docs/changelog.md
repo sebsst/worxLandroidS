@@ -4,7 +4,8 @@ En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que l
 
 ## 03/07/2018
 
-- Ajout message création équipement
+- Ajout message création équipement 
+- Message en cas de version mosquitto non compatible
 - correction bug affichage zone de départ
 
 ## 25/06/2018
