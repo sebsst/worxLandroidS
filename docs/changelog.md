@@ -2,6 +2,12 @@
 
 En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que la doc, les traductions et des corrections mineures
 
+## 03/07/2018
+
+- Ajout message création équipement 
+- Message si version mosquitto non compatible
+- correction bug affichage zone de départ
+
 ## 25/06/2018
 
 - correction bug message sur cron30

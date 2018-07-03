@@ -454,6 +454,10 @@ class worxLandroidS extends eqLogic {
 
   public static function disconnect( $r ) {
     log::add('worxLandroidS', 'debug', 'Déconnexion de Mosquitto avec code ' . $r);
+    if($r == '14'){
+	  message::add('worxLandroidS', "Vous devez mettre à jour Mosquitto (version minimum 1.4 requise)");	    
+    }
+	
     config::save('status', '0',  'worxLandroidS');
   }
 
@@ -506,6 +510,7 @@ class worxLandroidS extends eqLogic {
       $elogic->setConfiguration('errorRetryMode', true);
 // ajout des actions par défaut
       log::add('worxLandroidS', 'info', 'Saving device ' . $nodeid);
+      message::add('worxLandroidS', 'Tondeuse ajoutée: ' . $elogic->getName(), null, null);	    
       
 	    // Advise the desktop page (javascript) that a new equipment has been addedv
 
@@ -674,10 +679,10 @@ schedule: TimePeriod[];
         self::newInfo($elogic,'batteryTemperature',$json2_data->dat->bt->t,'string',0);
         self::newInfo($elogic,'zonesList',$json2_data->dat->mz,'string',0);
 	//log::add('worxLandroidS', 'Debug', 'zone:' . $json2_data->cfg->mzv[$json2_data->dat->lz]+1 . ' / '.$json2_data->cfg->mz[1]);    
-	if ($json2_data->cfg->mz[1] != 0){
+//	if ($json2_data->cfg->mz[1] != 0){
 		// log::add('worxLandroidS', 'Debug', ' : zone' . $json2_data->cfg->mzv[$json2_data->dat->lz]);
         	self::newInfo($elogic,'currentZone',$json2_data->cfg->mzv[$json2_data->dat->lz]+1,'numeric',0);	    
-	}
+	//} 
 
 //        self::getStatusDescription($json2_data->dat->ls);
 
