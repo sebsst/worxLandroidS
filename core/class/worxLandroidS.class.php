@@ -806,7 +806,7 @@ schedule: TimePeriod[];
     $cmdlogic = worxLandroidSCmd::byEqLogicIdAndLogicalId($elogic->getId(),$cmdId);
 
     if (!is_object($cmdlogic)) {
-      //log::add('worxLandroidS', 'info', 'Cmdlogic n existe pas, creation');
+      log::add('worxLandroidS', 'info', 'Cmdlogic n existe pas, creation');
       $cmdlogic = new worxLandroidSCmd();
       $cmdlogic->setEqLogic_id($elogic->getId());
       $cmdlogic->setEqType('worxLandroidS');
@@ -823,7 +823,7 @@ schedule: TimePeriod[];
     }
 	  
 	  
-    //log::add('worxLandroidS', 'debug', 'Cmdlogic update'.$cmdId.$value);
+    log::add('worxLandroidS', 'debug', 'Cmdlogic update'.$cmdId.$value);
 
 	  if(strstr($cmdId,"Planning/startTime") && $value != '00:00' ){
    // log::add('worxLandroidS', 'debug', 'savedValue time'. $value);
