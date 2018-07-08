@@ -455,7 +455,7 @@ class worxLandroidS extends eqLogic {
   public static function disconnect( $r ) {
     log::add('worxLandroidS', 'debug', 'Déconnexion de Mosquitto avec code ' . $r);
 	  
-    self::newInfo($elogic,'LastMosquittoCode', $r,'numeric',1);	  
+    self::newInfo($this,'LastMosquittoCode', $r,'numeric',1);	  
     if($r == '14'){
 	  message::add('worxLandroidS', "Vous devez mettre à jour Mosquitto (version minimum 1.4 requise)");	    
     }
