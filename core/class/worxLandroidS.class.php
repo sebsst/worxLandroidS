@@ -1152,8 +1152,10 @@ public static $_widgetPossibility = array('custom' => array(
 	    else {
                $replace['#' . $cmd->getLogicalId() . '_visible#'] = 'display:none';		
 
-	    }    
-            $cmd_html .= $cmd->toHtml($_version, '', $replace['#cmd-background-color#']);
+	    }   
+		
+            if(	(strpos($cmd->getId() , 'Planning') !== 0){	
+            $cmd_html .= $cmd->toHtml($_version, '', $replace['#cmd-background-color#']);}
             	
             if ($cmd->getIsHistorized() == 1) {
                 $replace['#' . $cmd->getLogicalId() . '_history#'] = 'history cursor';
