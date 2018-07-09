@@ -1172,7 +1172,7 @@ public static $_widgetPossibility = array('custom' => array(
 		
 		$replace['#cmd#'] = $cmd_html;
 	
-		if($automaticWidget != true){
+		if($automaticWidget == true){
 			return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'worxMain', 'worxLandroidS')));
 		} else
 		{
