@@ -1154,7 +1154,7 @@ public static $_widgetPossibility = array('custom' => array(
 
 	    }   
 		
-            if(	(strpos($cmd->getId() , 'Planning') !== 0){	
+            if(	(strpos($cmd->getId() , 'Planning') === 0){} else {	
             $cmd_html .= $cmd->toHtml($_version, '', $replace['#cmd-background-color#']);}
             	
             if ($cmd->getIsHistorized() == 1) {
