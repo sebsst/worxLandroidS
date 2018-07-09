@@ -1062,6 +1062,8 @@ public static $_widgetPossibility = array('custom' => array(
       'border-radius' => true,
       'background-opacity' => true,
 )); 
+	
+	
 	public function toHtml($_version = 'dashboard') {
 		$jour = array("Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi");
 		$replace = $this->preToHtml($_version);
@@ -1151,9 +1153,8 @@ public static $_widgetPossibility = array('custom' => array(
                $replace['#' . $cmd->getLogicalId() . '_visible#'] = 'display:none';		
 
 	    }    
-		    
-
-		
+            $cmd_html .= $cmd->toHtml($_version, '', $replace['#cmd-background-color#']);
+            	
             if ($cmd->getIsHistorized() == 1) {
                 $replace['#' . $cmd->getLogicalId() . '_history#'] = 'history cursor';
             }
@@ -1162,7 +1163,8 @@ public static $_widgetPossibility = array('custom' => array(
             $replace['#' . $cmd->getLogicalId() . '_id#'] = $cmd->getId();
         }	
 		
-		
+		$replace['#cmd#'] = $cmd_html;
+	
 		
 		
 		return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'worxMain', 'worxLandroidS')));
