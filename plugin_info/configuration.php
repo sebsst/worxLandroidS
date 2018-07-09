@@ -42,6 +42,8 @@ if (!isConnect()) {
 							<input class="configKey form-control" data-l1key="passwd" type="password" placeholder="{{saisir le mot de passe}}">
 						</div>
 					</div>   
+	                                <label class="checkbox-inline"><input type="checkbox" class="configKey" data-l1key="automaticWidget" checked/>{{automatic Widget}}</label>
+
 
 	    <div class="form-group">
 		<label class="col-sm-4 control-label">{{Initialiser/réactualiser données cloud worx : }}</label>
