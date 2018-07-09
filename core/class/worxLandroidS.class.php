@@ -1160,7 +1160,7 @@ public static $_widgetPossibility = array('custom' => array(
 	    if($automaticWidget != true){
 		    
 		    $templ = $cmd->getTemplate('dashboard','');
-		     log::add('worxLandroidS', 'debug', 'template: ' . $templ );
+		     //log::add('worxLandroidS', 'debug', 'template: ' . $templ );
 		    if($templ == ''){
 		     $cmd->setTemplate('dashboard',$params['tpldesktop']?: 'badge');
 		    }
