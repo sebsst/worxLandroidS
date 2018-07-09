@@ -1159,6 +1159,10 @@ public static $_widgetPossibility = array('custom' => array(
 
 	    if($automaticWidget != true){
 		    
+		    $templ = $cmd->getTemplate('dashboard','');
+		    if($templ == ''){
+		     $cmd->setTemplate('dashboard',$params['tpldesktop']?: 'badge');
+		    }
 		    if(	substr_compare($cmd->getName(),'Planning', 0, 8)!=0){
 		    $cmd_html .= $cmd->toHtml($_version, '', $replace['#cmd-background-color#']);}
 	    }
