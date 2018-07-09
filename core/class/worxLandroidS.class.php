@@ -1065,6 +1065,8 @@ public static $_widgetPossibility = array('custom' => array(
 	
 	
 	public function toHtml($_version = 'dashboard') {
+		
+	        $automaticWidget = config::byKey('automaticWidget', 'worxLandroidS');
 		$jour = array("Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi");
 		$replace = $this->preToHtml($_version);
 		if (!is_array($replace)) {
@@ -1154,9 +1156,12 @@ public static $_widgetPossibility = array('custom' => array(
 
 	    }   
 		
-            if(	substr_compare($cmd->getName(),'Planning', 0, 8)!=0){
-            $cmd_html .= $cmd->toHtml($_version, '', $replace['#cmd-background-color#']);}
-            	
+
+	    if($automaticWidget != true){
+		    
+		    if(	substr_compare($cmd->getName(),'Planning', 0, 8)!=0){
+		    $cmd_html .= $cmd->toHtml($_version, '', $replace['#cmd-background-color#']);}
+	    }
             if ($cmd->getIsHistorized() == 1) {
                 $replace['#' . $cmd->getLogicalId() . '_history#'] = 'history cursor';
             }
@@ -1167,10 +1172,13 @@ public static $_widgetPossibility = array('custom' => array(
 		
 		$replace['#cmd#'] = $cmd_html;
 	
-		
-		
-		return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'worxMain', 'worxLandroidS')));
-
+		if($automaticWidget != true){
+			return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'worxMain', 'worxLandroidS')));
+		} else
+		{
+			return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'worxMainOwn', 'worxLandroidS')));
+	
+		}
 	}	
 	
 
