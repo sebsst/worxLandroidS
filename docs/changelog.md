@@ -2,6 +2,11 @@
 
 En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que la doc, les traductions et des corrections mineures
 
+## 09/07/2018
+
+- Possibilité de définir son propre widget pour les commandes de type infos pour permettre l'affichage de données supplémentaires
+- Modification des types d'info numériques (peut-être aussi fait manuellement ou en recréant l'équipement)
+
 ## 03/07/2018
 
 - Ajout message création équipement 

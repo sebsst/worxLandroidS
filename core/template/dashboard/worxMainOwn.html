@@ -10,24 +10,11 @@
       #batteryLevel#%</span>
  <br/>
 
-      <span style="font-size: 0.8em;" class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#lastCom#">
-      #lastDate# #lastTime#</span>
-    
-         <span  class="doc-#totalTime#" data-type="info" data-subtype="string" data-cmd_id="#totalTime#" style="font-size: 0.8em" >
-            
-         <div style="#totalDistance_visible#">
-             <br/>
-            Distance totale: #totalDistance# m en  #totalTime# minutes  <br/> </div>
-         <span style="#batteryChargeCycle_visible#">   
-            #batteryChargeCycle# cycles de charge batterie </span> </span> 
-    <span style=font-size: 1.2em;"class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#status#">
+    <span style="font-weight:bold;"> <br/> #cmd# </span></span>
   
-
-                              
+  
     <span style="font-weight:bold;#rainDelay_visible#"> <br/> Délai pluie: #rainDelay# mns</span></span>
-                                                      
     <span style="padding-left: 8px ;#rainDelay_visible#" >
-
     <a class="btn cmd" style="font-size: 0.8em;padding:1px;background-color:MidnightBlue " data-cmd_id="#rain_delay_0" title="raind_delay_0" onclick="jeedom.cmd.execute({id: #rain_delay_0_id#});">&nbsp;0&nbsp;</a>
     <a class="btn cmd" style="font-size: 0.8em;padding:1px;background-color:MidnightBlue " data-cmd_id="#rain_delay_30" title="raind_delay_30" onclick="jeedom.cmd.execute({id: #rain_delay_30_id#});">&nbsp;30&nbsp;</a>
     <a class="btn cmd" style="font-size: 0.8em;padding:1px;background-color:MidnightBlue " data-cmd_id="#rain_delay_60" title="raind_delay_60" onclick="jeedom.cmd.execute({id: #rain_delay_60_id#});">&nbsp;60&nbsp;</a>
@@ -35,18 +22,15 @@
     <a class="btn cmd" style="font-size: 0.8em;padding:1px;background-color:MidnightBlue " data-cmd_id="#rain_delay_240" title="raind_delay_240" onclick="jeedom.cmd.execute({id: #rain_delay_240_id#});">240</a>
     <br/>
     </span> 
-
     <br/>                                                                                                                     
     <span style="font-weight:bold">#statusDescription# <span style="#statusCode_visible#"> (#statusCode#) </span>   </span> 
     <span style="font-size: 0.9em; #currentZone_visible#" > <br/> Zone départ: #currentZone# </span></span>
-
     <span style="font-size: 1.2em" class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#errorCode#">
     <span style="font-weight:bold;color:#errorColor#">  <br/>   #errorDescription#
                                                      <span style="#errorCode_visible#">   (#errorCode#) </span>
                                                                                               </span></span><br/>
                                              
  </center>                                                                                                                           
-
     <center style="position : absolute;left : 5px">#daySetup#</center>
 </div>
 </div>
