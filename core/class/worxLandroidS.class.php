@@ -823,7 +823,7 @@ schedule: TimePeriod[];
     }
 	  
 	  
-    log::add('worxLandroidS', 'debug', 'Cmdlogic update'.$cmdId.$value);
+ //   log::add('worxLandroidS', 'debug', 'Cmdlogic update'.$cmdId.$value);
 
 	  if(strstr($cmdId,"Planning/startTime") && $value != '00:00' ){
    // log::add('worxLandroidS', 'debug', 'savedValue time'. $value);
