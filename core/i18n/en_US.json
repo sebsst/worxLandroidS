@@ -47,12 +47,12 @@
         "Téléinfo": "Téléinfo",
         "Température": "Température",
         "Volet": "Volet",
-        "Ajouter une commande action": "Ajouter une commande action",
+        "Ajouter une commande action": "Add an action command",
         "Nom": "Nom",
         "Sous-Type": "Sous-Type",
         "Valeur": "Valeur",
         "Paramètres": "Paramètres",
-        "Rechercher": "Rechercher",
+        "Rechercher": "Search",
         "Gestion": "Gestion",
         "Configuration avancée": "Configuration avancée",
         "Nom de l'équipement worxLandroidS": "Nom de l'équipement worxLandroidS",
@@ -117,7 +117,7 @@
         "Mot de passe de Connexion (non obligatoire) : ": "Mot de passe de Connexion (non obligatoire) : ",
         "Decouverte Automatique des topics: ": "Decouverte Automatique des topics: ",
         "Topic root (defaut: Tous): ": "Topic root (defaut: Tous): ",
-        "Aucune": "Aucune",
+        "Aucune": "None",
         "Qos": "Qos"
     },
     "plugins\/worxLandroidS\/desktop\/modal\/health.php": {
