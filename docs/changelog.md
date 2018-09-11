@@ -2,6 +2,12 @@
 
 En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que la doc, les traductions et des corrections mineures
 
+## 11/09/2018
+
+Ajout du paramètre type de tondeuses. 
+- DB504 pour les modèles M récemment passés à la version 5.x 
+- DB510 pour les modèles S.
+
 ## 09/07/2018
 
 - Possibilité de définir son propre widget pour les commandes de type infos pour permettre l'affichage de données supplémentaires
