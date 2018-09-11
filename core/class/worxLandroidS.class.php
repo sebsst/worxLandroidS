@@ -396,6 +396,7 @@ class worxLandroidS extends eqLogic {
       $certfile = $resource_path.'/cert.pem';
       $pkeyfile = $resource_path.'/pkey.pem';
       $root_ca = $resource_path.'/vs-ca.pem';	  
+      $MowerType = config::byKey('MowerType', 'worxLandroidS');	  
     //curl_setopt ('mqtts://' . config::byKey('mqtt_endpoint', 'worxLandroidS'), CURLOPT_CAINFO, $root_ca);   
     //	  curl_setopt('mqtts://' . config::byKey('mqtt_endpoint', 'worxLandroidS'), CURLOPT_SSL_VERIFYPEER, false);
     self::$_client = $client;
@@ -407,13 +408,13 @@ class worxLandroidS extends eqLogic {
     self::$_client->onLog('worxLandroidS::logmq');
     self::$_client->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);
       try {
-         $topic = 'DB510/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
+         $topic = $MowerType.'/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
          self::$_client->setWill("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", $msg, 0, 0);
          self::$_client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883 , 5);
          self::$_client->subscribe($topic, 0); // !auto: Subscribe to root topic
 	   log::add('worxLandroidS', 'debug', 'Subscribe to mqtt ' . config::byKey('mqtt_endpoint', 'worxLandroidS') . ' msg ' . $msg);
     //self::$_client->loop();  
-    self::$_client->publish("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", $msg, 0, 0);
+    self::$_client->publish(config::byKey('MowerType', 'worxLandroidS')."/".config::byKey('mac_address','worxLandroidS')."/commandIn", $msg, 0, 0);
       //self::$_client->loopForever();
       $start_time = time();
 	      while (true) { 
@@ -523,7 +524,7 @@ class worxLandroidS extends eqLogic {
       $elogic->setIsVisible(1);
       $elogic->setIsEnable(1);	    
       $elogic->checkAndUpdateCmd();
-      $commandIn = 'DB510/'. $json2_data->dat->mac .'/commandIn';
+      $commandIn = config::byKey('MowerType', 'worxLandroidS').'/'. $json2_data->dat->mac .'/commandIn';
       self::newAction($elogic,'setRainDelay', $commandIn, '{"rd":"#message#"}','message');
       self::newAction($elogic,'start',$commandIn,array(cmd=>1),'other');
       self::newAction($elogic,'stop',$commandIn,array(cmd=>3),'other');
@@ -904,7 +905,7 @@ schedule: TimePeriod[];
   public static function setSchedule($_id, $schedule) {	
   	  $_message = '{"sc":'.json_encode(array('d'=>$schedule))."}";
   	 log::add('worxLandroidS', 'debug', 'message à publier' . $_message);	  
-	  worxLandroidS::publishMosquitto($_id, "DB510/".$_id->getConfiguration('mac_address','worxLandroidS')."/commandIn", $_message, 0);
+	  worxLandroidS::publishMosquitto($_id, config::byKey('MowerType', 'worxLandroidS')."/".$_id->getConfiguration('mac_address','worxLandroidS')."/commandIn", $_message, 0);
   }	
 	
 
