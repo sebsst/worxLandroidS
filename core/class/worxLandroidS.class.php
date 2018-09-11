@@ -409,7 +409,7 @@ class worxLandroidS extends eqLogic {
     self::$_client->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);
       try {
          $topic = $MowerType.'/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
-         self::$_client->setWill("DB510/".config::byKey('mac_address','worxLandroidS')."/commandIn", $msg, 0, 0);
+         self::$_client->setWill($MowerType."/".config::byKey('mac_address','worxLandroidS')."/commandIn", $msg, 0, 0);
          self::$_client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883 , 5);
          self::$_client->subscribe($topic, 0); // !auto: Subscribe to root topic
 	   log::add('worxLandroidS', 'debug', 'Subscribe to mqtt ' . config::byKey('mqtt_endpoint', 'worxLandroidS') . ' msg ' . $msg);
