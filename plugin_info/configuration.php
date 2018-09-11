@@ -46,7 +46,7 @@ if (!isConnect()) {
 
 						<label class="col-sm-3 control-label">{{Type}}</label>
 						<div class="col-sm-3">
-						<select id="sel_object" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="MowerType">
+						<select id="sel_object" class="eqLogicAttr form-control" data-l1key="MowerType">
 
 							<option value="DB510">{{DB510}}</option>
 							<option value="DB504">{{DB504}}</option>
