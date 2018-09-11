@@ -42,7 +42,19 @@ if (!isConnect()) {
 							<input class="configKey form-control" data-l1key="passwd" type="password" placeholder="{{saisir le mot de passe}}">
 						</div>
 					</div>   
-	                
+					<div class="form-group">
+
+						<label class="col-sm-3 control-label">{{Type}}</label>
+						<div class="col-sm-3">
+						<select id="sel_object" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="MowerType">
+
+							<option value="DB510">{{1}}</option>
+							<option value="DB504">{{5}}</option>
+			
+
+						</select>
+						</div>													
+					</div>		                
 
 	    <div class="form-group">
 		<label class="col-sm-4 control-label">{{Initialiser/réactualiser données cloud worx : }}</label>
