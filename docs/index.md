@@ -118,6 +118,7 @@ Depuis la version du firmware 5.x, les modèles M devraient également être com
 Il peut arriver par moment de perdre la connexion avec la tondeuse, y compris avec l'application mobile.
 Dans certains cas, le fait de réactualiser le code WIFI peut résoudre le problème.
 (Faire comme si on voulait ajouter une nouvelle tondeuse sur l'appli mobile, appuyer 3 secondes sur le bouton OK de la tondeuse, renseigner le n° de série et le code WIFI correspondant)
+Worx limite volontairement le nombre d'interrogations de l'état de la tondeuse (limite non connue) donc trop de "refresh" pourrait stopper la communication avec le cloud amazon. D'après les tests, il s'agit d'une limite quotidienne.
 
 >Version mosquitto
 Les versions mosquitto 1.3.x et antérieures ne sont pas compatibles avec le plugin. Le script d'installation (dépendances) doit pouvoir installer une version plus récente, toutefois il se peut que certaines distributions ne soient pas prises en compte. 
