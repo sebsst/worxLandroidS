@@ -50,8 +50,6 @@ if (!isConnect()) {
 
 							<option value="DB510">{{Landroid version S}}</option>
 							<option value="DB504">{{Landroid version M}}</option>
-			
-
 						</select>
 						</div>													
 					</div>		                
