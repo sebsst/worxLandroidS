@@ -4,9 +4,8 @@ En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que l
 
 ## 11/09/2018
 
-Ajout du paramètre type de tondeuses. 
-- DB504 pour les modèles M récemment passés à la version 5.x 
-- DB510 pour les modèles S.
+- Ajout du paramètre type de tondeuses: Landroid version S / landroid version M (firmware 5.x)
+- Ajout de la fonction "pause"
 
 ## 09/07/2018
 
