@@ -48,8 +48,8 @@ if (!isConnect()) {
 						<div class="col-sm-3">
 						<select id="sel_object" class="configKey form-control" data-l1key="MowerType">
 
-							<option value="DB510">{{DB510}}</option>
-							<option value="DB504">{{DB504}}</option>
+							<option value="DB510">{{Landroid version S}}</option>
+							<option value="DB504">{{Landroid version M}}</option>
 			
 
 						</select>
