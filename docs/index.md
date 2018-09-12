@@ -76,6 +76,7 @@ Oui à partir des boutons en haut à droite
 
 Le plugin est compatible avec les modèle S worx Landroid WR10xSx. 
 Un autre plugin worxLandroid est disponible pour les modèles M.
+Depuis la version du firmware 5.x, les modèles M devraient également être compatible (liste des modèles non connus)
 
 >Liste des codes erreur:
 - 1: Bloquée
