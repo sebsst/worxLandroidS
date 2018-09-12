@@ -526,6 +526,7 @@ class worxLandroidS extends eqLogic {
       $commandIn = config::byKey('MowerType', 'worxLandroidS').'/'. $json2_data->dat->mac .'/commandIn';
       self::newAction($elogic,'setRainDelay', $commandIn, '{"rd":"#message#"}','message');
       self::newAction($elogic,'start',$commandIn,array(cmd=>1),'other');
+      self::newAction($elogic,'pause',$commandIn,array(cmd=>2),'other');	    
       self::newAction($elogic,'stop',$commandIn,array(cmd=>3),'other');
       self::newAction($elogic,'refreshValue',$commandIn,"",'other');
       self::newAction($elogic,'off_today',$commandIn,"off_today",'other');
@@ -961,6 +962,12 @@ schedule: TimePeriod[];
 	  { 
 		  $_message = '{"cmd":1}';
 	  }
+	  // send pause command
+	  if($cmd->getName() == 'pause')
+	  { 
+		  $_message = '{"cmd":2}';
+	  }
+
 	  // send stop
 	  if($cmd->getName() == 'stop')
 	  { 
