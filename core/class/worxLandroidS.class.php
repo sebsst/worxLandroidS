@@ -24,8 +24,7 @@ class worxLandroidS extends eqLogic {
   private static $_depLogFile;
   // Dependancy installation progress value log file
   private static $_depProgressFile;	  	
-	  
-	
+
   public static function health() {
     $return = array();
     $socket = socket_create(AF_INET, SOCK_STREAM, 0);
