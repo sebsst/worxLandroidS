@@ -42,7 +42,17 @@ if (!isConnect()) {
 							<input class="configKey form-control" data-l1key="passwd" type="password" placeholder="{{saisir le mot de passe}}">
 						</div>
 					</div>   
-	                
+					<div class="form-group">
+
+						<label class="col-sm-3 control-label">{{Type}}</label>
+						<div class="col-sm-3">
+						<select id="sel_object" class="configKey form-control" data-l1key="MowerType">
+
+							<option value="DB510">{{Landroid version S}}</option>
+							<option value="DB504">{{Landroid version M}}</option>
+						</select>
+						</div>													
+					</div>		                
 
 	    <div class="form-group">
 		<label class="col-sm-4 control-label">{{Initialiser/réactualiser données cloud worx : }}</label>

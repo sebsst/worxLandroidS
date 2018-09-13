@@ -2,6 +2,12 @@
 
 En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que la doc, les traductions et des corrections mineures
 
+## 11/09/2018
+
+- Ajout du paramètre type de tondeuses: Landroid version S / landroid version M (firmware 5.x)
+(en cas de soucis vous pouvez cocher réinitialiser les paramètres dans la configuration du plugin et sauvegarder)
+- Ajout de la fonction "pause"
+
 ## 09/07/2018
 
 - Possibilité de définir son propre widget pour les commandes de type infos pour permettre l'affichage de données supplémentaires
