@@ -420,8 +420,9 @@ class worxLandroidS extends eqLogic {
 		      self::$_client->loop(1);		   
 		      if ((time() - $start_time) > 45) { 
 	               log::add('worxLandroidS', 'debug', 'Timeout reached');
-			self::newInfo($elogic,'statusDescription', __("Communication timeout",__FILE__),'string',1);
-			      
+			 foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
+			self::newInfo($eqpt,'statusDescription', __("Communication timeout",__FILE__),'string',1);
+			 }
 			      
 			return false;			       
 		      }
