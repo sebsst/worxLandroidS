@@ -306,7 +306,7 @@ class worxLandroidS extends eqLogic {
               case '30': $typetondeuse = "DB504"; break;
             }
             $nodeid = $typetondeuse.'/'.$product['mac_address'].'/commandOut';
-            self::create_mower($nodeid);
+            self::create_mower($typetondeuse, $product['name'], $product['macAddress']);
             //config::save('mac_address', $product['mac_address'],'worxLandroidS');
             //config::save('landroid_name', $product['name'],'worxLandroidS');
             
@@ -684,7 +684,7 @@ class worxLandroidS extends eqLogic {
               sleep(15);
               $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
               $client = new Mosquitto\Client($mosqId, true);
-              self::connect_and_publish($client, '{}');	     
+              self::connect_and_publish($client, '{}', $elogic);	     
               }    else {
                 $elogic->setConfiguration('retryNr', 0);	
                 self::newInfo($elogic,'errorCode',$json2_data->dat->le,'numeric',1);
@@ -1014,7 +1014,7 @@ class worxLandroidS extends eqLogic {
             $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
             // if ( config::byKey('mowingTime', 'worxLandroidS') == '0' ){
             $client = new Mosquitto\Client($mosqId, true);
-            self::connect_and_publish($client, $_message); 
+            self::connect_and_publish($client, $_message,$eqlogic); 
 }	
 public static $_widgetPossibility = array('custom' => array(
   'visibility' => true,
