@@ -306,8 +306,9 @@ class worxLandroidS extends eqLogic {
               case '30': $typetondeuse = "DB504"; break;
             }
             $nodeid = $typetondeuse.'/'.$product['mac_address'].'/commandOut';
-            self::create_mower($typetondeuse, $product['name'], $product['macAddress']);
-            //config::save('mac_address', $product['mac_address'],'worxLandroidS');
+            self::create_mower($typetondeuse, $product['name'], $product['mac_address']);
+            log::add('worxLandroidS', 'info', 'mac_address '.$product['mac_address']);
+          //config::save('mac_address', $product['mac_address'],'worxLandroidS');
             //config::save('landroid_name', $product['name'],'worxLandroidS');
             
             // code...
