@@ -456,7 +456,7 @@ class worxLandroidS extends eqLogic {
         }
 
 
-        public static create_mower($mowerType, $mowerName, $macAddress){
+        public static function create_mower($mowerType, $mowerName, $macAddress){
 
           $elogic = new worxLandroidS();
           $elogic->setEqType_name('worxLandroidS');
