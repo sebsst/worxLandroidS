@@ -294,7 +294,7 @@ class worxLandroidS extends eqLogic {
         {
 
           
-          foreach ($json3[] as $product) {
+          foreach ($json3 as $product) {
             switch ($product['product_id']) {
               case '25': $typetondeuse = "DB510"; break;
               case '40': $typetondeuse = "DB510"; break;    //S700 WR115MI
