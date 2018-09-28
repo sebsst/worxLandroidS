@@ -104,7 +104,7 @@ class worxLandroidS extends eqLogic {
             if(config::byKey('status','worxLandroidS') == '1'){self::$_client->disconnect();}
             $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
             $client = new Mosquitto\Client($mosqId, true);
-            self::connect_and_publish($client, '{}');	 
+            self::connect_and_publish($client, '{}', $eqpt);	 
               
             }
           }
@@ -1014,7 +1014,7 @@ class worxLandroidS extends eqLogic {
             $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
             // if ( config::byKey('mowingTime', 'worxLandroidS') == '0' ){
             $client = new Mosquitto\Client($mosqId, true);
-            self::connect_and_publish($client, $_message,$eqlogic); 
+            self::connect_and_publish($client, $_message, $eqlogic); 
 }	
 public static $_widgetPossibility = array('custom' => array(
   'visibility' => true,
