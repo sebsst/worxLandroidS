@@ -499,7 +499,9 @@ class worxLandroidS extends eqLogic {
             self::newAction($elogic,'on_'.$i,$commandIn,'on_'.$i,'other');
             self::newAction($elogic,'off_'.$i,$commandIn,'off_'.$i,'other');
           }      
-          
+          $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
+          $client = new Mosquitto\Client($mosqId);
+          self::connect_and_publish($client, '{}', $elogic);	 
           
           
           event::add('worxLandroidS::includeEqpt', $elogic->getId());
