@@ -375,15 +375,17 @@ class worxLandroidS extends eqLogic {
         
       }
       
-      public static function connect_and_publish($client, $msg, $eqpt) {
+      public static function connect_and_publish($client, $msg, $eqpt, $mowerType, $macAddress) {
         $resource_path = realpath(dirname(__FILE__) . '/../../resources/');
         
         $certfile = $resource_path.'/cert.pem';
         $pkeyfile = $resource_path.'/pkey.pem';
         $root_ca = $resource_path.'/vs-ca.pem';	  
-        $MowerType = config::byKey('MowerType', 'worxLandroidS');
+  //      $MowerType = config::byKey('MowerType', 'worxLandroidS');
+        if(is_null($mowerType)){
         $mowerType = $eqpt->getConfiguration('mowerType','DB510');
-        $macAddress = $eqpt->getConfiguration('macAddress');  
+        $macAddress = $eqpt->getConfiguration('macAddress');
+        }  
         //curl_setopt ('mqtts://' . config::byKey('mqtt_endpoint', 'worxLandroidS'), CURLOPT_CAINFO, $root_ca);   
         //	  curl_setopt('mqtts://' . config::byKey('mqtt_endpoint', 'worxLandroidS'), CURLOPT_SSL_VERIFYPEER, false);
         self::$_client = $client;
@@ -458,7 +460,7 @@ class worxLandroidS extends eqLogic {
 
 
         public static function create_mower($nodeid, $mowerType, $mowerName, $macAddress){
-
+/*
           $elogic = new worxLandroidS();
           $elogic->setEqType_name('worxLandroidS');
           $elogic->setLogicalId($nodeid);
@@ -498,13 +500,13 @@ class worxLandroidS extends eqLogic {
           for ($i = 0; $i < 7; $i++) {
             self::newAction($elogic,'on_'.$i,$commandIn,'on_'.$i,'other');
             self::newAction($elogic,'off_'.$i,$commandIn,'off_'.$i,'other');
-          }      
+          }  */    
           $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
           $client = new Mosquitto\Client($mosqId);
-          self::connect_and_publish($client, '{}', $elogic);	 
+          self::connect_and_publish($client, '{}', $elogic, $mowerType, $macAddress);	 
           
           
-          event::add('worxLandroidS::includeEqpt', $elogic->getId());
+          //event::add('worxLandroidS::includeEqpt', $elogic->getId());
           
         }
         
