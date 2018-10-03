@@ -64,13 +64,15 @@ class worxLandroidS extends eqLogic {
         $endTime = $initDate->format("H:i");
         // refresh value each hours if mower is sleeping at home :-)
         if($startTime == '00:00' or $startTime > date('H:i') or date('H:i') > $endTime) {
-          config::save('mowingTime', '0' ,'worxLandroidS');
-          log::add('worxLandroidS', 'debug', 'mower sleeping ');
+          //config::save('mowingTime', '0' ,'worxLandroidS');
+          $eqpt->setConfiguration('mowingTime', '0');
+          log::add('worxLandroidS', 'debug', $eqpt->getName() . 'mower sleeping ');
           
-          if(config::byKey('status','worxLandroidS') == '1' && isset($_client) ){self::$_client->disconnect();}
+          if($eqpt->getConfiguration('status') == '1' && isset($_client) ){self::$_client->disconnect();}
           
         }
-        else { config::save('mowingTime', '1' ,'worxLandroidS'); }
+        else { 
+          $eqpt->setConfiguration('mowingTime', '1'); }
         
       }	  
     }
@@ -85,7 +87,7 @@ class worxLandroidS extends eqLogic {
     
     foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
       if ($eqpt->getIsEnable() == true){
-        if(config::byKey('status','worxLandroidS') == '0'){ //on se connecte seulement si on est pas déjà connecté
+        if($eqpt->getConfiguration('status') == '0'){ //on se connecte seulement si on est pas déjà connecté
           $i = date('w');
           $start = $eqpt->getCmd(null, 'Planning/startTime/' . $i);
           $startTime = is_object($start) ? $start->execCmd() : '';
@@ -101,7 +103,7 @@ class worxLandroidS extends eqLogic {
             log::add('worxLandroidS', 'debug', 'mower sleeping ');
             
             
-            if(config::byKey('status','worxLandroidS') == '1'){self::$_client->disconnect();}
+            if($eqpt->getConfiguration('status') == '1'){self::$_client->disconnect();}
             $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
             $client = new Mosquitto\Client($mosqId, true);
             self::connect_and_publish($client, '{}', $eqpt);	 
@@ -540,9 +542,9 @@ class worxLandroidS extends eqLogic {
                     self::newInfo($elogic,'Planning/duration/'.$i,'0','string',1);
                     self::newInfo($elogic,'Planning/cutEdge/'.$i,' ','string',1);
                   }          
-          $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
-          $client = new Mosquitto\Client($mosqId);
-          self::connect_and_publish($client, '{}', $elogic);	 
+          //$mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
+          //$client = new Mosquitto\Client($mosqId);
+          //self::connect_and_publish($client, '{}', $elogic);	 
             
             
             //event::add('worxLandroidS::includeEqpt', $elogic->getId());
