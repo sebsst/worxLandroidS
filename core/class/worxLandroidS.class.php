@@ -243,6 +243,10 @@ class worxLandroidS extends eqLogic {
         } else
         {
           
+          
+
+          config::save('mqtt_client_id', $json['mqtt_client_id'],'worxLandroidS');
+          config::save('mqtt_endpoint', $json['mqtt_endpoint'],'worxLandroidS');          
           // get certificate
           $url =  "https://api.worxlandroid.com:443/api/v1/users/certificate";
           $api_token = $json['api_token'];
@@ -317,8 +321,6 @@ class worxLandroidS extends eqLogic {
           //log::add('worxLandroidS', 'info', 'mac_address '.$json3[0]['mac_address']);
         }
         // test client2
-        config::save('mqtt_client_id', $json['mqtt_client_id'],'worxLandroidS');
-        config::save('mqtt_endpoint', $json['mqtt_endpoint'],'worxLandroidS');
         //  log::add('worxLandroidS', 'info', 'mqtt_client_id '.$json['mqtt_endpoint']);
       }
     }
