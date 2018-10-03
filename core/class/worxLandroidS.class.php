@@ -498,6 +498,46 @@ class worxLandroidS extends eqLogic {
             self::newAction($elogic,'on_'.$i,$commandIn,'on_'.$i,'other');
             self::newAction($elogic,'off_'.$i,$commandIn,'off_'.$i,'other');
           }     
+          
+                  self::newInfo($elogic,'errorCode',0,'numeric',1);
+                  self::newInfo($elogic,'errorDescription',' ','string',1);
+                  
+                  
+                  self::newInfo($elogic,'statusCode',0,'numeric',1);
+                  self::newInfo($elogic,'statusDescription',' ','string',1);
+                  self::newInfo($elogic,'batteryLevel',0,'numeric',1);
+                  self::newInfo($elogic,'langue',' ','string',0);
+                  
+                  self::newInfo($elogic,'lastDate',' ','string',1);
+                  self::newInfo($elogic,'lastTime',' ','string',1);
+                  
+                  self::newInfo($elogic,'firmware',' ','string',0);
+                  self::newInfo($elogic,'wifiQuality',0,'numeric',0);
+                  self::newInfo($elogic,'rainDelay', 0,'numeric',1);
+                  
+                  self::newInfo($elogic,'totalTime',0,'numeric',1);
+                  self::newInfo($elogic,'totalDistance',0,'numeric',1);
+                  self::newInfo($elogic,'totalBladeTime',0,'numeric',0);
+                  self::newInfo($elogic,'batteryChargeCycle',0,'numeric',1);
+                  self::newInfo($elogic,'batteryCharging',false,'binary',1);
+                  self::newInfo($elogic,'batteryVoltage', 0,'numeric',0);
+                  self::newInfo($elogic,'batteryTemperature',0,'numeric',0);
+                  self::newInfo($elogic,'zonesList',' ','string',0);
+                  //log::add('worxLandroidS', 'Debug', 'zone:' . $json2_data->cfg->mzv[$json2_data->dat->lz]+1 . ' / '.$json2_data->cfg->mz[1]);    
+                  //	if ($json2_data->cfg->mz[1] != 0){
+                  // log::add('worxLandroidS', 'Debug', ' : zone' . $json2_data->cfg->mzv[$json2_data->dat->lz]);
+                  self::newInfo($elogic,'currentZone', 0 ,'numeric',0);	    
+                  //} 
+                  
+                  //        self::getStatusDescription($json2_data->dat->ls);
+                  
+                  //  date début + durée + bordure
+                  
+                  for ($i = 0; $i < 7; $i++) {
+                    self::newInfo($elogic,'Planning/startTime/'.$i,'00:00','string',1);
+                    self::newInfo($elogic,'Planning/duration/'.$i,'0','string',1);
+                    self::newInfo($elogic,'Planning/cutEdge/'.$i,' ','string',1);
+                  }          
           $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
           $client = new Mosquitto\Client($mosqId);
           self::connect_and_publish($client, '{}', $elogic);	 
