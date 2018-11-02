@@ -314,6 +314,67 @@ class worxLandroidS extends eqLogic {
         {
         } else
         {
+		
+////// test
+	      $resource_path = realpath(dirname(__FILE__) . '/../../resources/');
+
+      $certfile = $resource_path.'/cert.pem';
+      $pkeyfile = $resource_path.'/pkey.pem';
+      $root_ca = $resource_path.'/vs-ca.pem';	  
+      $MowerType = 'DB510'; //config::byKey('MowerType', 'worxLandroidS');	  
+    //curl_setopt ('mqtts://' . config::byKey('mqtt_endpoint', 'worxLandroidS'), CURLOPT_CAINFO, $root_ca);   
+    //	  curl_setopt('mqtts://' . config::byKey('mqtt_endpoint', 'worxLandroidS'), CURLOPT_SSL_VERIFYPEER, false);
+  
+	  $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
+         // if ( config::byKey('mowingTime', 'worxLandroidS') == '0' ){
+	    $client = new Mosquitto\Client($mosqId, true);		
+
+    $client->clearWill();
+    $client->onConnect('worxLandroidS::connect');
+    $client->onDisconnect('worxLandroidS::disconnect');
+    $client->onSubscribe('worxLandroidS::subscribe');
+    $client->onMessage('worxLandroidS::message');
+    $client->onLog('worxLandroidS::logmq');
+    $client->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);
+      try {
+         $topic = $MowerType.'/'.$json3[0]['mac_address'].'/commandOut';
+         $client->setWill($MowerType."/".$json3[0]['mac_address']."/commandIn", $msg, 0, 0);
+         $client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883 , 5);
+         $client->subscribe($topic, 0); // !auto: Subscribe to root topic
+	   log::add('worxLandroidS', 'debug', 'Subscribe to mqtt ' . config::byKey('mqtt_endpoint', 'worxLandroidS') . ' msg ' . $msg);
+    //self::$_client->loop();  
+    $client->publish($MowerType."/".$json3[0]['mac_address']."/commandIn", $msg, 0, 0);
+      //self::$_client->loopForever();
+      $start_time = time();
+	      while (true) { 
+		      $client->loop(1);		   
+		      if ((time() - $start_time) > 45) { 
+	               log::add('worxLandroidS', 'debug', 'Timeout reached');
+			 foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
+			//self::newInfo($eqpt,'statusDescription', __("Communication timeout",__FILE__),'string',1);
+			 }
+			      
+			return false;			       
+		      }
+			      
+		   }
+		//	for ($i = 0; $i < 12; $i++) {
+                    // Loop around to permit the library to do its work
+                  //  self::$_client->loop(1);
+		//		sleep(1);
+                 //       }      
+	      
+	      
+      }
+       catch (Exception $e){
+      // log::add('worxLandroidS', 'debug', $e->getMessage());
+     } 
+     //if(config::byKey('status','worxLandroidS') == '1'){	
+//	     self::$_client->disconnect(); }	
+		
+////// test
+		
+		
 
           config::save('mac_address', $json3[0]['mac_address'],'worxLandroidS');
 	  config::save('landroid_name', $json3[0]['name'],'worxLandroidS');
