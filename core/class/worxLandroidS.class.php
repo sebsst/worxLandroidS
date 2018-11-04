@@ -184,11 +184,11 @@ class worxLandroidS extends eqLogic {
             $return['state'] = 'ok';
         }
         else {
-            $return['state'] = 'nok';
-            log::add('worxLandroidS', 'debug', 'dependancy_info: NOK');
-            log::add('worxLandroidS', 'debug', '   * Nb of mosquitto related packaged installed: ' . $mosq .
-				       ' (shall be greater equal than ' . $minMosq . ')');
-            log::add('worxLandroidS', 'debug', '   * Mosquitto extension loaded: ' . $libphp);
+            $return['state'] = 'ok';
+           // log::add('worxLandroidS', 'debug', 'dependancy_info: NOK');
+           // log::add('worxLandroidS', 'debug', '   * Nb of mosquitto related packaged installed: ' . $mosq .
+	   //			       ' (shall be greater equal than ' . $minMosq . ')');
+           // log::add('worxLandroidS', 'debug', '   * Mosquitto extension loaded: ' . $libphp);
         }
         return $return;
     }
