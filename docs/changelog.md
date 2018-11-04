@@ -2,6 +2,10 @@
 
 En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que la doc, les traductions et des corrections mineures
 
+## 04/11/2018
+
+- modification paramètre de connexion mosquitto (tls Options) qui empêchait la connexion.
+
 ## 14/09/2018
 
 - Correction de l'affichage sur mobile si le format du widget choisi est le "standard" jeedom. 
