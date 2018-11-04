@@ -407,7 +407,7 @@ class worxLandroidS extends eqLogic {
     self::$_client->onLog('worxLandroidS::logmq');
 	  
     self::$_client->setTlsCertificates($root_ca,$certfile,$pkeyfile,null);
-    self::$_client->setTlsOptions(Mosquitto\Client::SSL_VERIFY_NONE,"tlsv1.2",null);	  
+   // self::$_client->setTlsOptions(Mosquitto\Client::SSL_VERIFY_NONE,"tlsv1.2",null);	  
       try {
          $topic = $MowerType.'/'.config::byKey('mac_address','worxLandroidS').'/commandOut';
          self::$_client->setWill($MowerType."/".config::byKey('mac_address','worxLandroidS')."/commandIn", $msg, 0, 0);
