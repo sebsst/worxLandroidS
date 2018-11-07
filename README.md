@@ -29,8 +29,3 @@ Le dashboard affiche:
 -L'autre bouton permet de récupérer les derniers horaires communiqués au plugin (10H - 17h par défaut)
 -Edge signifie la coupe des bordures est planifié
 
-# FAQ
-
->quels sont les modèles compatibles?
-
-Le plugin est compatible avec les modèle S worx Landroid WR10xSx. Un autre plugin worxLandroid est disponible pour les modèles M.
