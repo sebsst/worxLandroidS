@@ -128,7 +128,8 @@ $eqLogics = eqLogic::byType('worxLandroidS');
             <div class="form-group">
               <label class="col-sm-3 control-label" > {{Type Tondeuse}}</label>
               <div class="col-sm-3">
-      			<Input readonly type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="MowerType" />
+      			    <Input readonly type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="mowerDescription" />
+      			    <Input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="MowerType" />
               </div>
             </div>
             <div class="form-group">
