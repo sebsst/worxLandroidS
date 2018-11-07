@@ -123,10 +123,20 @@ $eqLogics = eqLogic::byType('worxLandroidS');
                 <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isEnable" checked/>{{Activer}}</label>
                 <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isVisible" checked/>{{Visible}}</label>
                 <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="errorRetryMode" checked/>{{retry Mode}}</label>
-           <label type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom de l'équipement worxLandroidS}}"
               </div>
             </div>
-
+            <div class="form-group">
+              <label class="col-sm-3 control-label" > {{Type Tondeuse}}</label>
+              <div class="col-sm-3">
+      			<Input readonly type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="MowerType" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-3 control-label" > {{Adresse Mac}}</label>
+              <div class="col-sm-3">
+      			<Input readonly type="text" class="eqLogicAttr form-control" data-l1key="logicalId"  />
+              </div>
+            </div>            
 
         </fieldset>
       </form>
