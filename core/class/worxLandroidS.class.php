@@ -43,15 +43,15 @@ class worxLandroidS extends eqLogic {
 	public static function cron30() {
 		worxLandroidS::refresh_values();
 	}
-	
+
 	public static function checkMowingTime() {
 		foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
 			if ($eqpt->getIsEnable() == true){
 				$i = date('w');
 				$start = $eqpt->getCmd(null, 'Planning/startTime/' . $i);
-				$startTime = is_object($start) ? $start->execCmd() : '';
+				$startTime = is_object($start) ? $start->execCmd() : '00:00';
 				$dur = $eqpt->getCmd(null, 'Planning/duration/' . $i);
-				$duration = is_object($dur) ? $dur->execCmd() : '';
+				$duration = is_object($dur) ? $dur->execCmd() : 0;
 				
 				$initDate = DateTime::createFromFormat('H:i', $startTime);
 				$initDate->add(new DateInterval("PT".$duration."M"));
@@ -80,7 +80,7 @@ class worxLandroidS extends eqLogic {
 		$eqptlist[] = array();
 		foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
 			if ($eqpt->getIsEnable() == true){
-				if($eqpt->getConfiguration('status') == '0'){ //on se connecte seulement si on est pas déjà connecté
+				if(config::byKey('status','worxLandroidS') == '0'){ //on se connecte seulement si on est pas déjà connecté
 					$i = date('w');
 					$start = $eqpt->getCmd(null, 'Planning/startTime/' . $i);
 					$startTime = is_object($start) ? $start->execCmd() : '';
@@ -95,12 +95,15 @@ class worxLandroidS extends eqLogic {
 						config::save('realTime', '0' ,'worxLandroidS');
 						log::add('worxLandroidS', 'debug', 'mower sleeping ');
 						// populate message to be sent
-						$eqplist[$count] = array($eqpt->getConfiguration('MowerType'),$eqpt->getLogicalId , '{}');
+						$eqptlist[$count] = array($eqpt->getConfiguration('MowerType'),$eqpt->getLogicalId() , '{}');
 						$count++;	
 							if(config::byKey('status','worxLandroidS') == '1'){
 								// modification à faire ======>
 								self::$_client->disconnect();
 							}
+							//	$mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
+							//	$client = new Mosquitto\Client($mosqId, true);
+							//	self::connect_and_publish($eqpt, $client, '{}');
 							
 						}
 					}
@@ -113,7 +116,13 @@ class worxLandroidS extends eqLogic {
 				$client = new Mosquitto\Client($mosqId, true);
 				self::connect_and_publish($eqptlist, $client, '{}');
 				}
+				
+				
+				
+				
 			}
+			
+			
 			
 			public static function deamon_info() {
 				$return = array();
@@ -308,7 +317,7 @@ class worxLandroidS extends eqLogic {
                                 curl_setopt($ch, CURLOPT_URL, $url);
 								$products = json_decode(curl_exec($ch),true);								
 					foreach ($json3 as $key => $product) {
-                            $typetondeuse = 'DB510'; // default value
+                            $typetondeuse = 'DB510';
 							$found_key = array_search($product['product_id'], array_column($products, 'id'));  
 							$board_id = $products[$found_key]['board_id']	;	
     						$mowerDescription = $products[$found_key]['description']		;
@@ -389,6 +398,9 @@ class worxLandroidS extends eqLogic {
 		$CERTFILE = $RESOURCE_PATH .'/cert.pem';
 		$PKEYFILE = $RESOURCE_PATH .'/pkey.pem';
 		$ROOT_CA = $RESOURCE_PATH .'/vs-ca.pem';
+		//$MowerType = $eqpt->getConfiguration('MowerType');
+		//curl_setopt ('mqtts://' . config::byKey('mqtt_endpoint', 'worxLandroidS'), CURLOPT_CAINFO, $ROOT_CA);
+		//	  curl_setopt('mqtts://' . config::byKey('mqtt_endpoint', 'worxLandroidS'), CURLOPT_SSL_VERIFYPEER, false);
 		self::$_client = $client;
 		self::$_client->clearWill();
 		self::$_client->onConnect('worxLandroidS::connect');
@@ -725,11 +737,15 @@ class worxLandroidS extends eqLogic {
 						$cmdlogic->setType('info');
 						$cmdlogic->setName( $cmdId );
 						$cmdlogic->setIsVisible($visible);
+						
+						
 						$cmdlogic->setConfiguration('topic', $value);
 						//$cmdlogic->setValue($value);
 						$cmdlogic->save();
 					}
-				//   log::add('worxLandroidS', 'debug', 'Cmdlogic update'.$cmdId.$value);
+					
+					
+					//   log::add('worxLandroidS', 'debug', 'Cmdlogic update'.$cmdId.$value);
 					
 					if(strstr($cmdId,"Planning/startTime") && $value != '00:00' ){
 						// log::add('worxLandroidS', 'debug', 'savedValue time'. $value);
@@ -745,8 +761,12 @@ class worxLandroidS extends eqLogic {
 					$cmdlogic->setConfiguration('topic', $value);
 					//$cmdlogic->setValue($value);
 					$cmdlogic->save();
+					
 					$elogic->checkAndUpdateCmd($cmdId,$value);
-			  }
+					
+					
+					
+				}
 				
 				public static function newAction($elogic,$cmdId,$topic,$payload,$subtype){
 					$cmdlogic = worxLandroidSCmd::byEqLogicIdAndLogicalId($elogic->getId(),$cmdId);
@@ -1017,10 +1037,13 @@ class worxLandroidS extends eqLogic {
 								
 							}
 						}
+						
+						
+						
 					}
 					
 					class worxLandroidSCmd extends cmd {
-				
+						
 						public function execute($_options = null) {
 							switch ($this->getType()) {
 								case 'action' :
