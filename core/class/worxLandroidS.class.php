@@ -76,7 +76,8 @@ class worxLandroidS extends eqLogic {
 	
 	
 	public static function refresh_values() {
-		
+		$count = 0;
+		$eqptlist[] = array();
 		foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
 			if ($eqpt->getIsEnable() == true){
 				if($eqpt->getConfiguration('status') == '0'){ //on se connecte seulement si on est pas déjà connecté
@@ -94,8 +95,8 @@ class worxLandroidS extends eqLogic {
 						config::save('realTime', '0' ,'worxLandroidS');
 						log::add('worxLandroidS', 'debug', 'mower sleeping ');
 						// populate message to be sent
-						$eqplist[] = array($eqpt->getConfiguration('MowerType'),$eqpt->getLogicalId , '{}');
-							
+						$eqplist[$count] = array($eqpt->getConfiguration('MowerType'),$eqpt->getLogicalId , '{}');
+						$count++;	
 							if(config::byKey('status','worxLandroidS') == '1'){
 								// modification à faire ======>
 								self::$_client->disconnect();
@@ -584,7 +585,7 @@ class worxLandroidS extends eqLogic {
 				$mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
 				$client = new Mosquitto\Client($mosqId, true);
 				$eqptlist[] = array();
-				$eqptlist[] = array($elogic->getConfiguration('MowerType'),$elogic->getLogicalId(),'{}');
+				$eqptlist[0] = array($elogic->getConfiguration('MowerType'),$elogic->getLogicalId(),'{}');
 					self::connect_and_publish($eqptlist, $client, '{}');
 					}    else {
 						$elogic->setConfiguration('retryNr', 0);
