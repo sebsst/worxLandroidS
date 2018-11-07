@@ -101,28 +101,19 @@ class worxLandroidS extends eqLogic {
 								// modification à faire ======>
 								self::$_client->disconnect();
 							}
-							//	$mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
-							//	$client = new Mosquitto\Client($mosqId, true);
-							//	self::connect_and_publish($eqpt, $client, '{}');
 							
 						}
 					}
 				}
 			}
 			
-			if(!empty($eqplist[0])){
+			if(!empty($eqptlist[0])){
 				
 				$mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
 				$client = new Mosquitto\Client($mosqId, true);
 				self::connect_and_publish($eqptlist, $client, '{}');
 				}
-				
-				
-				
-				
 			}
-			
-			
 			
 			public static function deamon_info() {
 				$return = array();
@@ -307,24 +298,30 @@ class worxLandroidS extends eqLogic {
 					{
 					} else
 					{
-						foreach ($json3 as $key => $product) {
-							
-							switch ($product['product_id']) {
-								case 25: $typetondeuse = "DB510"; break;
-								case 40: $typetondeuse = "DB510"; break;    //S700 WR115MI
-								case 24: $typetondeuse = "DB510"; break;    //S500i WR105SI
-								case 35: $typetondeuse = "DB510"; break;    // WR103SI
-								case 37: $typetondeuse = "DB510"; break;    // SO500i WR105SI
-								case 34: $typetondeuse = "DB510"; break;
-								case 28: $typetondeuse = "DB504"; break;
-								case 30: $typetondeuse = "DB504"; break;
-							}
+// get boards => id => code
+								$url =  "https://api.worxlandroid.com:443/api/v1/boards";
+                                curl_setopt($ch, CURLOPT_URL, $url);
+								$boards = json_decode(curl_exec($ch),true);
+								
+// get products => product_id => board_id
+								$url =  "https://api.worxlandroid.com:443/api/v1/products";
+                                curl_setopt($ch, CURLOPT_URL, $url);
+								$products = json_decode(curl_exec($ch),true);								
+					foreach ($json3 as $key => $product) {
+                            $typetondeuse = 'DB510'; // default value
+							$found_key = array_search($product['product_id'], array_column($products, 'id'));  
+							$board_id = $products[$found_key]['board_id']	;	
+    						$mowerDescription = $products[$found_key]['description']		;
+                            log::add('worxLandroidS', 'info', 'board_id: '.$board_id. ' / product id:'.$product['product_id']);    
+							$found_key = array_search($board_id, array_column($boards, 'id'));  
+							$typetondeuse = $boards[$found_key]['code']		;
+	
 							log::add('worxLandroidS', 'info', 'mac_address '.$product['mac_address'].$typetondeuse);
 							// create Equipement if not already created
 							$elogic = self::byLogicalId($product['mac_address'], 'worxLandroidS');
 							if(!is_object($elogic)){
 								log::add('worxLandroidS', 'info', 'mac_address '.$product['mac_address'].$typetondeuse.$product['product_id']);
-								worxLandroidS::create_equipement($product, $typetondeuse);
+								worxLandroidS::create_equipement($product, $typetondeuse, $mowerDescription);
 							}
 						}
 						config::save('initCloud', 0 ,'worxLandroidS');
@@ -337,7 +334,7 @@ class worxLandroidS extends eqLogic {
 		
 	}
 	
-	public static function create_equipement($product, $MowerType){
+	public static function create_equipement($product, $MowerType, $mowerDescription){
 		$elogic = new worxLandroidS();
 		$elogic->setEqType_name('worxLandroidS');
 		//	$eqlogicid = $product['mac_address'];
@@ -345,6 +342,7 @@ class worxLandroidS extends eqLogic {
 		$elogic->setName($product['name']);
 		
 		$elogic->setConfiguration('MowerType', $MowerType);
+		$elogic->setConfiguration('mowerDescription', $mowerDescription);		
 		//$elogic->setName('LandroidS-'. $json2_data->dat->mac);
 		//$elogic->setConfiguration('topic', $nodeid);
 		$elogic->setConfiguration('errorRetryMode', true);
@@ -391,9 +389,6 @@ class worxLandroidS extends eqLogic {
 		$CERTFILE = $RESOURCE_PATH .'/cert.pem';
 		$PKEYFILE = $RESOURCE_PATH .'/pkey.pem';
 		$ROOT_CA = $RESOURCE_PATH .'/vs-ca.pem';
-		//$MowerType = $eqpt->getConfiguration('MowerType');
-		//curl_setopt ('mqtts://' . config::byKey('mqtt_endpoint', 'worxLandroidS'), CURLOPT_CAINFO, $ROOT_CA);
-		//	  curl_setopt('mqtts://' . config::byKey('mqtt_endpoint', 'worxLandroidS'), CURLOPT_SSL_VERIFYPEER, false);
 		self::$_client = $client;
 		self::$_client->clearWill();
 		self::$_client->onConnect('worxLandroidS::connect');
@@ -730,15 +725,11 @@ class worxLandroidS extends eqLogic {
 						$cmdlogic->setType('info');
 						$cmdlogic->setName( $cmdId );
 						$cmdlogic->setIsVisible($visible);
-						
-						
 						$cmdlogic->setConfiguration('topic', $value);
 						//$cmdlogic->setValue($value);
 						$cmdlogic->save();
 					}
-					
-					
-					//   log::add('worxLandroidS', 'debug', 'Cmdlogic update'.$cmdId.$value);
+				//   log::add('worxLandroidS', 'debug', 'Cmdlogic update'.$cmdId.$value);
 					
 					if(strstr($cmdId,"Planning/startTime") && $value != '00:00' ){
 						// log::add('worxLandroidS', 'debug', 'savedValue time'. $value);
@@ -754,12 +745,8 @@ class worxLandroidS extends eqLogic {
 					$cmdlogic->setConfiguration('topic', $value);
 					//$cmdlogic->setValue($value);
 					$cmdlogic->save();
-					
 					$elogic->checkAndUpdateCmd($cmdId,$value);
-					
-					
-					
-				}
+			  }
 				
 				public static function newAction($elogic,$cmdId,$topic,$payload,$subtype){
 					$cmdlogic = worxLandroidSCmd::byEqLogicIdAndLogicalId($elogic->getId(),$cmdId);
@@ -891,7 +878,7 @@ class worxLandroidS extends eqLogic {
 					// if ( config::byKey('mowingTime', 'worxLandroidS') == '0' ){
 					$client = new Mosquitto\Client($mosqId, true);
 					$eqptlist[] = array();
-					$eqptlist[] = array($eqlogic->getConfiguration('MowerType'),$eqlogic->getLogicalId(),$_message);
+					$eqptlist[0] = array($eqlogic->getConfiguration('MowerType'),$eqlogic->getLogicalId(),$_message);
 					self::connect_and_publish($eqptlist, $client, $_message);
 					//self::connect_and_publish($eqlogic, $client, $_message);
 					
@@ -1030,13 +1017,10 @@ class worxLandroidS extends eqLogic {
 								
 							}
 						}
-						
-						
-						
 					}
 					
 					class worxLandroidSCmd extends cmd {
-						
+				
 						public function execute($_options = null) {
 							switch ($this->getType()) {
 								case 'action' :
