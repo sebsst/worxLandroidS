@@ -1,9 +1,9 @@
 # worxLandroidS
 
-Robots tondeuses Worx Landroid modèles S
+Plugin Jeedom pour Robots tondeuses Worx Landroid modèles S/M/L
 
 # Présentation
-Ce plugin permet de se connecter aux tondeuses worx Landroid modèles S.
+Ce plugin permet de se connecter aux tondeuses worx Landroid modèles S/M/L 
 
 # Configuration du plugin
 
