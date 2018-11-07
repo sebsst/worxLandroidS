@@ -4,6 +4,31 @@
 
 Ce plugin permet de se connecter aux tondeuses worx Landroid modèles S et M (version firmware > 5.0)
 
+Tondeuses théoriquement compatible:
+-WG757E
+-WG796E.1
+-WG797E.1
+-WG798E
+-WR101SI
+-WR102SI
+-WR104SI
+-WR105SI
+-WR106SI
+-WR110MI
+-WR111MI
+-WR112MI
+-WG799E
+-WR113MI
+-WR100SI
+-WR101SI.1
+-WR102SI.1
+-WR103SI
+-WR104SI.1
+-WR105SI.1
+-WR106SI.1
+-WR110MI.1
+-WR115MI
+
 ### Configuration du plugin
 
 La connexion vers la tondeuse se fait à partir d'un serveur cloud en utilisant le compte utilisé lors de l'enregistrement de la tondeuse.
