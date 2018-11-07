@@ -144,6 +144,14 @@ $eqLogics = eqLogic::byType('worxLandroidS');
       			<Input readonly type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="serialNumber"  />
               </div>
             </div>   
+             <div class="form-group">
+              <label class="col-sm-3 control-label" > {{Date de fin de garantie}}</label>
+              <div class="col-sm-3">
+      			<Input readonly type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="warranty_expiration_date"  />
+              </div>
+            </div>              
+
+            
         </fieldset>
       </form>
     </div>
