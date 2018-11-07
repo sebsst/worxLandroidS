@@ -138,7 +138,12 @@ $eqLogics = eqLogic::byType('worxLandroidS');
       			<Input readonly type="text" class="eqLogicAttr form-control" data-l1key="logicalId"  />
               </div>
             </div>            
-
+            <div class="form-group">
+              <label class="col-sm-3 control-label" > {{Numéro de série}}</label>
+              <div class="col-sm-3">
+      			<Input readonly type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="serialNumber"  />
+              </div>
+            </div>   
         </fieldset>
       </form>
     </div>
