@@ -49,9 +49,9 @@ class worxLandroidS extends eqLogic {
 			if ($eqpt->getIsEnable() == true){
 				$i = date('w');
 				$start = $eqpt->getCmd(null, 'Planning/startTime/' . $i);
-				$startTime = is_object($start) ? $start->execCmd() : '00:00';
+				$startTime = is_object($start) ? $start->execCmd() : '';
 				$dur = $eqpt->getCmd(null, 'Planning/duration/' . $i);
-				$duration = is_object($dur) ? $dur->execCmd() : 0;
+				$duration = is_object($dur) ? $dur->execCmd() : '';
 				
 				$initDate = DateTime::createFromFormat('H:i', $startTime);
 				$initDate->add(new DateInterval("PT".$duration."M"));
@@ -83,11 +83,13 @@ class worxLandroidS extends eqLogic {
 				if(config::byKey('status','worxLandroidS') == '0'){ //on se connecte seulement si on est pas déjà connecté
 					$i = date('w');
 					$start = $eqpt->getCmd(null, 'Planning/startTime/' . $i);
-					$startTime = is_object($start) ? $start->execCmd() : '';
+					$startTime = is_object($start) ? $start->execCmd() : '00:00';
 					$dur = $eqpt->getCmd(null, 'Planning/duration/' . $i);
-					$duration = is_object($dur) ? $dur->execCmd() : '';
+					$duration = is_object($dur) ? $dur->execCmd() : 0;
 					
 					$initDate = DateTime::createFromFormat('H:i', $startTime);
+                  log::add('worxLandroidS', 'debug', 'mower sleeping '.$duration);
+                    //if(empty($duration){$duration = 0};
 					$initDate->add(new DateInterval("PT".$duration."M"));
 					$endTime = $initDate->format("H:i");
 					// refresh value each 30 minutes if mower is sleeping at home :-)
@@ -339,9 +341,13 @@ class worxLandroidS extends eqLogic {
 			}
 		}
 		
-		worxLandroidS::refresh_values();
+		//worxLandroidS::refresh_values();
 		
 	}
+  
+  public function postSave() {
+    self::refresh_values();
+  }
 	
 	public static function create_equipement($product, $MowerType, $mowerDescription){
 		$elogic = new worxLandroidS();
@@ -837,6 +843,7 @@ class worxLandroidS extends eqLogic {
 					$daySchedule[2] = $schedule[intval($daynumber)][2];
 					$schedule[intval($daynumber)] = $daySchedule;
 					$_message = '{"sc":'.json_encode(array('d'=>$schedule))."}" ;
+                    						log::add('worxLandroidS', 'debug', '$current schedule: ' . $_message);
 					return $_message ;
 					//  worxLandroidS::setSchedule($eqlogic, $schedule);
 					
@@ -866,11 +873,18 @@ class worxLandroidS extends eqLogic {
 						}
 						
 						$sched = self::getSavedDaySchedule($eqlogicid,  substr($_message,3,1));
-						$_message = self::setDaySchedule($eqlogicid, substr($_message,3,1), $sched);//  $this->saveConfiguration('savedValue',
+
+                      $_message = self::setDaySchedule($eqlogicid, substr($_message,3,1), $sched);//  $this->saveConfiguration('savedValue',
 					}
 					
 					if($cmd->getName()=='refreshValue'){ $_message = '{}';}
 					
+					// send start command
+					if($cmd->getName() == 'user_message')
+					{
+						$_message = trim($_message,'|');
+					}
+                  
 					// send start command
 					if($cmd->getName() == 'start')
 					{
