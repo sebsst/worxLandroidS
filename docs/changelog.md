@@ -3,6 +3,7 @@
 En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que la doc, les traductions et des corrections mineures
 
 ## 07/11/2018
+- La nouvelle version du plugin nécessite la recréation des équipements, vous devez donc supprimer les équipements existants
 - Gestion multi-tondeuses
 - Détection automatique du type de tondeuse
 
