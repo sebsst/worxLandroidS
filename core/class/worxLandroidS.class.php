@@ -103,10 +103,6 @@ class worxLandroidS extends eqLogic {
 								// modification à faire ======>
 								self::$_client->disconnect();
 							}
-							//	$mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
-							//	$client = new Mosquitto\Client($mosqId, true);
-							//	self::connect_and_publish($eqpt, $client, '{}');
-							
 						}
 					}
 				}
@@ -118,13 +114,8 @@ class worxLandroidS extends eqLogic {
 				$client = new Mosquitto\Client($mosqId, true);
 				self::connect_and_publish($eqptlist, $client, '{}');
 				}
-				
-				
-				
-				
+			
 			}
-			
-			
 			
 			public static function deamon_info() {
 				$return = array();
@@ -237,9 +228,6 @@ class worxLandroidS extends eqLogic {
 							'x-auth-token:' . $token
 						)
 					);
-					
-					
-					
 					$result = curl_exec($ch);
 					log::add('worxLandroidS', 'info', 'Connexion result :'.$result);
 					$json = json_decode($result,true);
@@ -309,12 +297,12 @@ class worxLandroidS extends eqLogic {
 					{
 					} else
 					{
-// get boards => id => code
+              // get boards => id => code
 								$url =  "https://api.worxlandroid.com:443/api/v1/boards";
                                 curl_setopt($ch, CURLOPT_URL, $url);
 								$boards = json_decode(curl_exec($ch),true);
 								
-// get products => product_id => board_id
+                // get products => product_id => board_id
 								$url =  "https://api.worxlandroid.com:443/api/v1/products";
                                 curl_setopt($ch, CURLOPT_URL, $url);
 								$products = json_decode(curl_exec($ch),true);								
@@ -404,9 +392,7 @@ class worxLandroidS extends eqLogic {
 		$CERTFILE = $RESOURCE_PATH .'/cert.pem';
 		$PKEYFILE = $RESOURCE_PATH .'/pkey.pem';
 		$ROOT_CA = $RESOURCE_PATH .'/vs-ca.pem';
-		//$MowerType = $eqpt->getConfiguration('MowerType');
-		//curl_setopt ('mqtts://' . config::byKey('mqtt_endpoint', 'worxLandroidS'), CURLOPT_CAINFO, $ROOT_CA);
-		//	  curl_setopt('mqtts://' . config::byKey('mqtt_endpoint', 'worxLandroidS'), CURLOPT_SSL_VERIFYPEER, false);
+
 		self::$_client = $client;
 		self::$_client->clearWill();
 		self::$_client->onConnect('worxLandroidS::connect');
@@ -492,11 +478,7 @@ class worxLandroidS extends eqLogic {
 		}
 		
 		public static function message($message) {
-			//self::$_client->exitloop();
-			//self::$_client->unsubscribe($message->topic);
-			
-			//  if(isset(self::$_client_pub){ self::$_client_pub->disconnect(); }
-			// unset(self::$_client);
+
 			log::add('worxLandroidS', 'debug', 'Message ' . $message->payload . ' sur ' . $message->topic);
 			//json message
 			$nodeid = $message->topic;
@@ -506,15 +488,10 @@ class worxLandroidS extends eqLogic {
 			$split_topic = explode( '/', $nodeid);
 			$mac_address = $split_topic[1];
 			$type = 'json';
-			// log::add('worxLandroidS', 'debug', 'Message json : ' . $value . ' pour information sur : ' . $nodeid);
-			
-			//config::save('landroid_name', $json3[0]['name'],'worxLandroidS');
-			//		log::add('worxLandroidS', 'debug', 'Message ' . $mac_address);
 			
 			$json = json_decode($value, true);
 			$elogic = eqlogic::byLogicalId($mac_address, 'worxLandroidS', false);
-			
-			//log::add('worxLandroidS', 'debug', 'Message ' . $elogic->getName());
+
 			/*
 			cfg->lg language: string;
 			cfg->dt dateTime: moment.Moment;
@@ -576,10 +553,7 @@ class worxLandroidS extends eqLogic {
 		15: "Timeout finding home"
 		
 		*/
-		
-		//        log::add('worxLandroidS', 'Debug', 'Langue : ' . $json2_data->cfg->lg. ' pour information : ' . $cmdId);
-		//        log::add('worxLandroidS', 'Debug', ' : ' . $json2_data->cfg->sc->m. ' pour information : ' . $cmdId);
-		
+
 		
 		if( config::byKey('status','worxLandroidS') == '1'){ //&& config::byKey('mowingTime','worxLandroidS') == '0'){
 			self::$_client->disconnect();  }
@@ -1087,6 +1061,5 @@ class worxLandroidS extends eqLogic {
 							}
 							return true;
 						}
-						
 						
 					}
