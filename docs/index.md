@@ -4,32 +4,6 @@
 
 Ce plugin permet de se connecter aux tondeuses worx Landroid modèles WIFI (Modèle M/L avec version firmware > 5.0)
 
-Tondeuses théoriquement compatible:
-- Landroid M 800 WiFi - WG757E
-- Landroid M 1000 WiFi - WG796E.1
-- Landroid L 2000 WiFi - WG797E.1
-- Landroid L 1500 WiFi - WG798E
-- Landroid S Orange 450 WiFi - WR101SI
-- Landroid S Black Black 450 WiFi - WR102SI
-- Landroid S Orange 500 WiFi - WR104SI
-- Landroid S Black 500 WiFi - WR105SI
-- Landroid S White 450 WiFi - WR106SI
-- Landroid S Black 700 WiFi - WR110MI
-- Landroid M 800 WiFi - WR111MI
-- Landroid M 1000 WiFi - WR112MI
-- Landroid M 1200 WiFi - WG799E
-- Landroid M 1200 WiFi - WR113MI
-- Landroid S White 390 WiFi - WR100SI
-- Landroid S Orange 450 WiFi - WR101SI.1
-- Landroid S Black Black 450 WiFi - WR102SI.1
-- Landroid S Black Grey 500 WiFi - WR103SI
-- Landroid S Orange 500 WiFi - WR104SI.1
-- Landroid S Black 500 WiFi - WR105SI.1
-- Landroid S White 450 WiFi - WR106SI.1
-- Landroid S Black 700 WiFi - WR110MI.1
-- Landroid S Orange 700 WiFi - WR115MI
-
-
 ### Configuration du plugin
 
 La connexion vers la tondeuse se fait à partir d'un serveur cloud en utilisant le compte utilisé lors de l'enregistrement de la tondeuse.
@@ -100,9 +74,31 @@ Oui à partir des boutons en haut à droite
 
 >quels sont les modèles compatibles?
 
-Le plugin est compatible avec les modèle S worx Landroid WR10xSx. 
-Un autre plugin worxLandroid est disponible pour les modèles M.
-Depuis la version du firmware 5.x, les modèles M devraient également être compatible (liste des modèles non connus)
+- Landroid M 800 WiFi - WG757E
+- Landroid M 1000 WiFi - WG796E.1
+- Landroid L 2000 WiFi - WG797E.1
+- Landroid L 1500 WiFi - WG798E
+- Landroid S Orange 450 WiFi - WR101SI
+- Landroid S Black Black 450 WiFi - WR102SI
+- Landroid S Orange 500 WiFi - WR104SI
+- Landroid S Black 500 WiFi - WR105SI
+- Landroid S White 450 WiFi - WR106SI
+- Landroid S Black 700 WiFi - WR110MI
+- Landroid M 800 WiFi - WR111MI
+- Landroid M 1000 WiFi - WR112MI
+- Landroid M 1200 WiFi - WG799E
+- Landroid M 1200 WiFi - WR113MI
+- Landroid S White 390 WiFi - WR100SI
+- Landroid S Orange 450 WiFi - WR101SI.1
+- Landroid S Black Black 450 WiFi - WR102SI.1
+- Landroid S Black Grey 500 WiFi - WR103SI
+- Landroid S Orange 500 WiFi - WR104SI.1
+- Landroid S Black 500 WiFi - WR105SI.1
+- Landroid S White 450 WiFi - WR106SI.1
+- Landroid S Black 700 WiFi - WR110MI.1
+- Landroid S Orange 700 WiFi - WR115MI
+
+Un autre plugin worxLandroid est disponible pour les modèles M/L en version non cloud.
 
 >Liste des codes erreur:
 - 1: Bloquée
