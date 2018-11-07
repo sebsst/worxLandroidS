@@ -26,6 +26,7 @@ Le dashboard affiche:
 - Etat batterie
 - bouton de retour maison
 - bouton de démarrage
+- bouton pause
 - Rafraîchissement des infos courantes
 - la date et heure de la dernière communication
 - Distance et durée totale de fonctionnement
@@ -67,10 +68,6 @@ Toutes les 2 minutes si la tondeuse est en activité et toutes les 30 minutes lo
 
 Cela signifie que la tondeuse était coincée pendant quelques secondes et que le plugin a remonté l'info à ce moment là.
 Il est possible de rafraîchir le statut de la tondeuse en utilisant le bouton "refreshValue"
-
->Est-ce que je peux démarrer ou arrêter la tondeuse à partir du plugin? 
-
-Oui à partir des boutons en haut à droite
 
 >quels sont les modèles compatibles?
 
