@@ -329,7 +329,7 @@ class worxLandroidS extends eqLogic {
 			}
 		}
 		
-		//worxLandroidS::refresh_values();
+		worxLandroidS::refresh_values();
 		
 	}
   
