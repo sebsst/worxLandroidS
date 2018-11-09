@@ -333,9 +333,9 @@ class worxLandroidS extends eqLogic {
 		
 	}
   
-  public function postSave() {
-    self::refresh_values();
-  }
+  //public function postSave() {
+  //  self::refresh_values();
+  //}
 	
 	public static function create_equipement($product, $MowerType, $mowerDescription){
 		$elogic = new worxLandroidS();
