@@ -59,6 +59,7 @@ else
 fi
 echo 60 > ${PROGRESS_FILE}
 
+
 echo "*"
 echo "* Install php mosquitto wrapper"
 echo "*"
