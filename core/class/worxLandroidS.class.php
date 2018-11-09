@@ -19,7 +19,6 @@ require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 
 class worxLandroidS extends eqLogic {
 	
-	
 	public static $_client;
 	public static $_client_pub;
 	// Dependancy installation log file
