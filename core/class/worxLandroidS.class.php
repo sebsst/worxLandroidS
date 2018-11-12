@@ -575,7 +575,7 @@ class worxLandroidS extends eqLogic {
 			$retryNr = $elogic->getConfiguration('retryNr', 0);
 			$errorCode = $json2_data->dat->le ;
 			
-			if($errorCode != 0 and $retryMode && $retryNr < 1){
+			if($errorCode != 0 and $retryMode && $retryNr < 1 && false ){ //suppression mode retry
 				log::add('worxLandroidS', 'Debug', ' error wait for retry err code : ' . $json2_data->dat->le);
 				$retryNr++;
 				$elogic->setConfiguration('retryNr', $retryNr);
