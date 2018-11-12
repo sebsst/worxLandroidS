@@ -306,11 +306,11 @@ class worxLandroidS extends eqLogic {
                                 curl_setopt($ch, CURLOPT_URL, $url);
 								$products = json_decode(curl_exec($ch),true);								
 					foreach ($json3 as $key => $product) {
-                            $typetondeuse = 'DB510';
+                                                         $typetondeuse = 'DB510';
 							$found_key = array_search($product['product_id'], array_column($products, 'id'));  
 							$board_id = $products[$found_key]['board_id']	;	
-    						$mowerDescription = $products[$found_key]['description']		;
-                            log::add('worxLandroidS', 'info', 'board_id: '.$board_id. ' / product id:'.$product['product_id']);    
+    						        $mowerDescription = $products[$found_key]['description']		;
+                                                        log::add('worxLandroidS', 'info', 'board_id: '.$board_id. ' / product id:'.$product['product_id']);    
 							$found_key = array_search($board_id, array_column($boards, 'id'));  
 							$typetondeuse = $boards[$found_key]['code']		;
 	
@@ -318,9 +318,20 @@ class worxLandroidS extends eqLogic {
 							// create Equipement if not already created
 							$elogic = self::byLogicalId($product['mac_address'], 'worxLandroidS');
 							if(!is_object($elogic)){
+
+							    $elogic_prev = self::byLogicalId($typetondeuse.'/'.$product['mac_address'].'/commandOut', 'worxLandroidS');
+							    if(is_object($elogic_prev)){
+						             // update existing  equipement if created in previous plugin release
+							     	$elogic_prev->setLogicalId('$product['mac_address']');
+								$elogic_prev->save;
+							     }		    
+							    }else{								
+								
 								log::add('worxLandroidS', 'info', 'mac_address '.$product['mac_address'].$typetondeuse.$product['product_id']);
 								worxLandroidS::create_equipement($product, $typetondeuse, $mowerDescription);
-							}
+							    }
+							 }							
+
 						}
 						config::save('initCloud', 0 ,'worxLandroidS');
 					}
