@@ -322,7 +322,7 @@ class worxLandroidS extends eqLogic {
 							    $elogic_prev = self::byLogicalId($typetondeuse.'/'.$product['mac_address'].'/commandOut', 'worxLandroidS');
 							    if(is_object($elogic_prev)){
 						             // update existing  equipement if created in previous plugin release
-							     	$elogic_prev->setLogicalId('$product['mac_address']');
+							     	$elogic_prev->setLogicalId($product['mac_address']);
 								$elogic_prev->save;
 							     }		    
 							    }else{								
