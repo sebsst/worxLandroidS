@@ -122,7 +122,7 @@ $eqLogics = eqLogic::byType('worxLandroidS');
               <div class="col-sm-8">
                 <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isEnable" checked/>{{Activer}}</label>
                 <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isVisible" checked/>{{Visible}}</label>
-                <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="errorRetryMode" checked/>{{retry Mode}}</label>
+                
               </div>
             </div>
             <div class="form-group">
