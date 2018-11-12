@@ -322,7 +322,7 @@ class worxLandroidS extends eqLogic {
 							    $elogic_prev = self::byLogicalId($typetondeuse.'/'.$product['mac_address'].'/commandOut', 'worxLandroidS');
 							    if(is_object($elogic_prev)){
 						             // created equipement in previous plugin release*
-								event::add('worxLandroidS::includeEqpt', $elogic_prev->get_id());    
+							        message::add('worxLandroidS', 'Veuillez supprimer la tondeuse ajoutée précédemment: ' . $elogic_prev->getName(), null, null); 
 								log::add('worxLandroidS', 'info', 'Suppress existing first : mac_address '.$product['mac_address'].$typetondeuse.$product['product_id']);
 							     }	    
 							    else{								
