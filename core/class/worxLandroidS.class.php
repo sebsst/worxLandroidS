@@ -74,6 +74,7 @@ class worxLandroidS extends eqLogic {
 	}
 	
 	
+
 	public static function refresh_values() {
 		$count = 0;
 		$eqptlist[] = array();
@@ -313,6 +314,7 @@ class worxLandroidS extends eqLogic {
                                                         log::add('worxLandroidS', 'info', 'board_id: '.$board_id. ' / product id:'.$product['product_id']);    
 							$found_key = array_search($board_id, array_column($boards, 'id'));  
 							$typetondeuse = $boards[$found_key]['code']		;
+
 	
 							log::add('worxLandroidS', 'info', 'mac_address '.$product['mac_address'].$typetondeuse);
 							// create Equipement if not already created
