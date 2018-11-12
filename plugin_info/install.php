@@ -72,7 +72,6 @@ function worxLandroidS_update() {
          worxLandroidS::newAction($eqpt,'rain_delay_120',$commandIn,"120",'other');
          worxLandroidS::newAction($eqpt,'rain_delay_240',$commandIn,"240",'other');
 
- 
     }
 
     
