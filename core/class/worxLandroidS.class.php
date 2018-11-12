@@ -361,7 +361,7 @@ class worxLandroidS extends eqLogic {
 		$elogic->setConfiguration('mowerDescription', $mowerDescription);		
 		//$elogic->setName('LandroidS-'. $json2_data->dat->mac);
 		//$elogic->setConfiguration('topic', $nodeid);
-		$elogic->setConfiguration('errorRetryMode', true);
+		$elogic->setConfiguration('errorRetryMode', false);
 		// ajout des actions par défaut
 		log::add('worxLandroidS', 'info', 'Saving device with mac address' . $product['mac_address']);
 		message::add('worxLandroidS', 'Tondeuse ajoutée: ' . $elogic->getName(), null, null);
