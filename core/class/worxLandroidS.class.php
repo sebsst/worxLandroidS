@@ -324,8 +324,8 @@ class worxLandroidS extends eqLogic {
 						             // update existing  equipement if created in previous plugin release
 							     	$elogic_prev->setLogicalId($product['mac_address']);
 								$elogic_prev->save;
-							     }		    
-							    }else{								
+							     }	    
+							    else{								
 								
 								log::add('worxLandroidS', 'info', 'mac_address '.$product['mac_address'].$typetondeuse.$product['product_id']);
 								worxLandroidS::create_equipement($product, $typetondeuse, $mowerDescription);
