@@ -1,75 +1,70 @@
-# Robots tondeuses Worx Landroid modèles S, M et L
+# Worx Landroid mowers S,M and L models
 
-## Présentation
+## Introduction
 
-Ce plugin permet de se connecter aux tondeuses worx Landroid modèles WIFI (Modèle M/L avec version firmware > 5.0)
+Pugin is compatible with Worx landroid  WIFI / cloud models (M or L firmware version > 5.0)
 
-### Configuration du plugin
+### Plugin configuration
 
-La connexion vers la tondeuse se fait à partir d'un serveur cloud en utilisant le compte utilisé lors de l'enregistrement de la tondeuse.
+Connexion ids to cloud server are the ones provided during product registration
 
-Les identifiants correspondent à ceux de l'application mobile.
-Vous devez attendre la fin de l'activation des dépendances pour permettre la communication avec la tondeuse par le protocole Mosquitto.
+Email and password are the same than the mobile application. Dependencies installation must be completed before communication can be established with mower.
 
-Une fois la sauvegarde effectuée, un nouvel équipement tondeuse va être créé automatiquement. En cas de soucis vous pouvez réactualiser les informations du cloud en utilisant la case à cocher correspondante et en effectuant une nouvelle sauvegarde.
+If all provided are ok, devices will be created automatically after configuration save. Clouds parameters can be refreshed by using the appropriate checkbox
 
-L'arrêt du daemon permet de stopper la connexion avec la tondeuse.
-En cas du défaillance il se peut que le Daemon soit à l'arrêt et vous pouvez tenter un redémarrage.
+Stopping the daemon will stop periodic communication with the mower. 
 
-En cas d'arrêt prolongé, la meilleure solution est de désactiver le plugin.
+If device is not used during a long period, the best solution is to disable plugin to avoid unecessary system resource usage.
 
-### utilisation
+### Usage
 
-Le nom par défaut = Nom de la tondeuse sur l'application mobile
+Device default name = device name from mobile application
 
-Le dashboard affiche:
-- Etat batterie
-- bouton de retour maison
-- bouton de démarrage
-- bouton pause
-- Rafraîchissement des infos courantes
-- la date et heure de la dernière communication
-- Distance et durée totale de fonctionnement
-- Nombres de cycles de recharge
-- Délai en minutes après la pluie
-- changement du délai pluie (0 = on peut tondre sous la pluie, 30, 60, 120, 240)
-- Etat de la tondeuse avec le code correspondant
-- Description de l'erreur avec le code correspondant
-- Le planning par jour avec l'heure de démarrage et d'arrêt
-- Le bouton off permet de mettre les horaires à 0
-- Le bouton on permet de récupérer les derniers horaires communiqués au plugin (10H - 17h par défaut)
-- 'Bord.' signifie la coupe des bordures est planifié 
+Dashboard
+- Remaining battery
+- Go home
+- Start button
+- Pause
+- Data refresh
+- Last communication date and time
+- Total distance and work duration
+- Total number of charging cycle
+- Rain delay in minutes
+- Change rain delay (0 = no wait time, 30, 60, 120, 240)
+- Mower status and status code
+- Error description if any
+- Daily schedule : start and stop time
+- Off button : set timing to 0
+- On button to retrieve last known values (defaulted to 10-17h)
+- Cutting edges indicator
 
-Vous pouvez masquer les infos suivantes:
+Below info can be hidden
 - errorCode, statusCode, totalDistance, batteryChargeCycle, rainDelay
 
 
-## Informations utiles pour les scénarios
+## Usefull info
 
-Pour les scénarios, il peut être intéressant d'utiliser les actions 'on_today' et 'off_today' empêcher le démarrage un jour férié.
-Penser à mettre off le matin et remettre à on avant minuit pour récupérer les horaires précédents
+To avoid mowing on a particular day, you can set up a scenario with actions 'off_today' and 'on_today' before midnight to set timings
 
-Il faut éviter d'envoyer plusieurs demandes de changement de planning sur des jours différents à des intervalles rapides. En effet le changement n'est enregistré dans le plugin qu'à la réponse du serveur. Tout le planning est envoyé à chaque fois et par conséquent on pourrait perdre la précédente demande.
-Donc soit il faut attendre le l'actualisation de l'info dans l'équipement, soit il faut mettre une temporisation.
+Avoid fast planning change because complete planning is sent each time but is only recorded after cloud server response. Several messages arriving at the same moment may lead to incorrect time.
 
-Pour le planning, les commandes possibles sont: 
-- on_0 à on_6 où le chiffre représente le numéro du jour de la semaine (0 =dimanche)
-- off_0 à off_6
-- on_today pour activer le jour courant
-- off_today pour désactiver le jour courant
+Daily schedule - possible actions:
+- From on_0 to on_6 where the digits correspond to the current (0 =Sunday)
+- off_0 to off_6
+- on_today set current day mowing times
+- off_today current day mowing time
 
 ## FAQ
 
->A quelle fréquence, les données sont-elles réactualisées?
+>Which data refresh frequency?
 
-Toutes les 2 minutes si la tondeuse est en activité et toutes les 30 minutes lorsqu'elle est en veille.
+Each 2 minutes during mowing periods and each 30 minutes when mower is on standby
 
->Le plugin m'indique que la tondeuse est coincée mais ce n'est pas le cas, pourquoi?
+>Plugin indicates that mower is blocked but it is actually not the case. why?
 
-Cela signifie que la tondeuse était coincée pendant quelques secondes et que le plugin a remonté l'info à ce moment là.
-Il est possible de rafraîchir le statut de la tondeuse en utilisant le bouton "refreshValue"
+Landroid can be blocked only a few seconds, due to periodic refresh the message could be send during these few seconds. Either wait for next refresh or perform a manual "refreshValue"
 
->quels sont les modèles compatibles?
+>Compatible devices
 
 - Landroid M 800 WiFi - WG757E
 - Landroid M 1000 WiFi - WG796E.1
