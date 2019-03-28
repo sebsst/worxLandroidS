@@ -93,7 +93,9 @@ class worxLandroidS extends eqLogic {
 					$initDate->add(new DateInterval("PT".$duration."M"));
 					$endTime = $initDate->format("H:i");
 					// refresh value each 30 minutes if mower is sleeping at home :-)
-					if($startTime == '00:00' or $startTime > date('H:i') or date('H:i') > $endTime) {
+					if($startTime == '00:00' or $startTime > date('H:i') or date('H:i') > $endTime
+					  or $startTime <= date('H:i') and date('H:i') <= $endTime
+					  )   {
 						config::save('realTime', '0' ,'worxLandroidS');
 						log::add('worxLandroidS', 'debug', 'mower sleeping ');
 						// populate message to be sent
