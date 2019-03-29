@@ -1,15 +1,12 @@
 # Changelog
 
-En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que la doc, les traductions et des corrections mineures
-
-## 29/03/2019
-- Correction sur la fréquence de rafraîchissement des données
+If no info in changelog, the update concerns only doc, translations or minor corrections
 
 ## 07/11/2018
-- La nouvelle version du plugin nécessite la recréation des équipements, vous devez donc supprimer les équipements existants
-- Gestion multi-tondeuses
-- Détection automatique du type de tondeuse
-- suppression mode retry
+- If you have already installed the plugin you may have to delete existing devices with the new plugin version
+- Manage multiple devices
+- Mower type automatic detection
+- Retry mode removed
 
 ## 14/09/2018
 

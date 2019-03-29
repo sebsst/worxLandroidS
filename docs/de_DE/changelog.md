@@ -2,9 +2,6 @@
 
 En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que la doc, les traductions et des corrections mineures
 
-## 29/03/2019
-- Correction sur la fréquence de rafraîchissement des données
-
 ## 07/11/2018
 - La nouvelle version du plugin nécessite la recréation des équipements, vous devez donc supprimer les équipements existants
 - Gestion multi-tondeuses
