@@ -40,7 +40,7 @@ class worxLandroidS extends eqLogic {
 	}
 	//     * Fonction exécutée automatiquement toutes les heures par Jeedom
 	public static function cron30() {
-		worxLandroidS::refresh_values();
+		worxLandroidS::refresh_values("false");
 	}
 
 	public static function checkMowingTime() {
@@ -75,7 +75,7 @@ class worxLandroidS extends eqLogic {
 	
 	
 
-	public static function refresh_values() {
+	public static function refresh_values($checkMowingTime = "false") {
 		$count = 0;
 		$eqptlist[] = array();
 		foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
@@ -93,8 +93,9 @@ class worxLandroidS extends eqLogic {
 					$initDate->add(new DateInterval("PT".$duration."M"));
 					$endTime = $initDate->format("H:i");
 					// refresh value each 30 minutes if mower is sleeping at home :-)
-					if($startTime == '00:00' or $startTime > date('H:i') or date('H:i') > $endTime
-					  or $startTime <= date('H:i') and date('H:i') <= $endTime
+					if($checkMowingTime == "manual" or
+					   $checkMowingTime == "false" and ( $startTime == '00:00' or $startTime > date('H:i') or date('H:i') > $endTime )
+					  or $startTime <= date('H:i') and date('H:i') <= $endTime and $checkMowingTime == "true"
 					  )   {
 						config::save('realTime', '0' ,'worxLandroidS');
 						log::add('worxLandroidS', 'debug', 'mower sleeping ');
@@ -343,12 +344,12 @@ class worxLandroidS extends eqLogic {
 			}
 		}
 		
-		worxLandroidS::refresh_values();
+		worxLandroidS::refresh_values("true");
 		
 	}
   
   public function postSave() {
-    self::refresh_values();
+    self::refresh_values("manual");
   }
 	
 	public static function create_equipement($product, $MowerType, $mowerDescription){
