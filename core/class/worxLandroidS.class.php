@@ -88,7 +88,7 @@ class worxLandroidS extends eqLogic {
 					$duration = is_object($dur) ? $dur->execCmd() : 0;
 					
 					$initDate = DateTime::createFromFormat('H:i', $startTime);
-                  log::add('worxLandroidS', 'debug', 'mower sleeping '.$duration);
+                  //log::add('worxLandroidS', 'debug', 'mower sleeping '.$duration);
                     //if(empty($duration){$duration = 0};
 					$initDate->add(new DateInterval("PT".$duration."M"));
 					$endTime = $initDate->format("H:i");
