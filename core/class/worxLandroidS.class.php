@@ -616,10 +616,13 @@ class worxLandroidS extends eqLogic {
 						self::newInfo($elogic,'batteryVoltage',$json2_data->dat->bt->v,'numeric',0);
 						self::newInfo($elogic,'batteryTemperature',$json2_data->dat->bt->t,'numeric',0);
 						self::newInfo($elogic,'zonesList',$json2_data->dat->mz,'string',0);
-						self::newInfo($elogic,'connexion',$json2_data->dat->modules->conn,'string',0);
-						self::newInfo($elogic,'GPSLatitude',$json2_data->dat->modules->4G->GPS[0],'string',0);
-						self::newInfo($elogic,'GPSLongitude',$json2_data->dat->modules->4G->GPS[1],'string',0);
-				     				     
+				
+				                if(array_key_exists('conn', $json2_data->dat))
+						{ // for mower with 4G modules
+						  self::newInfo($elogic,'connexion',$json2_data->dat->conn,'string',0);
+						  self::newInfo($elogic,'GPSLatitude',$json2_data->dat->modules[$json2_data->dat->conn]->GPS->coo[0],'string',0);
+						  self::newInfo($elogic,'GPSLongitude',$json2_data->dat->modules[$json2_data->dat->conn]->GPS->coo[1],'string',0);
+						}		     
 				                   
 						//log::add('worxLandroidS', 'Debug', 'zone:' . $json2_data->cfg->mzv[$json2_data->dat->lz]+1 . ' / '.$json2_data->cfg->mz[1]);
 						//	if ($json2_data->cfg->mz[1] != 0){
