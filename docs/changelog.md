@@ -2,6 +2,9 @@
 
 En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que la doc, les traductions et des corrections mineures
 
+## 03/04/2019
+- Ajout coordonnées GPS si disponibles
+
 ## 29/03/2019
 - Correction sur la fréquence de rafraîchissement des données
 
