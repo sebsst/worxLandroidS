@@ -449,6 +449,7 @@ class worxLandroidS extends eqLogic {
 					log::add('worxLandroidS', 'debug', 'Timeout reached');
 					foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
 						self::newInfo($eqpt,'statusDescription', __("Communication timeout",__FILE__),'string',1);
+					        config::save('status', '0',  'worxLandroidS');
 					}
 					return false;
 				}
