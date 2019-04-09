@@ -621,8 +621,8 @@ class worxLandroidS extends eqLogic {
 				                if(array_key_exists('conn', $json2_data->dat))
 						{ // for mower with 4G modules
 						  self::newInfo($elogic,'connexion',$json2_data->dat->conn,'string',1);
-						  self::newInfo($elogic,'GPSLatitude',$json2_data->dat->modules[$json2_data->dat->conn]->gps->coo[0],'string',1);
-						  self::newInfo($elogic,'GPSLongitude',$json2_data->dat->modules[$json2_data->dat->conn]->gps->coo[1],'string',1);
+						  self::newInfo($elogic,'GPSLatitude',$json2_data->dat->modules->4G->gps->coo[0],'string',1);
+						  self::newInfo($elogic,'GPSLongitude',$json2_data->dat->modules>4G->gps->coo[1],'string',1);
 						}
 						else
 						{
