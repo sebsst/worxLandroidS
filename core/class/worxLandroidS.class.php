@@ -213,12 +213,12 @@ class worxLandroidS extends eqLogic {
 						$email = config::byKey('email', 'worxLandroidS');
 						$passwd = config::byKey('passwd', 'worxLandroidS');
 						// get mqtt config
-						$url =  "https://api.worxlandroid.com:443/api/v1/users/auth";
+						$url =  "https://api.worxlandroid.com:443/api/v2/users/auth";
 						
-						$token = "qiJNz3waS4I99FPvTaPt2C2R46WXYdhw";
+						$token = "725f542f5d2c4b6a5145722a2a6a5b736e764f6e725b462e4568764d4b58755f6a767b2b76526457";
 						$content = "application/json";
 						$ch = curl_init();
-						$data = array("email" => $email, "password" => $passwd, "uuid" => "uuid/v1" , "type"=> "app" , "platform"=> "android");
+						$data = array("email" => $email, "password" => $passwd, "uuid" => "uuid/v2" , "type"=> "app" , "platform"=> "android");
 						$data_string = json_encode($data);
 						
 						$ch = curl_init($url);
@@ -249,7 +249,7 @@ class worxLandroidS extends eqLogic {
 					{
 						
 						// get certificate
-						$url =  "https://api.worxlandroid.com:443/api/v1/users/certificate";
+						$url =  "https://api.worxlandroid.com:443/api/v2/users/certificate";
 						$api_token = $json['api_token'];
 						$token = $json['api_token'];
 						
@@ -278,7 +278,7 @@ class worxLandroidS extends eqLogic {
 						file_put_contents($PKEYFILE, $certs['pkey']);
 						
 						// get product item (mac address)
-						$url =  "https://api.worxlandroid.com:443/api/v1/product-items";
+						$url =  "https://api.worxlandroid.com:443/api/v2/product-items";
 						
 						$content = "application/json";
 						$ch = curl_init($url);
@@ -301,12 +301,12 @@ class worxLandroidS extends eqLogic {
 					} else
 					{
               // get boards => id => code
-								$url =  "https://api.worxlandroid.com:443/api/v1/boards";
+								$url =  "https://api.worxlandroid.com:443/api/v2/boards";
                                 curl_setopt($ch, CURLOPT_URL, $url);
 								$boards = json_decode(curl_exec($ch),true);
 								
                 // get products => product_id => board_id
-								$url =  "https://api.worxlandroid.com:443/api/v1/products";
+								$url =  "https://api.worxlandroid.com:443/api/v2/products";
                                 curl_setopt($ch, CURLOPT_URL, $url);
 								$products = json_decode(curl_exec($ch),true);								
 					foreach ($json3 as $key => $product) {
