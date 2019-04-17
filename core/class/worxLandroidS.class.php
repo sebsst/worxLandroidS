@@ -213,12 +213,12 @@ class worxLandroidS extends eqLogic {
 						$email = config::byKey('email', 'worxLandroidS');
 						$passwd = config::byKey('passwd', 'worxLandroidS');
 						// get mqtt config
-						$url =  "https://api.worxlandroid.com:443/api/v2/users/auth";
+						$url =  "https://api.worxlandroid.com:443/api/v2/oauth/token";
 						
 						$token = "725f542f5d2c4b6a5145722a2a6a5b736e764f6e725b462e4568764d4b58755f6a767b2b76526457";
 						$content = "application/json";
 						$ch = curl_init();
-						$data = array("email" => $email, "password" => $passwd, "uuid" => "uuid/v2" , "type"=> "app" , "platform"=> "android");
+						$data = array("username" => $email, "password" => $passwd, "client_id" => 1, "grant_type" => "password", "type"=> "app" , "client_secret"=> "nCH3A0WvMYn66vGorjSrnGZ2YtjQWDiCvjg7jNxK", "scope" => "*");
 						$data_string = json_encode($data);
 						
 						$ch = curl_init($url);
@@ -227,12 +227,11 @@ class worxLandroidS extends eqLogic {
 						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 						curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 							'Content-Type: application/json',
-							'Content-Length: ' . strlen($data_string),
+							//'Content-Length: ' . strlen($data_string),
 							'x-auth-token:' . $token
 						)
 					);
-					$result = curl_exec($ch);
-					log::add('worxLandroidS', 'info', 'Connexion result :'.$result);
+					$result = curl_exec($ch);					log::add('worxLandroidS', 'info', 'Connexion result :'.$result);
 					$json = json_decode($result,true);
 					if (is_null($json))
 					{
@@ -248,17 +247,38 @@ class worxLandroidS extends eqLogic {
 					} else
 					{
 						
-						// get certificate
-						$url =  "https://api.worxlandroid.com:443/api/v2/users/certificate";
-						$api_token = $json['api_token'];
+						// get users parameters
+						$url =  "https://api.worxlandroid.com/api/v2/users/me";
+						$api_token = $json['access_token'];
 						$token = $json['api_token'];
 						
 						$content = "application/json";
 						$ch = curl_init($url);
 						curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
 						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                        			curl_setopt($ch, CURLOPT_HEADER, FALSE);
 						curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-							'x-auth-token:' . $api_token
+                            				"Content-Type: application/json",
+							'Authorization: Bearer ' . $api_token
+						) )  ;                   
+                      
+                        			$result_users = curl_exec($ch);
+                        			log::add('worxLandroidS', 'info', 'Connexion result :'.$result_users);
+	                    			$json_users = json_decode($result_users,true);
+                         
+						// get certificate
+						$url =  "https://api.worxlandroid.com:443/api/v2/users/certificate";
+						//$api_token = $json['api_token'];
+						//$token = $json['api_token'];
+						
+						$content = "application/json";
+						$ch = curl_init($url);
+						curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+						curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                            				'mqtt_endpoint:'. $json_users['mqtt_endpoint'],
+                            				"Content-Type: application/json",
+							'Authorization: Bearer ' . $api_token
 						)
 					);
 					
@@ -285,7 +305,7 @@ class worxLandroidS extends eqLogic {
 						curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
 						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 						curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-							'x-auth-token:' . $api_token
+							'Authorization: Bearer ' . $api_token
 						)
 					);
 					
