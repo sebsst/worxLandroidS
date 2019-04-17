@@ -314,7 +314,7 @@ class worxLandroidS extends eqLogic {
 					
 					$json3 = json_decode($result,true);
 					config::save('mqtt_client_id', 'android-uuid/v1','worxLandroidS');
-					config::save('mqtt_endpoint', $json['mqtt_endpoint'],'worxLandroidS');
+					//config::save('mqtt_endpoint', $json['mqtt_endpoint'],'worxLandroidS');
 					
 					if (is_null($json3))
 					{
