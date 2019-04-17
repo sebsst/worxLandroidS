@@ -213,12 +213,12 @@ class worxLandroidS extends eqLogic {
 						$email = config::byKey('email', 'worxLandroidS');
 						$passwd = config::byKey('passwd', 'worxLandroidS');
 						// get mqtt config
-						$url =  "https://api.worxlandroid.com:443/api/v1/users/auth";
+						$url =  "https://api.worxlandroid.com:443/api/v2/oauth/token";
 						
-						$token = "qiJNz3waS4I99FPvTaPt2C2R46WXYdhw";
+						$token = "725f542f5d2c4b6a5145722a2a6a5b736e764f6e725b462e4568764d4b58755f6a767b2b76526457";
 						$content = "application/json";
 						$ch = curl_init();
-						$data = array("email" => $email, "password" => $passwd, "uuid" => "uuid/v1" , "type"=> "app" , "platform"=> "android");
+						$data = array("username" => $email, "password" => $passwd, "client_id" => 1, "grant_type" => "password", "type"=> "app" , "client_secret"=> "nCH3A0WvMYn66vGorjSrnGZ2YtjQWDiCvjg7jNxK", "scope" => "*");
 						$data_string = json_encode($data);
 						
 						$ch = curl_init($url);
@@ -227,14 +227,14 @@ class worxLandroidS extends eqLogic {
 						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 						curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 							'Content-Type: application/json',
-							'Content-Length: ' . strlen($data_string),
+							//'Content-Length: ' . strlen($data_string),
 							'x-auth-token:' . $token
 						)
 					);
 					$result = curl_exec($ch);
 					log::add('worxLandroidS', 'info', 'Connexion result :'.$result);
 					$json = json_decode($result,true);
-					if (is_null($json))
+					if (is_null($json) )
 					{
 						log::add('worxLandroidS', 'info', 'Connexion KO for '.$equipement.' ('.$ip.')');
 						
@@ -248,17 +248,38 @@ class worxLandroidS extends eqLogic {
 					} else
 					{
 						
-						// get certificate
-						$url =  "https://api.worxlandroid.com:443/api/v1/users/certificate";
-						$api_token = $json['api_token'];
+						// get users parameters
+						$url =  "https://api.worxlandroid.com/api/v2/users/me";
+						$api_token = $json['access_token'];
 						$token = $json['api_token'];
 						
 						$content = "application/json";
 						$ch = curl_init($url);
 						curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
 						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                        curl_setopt($ch, CURLOPT_HEADER, FALSE);
 						curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-							'x-auth-token:' . $api_token
+                            "Content-Type: application/json",
+							'Authorization: Bearer ' . $api_token
+						) )  ;                   
+                      
+                        $result_users = curl_exec($ch);
+                        log::add('worxLandroidS', 'info', 'Connexion result :'.$result_users);
+	                    $json_users = json_decode($result_users,true);
+                         
+						// get certificate
+						$url =  "https://api.worxlandroid.com:443/api/v2/users/certificate";
+						//$api_token = $json['api_token'];
+						//$token = $json['api_token'];
+						
+						$content = "application/json";
+						$ch = curl_init($url);
+						curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+						curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                            'mqtt_endpoint:'. $json_users['mqtt_endpoint'],
+                            "Content-Type: application/json",
+							'Authorization: Bearer ' . $api_token
 						)
 					);
 					
@@ -278,14 +299,14 @@ class worxLandroidS extends eqLogic {
 						file_put_contents($PKEYFILE, $certs['pkey']);
 						
 						// get product item (mac address)
-						$url =  "https://api.worxlandroid.com:443/api/v1/product-items";
+						$url =  "https://api.worxlandroid.com:443/api/v2/product-items";
 						
 						$content = "application/json";
 						$ch = curl_init($url);
 						curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
 						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 						curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-							'x-auth-token:' . $api_token
+							'Authorization: Bearer ' . $api_token
 						)
 					);
 					
@@ -293,20 +314,20 @@ class worxLandroidS extends eqLogic {
 					log::add('worxLandroidS', 'info', 'Connexion result :'.$result);
 					
 					$json3 = json_decode($result,true);
-					config::save('mqtt_client_id', $json['mqtt_client_id'],'worxLandroidS');
-					config::save('mqtt_endpoint', $json['mqtt_endpoint'],'worxLandroidS');
+					config::save('mqtt_client_id', 'android-uuid/v1' ,'worxLandroidS');//$json_users['id'],'worxLandroidS');
+					config::save('mqtt_endpoint', $json_users['mqtt_endpoint'],'worxLandroidS');
 					
 					if (is_null($json3))
 					{
 					} else
 					{
               // get boards => id => code
-								$url =  "https://api.worxlandroid.com:443/api/v1/boards";
+								$url =  "https://api.worxlandroid.com:443/api/v2/boards";
                                 curl_setopt($ch, CURLOPT_URL, $url);
 								$boards = json_decode(curl_exec($ch),true);
 								
                 // get products => product_id => board_id
-								$url =  "https://api.worxlandroid.com:443/api/v1/products";
+								$url =  "https://api.worxlandroid.com:443/api/v2/products";
                                 curl_setopt($ch, CURLOPT_URL, $url);
 								$products = json_decode(curl_exec($ch),true);								
 					foreach ($json3 as $key => $product) {
@@ -449,6 +470,7 @@ class worxLandroidS extends eqLogic {
 					log::add('worxLandroidS', 'debug', 'Timeout reached');
 					foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
 						self::newInfo($eqpt,'statusDescription', __("Communication timeout",__FILE__),'string',1);
+					        config::save('status', '0',  'worxLandroidS');
 					}
 					return false;
 				}
@@ -620,8 +642,8 @@ class worxLandroidS extends eqLogic {
 				                if(array_key_exists('conn', $json2_data->dat))
 						{ // for mower with 4G modules
 						  self::newInfo($elogic,'connexion',$json2_data->dat->conn,'string',1);
-						  self::newInfo($elogic,'GPSLatitude',$json2_data->dat->modules[$json2_data->dat->conn]->GPS->coo[0],'string',1);
-						  self::newInfo($elogic,'GPSLongitude',$json2_data->dat->modules[$json2_data->dat->conn]->GPS->coo[1],'string',1);
+						  //self::newInfo($elogic,'GPSLatitude',$json2_data->dat->modules->4G->gps->coo[0],'string',1);
+						  //self::newInfo($elogic,'GPSLongitude',$json2_data->dat->modules>4G->gps->coo[1],'string',1);
 						}
 						else
 						{
