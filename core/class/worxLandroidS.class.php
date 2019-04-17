@@ -231,9 +231,10 @@ class worxLandroidS extends eqLogic {
 							'x-auth-token:' . $token
 						)
 					);
-					$result = curl_exec($ch);					log::add('worxLandroidS', 'info', 'Connexion result :'.$result);
+					$result = curl_exec($ch);
+					log::add('worxLandroidS', 'info', 'Connexion result :'.$result);
 					$json = json_decode($result,true);
-					if (is_null($json))
+					if (is_null($json) )
 					{
 						log::add('worxLandroidS', 'info', 'Connexion KO for '.$equipement.' ('.$ip.')');
 						
@@ -256,15 +257,15 @@ class worxLandroidS extends eqLogic {
 						$ch = curl_init($url);
 						curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
 						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                        			curl_setopt($ch, CURLOPT_HEADER, FALSE);
+                        curl_setopt($ch, CURLOPT_HEADER, FALSE);
 						curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                            				"Content-Type: application/json",
+                            "Content-Type: application/json",
 							'Authorization: Bearer ' . $api_token
 						) )  ;                   
                       
-                        			$result_users = curl_exec($ch);
-                        			log::add('worxLandroidS', 'info', 'Connexion result :'.$result_users);
-	                    			$json_users = json_decode($result_users,true);
+                        $result_users = curl_exec($ch);
+                        log::add('worxLandroidS', 'info', 'Connexion result :'.$result_users);
+	                    $json_users = json_decode($result_users,true);
                          
 						// get certificate
 						$url =  "https://api.worxlandroid.com:443/api/v2/users/certificate";
@@ -276,8 +277,8 @@ class worxLandroidS extends eqLogic {
 						curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
 						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 						curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                            				'mqtt_endpoint:'. $json_users['mqtt_endpoint'],
-                            				"Content-Type: application/json",
+                            'mqtt_endpoint:'. $json_users['mqtt_endpoint'],
+                            "Content-Type: application/json",
 							'Authorization: Bearer ' . $api_token
 						)
 					);
@@ -313,8 +314,8 @@ class worxLandroidS extends eqLogic {
 					log::add('worxLandroidS', 'info', 'Connexion result :'.$result);
 					
 					$json3 = json_decode($result,true);
-					config::save('mqtt_client_id', 'android-uuid/v1','worxLandroidS');
-					//config::save('mqtt_endpoint', $json['mqtt_endpoint'],'worxLandroidS');
+					config::save('mqtt_client_id', 'android-uuid/v1' ,'worxLandroidS');//$json_users['id'],'worxLandroidS');
+					config::save('mqtt_endpoint', $json_users['mqtt_endpoint'],'worxLandroidS');
 					
 					if (is_null($json3))
 					{
