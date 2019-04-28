@@ -7,8 +7,8 @@ En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que l
 - Ajout de la fonction set_schedule pour définir le jour de tonte d'un jour donné. Par défaut l'action n'est pas visible. Le but étant de faire de la planification à l'aide d'un scénario mais il est possible de rendre visible sur le widget si besoin.
 - Format attendu: numéro jour;heure départ;durée en minutes;bordure
 Exemples : 
-- 1;10:00;120;1 => lundi, démarrage à 10:00 pendant 120 minutes, coupe la bordure
-- 0;08:00;300;0 => dimanche, démarrage à 08:00 pendant 300 minutes, ne coupe pas la bordure
+  * 1;10:00;120;1 => lundi, démarrage à 10:00 pendant 120 minutes, coupe la bordure
+  * 0;08:00;300;0 => dimanche, démarrage à 08:00 pendant 300 minutes, ne coupe pas la bordure
 
 
 ## 17/04/2019
