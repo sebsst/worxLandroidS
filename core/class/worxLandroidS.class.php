@@ -1187,6 +1187,13 @@ class worxLandroidS extends eqLogic
         }
         foreach ($this->getCmd('action') as $cmd) {
             $replace['#' . $cmd->getLogicalId() . '_id#'] = $cmd->getId();
+         if ($cmd->getIsVisible()) {
+                $replace['#' . $cmd->getLogicalId() . '_visible#'] = '';
+            } else {
+                $replace['#' . $cmd->getLogicalId() . '_visible#'] = 'display:none';
+                
+            }
+               
                 if($cmd->getName() == 'set_schedule'){
 
           $cmdaction_html = $cmd->toHtml();
