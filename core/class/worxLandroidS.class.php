@@ -396,7 +396,11 @@ class worxLandroidS extends eqLogic
         self::newAction($elogic, 'rain_delay_60', $commandIn, "60", 'other');
         self::newAction($elogic, 'rain_delay_120', $commandIn, "120", 'other');
         self::newAction($elogic, 'rain_delay_240', $commandIn, "240", 'other');
-        self::newAction($elogic, 'set_schedule', $commandIn, "", 'message');
+      
+        $display = array(
+				'message_placeholder' => __('num jour;hh:mm;durée mn;bord(0 ou 1)', __FILE__),
+				'title_disable' => true);
+        self::newAction($elogic, 'set_schedule', $commandIn, "", 'message', $display);
         
         for ($i = 0; $i < 7; $i++) {
             self::newAction($elogic, 'on_' . $i, $commandIn, 'on_' . $i, 'other');
@@ -870,7 +874,7 @@ class worxLandroidS extends eqLogic
         
     }
     
-    public static function newAction($elogic, $cmdId, $topic, $payload, $subtype)
+    public static function newAction($elogic, $cmdId, $topic, $payload, $subtype, $params)
     {
         $cmdlogic = worxLandroidSCmd::byEqLogicIdAndLogicalId($elogic->getId(), $cmdId);
         
@@ -883,7 +887,18 @@ class worxLandroidS extends eqLogic
             $cmdlogic->setLogicalId($cmdId);
             $cmdlogic->setType('action');
             $cmdlogic->setName($cmdId);
-          $cmdlogic->setDisplay('title_placeholder', '1;hh:mm;durée;1-0' ?: false);
+			$cmdlogic->setConfiguration('listValue', json_encode($params['listValue']) ?: null);
+			$cmdlogic->setDisplay('forceReturnLineBefore', $params['forceReturnLineBefore'] ?: false);
+	        $cmdlogic->setDisplay('message_disable', $params['message_disable'] ?: false);
+	        $cmdlogic->setDisplay('title_disable', $params['title_disable'] ?: false);
+			$cmdlogic->setDisplay('title_placeholder', $params['title_placeholder'] ?: false);
+			$cmdlogic->setDisplay('icon', $params['icon'] ?: false);				
+			$cmdlogic->setDisplay('message_placeholder', $params['message_placeholder'] ?: false);
+			$cmdlogic->setDisplay('title_possibility_list', json_encode($params['title_possibility_list'] ?: null));//json_encode(array("1","2"));
+			$cmdlogic->setDisplay('icon', $params['icon'] ?: null);
+          
+          
+          
             $cmdlogic->setConfiguration('topic', $topic);
             $cmdlogic->setConfiguration('request', $payload);
             
