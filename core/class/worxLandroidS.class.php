@@ -899,7 +899,7 @@ class worxLandroidS extends eqLogic
 			$cmdlogic->setDisplay('title_possibility_list', json_encode($params['title_possibility_list'] ?: null));//json_encode(array("1","2"));
 			$cmdlogic->setDisplay('icon', $params['icon'] ?: null);
           
-	    $cmd->setIsVisible($params['isvisible'] ?: 0);
+	    $cmdlogic->setIsVisible($params['isvisible'] ?: 0);
           
           
             $cmdlogic->setConfiguration('topic', $topic);
