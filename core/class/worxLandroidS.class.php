@@ -399,7 +399,9 @@ class worxLandroidS extends eqLogic
       
         $display = array(
 				'message_placeholder' => __('num jour;hh:mm;durée mn;bord(0 ou 1)', __FILE__),
-				'title_disable' => true);
+				'isvisible' => 0,
+                		'title_disable' => true);
+	    
         self::newAction($elogic, 'set_schedule', $commandIn, "", 'message', $display);
         
         for ($i = 0; $i < 7; $i++) {
