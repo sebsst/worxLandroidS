@@ -1190,7 +1190,7 @@ class worxLandroidS extends eqLogic
                 if($cmd->getName() == 'set_schedule'){
 
           $cmdaction_html = $cmd->toHtml();
-            $replace['#cmdaction'] = $cmdaction_html;}
+            $replace['#cmdaction#'] = $cmdaction_html;}
           
         }
         
