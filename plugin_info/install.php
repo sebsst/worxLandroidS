@@ -76,7 +76,7 @@ function worxLandroidS_update() {
 				'isvisible' => 0,
                 		'title_disable' => true);
 	    
-        worxLandroidS::newAction($elogic, 'set_schedule', $commandIn, "", 'message', $display);
+        worxLandroidS::newAction($eqpt, 'set_schedule', $commandIn, "", 'message', $display);
 
     }
 
