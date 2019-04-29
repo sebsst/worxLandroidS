@@ -71,6 +71,12 @@ function worxLandroidS_update() {
          worxLandroidS::newAction($eqpt,'rain_delay_60',$commandIn,"60",'other');
          worxLandroidS::newAction($eqpt,'rain_delay_120',$commandIn,"120",'other');
          worxLandroidS::newAction($eqpt,'rain_delay_240',$commandIn,"240",'other');
+                $display = array(
+				'message_placeholder' => __('num jour;hh:mm;durée mn;bord(0 ou 1)', __FILE__),
+				'isvisible' => 0,
+                		'title_disable' => true);
+	    
+        worxLandroidS::newAction($eqpt, 'set_schedule', $commandIn, "", 'message', $display);
 
     }
 
