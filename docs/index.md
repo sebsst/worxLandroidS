@@ -70,30 +70,38 @@ Cela signifie que la tondeuse était coincée pendant quelques secondes et que l
 Il est possible de rafraîchir le statut de la tondeuse en utilisant le bouton "refreshValue"
 
 >quels sont les modèles compatibles?
+-WG757E
+-WG796E.1
+-WG797E.1
+-WG798E
+-WR101SI
+-WR102SI
+-WR104SI
+-WR105SI
+-WR106SI
+-WR110MI
+-WR111MI
+-WR112MI
+-WG799E
+-WR113MI
+-WR100SI
+-WR101SI.1
+-WR102SI.1
+-WR103SI
+-WR104SI.1
+-WR105SI.1
+-WR106SI.1
+-WR110MI.1
+-WR115MI
+-WR130E
+-WR141E
+-WR142E
+-WR143E
+-WR153E
+-WR155E
+-WR140
+-WR150
 
-- Landroid M 800 WiFi - WG757E
-- Landroid M 1000 WiFi - WG796E.1
-- Landroid L 2000 WiFi - WG797E.1
-- Landroid L 1500 WiFi - WG798E
-- Landroid S Orange 450 WiFi - WR101SI
-- Landroid S Black Black 450 WiFi - WR102SI
-- Landroid S Orange 500 WiFi - WR104SI
-- Landroid S Black 500 WiFi - WR105SI
-- Landroid S White 450 WiFi - WR106SI
-- Landroid S Black 700 WiFi - WR110MI
-- Landroid M 800 WiFi - WR111MI
-- Landroid M 1000 WiFi - WR112MI
-- Landroid M 1200 WiFi - WG799E
-- Landroid M 1200 WiFi - WR113MI
-- Landroid S White 390 WiFi - WR100SI
-- Landroid S Orange 450 WiFi - WR101SI.1
-- Landroid S Black Black 450 WiFi - WR102SI.1
-- Landroid S Black Grey 500 WiFi - WR103SI
-- Landroid S Orange 500 WiFi - WR104SI.1
-- Landroid S Black 500 WiFi - WR105SI.1
-- Landroid S White 450 WiFi - WR106SI.1
-- Landroid S Black 700 WiFi - WR110MI.1
-- Landroid S Orange 700 WiFi - WR115MI
 
 Un autre plugin worxLandroid est disponible pour les modèles M/L en version non cloud.
 
