@@ -1,4 +1,4 @@
-# Robots tondeuses Worx Landroid modèles S, M et L
+# Robots tondeuses Worx Landroid
 
 ## Présentation
 
