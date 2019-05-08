@@ -683,7 +683,7 @@ class worxLandroidS extends eqLogic
 // mise a jour des infos virtuelles séparées par des virgules
           $cmd = worxLandroidSCmd::byEqLogicIdCmdName($elogic->getId(), 'virtualInfo');
           $name = $cmd->getConfiguration('request', ''); 
- log::add('worxLandroidS', 'info', 'liste commande' . $name);  
+          //log::add('worxLandroidS', 'info', 'liste commande' . $name);  
           $cmdlist = explode(',', $name);
           $value = '';
           foreach ($cmdlist as $cmdname){
@@ -697,10 +697,10 @@ class worxLandroidS extends eqLogic
             { $value .= ',' . $cmdlogic->getConfiguration('topic', '');   
             }
             
-           log::add('worxLandroidS', 'info', 'liste commande/value:' . $cmdname . '/' . $value);      
+           //log::add('worxLandroidS', 'info', 'liste commande/value:' . $cmdname . '/' . $value);      
 
             }
-           log::add('worxLandroidS', 'info', 'liste commande' . $value);     
+           //log::add('worxLandroidS', 'info', 'liste commande' . $value);     
 
            $cmd->setConfiguration('topic', $value);
            $cmd->save();
@@ -1248,6 +1248,14 @@ class worxLandroidSCmd extends cmd
     
     public function execute($_options = null)
     {
+	if($this->getName() == 'newBlades'){
+		$elogic = $this->getEqLogic();
+		$cmdin = worxLandroidSCmd::byEqLogicIdCmdName($elogic->getId(), 'totalBladeTime');
+		$value = $cmdin->getConfiguration('topic', ''); 
+		self::newInfo($elogic, 'lastBladesChangedTime', $value, 'numeric', 0);
+		
+	} else
+	{
         switch ($this->getType()) {
             case 'action':
                 $request = $this->getConfiguration('request', '1');
@@ -1274,6 +1282,7 @@ class worxLandroidSCmd extends cmd
                 log::add('worxLandroidS', 'debug', 'Eqlogicname: ' . $eqlogic->getName());
                 worxLandroidS::publishMosquitto($this->getId(), $topic, $request, $this->getConfiguration('retain', '0'));
         }
+	}
         return true;
     }
     
