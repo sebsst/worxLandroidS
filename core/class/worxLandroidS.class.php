@@ -362,6 +362,7 @@ class worxLandroidS extends eqLogic
         $elogic->setConfiguration('serialNumber', $product['serial_number']);
         $elogic->setConfiguration('warranty_expiration_date', $product['warranty_expiration_date']);
         $elogic->setConfiguration('MowerType', $MowerType);
+        $elogic->setConfiguration('maxBladesDuration', 300);	    
         $elogic->setConfiguration('mowerDescription', $mowerDescription);
         //$elogic->setName('LandroidS-'. $json2_data->dat->mac);
         //$elogic->setConfiguration('topic', $nodeid);
