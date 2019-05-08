@@ -77,7 +77,9 @@ function worxLandroidS_update() {
                 		'title_disable' => true);
 	    
         worxLandroidS::newAction($eqpt, 'set_schedule', $commandIn, "", 'message', $display);
-        worxLandroidS::newAction($eqpt, 'newBlades', $commandIn, "", 'other');	    
+        worxLandroidS::newAction($eqpt, 'newBlades', $commandIn, "", 'other');	
+	worxLandroidS::newInfo($eqpt, 'lastBladesChangeTime', '', 'numeric', 0);
+	    
 // ajout de la ommande pour le widget
 	 worxLandroidS::newInfo($eqpt, 'virtualInfo', '', 'string', 0, 'statusCode,statusDescription,batteryLevel,wifiQuality,currentZone');
     }
