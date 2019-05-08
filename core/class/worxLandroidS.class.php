@@ -1201,7 +1201,7 @@ class worxLandroidS extends eqLogic
             }
             
             
-            if ($automaticWidget != true) {
+            if ($automaticWidget != true or $cmd->getLogicalId() == 'virtualInfo') {
                 
                 $templ = $cmd->getTemplate('dashboard', '');
                 //log::add('worxLandroidS', 'debug', 'template: ' . $templ );
@@ -1231,7 +1231,7 @@ class worxLandroidS extends eqLogic
             $replace['#cmdaction#'] = $cmdaction_html;}
           
         }
-        
+        if($cmd->getLogicalId() == 'virtualInfo') $replace['#widget#'] = $cmd_html;        
         $replace['#cmd#'] = $cmd_html;
         
         if ($automaticWidget == true) {
