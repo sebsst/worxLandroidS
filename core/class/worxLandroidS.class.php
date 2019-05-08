@@ -1252,8 +1252,8 @@ class worxLandroidSCmd extends cmd
 		$elogic = $this->getEqLogic();
 		$cmdin = worxLandroidSCmd::byEqLogicIdCmdName($elogic->getId(), 'totalBladeTime');
 		$value = $cmdin->getConfiguration('topic', ''); 
-		self::newInfo($elogic, 'lastBladesChangedTime', $value, 'numeric', 0);
-		
+		worxLandroidS::newInfo($elogic, 'lastBladesChangeTime', $value, 'numeric', 0);
+		return true;
 	} else
 	{
         switch ($this->getType()) {
