@@ -78,7 +78,7 @@ function worxLandroidS_update() {
 	    
         worxLandroidS::newAction($eqpt, 'set_schedule', $commandIn, "", 'message', $display);
 // ajout de la ommande pour le widget
-	 worxLandroidS::newInfo($eqpt, 'statusCode,statusDescription,batteryLevel,wifiQuality,currentZone', 'string', 1);
+	 worxLandroidS::newInfo($eqpt, 'virtualInfo', 'statusCode,statusDescription,batteryLevel,wifiQuality,currentZone', 'string', 1);
     }
 }
 
