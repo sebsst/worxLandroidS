@@ -880,7 +880,7 @@ class worxLandroidS extends eqLogic
             
             
             $cmdlogic->setConfiguration('topic', $value);
-            if(is_null($request)){$cmdlogic->setConfiguration('request', $request);}
+            if(!is_null($request)){$cmdlogic->setConfiguration('request', $request);}
             $cmdlogic->setConfiguration('topic', $value);		
             //$cmdlogic->setValue($value);
             $cmdlogic->save();
