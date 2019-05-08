@@ -686,7 +686,7 @@ class worxLandroidS extends eqLogic
           
          $value = '';
          if(strstr($name,'virtualInfo')){
-          $name = $cmd->getConfiguration('topic', ''); 
+          $name = $cmd->getConfiguration('request', ''); 
           $cmdlist = explode(',', $name);
           foreach ($cmdlist as $cmdname){
             
@@ -704,7 +704,7 @@ class worxLandroidS extends eqLogic
             }
            log::add('worxLandroidS', 'info', 'liste commande' . $value);     
 
-           //$cmd->setConfiguration('topic', $value);
+           $cmd->setConfiguration('topic', $value);
            $cmd->save();
            $elogic->checkAndUpdateCmd($cmd, $value);
 
@@ -863,7 +863,7 @@ class worxLandroidS extends eqLogic
         }
     }
     
-    public static function newInfo($elogic, $cmdId, $value, $subtype, $visible)
+    public static function newInfo($elogic, $cmdId, $value, $subtype, $visible, $request)
     {
         $cmdlogic = worxLandroidSCmd::byEqLogicIdAndLogicalId($elogic->getId(), $cmdId);
         
@@ -880,6 +880,8 @@ class worxLandroidS extends eqLogic
             
             
             $cmdlogic->setConfiguration('topic', $value);
+            if(is_null($request){$cmdlogic->setConfiguration('request', $request);}
+            $cmdlogic->setConfiguration('topic', $value);		
             //$cmdlogic->setValue($value);
             $cmdlogic->save();
         }
