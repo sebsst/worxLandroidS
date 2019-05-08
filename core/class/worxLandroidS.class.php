@@ -681,12 +681,9 @@ class worxLandroidS extends eqLogic
             self::newInfo($elogic,'Planning/Saturday/Starttime',$json2_data->cfg->sc->d[6][0],'string',1);
             */
 // mise a jour des infos virtuelles séparées par des virgules
-         foreach ($elogic->getCmd('info', null, true) as $cmd)
-         {
-          
-         $value = '';
-         if(strstr($name,'virtualInfo')){
+          $cmd = worxLandroidSCmd::byEqLogicIdCmdName($elogic->getId(), 'virtualInfo');
           $name = $cmd->getConfiguration('request', ''); 
+ log::add('worxLandroidS', 'info', 'liste commande' . $name);  
           $cmdlist = explode(',', $name);
           foreach ($cmdlist as $cmdname){
             
@@ -707,10 +704,6 @@ class worxLandroidS extends eqLogic
            $cmd->setConfiguration('topic', $value);
            $cmd->save();
            $elogic->checkAndUpdateCmd($cmd, $value);
-
-          }
-            
-         } 
 		
 		
         }
