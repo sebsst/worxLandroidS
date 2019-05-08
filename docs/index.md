@@ -63,7 +63,7 @@ Format attendu: numéro jour;heure départ;durée en minutes;bordure Exemples :
 0;08:00;300;0 => dimanche, démarrage à 08:00 pendant 300 minutes, ne coupe pas la bordure
 
 ## Widget
-- un widget (workAndroid) est disponible sur le market pour un affichage avec des images. Pour cela Il est possible d'utiliser l'info virtualInfo et de cocher afficher, sélectionner le widget dans la configuration avancée.
+- un widget (workAndroid) est disponible sur le market pour un affichage avec des images. Pour cela Il est possible d'utiliser l'info virtualInfo: cocher afficher dans la liste des commandes, sélectionner le widget dans la configuration avancée. 
 
 ## FAQ
 
@@ -77,37 +77,37 @@ Cela signifie que la tondeuse était coincée pendant quelques secondes et que l
 Il est possible de rafraîchir le statut de la tondeuse en utilisant le bouton "refreshValue"
 
 >quels sont les modèles compatibles?
--WG757E
--WG796E.1
--WG797E.1
--WG798E
--WR101SI
--WR102SI
--WR104SI
--WR105SI
--WR106SI
--WR110MI
--WR111MI
--WR112MI
--WG799E
--WR113MI
--WR100SI
--WR101SI.1
--WR102SI.1
--WR103SI
--WR104SI.1
--WR105SI.1
--WR106SI.1
--WR110MI.1
--WR115MI
--WR130E
--WR141E
--WR142E
--WR143E
--WR153E
--WR155E
--WR140
--WR150
+- WG757E
+- WG796E.1
+- WG797E.1
+- WG798E
+- WR101SI
+- WR102SI
+- WR104SI
+- WR105SI
+- WR106SI
+- WR110MI
+- WR111MI
+- WR112MI
+- WG799E
+- WR113MI
+- WR100SI
+- WR101SI.1
+- WR102SI.1
+- WR103SI
+- WR104SI.1
+- WR105SI.1
+- WR106SI.1
+- WR110MI.1
+- WR115MI
+- WR130E
+- WR141E
+- WR142E
+- WR143E
+- WR153E
+- WR155E
+- WR140
+- WR150
 
 
 Un autre plugin worxLandroid est disponible pour les modèles M/L en version non cloud.
