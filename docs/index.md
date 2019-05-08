@@ -57,6 +57,7 @@ Pour le planning, les commandes possibles sont:
 - off_0 à off_6
 - on_today pour activer le jour courant
 - off_today pour désactiver le jour courant
+- 
 
 ## FAQ
 
@@ -155,10 +156,8 @@ Dans ce cas là, vous pouvez tenter de la mettre à jour manuellement et si poss
 
 ## Fonctionnement détaillé
 
-Connexion vers les api ci-dessous pour récupérer: les infos utilisateurs, le certificat et les paramètres tondeuses:
-https://api.worxlandroid.com:443/api/v1/users/auth
-https://api.worxlandroid.com:443/api/v1/users/certificate
-https://api.worxlandroid.com:443/api/v1/product-items
+Connexion vers des api worx pour récupérer: les infos utilisateurs, le certificat et les paramètres tondeuses:
+https://api.worxlandroid.com:443/api/v2
 
 Connexion au broker Mosquitto en fonction des liens et paramètres récupérés à partir des API précédentes
 
