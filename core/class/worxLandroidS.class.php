@@ -685,6 +685,7 @@ class worxLandroidS extends eqLogic
           $name = $cmd->getConfiguration('request', ''); 
  log::add('worxLandroidS', 'info', 'liste commande' . $name);  
           $cmdlist = explode(',', $name);
+          $value = '';
           foreach ($cmdlist as $cmdname){
             
             $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($elogic->getId(), $cmdname);
