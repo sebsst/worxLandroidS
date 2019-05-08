@@ -680,7 +680,39 @@ class worxLandroidS extends eqLogic
             self::newInfo($elogic,'Planning/Friday/Starttime',$json2_data->cfg->sc->d[5][0],'string',1);
             self::newInfo($elogic,'Planning/Saturday/Starttime',$json2_data->cfg->sc->d[6][0],'string',1);
             */
+// mise a jour des infos virtuelles séparées par des virgules
+         foreach ($elogic->getCmd('info', null, true) as $cmd)
+         {
+          
+         $value = '';
+         $name = $cmd->getName();
+         if(strstr($name,',')){
+          $cmdlist = explode(',', $name);
+          foreach ($cmdlist as $cmdname){
             
+            $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($elogic->getId(), $cmdname);
+            if(empty($value))
+            {
+              $value = $cmdlogic->getConfiguration('topic', '');            
+            } 
+            else
+            { $value .= ',' . $cmdlogic->getConfiguration('topic', '');   
+            }
+            
+           log::add('worxLandroidS', 'info', 'liste commande/value:' . $cmdname . '/' . $value);      
+
+            }
+           log::add('worxLandroidS', 'info', 'liste commande' . $value);     
+
+           $cmd->setConfiguration('topic', $value);
+           $cmd->save();
+           $elogic->checkAndUpdateCmd($cmd, $value);
+
+          }
+            
+         } 
+		
+		
         }
         
         $elogic->save();
