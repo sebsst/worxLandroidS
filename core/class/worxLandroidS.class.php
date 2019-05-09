@@ -55,9 +55,9 @@ class worxLandroidS extends eqLogic
             if ($eqpt->getIsEnable() == true) {
                 if (config::byKey('status', 'worxLandroidS') == '0') { //on se connecte seulement si on est pas déjà connecté
                     $i         = date('w');
-                    $start     = $eqpt->getCmd(null, 'Planning/startTime/' . $i);
+                    $start     = $eqpt->getCmd(null, 'Planning_startTime_' . $i);
                     $startTime = is_object($start) ? $start->execCmd() : '00:00';
-                    $dur       = $eqpt->getCmd(null, 'Planning/duration/' . $i);
+                    $dur       = $eqpt->getCmd(null, 'Planning_duration_' . $i);
                     $duration  = is_object($dur) ? $dur->execCmd() : 0;
                     
                     $initDate = DateTime::createFromFormat('H:i', $startTime);
@@ -669,18 +669,11 @@ class worxLandroidS extends eqLogic
             //  date début + durée + bordure
             
             for ($i = 0; $i < 7; $i++) {
-                self::newInfo($elogic, 'Planning/startTime/' . $i, $json2_data->cfg->sc->d[$i][0], 'string', 1);
-                self::newInfo($elogic, 'Planning/duration/' . $i, $json2_data->cfg->sc->d[$i][1], 'string', 1);
-                self::newInfo($elogic, 'Planning/cutEdge/' . $i, $json2_data->cfg->sc->d[$i][2], 'string', 1);
+                self::newInfo($elogic, 'Planning_startTime_' . $i, $json2_data->cfg->sc->d[$i][0], 'string', 1);
+                self::newInfo($elogic, 'Planning_duration_' . $i, $json2_data->cfg->sc->d[$i][1], 'string', 1);
+                self::newInfo($elogic, 'Planning_cutEdge_' . $i, $json2_data->cfg->sc->d[$i][2], 'string', 1);
             }
-            /*
-            self::newInfo($elogic,'Planning/Monday/Starttime',$json2_data->cfg->sc->d[1][0],'string',1);
-            self::newInfo($elogic,'Planning/Tuesday/Starttime',$json2_data->cfg->sc->d[2][0],'string',1);
-            self::newInfo($elogic,'Planning/wednesday/Starttime',$json2_data->cfg->sc->d[3][0],'string',1);
-            self::newInfo($elogic,'Planning/Thursday/Starttime',$json2_data->cfg->sc->d[4][0],'string',1);
-            self::newInfo($elogic,'Planning/Friday/Starttime',$json2_data->cfg->sc->d[5][0],'string',1);
-            self::newInfo($elogic,'Planning/Saturday/Starttime',$json2_data->cfg->sc->d[6][0],'string',1);
-            */
+
 // mise a jour des infos virtuelles séparées par des virgules
           $cmd = worxLandroidSCmd::byEqLogicIdCmdName($elogic->getId(), 'virtualInfo');
           $name = $cmd->getConfiguration('request', ''); 
@@ -884,12 +877,12 @@ class worxLandroidS extends eqLogic
         
         //   log::add('worxLandroidS', 'debug', 'Cmdlogic update'.$cmdId.$value);
         
-        if (strstr($cmdId, "Planning/startTime") && $value != '00:00') {
+        if (strstr($cmdId, "Planning_startTime") && $value != '00:00') {
             // log::add('worxLandroidS', 'debug', 'savedValue time'. $value);
             $cmdlogic->setConfiguration('savedValue', $value);
             $cmdlogic->save();
         }
-        if (strstr($cmdId, "Planning/duration") && $value != 0) {
+        if (strstr($cmdId, "Planning_duration") && $value != 0) {
             //log::add('worxLandroidS', 'debug', 'savedValue duration'. $value);
             $cmdlogic->setConfiguration('savedValue', $value);
             $cmdlogic->save();
@@ -946,12 +939,12 @@ class worxLandroidS extends eqLogic
     
     public static function getSavedDaySchedule($_id, $i)
     {
-        $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning/startTime/' . $i);
+        $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning_startTime_' . $i);
         $day[0]   = $cmdlogic->getConfiguration('savedValue', '10:00');
         
-        $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning/duration/' . $i);
+        $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning_duration_' . $i);
         $day[1]   = intval($cmdlogic->getConfiguration('savedValue', 420));
-        $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning/cutEdge/' . $i);
+        $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning_cutEdge_' . $i);
         $day[2]   = intval($cmdlogic->getConfiguration('topic', 0));
         
         return $day;
@@ -963,11 +956,11 @@ class worxLandroidS extends eqLogic
         $day = array();
         for ($i = 0; $i < 7; $i++) {
             
-            $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning/startTime/' . $i);
+            $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning_startTime_' . $i);
             $day[0]   = $cmdlogic->getConfiguration('topic', '10:00');
-            $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning/duration/' . $i);
+            $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning_duration_' . $i);
             $day[1]   = intval($cmdlogic->getConfiguration('topic', 420));
-            $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning/cutEdge/' . $i);
+            $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning_cutEdge_' . $i);
             $day[2]   = intval($cmdlogic->getConfiguration('topic', 0));
             
             $schedule[$i] = $day;
@@ -1117,9 +1110,9 @@ class worxLandroidS extends eqLogic
         for ($i = 0; $i <= 6; $i++) {
             $replaceDay                    = array();
             $replaceDay['#day#']           = $jour[$i];
-            $startTime                     = $this->getCmd(null, 'Planning/startTime/' . $i);
-            $cutEdge                       = $this->getCmd(null, 'Planning/cutEdge/' . $i);
-            $duration                      = $this->getCmd(null, 'Planning/duration/' . $i);
+            $startTime                     = $this->getCmd(null, 'Planning_startTime_' . $i);
+            $cutEdge                       = $this->getCmd(null, 'Planning_cutEdge_' . $i);
+            $duration                      = $this->getCmd(null, 'Planning_duration_' . $i);
             $replaceDay['#startTime#']     = is_object($startTime) ? $startTime->execCmd() : '';
             $replaceDay['#duration#']      = is_object($duration) ? $duration->execCmd() : '';
             $cmdS                          = $this->getCmd('action', 'on_' . $i);
