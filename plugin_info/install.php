@@ -82,16 +82,6 @@ function worxLandroidS_update() {
 	    
 // ajout de la ommande pour le widget
 	 worxLandroidS::newInfo($eqpt, 'virtualInfo', '', 'string', 0, 'statusCode,statusDescription,batteryLevel,wifiQuality,currentZone');
-         foreach ($eqpt->getCmd('info', null, true) as $cmd)
-	 {
-		 if(strstr($cmd->getLogicalId(),'/')
-		 {
-		 	$cmd->setLogicalId(str_replace('/','_',$cmd->getLogicalId()));
-			$cmd->save();					   
-		 }
-	 }
-		 
-
     
     }
 }
