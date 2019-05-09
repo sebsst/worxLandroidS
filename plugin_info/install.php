@@ -86,7 +86,7 @@ function worxLandroidS_update() {
 	 {
 		 if(strstr($cmd->getLogicalId(),'/')
 		 {
-		 	$cmd->setLogicalId(str_replace('/','_',$cmd->getLogicalId);
+		 	$cmd->setLogicalId(str_replace('/','_',$cmd->getLogicalId()));
 			$cmd->save();					   
 		 }
 	 }
