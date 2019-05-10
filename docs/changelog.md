@@ -4,6 +4,7 @@ En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que l
 
 ## 08/05/2019
 - Ajout d'une info (virtualInfo) pour concatener plusieurs infos du plugin séparé par des virgules pour l'utilisation du widget worklandroid. Le widget est dispo sur le market des widgets.
+- remplacement des infos planning/xxxx/xxx par planning_xxxxx_xxxx suite à un changement du core jeedom
 
 ## 28/04/2019
 - Diverses corrections
