@@ -15,6 +15,7 @@
       #lastDate# #lastTime#</span>
     
          <span  class="doc-#totalTime#" data-type="info" data-subtype="string" data-cmd_id="#totalTime#" style="font-size: 0.8em" >
+         <span  class="doc-#totalBladeTime#" data-type="info" data-subtype="string" data-cmd_id="#totalBladeTime#" style="font-size: 0.8em" >
             
          <div style="#totalDistance_visible#">
              <br/>
@@ -42,14 +43,16 @@
     </span> 
 
     <br/>                                                                                                                     
-    <span style="font-weight:bold">#statusDescription# <span style="#statusCode_visible#"> (#statusCode#) </span>   </span> 
+    <span style="font-weight:bold;#statusDescription_visible#">#statusDescription# </span>
+    <span style="#statusCode_visible#"> (#statusCode#) </span>  
     <span style="font-size: 0.9em; #currentZone_visible#" > <br/> Zone départ: #currentZone# </span></span>
 
     <span style="font-size: 1.2em" class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#errorCode#">
-    <span style="font-weight:bold;color:#errorColor#">  <br/>   #errorDescription#
+    <span style="font-weight:bold;color:#errorColor#">  <br/>  <span style="#errorDescription_visible#"> #errorDescription# </span>
                                                      <span style="#errorCode_visible#">   (#errorCode#) </span>
                                                                                               </span></span><br/>
- <div style="#set_schedule_visible#"> #cmdaction#      </div>                                                   
+ <div style="#set_schedule_visible#"> #cmdaction#      </div>      
+ <span style="#virtualInfo_visible#"> #cmd# </span>  
  </center>                                                                                                                           
 
     <center style="position : absolute;left : 5px">#daySetup#</center>

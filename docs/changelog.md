@@ -2,6 +2,10 @@
 
 En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que la doc, les traductions et des corrections mineures
 
+## 08/05/2019
+- Ajout d'une info (virtualInfo) pour concatener plusieurs infos du plugin séparé par des virgules pour l'utilisation du widget worklandroid. Le widget est dispo sur le market des widgets.
+- remplacement des infos planning/xxxx/xxx par planning_xxxxx_xxxx suite à un changement du core jeedom
+
 ## 28/04/2019
 - Diverses corrections
 - Ajout de la fonction set_schedule pour modifier le planning de tonte d'un jour donné. Par défaut l'action n'est pas visible. Le but étant de faire de la planification à l'aide d'un scénario mais il est possible de rendre visible sur le widget si besoin.
