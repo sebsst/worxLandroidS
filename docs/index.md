@@ -2,7 +2,7 @@
 
 ## Présentation
 
-Ce plugin permet de se connecter aux tondeuses worx Landroid modèles WIFI (Modèle M/L avec version firmware > 5.0)
+Ce plugin permet de se connecter aux tondeuses worx Landroid modèles WIFI
 
 ### Configuration du plugin
 
