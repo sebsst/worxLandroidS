@@ -177,11 +177,12 @@ $eqLogics = eqLogic::byType('worxLandroidS');
         <thead>
           <tr>
             <th style="width: 50px;">#</th>
-            <th style="width: 350px;">{{Nom}}</th>
+            <th style="width: 250px;">{{Nom}}</th>
             <th style="width: 120px;">{{Sous-Type}}</th>
             <th style="width: 250px;">{{Valeur}}</th>
+            <th style="width: 250px;">{{Request}}</th>
             <th style="width: 150px;">{{Paramètres}}</th>            
-            <th style="width: 150px;">{{Payload}}</th>
+
             <th style="width: 150px;">{{Options}}</th>
 
             <th style="width: 80px;"></th>
