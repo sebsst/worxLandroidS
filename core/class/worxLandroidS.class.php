@@ -681,6 +681,12 @@ class worxLandroidS extends eqLogic
           $cmdlist = explode(',', $name);
           $value = '';
           foreach ($cmdlist as $cmdname){
+		  
+	   if(strstr($cmdname,'#')){
+		   $value .= ',' . $result = jeedom::evaluateExpression($cmdname); // name = command number
+	   } else 
+	   {
+       
             
             $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($elogic->getId(), $cmdname);
             if(empty($value))
@@ -692,7 +698,7 @@ class worxLandroidS extends eqLogic
             }
             
            //log::add('worxLandroidS', 'info', 'liste commande/value:' . $cmdname . '/' . $value);      
-
+	    }
             }
            //log::add('worxLandroidS', 'info', 'liste commande' . $value);     
 

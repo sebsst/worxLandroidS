@@ -2,7 +2,7 @@
 
 ## Présentation
 
-Ce plugin permet de se connecter aux tondeuses worx Landroid modèles WIFI (Modèle M/L avec version firmware > 5.0)
+Ce plugin permet de se connecter aux tondeuses worx Landroid modèles WIFI
 
 ### Configuration du plugin
 
@@ -63,7 +63,8 @@ Format attendu: numéro jour;heure départ;durée en minutes;bordure Exemples :
 0;08:00;300;0 => dimanche, démarrage à 08:00 pendant 300 minutes, ne coupe pas la bordure
 
 ## Widget
-- un widget (workAndroid) est disponible sur le market pour un affichage avec des images. Pour cela Il est possible d'utiliser l'info virtualInfo: cocher afficher dans la liste des commandes, sélectionner le widget dans la configuration avancée. 
+- un widget (workAndroid) est disponible sur le market pour un affichage avec des images. Pour cela Il est possible d'utiliser l'info virtualInfo: cocher afficher dans la liste des commandes, sélectionner le widget dans la configuration avancée.
+(Recherche équipement pour récupérer l'info d'un autre équipement)
 
 ## FAQ
 
