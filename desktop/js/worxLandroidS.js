@@ -165,3 +165,4 @@ $('body').off('worxLandroidS::includeEqpt').on('worxLandroidS::includeEqpt', fun
 	}, 2000);
     }
 });
+
