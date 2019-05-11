@@ -27,6 +27,11 @@ $("#bt_addworxLandroidSAction").on('click', function(event) {
 	addCmdToTable(_cmd);
 });
 
+$("#bt_addworxLandroidInfo").on('click', function(event) {
+	var _cmd = {type: 'info'};
+	addCmdToTable(_cmd);
+});
+
 $('#bt_healthworxLandroidS').on('click', function () {
 	$('#md_modal').dialog({title: "{{Santé worxLandroidS}}"});
 	$('#md_modal').load('index.php?v=d&plugin=worxLandroidS&modal=health').dialog('open');
