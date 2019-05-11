@@ -167,6 +167,8 @@ $eqLogics = eqLogic::byType('worxLandroidS');
         <fieldset>
           <div class="form-actions">
             <a class="btn btn-success btn-sm cmdAction" id="bt_addworxLandroidSAction"><i class="fa fa-plus-circle"></i> {{Ajouter une commande action}}</a>
+            <a class="btn btn-success btn-sm cmdInfo" id="bt_addworxLandroidSInfo"><i class="fa fa-plus-circle"></i> {{Ajouter une commande Info}}</a>
+
           </div>
         </fieldset>
       </form>
