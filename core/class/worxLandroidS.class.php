@@ -683,7 +683,7 @@ class worxLandroidS extends eqLogic
           foreach ($cmdlist as $cmdname){
 		  
 	   if(strstr($cmdname,'#')){
-		   $value .= ',' . $result = jeedom::evaluateExpression($cmdname); // name = command number
+		   $value .= ',' . jeedom::evaluateExpression($cmdname); // name = command number
 	   } else 
 	   {
        
