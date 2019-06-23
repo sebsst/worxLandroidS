@@ -3,7 +3,7 @@
 En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que la doc, les traductions et des corrections mineures
 
 ## 23/06/2019
-- correction date de fin de garantie
+- correction date de fin de garantie (à la création de l'équipement)
 
 ## 08/05/2019
 - Ajout d'une info (virtualInfo) pour concatener plusieurs infos du plugin séparé par des virgules pour l'utilisation du widget worklandroid. Le widget est dispo sur le market des widgets. Recherche équipement pour récupérer l'info d'un autre équipement.
