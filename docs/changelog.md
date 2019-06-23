@@ -2,6 +2,9 @@
 
 En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que la doc, les traductions et des corrections mineures
 
+## 23/06/2019
+- correction date de fin de garantie
+
 ## 08/05/2019
 - Ajout d'une info (virtualInfo) pour concatener plusieurs infos du plugin séparé par des virgules pour l'utilisation du widget worklandroid. Le widget est dispo sur le market des widgets. Recherche équipement pour récupérer l'info d'un autre équipement.
 - remplacement des infos planning/xxxx/xxx par planning_xxxxx_xxxx suite à un changement du core jeedom
