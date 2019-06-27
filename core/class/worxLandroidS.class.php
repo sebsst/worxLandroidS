@@ -366,7 +366,6 @@ class worxLandroidS extends eqLogic
         $elogic->setConfiguration('mowerDescription', $mowerDescription);
         //$elogic->setName('LandroidS-'. $json2_data->dat->mac);
         //$elogic->setConfiguration('topic', $nodeid);
-        $elogic->setConfiguration('errorRetryMode', false);
         // ajout des actions par défaut
         log::add('worxLandroidS', 'info', 'Saving device with mac address' . $product['mac_address']);
         message::add('worxLandroidS', 'Tondeuse ajoutée: ' . $elogic->getName(), null, null);
@@ -600,27 +599,7 @@ class worxLandroidS extends eqLogic
             self::$_client->disconnect();
         }
         
-        $retryMode = $elogic->getConfiguration('errorRetryMode', true);
-        $retryNr   = $elogic->getConfiguration('retryNr', 0);
         $errorCode = $json2_data->dat->le;
-        
-        if ($errorCode != 0 and $retryMode && $retryNr < 1 && false) { //suppression mode retry
-            log::add('worxLandroidS', 'Debug', ' error wait for retry err code : ' . $json2_data->dat->le);
-            $retryNr++;
-            $elogic->setConfiguration('retryNr', $retryNr);
-            $elogic->save();
-            // retry after 15seconds
-            sleep(15);
-            $mosqId      = config::byKey('mqtt_client_id', 'worxLandroidS') . '' . $id . '' . substr(md5(rand()), 0, 8);
-            $client      = new Mosquitto\Client($mosqId, true);
-            $eqptlist[]  = array();
-            $eqptlist[0] = array(
-                $elogic->getConfiguration('MowerType'),
-                $elogic->getLogicalId(),
-                '{}'
-            );
-            self::connect_and_publish($eqptlist, $client, '{}');
-        } else {
             $elogic->setConfiguration('retryNr', 0);
             self::newInfo($elogic, 'errorCode', $json2_data->dat->le, 'numeric', 1);
             self::newInfo($elogic, 'errorDescription', self::getErrorDescription($json2_data->dat->le), 'string', 1);
@@ -705,9 +684,6 @@ class worxLandroidS extends eqLogic
            $cmd->setConfiguration('topic', $value);
            $cmd->save();
            $elogic->checkAndUpdateCmd($cmd, $value);
-		
-		
-        }
         
         $elogic->save();
         $elogic->refreshWidget();
