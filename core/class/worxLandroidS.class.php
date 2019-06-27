@@ -396,6 +396,8 @@ class worxLandroidS extends eqLogic
         self::newAction($elogic, 'rain_delay_60', $commandIn, "60", 'other');
         self::newAction($elogic, 'rain_delay_120', $commandIn, "120", 'other');
         self::newAction($elogic, 'rain_delay_240', $commandIn, "240", 'other');
+        self::newInfo($elogic, 'virtualInfo', '', 'string', 0, 'statusCode,statusDescription,batteryLevel,wifiQuality,currentZone');
+    
       
         $display = array(
 				'message_placeholder' => __('num jour;hh:mm;durée mn;bord(0 ou 1)', __FILE__),
