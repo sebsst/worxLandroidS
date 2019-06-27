@@ -1,8 +1,8 @@
-# Worx Landroid mowers S,M and L models
+# Robots tondeuses Worx Landroid
 
 ## Introduction
 
-Pugin is compatible with Worx landroid  WIFI / cloud models (M or L firmware version > 5.0)
+Ce plugin permet de se connecter aux tondeuses worx Landroid modèles WIFI
 
 ### Plugin configuration
 
@@ -53,42 +53,59 @@ Daily schedule - possible actions:
 - off_0 to off_6
 - on_today set current day mowing times
 - off_today current day mowing time
+- set_schedule pour modifier le planning de tonte d'un jour donné. Par défaut l'action n'est pas visible. Le but étant de faire de la planification à l'aide d'un scénario mais il est possible de rendre visible sur le widget si besoin.
+Format attendu: numéro jour;heure départ;durée en minutes;bordure Exemples :
+1;10:00;120;1 => lundi, démarrage à 10:00 pendant 120 minutes, coupe la bordure
+0;08:00;300;0 => dimanche, démarrage à 08:00 pendant 300 minutes, ne coupe pas la bordure
+
+## Widget
+- un widget (workAndroid) est disponible sur le market pour un affichage avec des images. Pour cela Il est possible d'utiliser l'info virtualInfo: cocher afficher dans la liste des commandes, sélectionner le widget dans la configuration avancée.
+(Recherche équipement pour récupérer l'info d'un autre équipement)
 
 ## FAQ
 
->Which data refresh frequency?
+>A quelle fréquence, les données sont-elles réactualisées?
 
-Each 2 minutes during mowing periods and each 30 minutes when mower is on standby
+Toutes les 2 minutes si la tondeuse est en activité et toutes les 30 minutes lorsqu'elle est en veille.
 
->Plugin indicates that mower is blocked but it is actually not the case. why?
+>Le plugin m'indique que la tondeuse est coincée mais ce n'est pas le cas, pourquoi?
 
-Landroid can be blocked only a few seconds, due to periodic refresh the message could be send during these few seconds. Either wait for next refresh or perform a manual "refreshValue"
+Cela signifie que la tondeuse était coincée pendant quelques secondes et que le plugin a remonté l'info à ce moment là.
+Il est possible de rafraîchir le statut de la tondeuse en utilisant le bouton "refreshValue"
 
->Compatible devices
+>quels sont les modèles compatibles?
+- WG757E
+- WG796E.1
+- WG797E.1
+- WG798E
+- WR101SI
+- WR102SI
+- WR104SI
+- WR105SI
+- WR106SI
+- WR110MI
+- WR111MI
+- WR112MI
+- WG799E
+- WR113MI
+- WR100SI
+- WR101SI.1
+- WR102SI.1
+- WR103SI
+- WR104SI.1
+- WR105SI.1
+- WR106SI.1
+- WR110MI.1
+- WR115MI
+- WR130E
+- WR141E
+- WR142E
+- WR143E
+- WR153E
+- WR155E
+- WR140
+- WR150
 
-- Landroid M 800 WiFi - WG757E
-- Landroid M 1000 WiFi - WG796E.1
-- Landroid L 2000 WiFi - WG797E.1
-- Landroid L 1500 WiFi - WG798E
-- Landroid S Orange 450 WiFi - WR101SI
-- Landroid S Black Black 450 WiFi - WR102SI
-- Landroid S Orange 500 WiFi - WR104SI
-- Landroid S Black 500 WiFi - WR105SI
-- Landroid S White 450 WiFi - WR106SI
-- Landroid S Black 700 WiFi - WR110MI
-- Landroid M 800 WiFi - WR111MI
-- Landroid M 1000 WiFi - WR112MI
-- Landroid M 1200 WiFi - WG799E
-- Landroid M 1200 WiFi - WR113MI
-- Landroid S White 390 WiFi - WR100SI
-- Landroid S Orange 450 WiFi - WR101SI.1
-- Landroid S Black Black 450 WiFi - WR102SI.1
-- Landroid S Black Grey 500 WiFi - WR103SI
-- Landroid S Orange 500 WiFi - WR104SI.1
-- Landroid S Black 500 WiFi - WR105SI.1
-- Landroid S White 450 WiFi - WR106SI.1
-- Landroid S Black 700 WiFi - WR110MI.1
-- Landroid S Orange 700 WiFi - WR115MI
 
 Un autre plugin worxLandroid est disponible pour les modèles M/L en version non cloud.
 
@@ -142,10 +159,8 @@ Dans ce cas là, vous pouvez tenter de la mettre à jour manuellement et si poss
 
 ## Fonctionnement détaillé
 
-Connexion vers les api ci-dessous pour récupérer: les infos utilisateurs, le certificat et les paramètres tondeuses:
-https://api.worxlandroid.com:443/api/v1/users/auth
-https://api.worxlandroid.com:443/api/v1/users/certificate
-https://api.worxlandroid.com:443/api/v1/product-items
+Connexion vers des api worx pour récupérer: les infos utilisateurs, le certificat et les paramètres tondeuses:
+https://api.worxlandroid.com:443/api/v2
 
 Connexion au broker Mosquitto en fonction des liens et paramètres récupérés à partir des API précédentes
 
