@@ -1034,6 +1034,11 @@ class worxLandroidS extends eqLogic
         if ($cmd->getName() == 'stop') {
             $_message = '{"cmd":3}';
         }
+	    
+        // send stop
+        if ($cmd->getName() == 'cutEdge') {
+            $_message = '{"cmd":4}';
+        }	    
        
         // send free command
         if ($cmd->getName() == 'set_schedule') {
