@@ -605,7 +605,7 @@ class worxLandroidS extends eqLogic
             $elogic->setConfiguration('retryNr', 0);
             self::newInfo($elogic, 'errorCode', $json2_data->dat->le, 'numeric', 1);
             self::newInfo($elogic, 'errorDescription', self::getErrorDescription($json2_data->dat->le), 'string', 1);
-            
+            self::newAction($elogic, 'cutEdge', $commandIn, array( cmd => 4 ), 'other');
             
             self::newInfo($elogic, 'statusCode', $json2_data->dat->ls, 'numeric', 1);
             self::newInfo($elogic, 'statusDescription', self::getStatusDescription($json2_data->dat->ls), 'string', 1);
@@ -1034,6 +1034,11 @@ class worxLandroidS extends eqLogic
         if ($cmd->getName() == 'stop') {
             $_message = '{"cmd":3}';
         }
+	    
+        // send stop
+        if ($cmd->getName() == 'cutEdge') {
+            $_message = '{"cmd":4}';
+        }	    
        
         // send free command
         if ($cmd->getName() == 'set_schedule') {
