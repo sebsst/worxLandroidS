@@ -375,7 +375,7 @@ class worxLandroidS extends eqLogic
         $elogic->setDisplay("height", "260px");
         $elogic->setIsVisible(1);
         $elogic->setIsEnable(1);
-        $elogic->checkAndUpdateCmd();
+        //$elogic->checkAndUpdateCmd();
         
         $commandIn = $MowerType . '/' . $product['mac_address'] . '/commandIn'; //config::byKey('MowerType', 'worxLandroidS').'/'. $json2_data->dat->mac .'/commandIn';
         self::newAction($elogic, 'setRainDelay', $commandIn, '{"rd":"#message#"}', 'message');
