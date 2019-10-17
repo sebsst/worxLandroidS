@@ -882,7 +882,7 @@ class worxLandroidS extends eqLogic
         
     }
     
-    public static function newAction($elogic, $cmdId, $topic, $payload, $subtype)
+    public static function newAction($elogic, $cmdId, $topic, $payload, $subtype, $params)
     {
         $cmdlogic = worxLandroidSCmd::byEqLogicIdAndLogicalId($elogic->getId(), $cmdId);
         
@@ -895,17 +895,17 @@ class worxLandroidS extends eqLogic
             $cmdlogic->setLogicalId($cmdId);
             $cmdlogic->setType('action');
             $cmdlogic->setName($cmdId);
-	   // $params not necessary 	(removed from function parameters)
-	   //$cmdlogic->setConfiguration('listValue', json_encode($params['listValue']) ?: null);
-           //$cmdlogic->setDisplay('forceReturnLineBefore', $params['forceReturnLineBefore'] ?: false);
-	   //$cmdlogic->setDisplay('message_disable', $params['message_disable'] ?: false);
-	   //$cmdlogic->setDisplay('title_disable', $params['title_disable'] ?: false);
-  	   //$cmdlogic->setDisplay('title_placeholder', $params['title_placeholder'] ?: false);
-	   //$cmdlogic->setDisplay('icon', $params['icon'] ?: false);				
-	   //$cmdlogic->setDisplay('message_placeholder', $params['message_placeholder'] ?: false);
-	   //$cmdlogic->setDisplay('title_possibility_list', json_encode($params['title_possibility_list'] ?: null));//json_encode(array("1","2"));
-	   //$cmdlogic->setDisplay('icon', $params['icon'] ?: null);
-	    //$cmdlogic->setIsVisible($params['isvisible'] ?: 0);
+			$cmdlogic->setConfiguration('listValue', json_encode($params['listValue']) ?: null);
+			$cmdlogic->setDisplay('forceReturnLineBefore', $params['forceReturnLineBefore'] ?: false);
+	        $cmdlogic->setDisplay('message_disable', $params['message_disable'] ?: false);
+	        $cmdlogic->setDisplay('title_disable', $params['title_disable'] ?: false);
+			$cmdlogic->setDisplay('title_placeholder', $params['title_placeholder'] ?: false);
+			$cmdlogic->setDisplay('icon', $params['icon'] ?: false);				
+			$cmdlogic->setDisplay('message_placeholder', $params['message_placeholder'] ?: false);
+			$cmdlogic->setDisplay('title_possibility_list', json_encode($params['title_possibility_list'] ?: null));//json_encode(array("1","2"));
+			$cmdlogic->setDisplay('icon', $params['icon'] ?: null);
+          
+	    $cmdlogic->setIsVisible($params['isvisible'] ?: 0);
           
           
             $cmdlogic->setConfiguration('topic', $topic);
