@@ -55,11 +55,13 @@ class worxLandroidS extends eqLogic
             if ($eqpt->getIsEnable() == true) {
                 if (config::byKey('status', 'worxLandroidS') == '0') { //on se connecte seulement si on est pas déjà connecté
                     $i         = date('w');
+                    if( $start='' ) 	
+                  	 { $start = '08:00';};    			
                     $start     = $eqpt->getCmd(null, 'Planning_startTime_' . $i);
                     $startTime = is_object($start) ? $start->execCmd() : '00:00';
                     $dur       = $eqpt->getCmd(null, 'Planning_duration_' . $i);
                     $duration  = is_object($dur) ? $dur->execCmd() : 0;
-                    
+                    if($duration== ''){ $checkMowingTime = 'manual'; $duration=1;}; //correction pour l'initialisation
                     $initDate = DateTime::createFromFormat('H:i', $startTime);
                     //log::add('worxLandroidS', 'debug', 'mower sleeping '.$duration);
                     //if(empty($duration){$duration = 0};
