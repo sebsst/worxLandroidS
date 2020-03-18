@@ -2,22 +2,33 @@
    
 
  <center class="widget-name display:inline"><a href="#eqLink#" style="font-weight:bold;font-size : 1.1em;#hideEqLogicName#">#name_display# #object_name#</a>
-   <a class="btn cmd" data-cmd_id="#start_id#" style= "cursor: pointer;position : absolute;right : 2px; width : 5px" title="Start" onclick="jeedom.cmd.execute({id: #start_id#});"><i class="fas fa-play pull-right" ></i></a>
-   <a class="btn cmd" data-cmd_id="#pause_id#" style= "cursor: pointer;position : absolute;right : 20px; width : 5px" title="pause" onclick="jeedom.cmd.execute({id: #pause_id#});"><i class="fas fa-pause pull-right" ></i></a>
-    <a class="btn cmd" data-cmd_id="#stop_id#" style= "cursor: pointer;position : absolute;right : 40px; width : 5 px" title="Home" onclick="jeedom.cmd.execute({id: #stop_id#});"><i class="fas fa-home pull-right" ></i></a>
-   <a class="btn cmd" data-type="action" data-cmd_id="#refreshValue_id#" style= "cursor: pointer;position : absolute;right : 60px; width : 5 px" title="Refresh" onclick="jeedom.cmd.execute({id: #refreshValue_id#});"><i class="fas fa-sync pull-right" ></i></a>
+   <a class="btn cmd" data-cmd_id="#start_id#" style= "cursor: pointer;position : absolute;right : 2px; width : 5px" title="Start" onclick="jeedom.cmd.execute({id: #start_id#});"><i style="font-size: 0.7em;" class="fas fa-play pull-right" ></i></a>
+   <a class="btn cmd" data-cmd_id="#pause_id#" style= "cursor: pointer;position : absolute;right : 25px; width : 5px" title="pause" onclick="jeedom.cmd.execute({id: #pause_id#});"><i style="font-size: 0.7em;" class="fas fa-pause pull-right" ></i></a>
+    <a class="btn cmd" data-cmd_id="#stop_id#" style= "cursor: pointer;position : absolute;right : 50px; width : 5 px" title="Home" onclick="jeedom.cmd.execute({id: #stop_id#});"><i style="font-size: 0.7em;" class="fas fa-home pull-right" ></i></a>
+   <a class="btn cmd" data-type="action" data-cmd_id="#refreshValue_id#" style= "cursor: pointer;position : absolute;right : 75px; width : 5 px" title="Refresh" onclick="jeedom.cmd.execute({id: #refreshValue_id#});"><i style="font-size: 0.7em;" class="fas fa-sync pull-right" ></i></a>
+
+  
 
     <span style="font-size: 1.2em;position : absolute; font-weight:bold;left : 1px;" class="cmd noRefresh jeedom-batterie2" data-type="info" data-subtype="string" data-cmd_id="#batteryLevel#">
       #batteryLevel#%</span>
- <br/>
+
 
       <span style="font-size: 0.8em;" class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#lastCom#">
-      #lastDate# #lastTime#</span>
-    
-         <span  class="doc-#totalTime#" data-type="info" data-subtype="string" data-cmd_id="#totalTime#" style="font-size: 0.8em" >
-         <span  class="doc-#totalBladeTime#" data-type="info" data-subtype="string" data-cmd_id="#totalBladeTime#" style="font-size: 0.8em" >
-            
-         <div style="#totalDistance_visible#">
+      <br/>#lastDate# #lastTime#</span>
+  </center>      
+                
+  	<center>
+      <span style="font-weight:bold;#statusDescription_visible#">#statusDescription# </span>
+    <span style="#statusCode_visible#"> (#statusCode#) </span>  
+    <span style="font-size: 0.9em; #currentZone_visible#" > <br/> Zone départ: #currentZone# </span>
+
+    <span style="font-size: 1.2em" class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#errorCode#">
+    <span style="font-weight:bold;color:#errorColor#">  <br/>  <span style="#errorDescription_visible#"> #errorDescription# </span>
+                                                     <span style="#errorCode_visible#">   (#errorCode#) </span>
+                                                                                           </span> </span>    </span><br/>
+
+
+         <div style="font-size: 0.9em;#totalDistance_visible#">
              <br/>
             Distance totale: #totalDistance# m en  #totalTime# minutes  <br/> </div>
          <span style="#batteryChargeCycle_visible#">   
@@ -25,14 +36,14 @@
     
      <span style="#GPSLatitude_visible#">   
             coordonnées GPS #GPSLatitude , #GPSLongitude </span>
-    </span> 
-    <span style=font-size: 1.2em;"class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#status#">
-  
+    
 
+  
+	
                               
-    <span style="font-weight:bold;#rainDelay_visible#"> <br/> Délai pluie: #rainDelay# mn</span></span>
+    <span style="font-weight:bold;#rainDelay_visible#"> <br/> Délai pluie: #rainDelay# mn</span>
                                                       
-    <span style="padding-left: 8px ;#rainDelay_visible#" >
+    <span style="padding-left: 8px ;#rainDelay_visible#">
 
     <a class="btn cmd" style="font-size: 0.8em;padding:1px;background-color:MidnightBlue " data-cmd_id="#rain_delay_0" title="raind_delay_0" onclick="jeedom.cmd.execute({id: #rain_delay_0_id#});">&nbsp;0&nbsp;</a>
     <a class="btn cmd" style="font-size: 0.8em;padding:1px;background-color:MidnightBlue " data-cmd_id="#rain_delay_30" title="raind_delay_30" onclick="jeedom.cmd.execute({id: #rain_delay_30_id#});">&nbsp;30&nbsp;</a>
@@ -43,17 +54,10 @@
     </span> 
 
     <br/>                                                                                                                     
-    <span style="font-weight:bold;#statusDescription_visible#">#statusDescription# </span>
-    <span style="#statusCode_visible#"> (#statusCode#) </span>  
-    <span style="font-size: 0.9em; #currentZone_visible#" > <br/> Zone départ: #currentZone# </span></span>
 
-    <span style="font-size: 1.2em" class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#errorCode#">
-    <span style="font-weight:bold;color:#errorColor#">  <br/>  <span style="#errorDescription_visible#"> #errorDescription# </span>
-                                                     <span style="#errorCode_visible#">   (#errorCode#) </span>
-                                                                                              </span></span><br/>
  <div style="#set_schedule_visible#"> #cmdaction#      </div>      
  <span style="#virtualInfo_visible#"> #cmd# </span>  
- </center>                                                                                                                           
+                                                                                                                         
 
     <center style="position : absolute;left : 5px">#daySetup#</center>
 </div>
