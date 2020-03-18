@@ -884,7 +884,7 @@ class worxLandroidS extends eqLogic
         
     }
     
-    public static function newAction($elogic, $cmdId, $topic, $payload, $subtype, $params)
+    public static function newAction($elogic, $cmdId, $topic, $payload, $subtype, $params = array())
     {
         $cmdlogic = worxLandroidSCmd::byEqLogicIdAndLogicalId($elogic->getId(), $cmdId);
         
