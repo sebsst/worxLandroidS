@@ -398,7 +398,7 @@ class worxLandroidS extends eqLogic
         self::newAction($elogic, 'rain_delay_60', $commandIn, "60", 'other', array());
         self::newAction($elogic, 'rain_delay_120', $commandIn, "120", 'other', array());
         self::newAction($elogic, 'rain_delay_240', $commandIn, "240", 'other', array());
-        self::newInfo($elogic, 'virtualInfo', '', 'string', 0, 'statusCode,statusDescription,batteryLevel,wifiQuality,currentZone', array());
+        self::newInfo($elogic, 'virtualInfo', '', 'string', 0, 'statusCode,statusDescription,batteryLevel,wifiQuality,currentZone');
     
       
         $display = array(
@@ -467,7 +467,7 @@ class worxLandroidS extends eqLogic
                 if ((time() - $start_time) > 45) {
                     log::add('worxLandroidS', 'debug', 'Timeout reached');
                     foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
-                        self::newInfo($eqpt, 'statusDescription', __("Communication timeout", __FILE__), 'string', 1, array());
+                        self::newInfo($eqpt, 'statusDescription', __("Communication timeout", __FILE__), 'string', 1, '');
 			self::$_client->disconnect();
                         config::save('status', '0', 'worxLandroidS');
                     }
@@ -605,46 +605,46 @@ class worxLandroidS extends eqLogic
         
         $errorCode = $json2_data->dat->le;
             $elogic->setConfiguration('retryNr', 0);
-            self::newInfo($elogic, 'errorCode', $json2_data->dat->le, 'numeric', 1, array() );
-            self::newInfo($elogic, 'errorDescription', self::getErrorDescription($json2_data->dat->le), 'string', 1, array());
+            self::newInfo($elogic, 'errorCode', $json2_data->dat->le, 'numeric', 1, '' );
+            self::newInfo($elogic, 'errorDescription', self::getErrorDescription($json2_data->dat->le), 'string', 1, '');
             self::newAction($elogic, 'cutEdge', $commandIn, array( cmd => 4 ), 'other', array());
             
-            self::newInfo($elogic, 'statusCode', $json2_data->dat->ls, 'numeric', 1, array());
-            self::newInfo($elogic, 'statusDescription', self::getStatusDescription($json2_data->dat->ls), 'string', 1, array());
-            self::newInfo($elogic, 'batteryLevel', $json2_data->dat->bt->p, 'numeric', 1, array());
-            self::newInfo($elogic, 'langue', $json2_data->cfg->lg, 'string', 0, array());
+            self::newInfo($elogic, 'statusCode', $json2_data->dat->ls, 'numeric', 1, '');
+            self::newInfo($elogic, 'statusDescription', self::getStatusDescription($json2_data->dat->ls), 'string', 1, '');
+            self::newInfo($elogic, 'batteryLevel', $json2_data->dat->bt->p, 'numeric', 1, '');
+            self::newInfo($elogic, 'langue', $json2_data->cfg->lg, 'string', 0, '');
             
-            self::newInfo($elogic, 'lastDate', $json2_data->cfg->dt, 'string', 1, array());
-            self::newInfo($elogic, 'lastTime', $json2_data->cfg->tm, 'string', 1, array());
+            self::newInfo($elogic, 'lastDate', $json2_data->cfg->dt, 'string', 1, '');
+            self::newInfo($elogic, 'lastTime', $json2_data->cfg->tm, 'string', 1, '');
             
-            self::newInfo($elogic, 'firmware', $json2_data->dat->fw, 'string', 0, array());
-            self::newInfo($elogic, 'wifiQuality', $json2_data->dat->rsi, 'numeric', 0, array());
-            self::newInfo($elogic, 'rainDelay', $json2_data->cfg->rd, 'numeric', 1, array());
+            self::newInfo($elogic, 'firmware', $json2_data->dat->fw, 'string', 0, '');
+            self::newInfo($elogic, 'wifiQuality', $json2_data->dat->rsi, 'numeric', 0, '');
+            self::newInfo($elogic, 'rainDelay', $json2_data->cfg->rd, 'numeric', 1, '');
             
-            self::newInfo($elogic, 'totalTime', $json2_data->dat->st->wt, 'numeric', 1, array());
-            self::newInfo($elogic, 'totalDistance', $json2_data->dat->st->d, 'numeric', 1, array());
-            self::newInfo($elogic, 'totalBladeTime', $json2_data->dat->st->b, 'numeric', 0, array());
-            self::newInfo($elogic, 'batteryChargeCycle', $json2_data->dat->bt->nr, 'numeric', 1, array());
-            self::newInfo($elogic, 'batteryCharging', $json2_data->dat->bt->c, 'binary', 1, array());
-            self::newInfo($elogic, 'batteryVoltage', $json2_data->dat->bt->v, 'numeric', 0, array());
-            self::newInfo($elogic, 'batteryTemperature', $json2_data->dat->bt->t, 'numeric', 0, array());
-            self::newInfo($elogic, 'zonesList', $json2_data->dat->mz, 'string', 0, array());
+            self::newInfo($elogic, 'totalTime', $json2_data->dat->st->wt, 'numeric', 1, '');
+            self::newInfo($elogic, 'totalDistance', $json2_data->dat->st->d, 'numeric', 1, '');
+            self::newInfo($elogic, 'totalBladeTime', $json2_data->dat->st->b, 'numeric', 0, '');
+            self::newInfo($elogic, 'batteryChargeCycle', $json2_data->dat->bt->nr, 'numeric', 1, '');
+            self::newInfo($elogic, 'batteryCharging', $json2_data->dat->bt->c, 'binary', 1, '');
+            self::newInfo($elogic, 'batteryVoltage', $json2_data->dat->bt->v, 'numeric', 0, '');
+            self::newInfo($elogic, 'batteryTemperature', $json2_data->dat->bt->t, 'numeric', 0, '');
+            self::newInfo($elogic, 'zonesList', $json2_data->dat->mz, 'string', 0, '');
             
             if (array_key_exists('conn', $json2_data->dat)) { // for mower with 4G modules
-                self::newInfo($elogic, 'connexion', $json2_data->dat->conn, 'string', 1, array());
-                self::newInfo($elogic,'GPSLatitude',$json2_data->dat->modules->{'4G'}->gps->coo[0],'string',1, array());
-                self::newInfo($elogic,'GPSLongitude',$json2_data->dat->modules->{'4G'}->gps->coo[1],'string',1, array());
+                self::newInfo($elogic, 'connexion', $json2_data->dat->conn, 'string', 1, '');
+                self::newInfo($elogic,'GPSLatitude',$json2_data->dat->modules->{'4G'}->gps->coo[0],'string',1, '');
+                self::newInfo($elogic,'GPSLongitude',$json2_data->dat->modules->{'4G'}->gps->coo[1],'string',1, '');
             } else {
-                self::newInfo($elogic, 'connexion', ' ', 'string', 0, array());
-                self::newInfo($elogic, 'GPSLatitude', ' ', 'string', 0, array());
-                self::newInfo($elogic, 'GPSLongitude', ' ', 'string', 0, array());
+                self::newInfo($elogic, 'connexion', ' ', 'string', 0, '');
+                self::newInfo($elogic, 'GPSLatitude', ' ', 'string', 0, '');
+                self::newInfo($elogic, 'GPSLongitude', ' ', 'string', 0, '');
                 
             }
             
             //log::add('worxLandroidS', 'Debug', 'zone:' . $json2_data->cfg->mzv[$json2_data->dat->lz]+1 . ' / '.$json2_data->cfg->mz[1]);
             //    if ($json2_data->cfg->mz[1] != 0){
             // log::add('worxLandroidS', 'Debug', ' : zone' . $json2_data->cfg->mzv[$json2_data->dat->lz]);
-            self::newInfo($elogic, 'currentZone', $json2_data->cfg->mzv[$json2_data->dat->lz] + 1, 'numeric', 0, array());
+            self::newInfo($elogic, 'currentZone', $json2_data->cfg->mzv[$json2_data->dat->lz] + 1, 'numeric', 0, '');
             //}
             
             //        self::getStatusDescription($json2_data->dat->ls);
@@ -652,9 +652,9 @@ class worxLandroidS extends eqLogic
             //  date début + durée + bordure
             
             for ($i = 0; $i < 7; $i++) {
-                self::newInfo($elogic, 'Planning_startTime_' . $i, $json2_data->cfg->sc->d[$i][0], 'string', 1, array());
-                self::newInfo($elogic, 'Planning_duration_' . $i, $json2_data->cfg->sc->d[$i][1], 'string', 1, array());
-                self::newInfo($elogic, 'Planning_cutEdge_' . $i, $json2_data->cfg->sc->d[$i][2], 'string', 1, array());
+                self::newInfo($elogic, 'Planning_startTime_' . $i, $json2_data->cfg->sc->d[$i][0], 'string', 1, '');
+                self::newInfo($elogic, 'Planning_duration_' . $i, $json2_data->cfg->sc->d[$i][1], 'string', 1, '');
+                self::newInfo($elogic, 'Planning_cutEdge_' . $i, $json2_data->cfg->sc->d[$i][2], 'string', 1, '');
             }
 
 // mise a jour des infos virtuelles séparées par des virgules
@@ -1158,6 +1158,7 @@ class worxLandroidS extends eqLogic
         }
         //}
       
+      /*
       	$etat = $this->getCmd(null, 'statusCode');
         $statusDescription             = $this->getCmd(null, 'statusDescription');
         $replace['#statusDesc#'] = is_object($statusDescription) ? $statusDescription->execCmd() : '';
@@ -1196,7 +1197,7 @@ class worxLandroidS extends eqLogic
 	        } elseif ( $etat >= 0) {
 	       	    $replace['#IMG#']  = "workandroid_inactive.png";
 	        }
-      	    
+      	    */
 	// fin gestion des images
 	    
         $errorCode               = $this->getCmd(null, 'errorCode');
