@@ -179,6 +179,7 @@ class worxLandroidS extends eqLogic
             'log' => log::getPathToLog(self::$_depLogFile)
         );
     }
+
     public static function daemon()
     {
 
@@ -357,7 +358,6 @@ class worxLandroidS extends eqLogic
     {
         $elogic = new worxLandroidS();
         $elogic->setEqType_name('worxLandroidS');
-        //    $eqlogicid = $product['mac_address'];
         $elogic->setLogicalId($product['mac_address']);
         $elogic->setName($product['name']);
         $elogic->setConfiguration('serialNumber', $product['serial_number']);
@@ -365,8 +365,7 @@ class worxLandroidS extends eqLogic
         $elogic->setConfiguration('MowerType', $MowerType);
         $elogic->setConfiguration('maxBladesDuration', 300);
         $elogic->setConfiguration('mowerDescription', $mowerDescription);
-        //$elogic->setName('LandroidS-'. $json2_data->dat->mac);
-        //$elogic->setConfiguration('topic', $nodeid);
+
         // ajout des actions par défaut
         log::add('worxLandroidS', 'info', 'Saving device with mac address' . $product['mac_address']);
         message::add('worxLandroidS', 'Tondeuse ajoutée: ' . $elogic->getName(), null, null);
@@ -376,42 +375,39 @@ class worxLandroidS extends eqLogic
         $elogic->setDisplay("height", "260px");
         $elogic->setIsVisible(1);
         $elogic->setIsEnable(1);
-        //$elogic->checkAndUpdateCmd();
 
         $commandIn = $MowerType . '/' . $product['mac_address'] . '/commandIn'; //config::byKey('MowerType', 'worxLandroidS').'/'. $json2_data->dat->mac .'/commandIn';
-        self::newAction($elogic, 'setRainDelay', $commandIn, '{"rd":"#message#"}', 'message');
-        self::newAction($elogic, 'start', $commandIn, array('cmd' => 1), 'other');
-        self::newAction($elogic, 'pause', $commandIn, array('cmd' => 2), 'other');
-        self::newAction($elogic, 'stop', $commandIn, array('cmd' => 3), 'other');
-        self::newAction($elogic, 'cutEdge', $commandIn, array('cmd' => 4), 'other');
-        self::newAction($elogic, 'refreshValue', $commandIn, "", 'other', array());
-        self::newAction($elogic, 'off_today', $commandIn, "off_today", 'other', array());
-        self::newAction($elogic, 'on_today', $commandIn, "on_today", 'other', array());
-        self::newAction($elogic, 'rain_delay_0', $commandIn, "0", 'other', array());
-        self::newAction($elogic, 'rain_delay_30', $commandIn, "30", 'other', array());
-        self::newAction($elogic, 'rain_delay_60', $commandIn, "60", 'other', array());
-        self::newAction($elogic, 'rain_delay_120', $commandIn, "120", 'other', array());
-        self::newAction($elogic, 'rain_delay_240', $commandIn, "240", 'other', array());
-        self::newInfo($elogic, 'virtualInfo', '', 'string', 0, 'statusCode,statusDescription,batteryLevel,wifiQuality,currentZone');
-
+        $elogic->newAction('setRainDelay', $commandIn, '{"rd":"#message#"}', 'message');
+        $elogic->newAction('start', $commandIn, array('cmd' => 1), 'other');
+        $elogic->newAction('pause', $commandIn, array('cmd' => 2), 'other');
+        $elogic->newAction('stop', $commandIn, array('cmd' => 3), 'other');
+        $elogic->newAction('cutEdge', $commandIn, array('cmd' => 4), 'other');
+        $elogic->newAction('refreshValue', $commandIn, "", 'other');
+        $elogic->newAction('off_today', $commandIn, "off_today", 'other');
+        $elogic->newAction('on_today', $commandIn, "on_today", 'other');
+        $elogic->newAction('rain_delay_0', $commandIn, "0", 'other');
+        $elogic->newAction('rain_delay_30', $commandIn, "30", 'other');
+        $elogic->newAction('rain_delay_60', $commandIn, "60", 'other');
+        $elogic->newAction('rain_delay_120', $commandIn, "120", 'other');
+        $elogic->newAction('rain_delay_240', $commandIn, "240", 'other');
+        $elogic->newInfo('virtualInfo', '', 'string', 0, 'statusCode,statusDescription,batteryLevel,wifiQuality,currentZone');
 
         $display = array(
                 'message_placeholder' => __('num jour;hh:mm;durée mn;bord(0 ou 1)', __FILE__),
                 'isvisible' => 0,
-                        'title_disable' => true);
+                'title_disable' => true);
 
-        self::newAction($elogic, 'set_schedule', $commandIn, "", 'message', $display);
+        $this->newAction('set_schedule', $commandIn, "", 'message', $display);
 
         for ($i = 0; $i < 7; $i++) {
-            self::newAction($elogic, 'on_' . $i, $commandIn, 'on_' . $i, 'other', array());
-            self::newAction($elogic, 'off_' . $i, $commandIn, 'off_' . $i, 'other', array());
+            $elogic->newAction('on_' . $i, $commandIn, 'on_' . $i, 'other');
+            $elogic->newAction('off_' . $i, $commandIn, 'off_' . $i, 'other');
         }
 
         event::add('worxLandroidS::includeEqpt', $elogic->getId());
 
         $elogic->setStatus('lastCommunication', date('Y-m-d H:i:s'));
         $elogic->save();
-
     }
 
     public static function connect_and_publish($eqptlist, $client, $msg)
@@ -459,7 +455,7 @@ class worxLandroidS extends eqLogic
                 if ((time() - $start_time) > 45) {
                     log::add('worxLandroidS', 'debug', 'Timeout reached');
                     foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
-                        self::newInfo($eqpt, 'statusDescription', __("Communication timeout", __FILE__), 'string', 1, '');
+                        $eqpt->newInfo('statusDescription', __("Communication timeout", __FILE__), 'string', 1, '');
                         self::$_client->disconnect();
                         config::save('status', '0', 'worxLandroidS');
                     }
@@ -492,7 +488,6 @@ class worxLandroidS extends eqLogic
     {
         log::add('worxLandroidS', 'debug', 'Déconnexion de Mosquitto avec code ' . $r);
 
-        // self::newInfo($this,'LastMosquittoCode', $r,'numeric',1);
         if ($r == '14') {
             message::add('worxLandroidS', "Vous devez mettre à jour Mosquitto (version minimum 1.4 requise)");
         }
@@ -593,44 +588,44 @@ class worxLandroidS extends eqLogic
         }
 
         $elogic->setConfiguration('retryNr', 0);
-        self::newInfo($elogic, 'errorCode', $json2_data->dat->le, 'numeric', 1, '' );
-        self::newInfo($elogic, 'errorDescription', self::getErrorDescription($json2_data->dat->le), 'string', 1, '');
+        $elogic->newInfo('errorCode', $json2_data->dat->le, 'numeric', 1, '' );
+        $elogic->newInfo('errorDescription', self::getErrorDescription($json2_data->dat->le), 'string', 1, '');
 
-        self::newInfo($elogic, 'statusCode', $json2_data->dat->ls, 'numeric', 1, '');
-        self::newInfo($elogic, 'statusDescription', self::getStatusDescription($json2_data->dat->ls), 'string', 1, '');
-        self::newInfo($elogic, 'batteryLevel', $json2_data->dat->bt->p, 'numeric', 1, '');
-        self::newInfo($elogic, 'langue', $json2_data->cfg->lg, 'string', 0, '');
+        $elogic->newInfo('statusCode', $json2_data->dat->ls, 'numeric', 1, '');
+        $elogic->newInfo('statusDescription', self::getStatusDescription($json2_data->dat->ls), 'string', 1, '');
+        $elogic->newInfo('batteryLevel', $json2_data->dat->bt->p, 'numeric', 1, '');
+        $elogic->newInfo('langue', $json2_data->cfg->lg, 'string', 0, '');
 
-        self::newInfo($elogic, 'lastDate', $json2_data->cfg->dt, 'string', 1, '');
-        self::newInfo($elogic, 'lastTime', $json2_data->cfg->tm, 'string', 1, '');
+        $elogic->newInfo('lastDate', $json2_data->cfg->dt, 'string', 1, '');
+        $elogic->newInfo('lastTime', $json2_data->cfg->tm, 'string', 1, '');
 
-        self::newInfo($elogic, 'firmware', $json2_data->dat->fw, 'string', 0, '');
-        self::newInfo($elogic, 'wifiQuality', $json2_data->dat->rsi, 'numeric', 0, '');
-        self::newInfo($elogic, 'rainDelay', $json2_data->cfg->rd, 'numeric', 1, '');
+        $elogic->newInfo('firmware', $json2_data->dat->fw, 'string', 0, '');
+        $elogic->newInfo('wifiQuality', $json2_data->dat->rsi, 'numeric', 0, '');
+        $elogic->newInfo('rainDelay', $json2_data->cfg->rd, 'numeric', 1, '');
 
-        self::newInfo($elogic, 'totalTime', $json2_data->dat->st->wt, 'numeric', 1, '');
-        self::newInfo($elogic, 'totalDistance', $json2_data->dat->st->d, 'numeric', 1, '');
-        self::newInfo($elogic, 'totalBladeTime', $json2_data->dat->st->b, 'numeric', 0, '');
-        self::newInfo($elogic, 'batteryChargeCycle', $json2_data->dat->bt->nr, 'numeric', 1, '');
-        self::newInfo($elogic, 'batteryCharging', $json2_data->dat->bt->c, 'binary', 1, '');
-        self::newInfo($elogic, 'batteryVoltage', $json2_data->dat->bt->v, 'numeric', 0, '');
-        self::newInfo($elogic, 'batteryTemperature', $json2_data->dat->bt->t, 'numeric', 0, '');
-        self::newInfo($elogic, 'zonesList', $json2_data->dat->mz, 'string', 0, '');
+        $elogic->newInfo('totalTime', $json2_data->dat->st->wt, 'numeric', 1, '');
+        $elogic->newInfo('totalDistance', $json2_data->dat->st->d, 'numeric', 1, '');
+        $elogic->newInfo('totalBladeTime', $json2_data->dat->st->b, 'numeric', 0, '');
+        $elogic->newInfo('batteryChargeCycle', $json2_data->dat->bt->nr, 'numeric', 1, '');
+        $elogic->newInfo('batteryCharging', $json2_data->dat->bt->c, 'binary', 1, '');
+        $elogic->newInfo('batteryVoltage', $json2_data->dat->bt->v, 'numeric', 0, '');
+        $elogic->newInfo('batteryTemperature', $json2_data->dat->bt->t, 'numeric', 0, '');
+        $elogic->newInfo('zonesList', $json2_data->dat->mz, 'string', 0, '');
 
         if (array_key_exists('conn', $json2_data->dat)) { // for mower with 4G modules
-            self::newInfo($elogic, 'connexion', $json2_data->dat->conn, 'string', 1, '');
-            self::newInfo($elogic,'GPSLatitude',$json2_data->dat->modules->{'4G'}->gps->coo[0],'string',1, '');
-            self::newInfo($elogic,'GPSLongitude',$json2_data->dat->modules->{'4G'}->gps->coo[1],'string',1, '');
+            $elogic->newInfo('connexion', $json2_data->dat->conn, 'string', 1, '');
+            $elogic->newInfo('GPSLatitude',$json2_data->dat->modules->{'4G'}->gps->coo[0],'string',1, '');
+            $elogic->newInfo('GPSLongitude',$json2_data->dat->modules->{'4G'}->gps->coo[1],'string',1, '');
         } else {
-            self::newInfo($elogic, 'connexion', ' ', 'string', 0, '');
-            self::newInfo($elogic, 'GPSLatitude', ' ', 'string', 0, '');
-            self::newInfo($elogic, 'GPSLongitude', ' ', 'string', 0, '');
+            $elogic->newInfo('connexion', ' ', 'string', 0, '');
+            $elogic->newInfo('GPSLatitude', ' ', 'string', 0, '');
+            $elogic->newInfo('GPSLongitude', ' ', 'string', 0, '');
         }
 
         //log::add('worxLandroidS', 'Debug', 'zone:' . $json2_data->cfg->mzv[$json2_data->dat->lz]+1 . ' / '.$json2_data->cfg->mz[1]);
         //    if ($json2_data->cfg->mz[1] != 0){
         // log::add('worxLandroidS', 'Debug', ' : zone' . $json2_data->cfg->mzv[$json2_data->dat->lz]);
-        self::newInfo($elogic, 'currentZone', $json2_data->cfg->mzv[$json2_data->dat->lz] + 1, 'numeric', 0, '');
+        $elogic->newInfo('currentZone', $json2_data->cfg->mzv[$json2_data->dat->lz] + 1, 'numeric', 0, '');
         //}
 
         //        self::getStatusDescription($json2_data->dat->ls);
@@ -638,9 +633,9 @@ class worxLandroidS extends eqLogic
         //  date début + durée + bordure
 
         for ($i = 0; $i < 7; $i++) {
-            self::newInfo($elogic, 'Planning_startTime_' . $i, $json2_data->cfg->sc->d[$i][0], 'string', 1, '');
-            self::newInfo($elogic, 'Planning_duration_' . $i, $json2_data->cfg->sc->d[$i][1], 'string', 1, '');
-            self::newInfo($elogic, 'Planning_cutEdge_' . $i, $json2_data->cfg->sc->d[$i][2], 'string', 1, '');
+            $elogic->newInfo('Planning_startTime_' . $i, $json2_data->cfg->sc->d[$i][0], 'string', 1, '');
+            $elogic->newInfo('Planning_duration_' . $i, $json2_data->cfg->sc->d[$i][1], 'string', 1, '');
+            $elogic->newInfo('Planning_cutEdge_' . $i, $json2_data->cfg->sc->d[$i][2], 'string', 1, '');
         }
 
         // mise a jour des infos virtuelles séparées par des virgules
@@ -815,14 +810,14 @@ class worxLandroidS extends eqLogic
         }
     }
 
-    public static function newInfo($elogic, $cmdId, $value, $subtype, $visible, $request=null)
+    public function newInfo($cmdId, $value, $subtype, $visible, $request=null)
     {
-        $cmdlogic = worxLandroidSCmd::byEqLogicIdAndLogicalId($elogic->getId(), $cmdId);
+        $cmdlogic = $this->getCmd(null, $cmdId);
 
         if (!is_object($cmdlogic)) {
             log::add('worxLandroidS', 'info', 'Cmdlogic n existe pas, creation');
             $cmdlogic = new worxLandroidSCmd();
-            $cmdlogic->setEqLogic_id($elogic->getId());
+            $cmdlogic->setEqLogic_id($this->getId());
             $cmdlogic->setEqType('worxLandroidS');
             $cmdlogic->setSubType($subtype);
             $cmdlogic->setLogicalId($cmdId);
@@ -856,17 +851,17 @@ class worxLandroidS extends eqLogic
         //$cmdlogic->setValue($value);
         $cmdlogic->save();
 
-        $elogic->checkAndUpdateCmd($cmdId, $value);
+        $this->checkAndUpdateCmd($cmdId, $value);
     }
 
-    public static function newAction($elogic, $cmdId, $topic, $payload, $subtype, $params = array())
+    public function newAction($cmdId, $topic, $payload, $subtype, $params = array())
     {
-        $cmdlogic = worxLandroidSCmd::byEqLogicIdAndLogicalId($elogic->getId(), $cmdId);
+        $cmdlogic = $this->getCmd(null, $cmdId);
 
         if (!is_object($cmdlogic)) {
             log::add('worxLandroidS', 'info', 'nouvelle action par défaut' . $payload);
             $cmdlogic = new worxLandroidSCmd();
-            $cmdlogic->setEqLogic_id($elogic->getId());
+            $cmdlogic->setEqLogic_id($this->getId());
             $cmdlogic->setEqType('worxLandroidS');
             $cmdlogic->setSubType($subtype);
             $cmdlogic->setLogicalId($cmdId);
@@ -879,7 +874,7 @@ class worxLandroidS extends eqLogic
             $cmdlogic->setDisplay('title_placeholder', $params['title_placeholder'] ?: false);
             $cmdlogic->setDisplay('icon', $params['icon'] ?: false);
             $cmdlogic->setDisplay('message_placeholder', $params['message_placeholder'] ?: false);
-            $cmdlogic->setDisplay('title_possibility_list', json_encode($params['title_possibility_list'] ?: null));//json_encode(array("1","2"));
+            $cmdlogic->setDisplay('title_possibility_list', json_encode($params['title_possibility_list'] ?: null));
             $cmdlogic->setDisplay('icon', $params['icon'] ?: null);
 
             $cmdlogic->setIsVisible($params['isvisible'] ?: 0);
@@ -1243,7 +1238,7 @@ class worxLandroidSCmd extends cmd
             $elogic = $this->getEqLogic();
             $cmdin = worxLandroidSCmd::byEqLogicIdCmdName($elogic->getId(), 'totalBladeTime');
             $value = $cmdin->getConfiguration('topic', '');
-            worxLandroidS::newInfo($elogic, 'lastBladesChangeTime', $value, 'numeric', 0);
+            $elogic->newInfo('lastBladesChangeTime', $value, 'numeric', 0);
             return true;
         } else {
             switch ($this->getType()) {
