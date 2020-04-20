@@ -220,9 +220,10 @@ class worxLandroidS extends eqLogic
                 'x-auth-token:' . $token
             ));
             $result = curl_exec($ch);
-            log::add('worxLandroidS', 'info', 'Connexion result :' . $result);
+            $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            log::add('worxLandroidS', 'info', 'Connexion result :' . $result . $httpcode);
             $json = json_decode($result, true);
-            if (is_null($json)) {
+            if (is_null($json) or $httpcode <> '200') {
                 log::add('worxLandroidS', 'info', 'Connexion KO');
 
                 event::add('jeedom::alert', array(
