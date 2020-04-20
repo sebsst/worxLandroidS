@@ -35,12 +35,11 @@ function worxLandroidS_install() {
 }
 
 function worxLandroidS_update() {
+    $cron = cron::byClassAndFunction('worxLandroidS', 'daemon');
     if (is_object($cron)) {
-    $cron->stop();
-    $cron->remove(); 
-    unset($cron);    
-
-
+        $cron->stop();
+        $cron->remove();
+        unset($cron);
     }
     $cron = cron::byClassAndFunction('worxLandroidS', 'daemon');
     config::save('initCloud', 1 ,'worxLandroidS');
@@ -54,35 +53,10 @@ function worxLandroidS_update() {
         $cron->setSchedule('* * * * *');
         $cron->setTimeout('1440');
         $cron->save();
-    } else
-    {
+    } else {
         $cron->setDeamonSleepTime(120);
         $cron->halt;
         $cron->run;
-    }
-    
-    foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
-      // add actions if missing
-         worxLandroidS::newAction($eqpt,'off_today',$commandIn,"off_today",'other');
-         worxLandroidS::newAction($eqpt,'on_today',$commandIn,"on_today",'other');
-         worxLandroidS::newAction($eqpt,'pause',$commandIn,"pause",'other');
-         worxLandroidS::newAction($eqpt,'rain_delay_0',$commandIn,"0",'other');
-         worxLandroidS::newAction($eqpt,'rain_delay_30',$commandIn,"30",'other');
-         worxLandroidS::newAction($eqpt,'rain_delay_60',$commandIn,"60",'other');
-         worxLandroidS::newAction($eqpt,'rain_delay_120',$commandIn,"120",'other');
-         worxLandroidS::newAction($eqpt,'rain_delay_240',$commandIn,"240",'other');
-                $display = array(
-				'message_placeholder' => __('num jour;hh:mm;durée mn;bord(0 ou 1)', __FILE__),
-				'isvisible' => 0,
-                		'title_disable' => true);
-	    
-        worxLandroidS::newAction($eqpt, 'set_schedule', $commandIn, "", 'message', $display);
-        worxLandroidS::newAction($eqpt, 'newBlades', $commandIn, "", 'other');	
-	worxLandroidS::newInfo($eqpt, 'lastBladesChangeTime', '', 'numeric', 0);
-	    
-// ajout de la ommande pour le widget
-	 worxLandroidS::newInfo($eqpt, 'virtualInfo', '', 'string', 0, 'statusCode,statusDescription,batteryLevel,wifiQuality,currentZone');
-         
     }
 }
 
