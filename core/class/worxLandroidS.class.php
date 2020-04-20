@@ -397,7 +397,7 @@ class worxLandroidS extends eqLogic
                 'isvisible' => 0,
                 'title_disable' => true);
 
-        $this->newAction('set_schedule', $commandIn, "", 'message', $display);
+        $elogic->newAction('set_schedule', $commandIn, "", 'message', $display);
 
         for ($i = 0; $i < 7; $i++) {
             $elogic->newAction('on_' . $i, $commandIn, 'on_' . $i, 'other');
