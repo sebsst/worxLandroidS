@@ -19,49 +19,39 @@
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 include_file('core', 'authentification', 'php');
 if (!isConnect()) {
-    include_file('desktop', '404', 'php');
-    die();
+	include_file('desktop', '404', 'php');
+	die();
 }
 ?>
 
-
 <form class="form-horizontal">
-  <div class="form-group">
-    <fieldset>
-
-					
-					<div class="form-group">
-						<label class="col-sm-3 control-label">{{Adresse email}}</label>
-						<div class="col-sm-3">
-							<input class="configKey form-control" data-l1key="email" type="text" placeholder="{{adresse email cloud worx}}">
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-sm-3 control-label">{{mot de passe}}</label>
-						<div class="col-sm-3">
-							<input class="configKey form-control" data-l1key="passwd" type="password" placeholder="{{saisir le mot de passe}}">
-						</div>
-					</div>   
-	                
-
-	    <div class="form-group">
-		<label class="col-sm-4 control-label">{{Initialiser/réactualiser données cloud worx : }}</label>
-		<div class="col-sm-2">
-		    <input id="mosquitto_por" type="checkbox" class="configKey autoCheck" data-l1key="initCloud"  />
+	<fieldset>
+		<div class="form-group">
+			<label class="col-sm-4 control-label">{{Adresse email}}</label>
+			<div class="col-sm-3">
+				<input class="configKey form-control" data-l1key="email" type="text" placeholder="{{adresse email cloud worx}}">
+			</div>
 		</div>
-            </div>
-	    <div class="form-group">	
-	    <div class="form-group">
-		<label class="col-sm-4 control-label">{{Utiliser le widget préconfiguré : }}</label>
-		<div class="col-sm-2">
-		    <input id="automaticWidget" type="checkbox" class="configKey autoCheck" data-l1key="automaticWidget"  />
+		<div class="form-group">
+			<label class="col-sm-4 control-label">{{mot de passe}}</label>
+			<div class="col-sm-3">
+				<input class="configKey form-control" data-l1key="passwd" type="password" placeholder="{{saisir le mot de passe}}">
+			</div>
 		</div>
-            </div>
-	    <div class="form-group">	
-
-
+		<div class="form-group">
+			<label class="col-sm-4 control-label">{{Initialiser/réactualiser données cloud worx : }}</label>
+			<div class="col-sm-2">
+				<input id="mosquitto_por" type="checkbox" class="configKey autoCheck" data-l1key="initCloud"/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-4 control-label">{{Utiliser le widget préconfiguré : }}</label>
+			<div class="col-sm-2">
+				<input id="automaticWidget" type="checkbox" class="configKey autoCheck" data-l1key="automaticWidget"/>
+			</div>
+		</div>
 	</fieldset>
 </form>
-		<legend>
-			 {{En cas d'arrêt prolongé, il est conseillé de désactiver le plugin ou d'arrêter cron et démon }}
-		</legend>
+<legend>
+	{{En cas d'arrêt prolongé, il est conseillé de désactiver le plugin ou d'arrêter cron et démon }}
+</legend>
