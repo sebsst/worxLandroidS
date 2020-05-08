@@ -1118,6 +1118,30 @@ class worxLandroidS extends eqLogic
         }
         //}
 
+      
+        $batteryLevelcmd = $this->getCmd(null, 'batteryLevel');
+        $batteryLevel = is_object($batteryLevelcmd) ? $batteryLevelcmd->execCmd() : '';
+              // BATTERIE
+        if ( $batteryLevel > 99 )  $replace['#batteryIMG#']  = "batterie_full.png";        
+        else if ( $batteryLevel > 75  ) $replace['#batteryIMG#']  = "batterie_high.png";
+		else if ( $batteryLevel> 50  ) $replace['#batteryIMG#']  = 'batterie_medium.png';       
+		else if ( $batteryLevel > 25  ) $replace['#batteryIMG#']  = 'batterie_low.png';        
+        else if ( $batteryLevel > 5  ) $replace['#batteryIMG#']  = 'batterie_highlow.png';        
+        //else  $('.cmd[data-cmd_uid=#uid#] .IMGbatterie#uid#').hide(); 
+      	//$('.cmd[data-cmd_uid=#uid#] .IMGbatterie#uid#').attr('title','Charge : '+batterie+' %');
+ 
+        // WIFI
+      
+        $wifiQualitycmd = $this->getCmd(null, 'wifiQuality');
+        $wifiQuality = is_object($wifiQualitycmd) ? $wifiQualitycmd->execCmd() : '';      
+        if ( $wifiQuality < 30 ) $replace['#wifiIMG#']  = 'wifi_high.png';
+		else if ( $wifiQuality <= 80 ) $replace['#wifiIMG#']  = 'wifi_medium.png';            
+ 		else if ( $wifiQuality > 80 ) $replace['#wifiIMG#']  = 'wifi_low.png';        
+        //else  $('.cmd[data-cmd_uid=#uid#] .IMGwifi#uid#').hide(); 
+      	//$('.cmd[data-cmd_uid=#uid#] .IMGwifi#uid#').attr('title','Signal : '+wifi+' db');
+      
+      
+      
       /*
           $etat = $this->getCmd(null, 'statusCode');
         $statusDescription             = $this->getCmd(null, 'statusDescription');
