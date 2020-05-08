@@ -1090,6 +1090,11 @@ class worxLandroidS extends eqLogic
                 $replaceDay['#cutEdge#'] = '.';
             }
 
+  	    if ($startTime->getIsVisible()) {
+                $replaceDay['#day_status_visible#'] = '';
+            } else {
+                $replaceDay['#day_status_visible#'] = 'display:none';
+            }
 
             //$replaceDay['#icone#'] = is_object($condition) ? self::getIconFromCondition($condition->execCmd()) : '';
             //$replaceDay['#conditionid#'] = is_object($condition) ? $condition->getId() : '';
