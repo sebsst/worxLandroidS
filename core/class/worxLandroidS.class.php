@@ -1123,6 +1123,8 @@ class worxLandroidS extends eqLogic
         }
         //}
 
+	if(strstr(config::byKey('default_bootstrap_theme'),'Light')) $replace['#theme#']  = "white";
+        else {   $replace['#theme#']  = "dark";};
       
         $batteryLevelcmd = $this->getCmd(null, 'batteryLevel');
         $batteryLevel = is_object($batteryLevelcmd) ? $batteryLevelcmd->execCmd() : '';
