@@ -1201,10 +1201,8 @@ class worxLandroidS extends eqLogic
       	switch($replace['#errorCode#']){
       // affichage icone pluie
           case '0': $replace['#errorIcon#'] = 'jeedomapp-sun'; break;            
-          case '5': $replace['#errorIcon#'] = 'fas fa-arrow-up'; break;
           case '1': $replace['#errorIcon#'] = 'fas fa-exclamation-circle icon_red'; break;                        
           case '2': $replace['#errorIcon#'] = 'fas fa-arrow-up'; break;
-
           case '4': $replace['#errorIcon#'] = 'fas nature-wood6'; break;                        
           case '5': $replace['#errorIcon#'] = 'meteo-pluie'; break;
           case '8': $replace['#errorIcon#'] = 'jeedom-ventilo'; break;
