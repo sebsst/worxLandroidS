@@ -1198,7 +1198,13 @@ class worxLandroidS extends eqLogic
         if ($replace['#errorCode#'] != 0) {
             $replace['#errorColor#'] = 'orange';
         }
-
+      	switch($replace['#errorCode#']){
+          case '0': $replace['#errorIcon#'] = 'jeedom2-case_ok'; break;            
+          case '1': $replace['#errorIcon#'] = 'fas fa-exclamation-circle icon_red'; break;                        
+          case '5': $replace['#errorIcon#'] = 'meteo-pluie'; break;       // affichage icone pluie
+          case '8': $replace['#errorIcon#'] = 'jeedom-ventilo'; break;
+		  default : $replace['#errorIcon#'] = 'fas fa-exclamation-circle icon_red'; break;            
+        }
         $replace['#errorID#']          = is_object($errorCode) ? $errorCode->getId() : '';
         $errorDescription              = $this->getCmd(null, 'errorDescription');
         $replace['#errorDescription#'] = is_object($errorDescription) ? $errorDescription->execCmd() : '';
