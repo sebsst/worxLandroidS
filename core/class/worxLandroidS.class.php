@@ -1130,7 +1130,7 @@ class worxLandroidS extends eqLogic
         $batteryLevelcmd = $this->getCmd(null, 'batteryLevel');
         $batteryLevel = is_object($batteryLevelcmd) ? $batteryLevelcmd->execCmd() : '';
               // BATTERIE
-        if ( $batteryLevel > 99 )  $replace['#batteryIMG#']  = "batterie_full.png";        
+        if ( $batteryLevel > 90 )  $replace['#batteryIMG#']  = "batterie_full.png";        
         else if ( $batteryLevel > 75  ) $replace['#batteryIMG#']  = "batterie_high.png";
 		else if ( $batteryLevel> 50  ) $replace['#batteryIMG#']  = 'batterie_medium.png';       
 		else if ( $batteryLevel > 25  ) $replace['#batteryIMG#']  = 'batterie_low.png';        
