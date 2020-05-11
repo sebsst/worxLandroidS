@@ -1199,11 +1199,19 @@ class worxLandroidS extends eqLogic
             $replace['#errorColor#'] = 'orange';
         }
       	switch($replace['#errorCode#']){
-          case '0': $replace['#errorIcon#'] = 'jeedom2-case_ok'; break;            
+      // affichage icone pluie
+          case '0': $replace['#errorIcon#'] = 'jeedomapp-sun'; break;            
+          case '5': $replace['#errorIcon#'] = 'fas fa-arrow-up'; break;
           case '1': $replace['#errorIcon#'] = 'fas fa-exclamation-circle icon_red'; break;                        
-          case '5': $replace['#errorIcon#'] = 'meteo-pluie'; break;       // affichage icone pluie
+          case '2': $replace['#errorIcon#'] = 'fas fa-arrow-up'; break;
+
+          case '4': $replace['#errorIcon#'] = 'fas nature-wood6'; break;                        
+          case '5': $replace['#errorIcon#'] = 'meteo-pluie'; break;
           case '8': $replace['#errorIcon#'] = 'jeedom-ventilo'; break;
-		  default : $replace['#errorIcon#'] = 'fas fa-exclamation-circle icon_red'; break;            
+          case '9': $replace['#errorIcon#'] = 'fas fa-ban'; break;
+          case '12': $replace['#errorIcon#'] = 'jeedom-batterie0'; break;
+
+          default : $replace['#errorIcon#'] = 'fas fa-exclamation-circle icon_red'; break;            
         }
         $replace['#errorID#']          = is_object($errorCode) ? $errorCode->getId() : '';
         $errorDescription              = $this->getCmd(null, 'errorDescription');
