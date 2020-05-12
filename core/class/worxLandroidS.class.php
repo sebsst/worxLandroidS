@@ -352,7 +352,7 @@ class worxLandroidS extends eqLogic
     public function postSave()
     {
         self::refresh_values("manual");
-
+        self::newAction('setRainDelay', $commandIn, '{"rd":#slider#}', 'slider', array( "minValue" => 0, "maxValue" => 300, "showNameOndashboard" => false,"showNameOnmobile" => false  ));
     }
 
     public static function create_equipement($product, $MowerType, $mowerDescription)
@@ -378,7 +378,8 @@ class worxLandroidS extends eqLogic
         $elogic->setIsEnable(1);
 
         $commandIn = $MowerType . '/' . $product['mac_address'] . '/commandIn'; //config::byKey('MowerType', 'worxLandroidS').'/'. $json2_data->dat->mac .'/commandIn';
-        $elogic->newAction('setRainDelay', $commandIn, '{"rd":"#message#"}', 'message');
+        //$elogic->newAction('setRainDelay', $commandIn, '{"rd":"#message#"}', 'message');
+        $elogic::newAction('setRainDelay', $commandIn, '{"rd":#slider#}', 'slider', array( "minValue" => 0, "maxValue" => 300, "showNameOndashboard" => false,"showNameOnmobile" => false  ));
         $elogic->newAction('start', $commandIn, array('cmd' => 1), 'other');
         $elogic->newAction('pause', $commandIn, array('cmd' => 2), 'other');
         $elogic->newAction('stop', $commandIn, array('cmd' => 3), 'other');
@@ -857,34 +858,37 @@ class worxLandroidS extends eqLogic
 
     public function newAction($cmdId, $topic, $payload, $subtype, $params = array())
     {
-        $cmdlogic = $this->getCmd(null, $cmdId);
+	$cmdlogic = $this->getCmd(null, $cmdId);
 
-        if (!is_object($cmdlogic)) {
-            log::add('worxLandroidS', 'info', 'nouvelle action par défaut' . $payload);
-            $cmdlogic = new worxLandroidSCmd();
-            $cmdlogic->setEqLogic_id($this->getId());
-            $cmdlogic->setEqType('worxLandroidS');
-            $cmdlogic->setSubType($subtype);
-            $cmdlogic->setLogicalId($cmdId);
-            $cmdlogic->setType('action');
-            $cmdlogic->setName($cmdId);
-            $cmdlogic->setConfiguration('listValue', json_encode($params['listValue']) ?: null);
-            $cmdlogic->setDisplay('forceReturnLineBefore', $params['forceReturnLineBefore'] ?: false);
-            $cmdlogic->setDisplay('message_disable', $params['message_disable'] ?: false);
-            $cmdlogic->setDisplay('title_disable', $params['title_disable'] ?: false);
-            $cmdlogic->setDisplay('title_placeholder', $params['title_placeholder'] ?: false);
-            $cmdlogic->setDisplay('icon', $params['icon'] ?: false);
-            $cmdlogic->setDisplay('message_placeholder', $params['message_placeholder'] ?: false);
-            $cmdlogic->setDisplay('title_possibility_list', json_encode($params['title_possibility_list'] ?: null));
-            $cmdlogic->setDisplay('icon', $params['icon'] ?: null);
+	if (!is_object($cmdlogic)) {
+	    log::add('worxLandroidS', 'info', 'nouvelle action par défaut' . $payload);
+	    $cmdlogic = new worxLandroidSCmd();
+	}
+	$cmdlogic->setEqLogic_id($this->getId());
+	$cmdlogic->setEqType('worxLandroidS');
+	$cmdlogic->setSubType($subtype);
+	$cmdlogic->setLogicalId($cmdId);
+	$cmdlogic->setType('action');
+	$cmdlogic->setName($cmdId);
+	$cmdlogic->setConfiguration('listValue', json_encode($params['listValue']) ?: null);
+        $cmdlogic->setConfiguration('minValue', json_encode($params['minValue']) ?: null);
+        $cmdlogic->setConfiguration('maxValue', json_encode($params['maxValue']) ?: null);	    
+	
+        $cmdlogic->setDisplay('showNameOndashboard', isset($params['showNameOndashboard']) ? $params['showNameOndashboard']: true);
+        $cmdlogic->setDisplay('showNameOnmobile', isset($params['showNameOnmobile'])? $params['showNameOndashboard']: true);	
+	$cmdlogic->setDisplay('forceReturnLineBefore', $params['forceReturnLineBefore'] ?: false);
+	$cmdlogic->setDisplay('message_disable', $params['message_disable'] ?: false);
+	$cmdlogic->setDisplay('title_disable', $params['title_disable'] ?: false);
+	$cmdlogic->setDisplay('title_placeholder', $params['title_placeholder'] ?: false);
+	$cmdlogic->setDisplay('icon', $params['icon'] ?: false);
+	$cmdlogic->setDisplay('message_placeholder', $params['message_placeholder'] ?: false);
+	$cmdlogic->setDisplay('title_possibility_list', json_encode($params['title_possibility_list'] ?: null));
+	$cmdlogic->setDisplay('icon', $params['icon'] ?: null);
+        $cmdlogic->setIsVisible($params['isvisible'] ?: 0);
+        $cmdlogic->setConfiguration('topic', $topic);
+        $cmdlogic->setConfiguration('request', $payload);
+        $cmdlogic->save();
 
-            $cmdlogic->setIsVisible($params['isvisible'] ?: 0);
-
-            $cmdlogic->setConfiguration('topic', $topic);
-            $cmdlogic->setConfiguration('request', $payload);
-
-            $cmdlogic->save();
-        }
     }
 
     public static function getSavedDaySchedule($_id, $i)
@@ -1191,7 +1195,8 @@ class worxLandroidS extends eqLogic
             }
               */
     // fin gestion des images
-
+        $cmdRainDelay = $this->getCmd(null, 'setRainDelay');
+        $replace['#setRainDelay#'] =  $cmdRainDelay->toHtml($_version, '', $replace['#cmd-background-color#']);
         $errorCode               = $this->getCmd(null, 'errorCode');
         $replace['#errorCode#']  = is_object($errorCode) ? $errorCode->execCmd() : '';
         $replace['#errorColor#'] = 'darkgreen';
