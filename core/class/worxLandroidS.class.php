@@ -1065,6 +1065,7 @@ class worxLandroidS extends eqLogic
         for ($i = 0; $i <= 6; $i++) {
             $replaceDay                    = array();
             $replaceDay['#day#']           = $jour[$i];
+            $replaceDay['#daynum#']           = $i;		
             $startTime                     = $this->getCmd(null, 'Planning_startTime_' . $i);
             $cutEdge                       = $this->getCmd(null, 'Planning_cutEdge_' . $i);
             $duration                      = $this->getCmd(null, 'Planning_duration_' . $i);
@@ -1088,11 +1089,15 @@ class worxLandroidS extends eqLogic
             }
 
             $replaceDay['#cutEdge#'] = is_object($cutEdge) ? $cutEdge->execCmd() : '';
+            $replaceDay['#cutEdgeInfo#'] = $replaceDay['#cutEdge#'];
             if ($replaceDay['#cutEdge#'] == '1') {
+                $replaceDay['#cutEdgeIcon#'] = 'fa nature-grass';
                 $replaceDay['#cutEdge#'] = 'Bord.';
             } else {
+                $replaceDay['#cutEdgeIcon#'] = 'fa fa-ban';              
                 $replaceDay['#cutEdge#'] = '.';
             }
+
 
   	    if ($startTime->getIsVisible()) {
                 $replaceDay['#day_status_visible#'] = '';
