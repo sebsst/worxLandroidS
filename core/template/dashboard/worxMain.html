@@ -7,7 +7,8 @@
 <center >
 <div style="display: inline-block;;margin-top:10px;margin-bottom:10px;margin-left:auto; margin-right:auto;">
    <center>
-      <div style="background: url('/plugins/worxLandroidS/resources/img/#theme#/#statusCode#.png') no-repeat center; background-size: 100% 100%; top:40px;width: 339px; height: 273px;margin: 3px 0;">
+      <div style="background: url('/plugins/worxLandroidS/resources/img/#theme#/#statusCode#.png') no-repeat center; 
+                  background-size: 100% 100%; top:40px;width: 339px; height: 273px;margin: 3px 0;">
         <div title="#statusDescription#" style="font-size: 0.8em;position : relative; top:7px;" >#lastDate# #lastTime#</div>
  
          <div title="#batteryLevel#%" style="background: url('/plugins/worxLandroidS/resources/img/#theme#/#batteryIMG#') ;  
@@ -37,6 +38,8 @@
    <span style="display: block; #batteryChargeCycle_visible#;margin: 3px 0;">  #batteryChargeCycle# cycles de charge batterie </span> 
    <span style="display: block; #GPSLatitude_visible#;margin: 3px 0;">  Coordonnées GPS: #GPSLatitude , #GPSLongitude </span>
    <div style="display: inline-block; margin: 3px 0">                          
+
+     
    <span style="font-weight:bold; #rainDelay_visible#;margin: 3px 0;"> Délai pluie: #rainDelay# mn  #setRainDelay#</span>
    <span style="padding-left: 8px ;#rainDelay_visible#;margin: 3px 0;">
    <a class="btn cmd" style="font-size: 0.8em; #rain_delay_0_visible#; padding:9px;" data-cmd_id="#rain_delay_0" title="raind_delay_0" onclick="jeedom.cmd.execute({id: #rain_delay_0_id#});">&nbsp;0&nbsp;</a>
@@ -44,9 +47,35 @@
    <a class="btn cmd" style="font-size: 0.8em;#rain_delay_60_visible# ; padding:9px;" data-cmd_id="#rain_delay_60" title="raind_delay_60" onclick="jeedom.cmd.execute({id: #rain_delay_60_id#});">&nbsp;60&nbsp;</a>
    <a class="btn cmd" style="font-size: 0.8em;#rain_delay_120_visible# ; padding:9px;" data-cmd_id="#rain_delay_120" title="raind_delay_120" onclick="jeedom.cmd.execute({id: #rain_delay_120_id#});">120</a>
    <a class="btn cmd" style="font-size: 0.8em;#rain_delay_240_visible# ; padding:9px;" data-cmd_id="#rain_delay_240" title="raind_delay_240" onclick="jeedom.cmd.execute({id: #rain_delay_240_id#});">240</a>
-   </span> 
+
+     </span> 
    </div>                                                                                                                     
+
    <div style="#set_schedule_visible#; margin-bottom: 2px"> #cmdaction#      </div>      
    <span style="#virtualInfo_visible#"> #cmd# </span>  
    </div>
    <div style="display: flex; width: auto; margin: 0 10px">#daySetup#</div>
+     
+   <script>
+    function setSchedule(debut, fin, numjour, bordure, toggle){
+      // fonction de changement de planification 
+	var t_fin = new Date('1970-01-01T' + fin + 'Z');
+	var t_debut = new Date('1970-01-01T' + debut + 'Z');
+	var diff  = t_fin - t_debut;
+	var minutes = Math.floor((diff/1000)/60);
+    var retour = '';
+	if(toggle==1 ){ if( bordure == 1){ bordure = 0 ;} else {bordure = 1}}
+
+    if(minutes >= 0 ){
+     // jeedom.cmd.execute({id:#set_schedule_id#, value:{ message: numjour ';'+debut+';'+minutes+';'+bordure }});
+     retour +=  numjour + ';' + debut + ';' + minutes + ';' + bordure;
+    }
+    else {
+      minutes = 0;
+      retour = numjour + ';' + debut + ';' + minutes + ';' + bordure;
+    }  
+	jeedom.cmd.execute({id: #set_schedule_id#, value:{ message: retour }})
+        
+   }    
+     
+   </script>
