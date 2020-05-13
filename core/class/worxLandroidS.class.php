@@ -1157,49 +1157,6 @@ class worxLandroidS extends eqLogic
         //else  $('.cmd[data-cmd_uid=#uid#] .IMGwifi#uid#').hide(); 
       	//$('.cmd[data-cmd_uid=#uid#] .IMGwifi#uid#').attr('title','Signal : '+wifi+' db');
       
-      
-      
-      /*
-          $etat = $this->getCmd(null, 'statusCode');
-        $statusDescription             = $this->getCmd(null, 'statusDescription');
-        $replace['#statusDesc#'] = is_object($statusDescription) ? $statusDescription->execCmd() : '';
-
-     // gestion des images
-      if ( $etat == 1 or $etat == 2 ) {
-                    $replace['#IMG#']  = "workandroid_base.png";
-            } elseif ( $etat == 0 ) {
-
-                $replace['#IMG#'] = "workandroid_inactive.png";
-            } elseif ( $etat == 4 ) {
-
-                $replace['#IMG#']  = "workandroid_ligne.png";
-            } elseif ( $etat == 5 ) {
-                $replace['#IMG#']  = "workandroid_findbase.png";
-            } elseif ( $etat == 6 ) {
-                $replace['#IMG#']  = "workandroid_findligne.png";
-            }  elseif ( $etat == 7 || $etat == 3 ) {
-                $replace['#IMG#']  = "workandroid_move.png";
-            } elseif ( $etat == 8 ) {
-                $replace['#IMG#']  = "workandroid_top.png";
-            } elseif ( $etat == 9 ) {
-                $replace['#IMG#']  = "workandroid_block.png";
-            } elseif ( $etat == 10 ) {
-                $replace['#IMG#']  = "workandroid_lame.png";
-            } elseif ( $etat == 30 ) {
-                $replace['#IMG#']  = "workandroid_home.png";
-            } elseif ( $etat == 31 ) {
-                $replace['#IMG#']  = "workandroid_ligne.png";
-            } elseif ( $etat == 32 ) {
-                $replace['#IMG#']  = "workandroid_bordure.png";
-            } elseif ( $etat == 33 ) {
-                $replace['#IMG#']  = "workandroid_ligne.png";
-            } elseif ( $etat == 34 ) {
-                $replace['#IMG#']  = "workandroid_pause.png";
-            } elseif ( $etat >= 0) {
-                   $replace['#IMG#']  = "workandroid_inactive.png";
-            }
-              */
-    // fin gestion des images
         $cmdRainDelay = $this->getCmd(null, 'setRainDelay');
         $replace['#setRainDelay#'] =  $cmdRainDelay->toHtml($_version, '', $replace['#cmd-background-color#']);
         $errorCode               = $this->getCmd(null, 'errorCode');
@@ -1273,6 +1230,9 @@ class worxLandroidS extends eqLogic
             $replace['#cmdaction#'] = $cmdaction_html;}
 
         }
+	$code = $replace['#statusCode#']; 
+        if($code <  5 or $code ==  10 or $code == 9 or $code == 34){ $replace['#moving#'] = 'display:none'; }
+      
         if($cmd->getLogicalId() == 'virtualInfo') $replace['#widget#'] = $cmd_html;
         $replace['#cmd#'] = $cmd_html;
 
