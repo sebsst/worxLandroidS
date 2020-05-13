@@ -1,11 +1,33 @@
-<div style="display: flex; flex-wrap: wrap; #day_status_visible#;font-size: 0.8em;margin : auto; margin-top: 4px; width: auto; height: 61px; min-width: 57px; max-width: 80px" class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#daySetup#">
+<div style="display: flex; flex-wrap: wrap; #day_status_visible#;font-size: 0.8em;margin : auto; 
+		margin-top: 4px; width: auto; height: 61px; min-width: 57px; max-width: 80px" class="cmd noRefresh" 
+        data-type="info" data-subtype="string" data-cmd_id="#daySetup#">
     <div style="margin-left: auto; margin-right: auto;">
-        <a class="btn cmd" style="display:inline;font-size:1em;padding:2px;background-color:#C04000" data-cmd_id="#off_daynum_id#" title="Off" onclick="jeedom.cmd.execute({id: #off_daynum_id#});"><i class="fa fa-stop" ></i></a>
-        <a class="btn cmd" style="display:inline;font-size:1em;padding:2px;background-color:#008080" data-cmd_id="#on_daynum_id#" title="On" onclick="jeedom.cmd.execute({id: #on_daynum_id#});"><i class="fa fa-play" ></i></a>
+        <a class="btn cmd" style="display:inline;font-size:1em;padding:2px;background-color:#C04000" 
+        	data-cmd_id="#off_daynum_id#" title="Off" onclick="jeedom.cmd.execute({id: #off_daynum_id#});"><i class="fa fa-stop" ></i></a>
+        <a class="btn cmd" style="display:inline;font-size:1em;padding:2px;background-color:#008080" 
+        	data-cmd_id="#on_daynum_id#" title="On" onclick="jeedom.cmd.execute({id: #on_daynum_id#});"><i class="fa fa-play" ></i></a>
         <br>
-        <span style="line-height: 2em">#day#</span>       
-    </div>
-    <div class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#startTime#" style="font-size:0.8em; width: inherit;margin-left: auto;margin-right: auto;" >#startTime# | #endTime#<br/>
-        #cutEdge#
+        <span style="line-height: 2em" >#day#</span>
+      </div>
+    <div class="cmd noRefresh" data-type="info" data-subtype="string" 
+    	data-cmd_id="#startTime#" style="font-weight:bold;font-size:0.9em; width: inherit;margin-left: auto;margin-right: auto;" >
+      <style>
+         input[type="time"]::-webkit-clear-button {
+            display: none;
+        }
+	  </style>
+      <input id="start#daynum#" type="time" name="start_time" STYLE="color: black;" value='#startTime#'>
+      <input id="end#daynum#" type="time" name="end_time" STYLE="color: black;" value='#endTime#'>
+      <input id="bordure#daynum#" type="number" min=0 max=1  name="bordure" STYLE="color: black;display:none" value='#cutEdgeInfo#'>
+
+		<a class="btn cmd" style="display:inline;font-size:1.2em;padding:1px;background-color:#008080" data-cmd_id="#on_toggle_id#" 
+			title="Enregistrer et inverser indicateur coupe bordure" 
+   		     onclick="setSchedule(document.getElementById('start#daynum#').value,
+   	         document.getElementById('end#daynum#').value,#daynum#,document.getElementById('bordure#daynum#').value,1);"><i class="#cutEdgeIcon#" ></i></a>   
+       <a class="btn cmd" style="display:inline;font-size:1.2em;padding:1px;background-color:#008080" data-cmd_id="#on_save_id#" title="Enregistrer"      
+ 		onclick="setSchedule(document.getElementById('start#daynum#').value,
+ 		document.getElementById('end#daynum#').value,#daynum#,document.getElementById('bordure#daynum#').value,0);"><i class="fa fa-save" ></i></a>     
+        </br>
+      <i style="display:none">#cutEdge#</i>
     </div>
 </div>
