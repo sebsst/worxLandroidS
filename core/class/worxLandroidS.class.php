@@ -1232,7 +1232,11 @@ class worxLandroidS extends eqLogic
         }
 	$code = $replace['#statusCode#']; 
         if($code <  5 or $code ==  10 or $code == 9 or $code == 34){ $replace['#moving#'] = 'display:none'; }
-      
+	// nouveau template
+      	$replaceImg['#worxImg#'] = '';      
+		$worxImg_template     = getTemplate('core', $version, strval($code), 'worxLandroidS');      
+	    $replace['#worxImg#'] .= template_replace($replaceImg, $worxImg_template);      
+	// fin nouveau template      
         if($cmd->getLogicalId() == 'virtualInfo') $replace['#widget#'] = $cmd_html;
         $replace['#cmd#'] = $cmd_html;
 
