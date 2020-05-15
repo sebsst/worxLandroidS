@@ -7,10 +7,15 @@
 <center >
 <div align="center" style="display: inline-block;;margin-top:10px;margin-bottom:10px;margin-left:auto; margin-right:auto;">
    
-      <div style="background: url('/plugins/worxLandroidS/resources/img/#theme#/#statusCode#.png') no-repeat center; 
-                  background-size: 100% 100%; top:40px;width: 339px; height: 273px;margin: 3px 0;">
-     
-        <div title="#statusDescription#" style="font-size: 0.8em;position : relative; top:7px;" >#lastDate# #lastTime#</div>
+
+           </div>
+    
+    <link rel="stylesheet" href="/plugins/worxLandroidS/core/template/dashboard/landroid.css">    
+        <br/>
+    <div class="container2-landroid" >  
+          
+		#worxImg#          
+       <div title="#statusDescription#" style="font-size: 0.8em;position : relative; top:7px;" >#lastDate# #lastTime#</div>
  
          <div title="#batteryLevel#%" style="background: url('/plugins/worxLandroidS/resources/img/#theme#/#batteryIMG#') ;  
                      background-size: 100% 100%; position: relative; left: -135px;top:-5px;  width: 30px; height: 15px; z-index: 3; ">
@@ -29,22 +34,20 @@
                <a  data-cmd_id="#cutEdge_id#" style= "cursor: pointer;position : absolute; top: 189px; left: 270px;width : 5px;z-index:6" 
                   title="Couper bordure" onclick="jeedom.cmd.execute({id: #cutEdge_id#});">
                  <i style="font-size: 3.5em; padding-top: 2px; margin-right: 2px; z-index:4" class="fas nature-grass pull-right" ></i></a>  
-                     <div style="background: url('/plugins/worxLandroidS/resources/img/roue5.gif') ;  
-                        background-size: 100% 100%; ;position: relative; left:-1px;  top: -3px;width: 60px; height: 60px;opacity:0.5; z-index: 1; #moving#">  </div>
-                     <div style="background: url('/plugins/worxLandroidS/resources/img/lame.gif') ;  
-                        background-size: 100% 100%; ;position: relative; left:70px;  top: -35px;width: 60px; height: 60px;opacity:0.8; z-index: 1; #moving#">  </div>
-                     <div style="background: url('/plugins/worxLandroidS/resources/img/sol1.gif') ;  
-                        background-size: 100% 100%; ;position: relative; left:-50px;  top: -63px;width: 320px; height: 40px;opacity:0.8; z-index: 1; #moving#">  </div>
 
            </div>
            
-           </div>
+
+    
+        </div>      
          <span style="font-weight:bold;font-size:1em;position:relative;top: -30px;width:150px;#statusDescription_visible#"><br/>					<br/>#statusDescription# 
          <span style="#statusCode_visible#"> (#statusCode#) </span>      
          <span style="font-weight:bold;color:#errorColor#">  <br/>  <span style="#errorDescription_visible#"> #errorDescription# </span>
          <span style="#errorCode_visible#">   (#errorCode#) </span>       </span>   
 
            </div>
+
+  <div>
    <div align="center>" style="display: block; font-size: 1em;#totalDistance_visible#;margin: 3px 0;">   Distance totale: #totalDistance# m en  #totalTime# minutes</div>
    <span style="display: block; #batteryChargeCycle_visible#;margin: 3px 0;">  #batteryChargeCycle# cycles de charge batterie </span> 
    <span style="display: block; #GPSLatitude_visible#;margin: 3px 0;">  Coordonnées GPS: #GPSLatitude , #GPSLongitude </span>
@@ -60,11 +63,10 @@
    <a class="btn cmd" style="font-size: 0.8em;#rain_delay_240_visible# ; padding:9px;" data-cmd_id="#rain_delay_240" title="raind_delay_240" onclick="jeedom.cmd.execute({id: #rain_delay_240_id#});">240</a>
 
      </span> 
-   </div>                                                                                                                     
-
-   <div style="#set_schedule_visible#; margin-bottom: 2px"> #cmdaction#      </div>      
+   </div> 
+      <div style="#set_schedule_visible#; margin-bottom: 2px"> #cmdaction#      </div>      
    <span style="#virtualInfo_visible#"> #cmd# </span>  
-   </div>
+  </div>
    <div style="display: flex; width: auto; margin: 0 10px">#daySetup#</div>
      
    <script>
