@@ -2,8 +2,9 @@
 
 En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que la doc, les traductions et des corrections mineures
 ## 10/05/2020
-- Changement du template.  (reprise et retravail des images d'Antoinekl du widget worklandroid + aide de Tektek)
+- Changement du template.  (reprise des images d'Antoinekl du widget worklandroid + travail de Tektek pour les animations, merci à eux)
 - correction pour masquer ou afficher certaines zones (planning_starttime permet de masquer ou afficher le jour dans le planning)
+- Edition possible des horaires de tonte depuis le widget
 
 ## 12/03/2020
 - correction pour l'initialisation de l'équipement et 1er refresh des données (+aide de Mips)
