@@ -1173,7 +1173,7 @@ class worxLandroidS extends eqLogic
           		- ( is_object($cmdLast) ? $cmdLast->execCmd() : 0);  
          
         $replace['#bladesDurationColor#'] = 'darkgreen';
-        if ($replace['#bladesDuration#'] > 0) {
+        if ($replace['#bladesDuration#'] > $this->getConfiguration('maxBladesDuration')) {
             $replace['#bladesDurationColor#'] = 'orange';
         }
 
