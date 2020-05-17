@@ -5,6 +5,7 @@ En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que l
 - Changement du template.  (reprise des images d'Antoinekl du widget worklandroid + travail de Tektek pour les animations, merci à eux)
 - correction pour masquer ou afficher certaines zones (planning_starttime permet de masquer ou afficher le jour dans le planning)
 - Edition possible des horaires de tonte depuis le widget
+- ajout de la gestion de durée de vie des lames (renseigner la durée de vie estimée dans l'équipement et en enregistrer, puis réinitialiser la durée sur le widget en cliquant sur les lames sous l'indicateur batterie)
 
 ## 12/03/2020
 - correction pour l'initialisation de l'équipement et 1er refresh des données (+aide de Mips)
