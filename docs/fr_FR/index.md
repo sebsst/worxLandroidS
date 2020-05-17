@@ -41,7 +41,11 @@ Le dashboard affiche:
 - 'Bord.' signifie la coupe des bordures est planifié 
 
 Vous pouvez masquer les infos suivantes:
-- errorCode, statusCode, totalDistance, batteryChargeCycle, rainDelay
+- errorCode, statusCode, totalDistance, batteryChargeCycle, rainDelay, cacher le jour de planification (schedule_startTime_#)
+
+![alt text](../images/doc.png)
+
+
 
 
 ## Informations utiles pour les scénarios
