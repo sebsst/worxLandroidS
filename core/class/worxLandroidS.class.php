@@ -353,6 +353,9 @@ class worxLandroidS extends eqLogic
     {
         self::refresh_values("manual");
         self::newAction('setRainDelay', $commandIn, '{"rd":#slider#}', 'slider', array( "minValue" => 0, "maxValue" => 300, "showNameOndashboard" => false,"showNameOnmobile" => false  ));
+        $display = array( 'isvisible' => 1,
+                'name' => __('Lames remplacees', __FILE__));
+        self::newAction('newBlades', $commandIn, "", 'other', $display);
     }
 
     public static function create_equipement($product, $MowerType, $mowerDescription)
@@ -392,6 +395,9 @@ class worxLandroidS extends eqLogic
         $elogic->newAction('rain_delay_60', $commandIn, "60", 'other');
         $elogic->newAction('rain_delay_120', $commandIn, "120", 'other');
         $elogic->newAction('rain_delay_240', $commandIn, "240", 'other');
+        $display = array( 'isvisible' => 1,
+                'name' => __('Lames remplacees', __FILE__));
+        $elogic->newAction('newBlades', $commandIn, "", 'other', $display);	    
         $elogic->newInfo('virtualInfo', '', 'string', 0, 'statusCode,statusDescription,batteryLevel,wifiQuality,currentZone');
 
         $display = array(
@@ -869,7 +875,7 @@ class worxLandroidS extends eqLogic
 	$cmdlogic->setSubType($subtype);
 	$cmdlogic->setLogicalId($cmdId);
 	$cmdlogic->setType('action');
-	$cmdlogic->setName($cmdId);
+	$cmdlogic->setName((json_encode($params['name']) ?: $cmdId);
 	$cmdlogic->setConfiguration('listValue', json_encode($params['listValue']) ?: null);
         $cmdlogic->setConfiguration('minValue', json_encode($params['minValue']) ?: null);
         $cmdlogic->setConfiguration('maxValue', json_encode($params['maxValue']) ?: null);	    
@@ -1159,6 +1165,19 @@ class worxLandroidS extends eqLogic
       
         $cmdRainDelay = $this->getCmd(null, 'setRainDelay');
         $replace['#setRainDelay#'] =  $cmdRainDelay->toHtml($_version, '', $replace['#cmd-background-color#']);
+
+	// calcul durée depuis dernier changement de lame
+        $cmdLast = $this->getCmd(null, 'lastBladesChangeTime');
+        $cmdTotal = $this->getCmd(null, 'totalBladeTime');
+        $replace['#bladesDuration#'] = ( is_object($cmdTotal) ? $cmdTotal->execCmd() : 0 ) 
+          		- ( is_object($cmdLast) ? $cmdLast->execCmd() : 0);  
+         
+        $replace['#bladesDurationColor#'] = 'darkgreen';
+        if ($replace['#bladesDuration#'] > 0) {
+            $replace['#bladesDurationColor#'] = 'orange';
+        }
+
+	    
         $errorCode               = $this->getCmd(null, 'errorCode');
         $replace['#errorCode#']  = is_object($errorCode) ? $errorCode->execCmd() : '';
         $replace['#errorColor#'] = 'darkgreen';
@@ -1215,20 +1234,20 @@ class worxLandroidS extends eqLogic
                 $replace['#' . $cmd->getLogicalId() . '_history#'] = 'history cursor';
             }
         }
+       $cmdaction_html = '';
         foreach ($this->getCmd('action') as $cmd) {
-            $replace['#' . $cmd->getLogicalId() . '_id#'] = $cmd->getId();
-         if ($cmd->getIsVisible()) {
+            if ($cmd->getIsVisible()) {
                 $replace['#' . $cmd->getLogicalId() . '_visible#'] = '';
             } else {
                 $replace['#' . $cmd->getLogicalId() . '_visible#'] = 'display:none';
-
             }
+            $replace['#' . $cmd->getLogicalId() . '_id#'] = $cmd->getId();
+           $replace['#cmdaction#'] = '';
+           if($cmd->getIsVisible() and ( $cmd->getLogicalId() == 'set_schedule' )  ){ // ici on peut mettre la liste des actions
 
-                if($cmd->getName() == 'set_schedule'){
-
-          $cmdaction_html = $cmd->toHtml();
-            $replace['#cmdaction#'] = $cmdaction_html;}
-
+             $cmdaction_html .= $cmd->toHtml($_version,'', $replace['#cmd-background-color#']);
+              $replace['#cmdaction#'] .= $cmdaction_html;
+           }
         }
 	$code = $replace['#statusCode#']; 
         if($code <  5 or $code ==  10 or $code == 9 or $code == 34){ $replace['#moving#'] = 'display:none'; }
@@ -1255,10 +1274,10 @@ class worxLandroidSCmd extends cmd
 
     public function execute($_options = null)
     {
-        if ($this->getName() == 'newBlades') {
+        if ($this->getLogicalId() == 'newBlades') {
             $elogic = $this->getEqLogic();
             $cmdin = worxLandroidSCmd::byEqLogicIdCmdName($elogic->getId(), 'totalBladeTime');
-            $value = $cmdin->getConfiguration('topic', '');
+            $value = $cmdin->execCmd();
             $elogic->newInfo('lastBladesChangeTime', $value, 'numeric', 0);
             return true;
         } else {
