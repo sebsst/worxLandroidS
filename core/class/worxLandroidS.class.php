@@ -1043,10 +1043,30 @@ class worxLandroidS extends eqLogic
 	    
         // send cutedger
         if ($cmd->getName() == 'cutEdge') {
-            sleep(10);
+            sleep(5);
             $_message = '{"cmd":2}';
-            sleep(10);
+		$mosqId      = config::byKey('mqtt_client_id', 'worxLandroidS') . substr(md5(rand()), 0, 8);
+		// if ( config::byKey('mowingTime', 'worxLandroidS') == '0' ){
+		$client      = new Mosquitto\Client($mosqId, true);
+		$eqptlist[]  = array();
+		$eqptlist[0] = array(
+		    $eqlogic->getConfiguration('MowerType'),
+		    $eqlogic->getLogicalId(),
+		    $_message
+		);		
+		self::connect_and_publish($eqptlist, $client, $_message);
+            sleep(5);
             $_message = '{"cmd":3}';
+		$mosqId      = config::byKey('mqtt_client_id', 'worxLandroidS') . substr(md5(rand()), 0, 8);
+		// if ( config::byKey('mowingTime', 'worxLandroidS') == '0' ){
+		$client      = new Mosquitto\Client($mosqId, true);
+		$eqptlist[]  = array();
+		$eqptlist[0] = array(
+		    $eqlogic->getConfiguration('MowerType'),
+		    $eqlogic->getLogicalId(),
+		    $_message
+		);		
+		self::connect_and_publish($eqptlist, $client, $_message);		
 		
         }	    
 
