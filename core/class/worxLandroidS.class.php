@@ -1008,7 +1008,7 @@ class worxLandroidS extends eqLogic
             $_message = '{"cmd":3}';
         }
 
-        // send stop
+        // send cutedge
         if ($cmd->getName() == 'cutEdge') {
             $_message = '{"cmd":4}';
         }
@@ -1040,6 +1040,15 @@ class worxLandroidS extends eqLogic
         );
         self::connect_and_publish($eqptlist, $client, $_message);
         //self::connect_and_publish($eqlogic, $client, $_message);
+	    
+        // send cutedger
+        if ($cmd->getName() == 'cutEdge') {
+            sleep(10);
+            $_message = '{"cmd":2}';
+            sleep(10);
+            $_message = '{"cmd":3}';
+		
+        }	    
 
     }
 
