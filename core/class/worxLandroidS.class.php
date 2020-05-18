@@ -1240,13 +1240,15 @@ class worxLandroidS extends eqLogic
                 $replace['#' . $cmd->getLogicalId() . '_visible#'] = '';
             } else {
                 $replace['#' . $cmd->getLogicalId() . '_visible#'] = 'display:none';
+
             }
+
             $replace['#' . $cmd->getLogicalId() . '_id#'] = $cmd->getId();
-           $replace['#cmdaction#'] = '';
-           if($cmd->getIsVisible() and ( $cmd->getLogicalId() == 'set_schedule' )  ){ // ici on peut mettre la liste des actions
+          $replace['#cmdaction#'] = '';
+           if($cmd->getIsVisible() and ( $cmd->getLogicalId() == 'set_schedule' )  ){
 
              $cmdaction_html .= $cmd->toHtml($_version,'', $replace['#cmd-background-color#']);
-              $replace['#cmdaction#'] .= $cmdaction_html;
+              $replace['#cmdaction#'] = $cmdaction_html;
            }
         }
 	$code = $replace['#statusCode#']; 
