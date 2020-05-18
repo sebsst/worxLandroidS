@@ -72,26 +72,39 @@
   </div>
    <div style="display: flex; width: auto; margin: 0 10px">#daySetup#</div>
    </div>
-   <script>
-    function setSchedule(debut, fin, numjour, bordure, toggle){
-      // fonction de changement de planification 
-	var t_fin = new Date('1970-01-01T' + fin + 'Z');
-	var t_debut = new Date('1970-01-01T' + debut + 'Z');
-	var diff  = t_fin - t_debut;
-	var minutes = Math.floor((diff/1000)/60);
-    var retour = '';
-	if(toggle==1 ){ if( bordure == 1){ bordure = 0 ;} else {bordure = 1}}
-
-    if(minutes >= 0 ){
-     // jeedom.cmd.execute({id:#set_schedule_id#, value:{ message: numjour ';'+debut+';'+minutes+';'+bordure }});
-     retour +=  numjour + ';' + debut + ';' + minutes + ';' + bordure;
-    }
-    else {
-      minutes = 0;
-      retour = numjour + ';' + debut + ';' + minutes + ';' + bordure;
-    }  
-	jeedom.cmd.execute({id: #set_schedule_id#, value:{ message: retour }})
-        
-   }    
+<script>
+   function setSchedule(debut, fin, numjour, bordure, toggle, onoff, on_id, off_id){
      
-   </script>
+   if(toggle==2){
+     if(onoff){
+      jeedom.cmd.execute({id: on_id});
+       
+     }
+     else
+     {
+       jeedom.cmd.execute({id: off_id});
+     }
+   }
+   else
+   {
+     // fonction de changement de planification 
+   var t_fin = new Date('1970-01-01T' + fin + 'Z');
+   var t_debut = new Date('1970-01-01T' + debut + 'Z');
+   var diff  = t_fin - t_debut;
+   var minutes = Math.floor((diff/1000)/60);
+   var retour = '';
+   if(toggle==1 ){ if( bordure == 1){ bordure = 0 ;} else {bordure = 1}}
+   
+   if(minutes >= 0 ){
+    // jeedom.cmd.execute({id:#set_schedule_id#, value:{ message: numjour ';'+debut+';'+minutes+';'+bordure }});
+    retour +=  numjour + ';' + debut + ';' + minutes + ';' + bordure;
+   }
+   else {
+     minutes = 0;
+     retour = numjour + ';' + debut + ';' + minutes + ';' + bordure;
+   }  
+   jeedom.cmd.execute({id: #set_schedule_id#, value:{ message: retour }})
+   }     
+  }    
+    
+</script>
