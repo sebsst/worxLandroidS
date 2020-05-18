@@ -875,7 +875,7 @@ class worxLandroidS extends eqLogic
 	$cmdlogic->setSubType($subtype);
 	$cmdlogic->setLogicalId($cmdId);
 	$cmdlogic->setType('action');
-	$cmdlogic->setName((json_encode($params['name']) ?: $cmdId);
+	$cmdlogic->setName(json_encode($params['name']) ?: $cmdId);
 	$cmdlogic->setConfiguration('listValue', json_encode($params['listValue']) ?: null);
         $cmdlogic->setConfiguration('minValue', json_encode($params['minValue']) ?: null);
         $cmdlogic->setConfiguration('maxValue', json_encode($params['maxValue']) ?: null);	    
