@@ -1114,7 +1114,13 @@ class worxLandroidS extends eqLogic
             //$replaceDay['#on_id#'] = $this->getCmd('action', 'on_1');
             //$replaceDay['#off_id#'] = $this->getCmd('action', 'off_1');
             // transforme au format objet DateTime
-
+	    if($replaceDay['#duration#'] == 0){
+               $replaceDay['#checkedDaynum#'] = '';
+            } else
+            {
+              $replaceDay['#checkedDaynum#'] = 'checked';
+            }
+		
             $initDate = DateTime::createFromFormat('H:i', $replaceDay['#startTime#']);
             if ($replaceDay['#duration#'] != '') {
                 $initDate->add(new DateInterval("PT" . $replaceDay['#duration#'] . "M"));
