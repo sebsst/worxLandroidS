@@ -1174,8 +1174,9 @@ class worxLandroidS extends eqLogic
         //}
 
 	$theme = jeedom::getThemeConfig();
-	if(strstr($theme['current_desktop_theme'],'Light')) $replace['#theme#']  = "light";
+	if(strstr($theme['current_desktop_theme'],'Light') or strstr($theme['current_desktop_theme'],'Legacy') ) $replace['#theme#']  = "light";
         else {   $replace['#theme#']  = "dark";};
+        if( strstr($theme['current_desktop_theme'],'Legacy')) $replace['#backgroundColor#']  = "background-color:white"; 
       
         $batteryLevelcmd = $this->getCmd(null, 'batteryLevel');
         $batteryLevel = is_object($batteryLevelcmd) ? $batteryLevelcmd->execCmd() : '';
