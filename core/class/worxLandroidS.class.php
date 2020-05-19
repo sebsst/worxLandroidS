@@ -1204,8 +1204,8 @@ class worxLandroidS extends eqLogic
 	// calcul durée depuis dernier changement de lame
         $cmdLast = $this->getCmd(null, 'lastBladesChangeTime');
         $cmdTotal = $this->getCmd(null, 'totalBladeTime');
-        $replace['#bladesDuration#'] = ( is_object($cmdTotal) ? $cmdTotal->execCmd() : 0 ) 
-          		- ( is_object($cmdLast) ? $cmdLast->execCmd() : 0);  
+        $replace['#bladesDuration#'] = round( ( ( is_object($cmdTotal) ? $cmdTotal->execCmd() : 0 )
+          		- ( is_object($cmdLast) ? $cmdLast->execCmd() : 0) ) / 60 );  
          
         $replace['#bladesDurationColor#'] = 'darkgreen';
         if ($replace['#bladesDuration#'] > $this->getConfiguration('maxBladesDuration')) {
