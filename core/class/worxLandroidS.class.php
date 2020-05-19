@@ -1,150 +1,150 @@
 <?php
 
 /* This file is part of Jeedom.
- *
- * Jeedom is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jeedom is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
- */
+*
+* Jeedom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* Jeedom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+*/
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 
 class worxLandroidS extends eqLogic
 {
 
-    public static $_client;
-    public static $_client_pub;
-    // Dependancy installation log file
-    private static $_depLogFile;
-    // Dependancy installation progress value log file
-    private static $_depProgressFile;
+  public static $_client;
+  public static $_client_pub;
+  // Dependancy installation log file
+  private static $_depLogFile;
+  // Dependancy installation progress value log file
+  private static $_depProgressFile;
 
-    public static function health()
-    {
-        $return   = array();
-        $socket   = socket_create(AF_INET, SOCK_STREAM, 0);
-        $server   = socket_connect($socket, config::byKey('mqtt_endpoint', 'worxLandroidS', '127.0.0.1'), '8883');
-        $return[] = array(
-            'test' => __('Mosquitto', __FILE__),
-            'result' => ($server) ? __('OK', __FILE__) : __('NOK', __FILE__),
-            'advice' => ($server) ? '' : __('Indique si Mosquitto est disponible', __FILE__),
-            'state' => $server
-        );
-        return $return;
-    }
+  public static function health()
+  {
+    $return   = array();
+    $socket   = socket_create(AF_INET, SOCK_STREAM, 0);
+    $server   = socket_connect($socket, config::byKey('mqtt_endpoint', 'worxLandroidS', '127.0.0.1'), '8883');
+    $return[] = array(
+      'test' => __('Mosquitto', __FILE__),
+      'result' => ($server) ? __('OK', __FILE__) : __('NOK', __FILE__),
+      'advice' => ($server) ? '' : __('Indique si Mosquitto est disponible', __FILE__),
+      'state' => $server
+    );
+    return $return;
+  }
 
-    public static function cron30()
-    {
-        worxLandroidS::refresh_values("false");
-    }
+  public static function cron30()
+  {
+    worxLandroidS::refresh_values("false");
+  }
 
-    public static function refresh_values($checkMowingTime = "false")
-    {
-        $count      = 0;
-        $eqptlist[] = array();
-        foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
-            if ($eqpt->getIsEnable() == true) {
-                if (config::byKey('status', 'worxLandroidS') == '0') { //on se connecte seulement si on est pas déjà connecté
-                    $i         = date('w');
-                    if( $start='' ) {
-                        $start = '08:00';
-                    }
-                    $start     = $eqpt->getCmd(null, 'Planning_startTime_' . $i);
-                    $startTime = is_object($start) ? $start->execCmd() : '00:00';
-                    $dur       = $eqpt->getCmd(null, 'Planning_duration_' . $i);
-                    $duration  = is_object($dur) ? $dur->execCmd() : 0;
-                    if($duration== ''){ $checkMowingTime = 'manual'; $duration=1;}; //correction pour l'initialisation
-                    $initDate = DateTime::createFromFormat('H:i', $startTime);
-                    //log::add('worxLandroidS', 'debug', 'mower sleeping '.$duration);
-                    //if(empty($duration){$duration = 0};
-                    $initDate->add(new DateInterval("PT" . $duration . "M"));
-                    $endTime = $initDate->format("H:i");
-                    // refresh value each 30 minutes if mower is sleeping at home :-)
-                    if ($checkMowingTime == "manual" or $checkMowingTime == "false" and ($startTime == '00:00' or $startTime > date('H:i') or date('H:i') > $endTime) or $startTime <= date('H:i') and date('H:i') <= $endTime and $checkMowingTime == "true") {
-                        config::save('realTime', '0', 'worxLandroidS');
-                        log::add('worxLandroidS', 'debug', 'mower sleeping ');
-                        // populate message to be sent
-                        $eqptlist[$count] = array(
-                            $eqpt->getConfiguration('MowerType'),
-                            $eqpt->getLogicalId(),
-                            '{}'
-                        );
-                        $count++;
-                        if (config::byKey('status', 'worxLandroidS') == '1') {
-                            // modification à faire ======>
-                            self::$_client->disconnect();
-                        }
-                    }
-                }
+  public static function refresh_values($checkMowingTime = "false")
+  {
+    $count      = 0;
+    $eqptlist[] = array();
+    foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
+      if ($eqpt->getIsEnable() == true) {
+        if (config::byKey('status', 'worxLandroidS') == '0') { //on se connecte seulement si on est pas déjà connecté
+          $i         = date('w');
+          if( $start='' ) {
+            $start = '08:00';
+          }
+          $start     = $eqpt->getCmd(null, 'Planning_startTime_' . $i);
+          $startTime = is_object($start) ? $start->execCmd() : '00:00';
+          $dur       = $eqpt->getCmd(null, 'Planning_duration_' . $i);
+          $duration  = is_object($dur) ? $dur->execCmd() : 0;
+          if($duration== ''){ $checkMowingTime = 'manual'; $duration=1;}; //correction pour l'initialisation
+          $initDate = DateTime::createFromFormat('H:i', $startTime);
+          //log::add('worxLandroidS', 'debug', 'mower sleeping '.$duration);
+          //if(empty($duration){$duration = 0};
+          $initDate->add(new DateInterval("PT" . $duration . "M"));
+          $endTime = $initDate->format("H:i");
+          // refresh value each 30 minutes if mower is sleeping at home :-)
+          if ($checkMowingTime == "manual" or $checkMowingTime == "false" and ($startTime == '00:00' or $startTime > date('H:i') or date('H:i') > $endTime) or $startTime <= date('H:i') and date('H:i') <= $endTime and $checkMowingTime == "true") {
+            config::save('realTime', '0', 'worxLandroidS');
+            log::add('worxLandroidS', 'debug', 'mower sleeping ');
+            // populate message to be sent
+            $eqptlist[$count] = array(
+              $eqpt->getConfiguration('MowerType'),
+              $eqpt->getLogicalId(),
+              '{}'
+              );
+              $count++;
+              if (config::byKey('status', 'worxLandroidS') == '1') {
+                // modification à faire ======>
+                self::$_client->disconnect();
+              }
             }
+          }
+        }
+      }
+
+      if (!empty($eqptlist[0])) {
+
+        $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . substr(md5(rand()), 0, 8);
+        $client = new Mosquitto\Client($mosqId, true);
+        self::connect_and_publish($eqptlist, $client, '{}');
         }
 
-        if (!empty($eqptlist[0])) {
+      }
 
-            $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . substr(md5(rand()), 0, 8);
-            $client = new Mosquitto\Client($mosqId, true);
-            self::connect_and_publish($eqptlist, $client, '{}');
-        }
-
-    }
-
-    public static function deamon_info()
-    {
+      public static function deamon_info()
+      {
         $return          = array();
         $return['log']   = '';
         $return['state'] = 'nok';
         $cron            = cron::byClassAndFunction('worxLandroidS', 'daemon');
         if (is_object($cron) && $cron->running()) {
-            $return['state'] = 'ok';
+          $return['state'] = 'ok';
         }
         $dependancy_info = self::dependancy_info();
         if ($dependancy_info['state'] == 'ok') {
-            $return['launchable'] = 'ok';
+          $return['launchable'] = 'ok';
         }
         return $return;
-    }
+      }
 
 
-    public static function deamon_start($_debug = false)
-    {
+      public static function deamon_start($_debug = false)
+      {
         self::deamon_stop();
         $deamon_info = self::deamon_info();
         if ($deamon_info['launchable'] != 'ok') {
-            throw new Exception(__('Veuillez vérifier la configuration', __FILE__));
+          throw new Exception(__('Veuillez vérifier la configuration', __FILE__));
         }
         $cron = cron::byClassAndFunction('worxLandroidS', 'daemon');
         if (!is_object($cron)) {
-            throw new Exception(__('Tache cron introuvable', __FILE__));
+          throw new Exception(__('Tache cron introuvable', __FILE__));
         }
         $cron->run();
-    }
+      }
 
-    public static function deamon_stop()
-    {
+      public static function deamon_stop()
+      {
         $cron = cron::byClassAndFunction('worxLandroidS', 'daemon');
         if (!is_object($cron)) {
-            throw new Exception(__('Tache cron introuvable', __FILE__));
+          throw new Exception(__('Tache cron introuvable', __FILE__));
         }
         $cron->halt();
-    }
+      }
 
-    /**
-     * Provides dependancy information
-     */
-    public static function dependancy_info()
-    {
+      /**
+      * Provides dependancy information
+      */
+      public static function dependancy_info()
+      {
         if (!isset(self::$_depLogFile))
-            self::$_depLogFile = __CLASS__ . '_dep';
+        self::$_depLogFile = __CLASS__ . '_dep';
         if (!isset(self::$_depProgressFile))
-            self::$_depProgressFile = jeedom::getTmpFolder(__CLASS__) . '/progress_dep.txt';
+        self::$_depProgressFile = jeedom::getTmpFolder(__CLASS__) . '/progress_dep.txt';
         $return                  = array();
         $return['log']           = log::getPathToLog(self::$_depLogFile);
         $return['progress_file'] = self::$_depProgressFile;
@@ -156,32 +156,32 @@ class worxLandroidS extends eqLogic
         $libphp                  = extension_loaded('mosquitto');
         // build the state status; if nok log debug information
         if ($mosq >= $minMosq && $libphp) {
-            $return['state'] = 'ok';
+          $return['state'] = 'ok';
         } else {
-            $return['state'] = 'ok';
+          $return['state'] = 'ok';
 
-            //    log::add('worxLandroidS', 'debug', 'dependancy_info: NOK');
-            //    log::add('worxLandroidS', 'debug', '   * Nb of mosquitto related packaged installed: ' . $mosq .
-            //    ' (shall be greater equal than ' . $minMosq . ')');
-            //    log::add('worxLandroidS', 'debug', '   * Mosquitto extension loaded: ' . $libphp);
+          //    log::add('worxLandroidS', 'debug', 'dependancy_info: NOK');
+          //    log::add('worxLandroidS', 'debug', '   * Nb of mosquitto related packaged installed: ' . $mosq .
+          //    ' (shall be greater equal than ' . $minMosq . ')');
+          //    log::add('worxLandroidS', 'debug', '   * Mosquitto extension loaded: ' . $libphp);
         }
         return $return;
-    }
-    /**
-     * Provides dependancy installation script
-     */
-    public static function dependancy_install()
-    {
+      }
+      /**
+      * Provides dependancy installation script
+      */
+      public static function dependancy_install()
+      {
         log::add('worxLandroidS', 'info', 'Installation des dépendances, voir log dédié (' . self::$_depLogFile . ')');
         log::remove(self::$_depLogFile);
         return array(
-            'script' => dirname(__FILE__) . '/../../resources/install.sh ' . self::$_depProgressFile . ' ' . config::byKey('installMosquitto', 'worxLandroidS', 1),
-            'log' => log::getPathToLog(self::$_depLogFile)
+          'script' => dirname(__FILE__) . '/../../resources/install.sh ' . self::$_depProgressFile . ' ' . config::byKey('installMosquitto', 'worxLandroidS', 1),
+          'log' => log::getPathToLog(self::$_depLogFile)
         );
-    }
+      }
 
-    public static function daemon()
-    {
+      public static function daemon()
+      {
 
         $RESOURCE_PATH = realpath(dirname(__FILE__) . '/../../resources/');
         $CERTFILE      = $RESOURCE_PATH . '/cert.pem';
@@ -190,176 +190,176 @@ class worxLandroidS extends eqLogic
         // log::add('worxLandroidS', 'debug', '$RESOURCE_PATH: ' . $CERTFILE);
         // init first connection
         if (config::byKey('initCloud', 'worxLandroidS') == true) {
-            //log::add('worxLandroidS', 'info', 'Paramètres utilisés, Host : ' . config::byKey('worxLandroidSAdress', 'worxLandroidS', '127.0.0.1') . ', Port : ' . config::byKey('worxLandroidSPort', 'worxLandroidS', '1883') . ', ID : ' . config::byKey('worxLandroidSId', 'worxLandroidS', 'Jeedom'));
+          //log::add('worxLandroidS', 'info', 'Paramètres utilisés, Host : ' . config::byKey('worxLandroidSAdress', 'worxLandroidS', '127.0.0.1') . ', Port : ' . config::byKey('worxLandroidSPort', 'worxLandroidS', '1883') . ', ID : ' . config::byKey('worxLandroidSId', 'worxLandroidS', 'Jeedom'));
 
-            $email  = config::byKey('email', 'worxLandroidS');
-            $passwd = config::byKey('passwd', 'worxLandroidS');
-            // get mqtt config
-            $url    = "https://api.worxlandroid.com:443/api/v2/oauth/token";
+          $email  = config::byKey('email', 'worxLandroidS');
+          $passwd = config::byKey('passwd', 'worxLandroidS');
+          // get mqtt config
+          $url    = "https://api.worxlandroid.com:443/api/v2/oauth/token";
 
-            $token       = "725f542f5d2c4b6a5145722a2a6a5b736e764f6e725b462e4568764d4b58755f6a767b2b76526457";
-            $ch          = curl_init();
-            $data        = array(
-                "username" => $email,
-                "password" => $passwd,
-                "client_id" => 1,
-                "grant_type" => "password",
-                "type" => "app",
-                "client_secret" => "nCH3A0WvMYn66vGorjSrnGZ2YtjQWDiCvjg7jNxK",
-                "scope" => "*"
-            );
-            $data_string = json_encode($data);
+          $token       = "725f542f5d2c4b6a5145722a2a6a5b736e764f6e725b462e4568764d4b58755f6a767b2b76526457";
+          $ch          = curl_init();
+          $data        = array(
+            "username" => $email,
+            "password" => $passwd,
+            "client_id" => 1,
+            "grant_type" => "password",
+            "type" => "app",
+            "client_secret" => "nCH3A0WvMYn66vGorjSrnGZ2YtjQWDiCvjg7jNxK",
+            "scope" => "*"
+          );
+          $data_string = json_encode($data);
 
-            $ch = curl_init($url);
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+          $ch = curl_init($url);
+          curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+          curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+          curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            //'Content-Length: ' . strlen($data_string),
+            'x-auth-token:' . $token
+          ));
+          $result = curl_exec($ch);
+          $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+          log::add('worxLandroidS', 'info', 'Connexion result :' . $result . $httpcode);
+          $json = json_decode($result, true);
+          if (is_null($json) or $httpcode <> '200') {
+            log::add('worxLandroidS', 'info', 'Connexion KO');
+
+            event::add('jeedom::alert', array(
+              'level' => 'warning',
+              'page' => 'worxLandroidS',
+              'message' => __('Données de connexion incorrectes', __FILE__)
+            ));
+            //$this->checkAndUpdateCmd('communicationStatus',false);
+            //return false;
+          } else {
+
+            // get users parameters
+            $url       = "https://api.worxlandroid.com/api/v2/users/me";
+            $api_token = $json['access_token'];
+            $token     = $json['api_token'];
+
+            $content = "application/json";
+            $ch      = curl_init($url);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HEADER, FALSE);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+              "Content-Type: application/json",
+              'Authorization: Bearer ' . $api_token
+            ));
+
+            $result_users = curl_exec($ch);
+            log::add('worxLandroidS', 'info', 'Connexion result :' . $result_users);
+            $json_users = json_decode($result_users, true);
+
+            // get certificate
+            $url = "https://api.worxlandroid.com:443/api/v2/users/certificate";
+            //$api_token = $json['api_token'];
+            //$token = $json['api_token'];
+
+            $content = "application/json";
+            $ch      = curl_init($url);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                'Content-Type: application/json',
-                //'Content-Length: ' . strlen($data_string),
-                'x-auth-token:' . $token
+              'mqtt_endpoint:' . $json_users['mqtt_endpoint'],
+              "Content-Type: application/json",
+              'Authorization: Bearer ' . $api_token
             ));
+
             $result = curl_exec($ch);
-            $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            log::add('worxLandroidS', 'info', 'Connexion result :' . $result . $httpcode);
-            $json = json_decode($result, true);
-            if (is_null($json) or $httpcode <> '200') {
-                log::add('worxLandroidS', 'info', 'Connexion KO');
+            log::add('worxLandroidS', 'info', 'Connexion result :' . $result);
 
-                event::add('jeedom::alert', array(
-                    'level' => 'warning',
-                    'page' => 'worxLandroidS',
-                    'message' => __('Données de connexion incorrectes', __FILE__)
-                ));
-                //$this->checkAndUpdateCmd('communicationStatus',false);
-                //return false;
+            $json2 = json_decode($result, true);
+
+
+            if (is_null($json2)) {
             } else {
+              $pkcs12 = base64_decode($json2['pkcs12']);
+              openssl_pkcs12_read($pkcs12, $certs, "");
+              file_put_contents($CERTFILE, $certs['cert']);
+              file_put_contents($PKEYFILE, $certs['pkey']);
 
-                // get users parameters
-                $url       = "https://api.worxlandroid.com/api/v2/users/me";
-                $api_token = $json['access_token'];
-                $token     = $json['api_token'];
+              // get product item (mac address)
+              $url = "https://api.worxlandroid.com:443/api/v2/product-items";
 
-                $content = "application/json";
-                $ch      = curl_init($url);
-                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_HEADER, FALSE);
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                    "Content-Type: application/json",
-                    'Authorization: Bearer ' . $api_token
-                ));
+              $content = "application/json";
+              $ch      = curl_init($url);
+              curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+              curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+              curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Authorization: Bearer ' . $api_token
+              ));
 
-                $result_users = curl_exec($ch);
-                log::add('worxLandroidS', 'info', 'Connexion result :' . $result_users);
-                $json_users = json_decode($result_users, true);
+              $result = curl_exec($ch);
+              log::add('worxLandroidS', 'info', 'Connexion result :' . $result);
 
-                // get certificate
-                $url = "https://api.worxlandroid.com:443/api/v2/users/certificate";
-                //$api_token = $json['api_token'];
-                //$token = $json['api_token'];
+              $json3 = json_decode($result, true);
+              config::save('mqtt_client_id', 'android-uuid/v1', 'worxLandroidS'); //$json_users['id'],'worxLandroidS');
+              config::save('mqtt_endpoint', $json_users['mqtt_endpoint'], 'worxLandroidS');
 
-                $content = "application/json";
-                $ch      = curl_init($url);
-                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                    'mqtt_endpoint:' . $json_users['mqtt_endpoint'],
-                    "Content-Type: application/json",
-                    'Authorization: Bearer ' . $api_token
-                ));
+              if (is_null($json3)) {
+              } else {
+                // get boards => id => code
+                $url = "https://api.worxlandroid.com:443/api/v2/boards";
+                curl_setopt($ch, CURLOPT_URL, $url);
+                $boards = json_decode(curl_exec($ch), true);
 
-                $result = curl_exec($ch);
-                log::add('worxLandroidS', 'info', 'Connexion result :' . $result);
+                // get products => product_id => board_id
+                $url = "https://api.worxlandroid.com:443/api/v2/products";
+                curl_setopt($ch, CURLOPT_URL, $url);
+                $products = json_decode(curl_exec($ch), true);
+                foreach ($json3 as $key => $product) {
+                  $typetondeuse     = 'DB510';
+                  $found_key        = array_search($product['product_id'], array_column($products, 'id'));
+                  $board_id         = $products[$found_key]['board_id'];
+                  $mowerDescription = $products[$found_key]['code'];
+                  log::add('worxLandroidS', 'info', 'board_id: ' . $board_id . ' / product id:' . $product['product_id']);
+                  $found_key    = array_search($board_id, array_column($boards, 'id'));
+                  $typetondeuse = $boards[$found_key]['code'];
 
-                $json2 = json_decode($result, true);
 
+                  log::add('worxLandroidS', 'info', 'mac_address ' . $product['mac_address'] . $typetondeuse);
+                  // create Equipement if not already created
+                  $elogic = self::byLogicalId($product['mac_address'], 'worxLandroidS');
+                  if (!is_object($elogic)) {
 
-                if (is_null($json2)) {
-                } else {
-                    $pkcs12 = base64_decode($json2['pkcs12']);
-                    openssl_pkcs12_read($pkcs12, $certs, "");
-                    file_put_contents($CERTFILE, $certs['cert']);
-                    file_put_contents($PKEYFILE, $certs['pkey']);
-
-                    // get product item (mac address)
-                    $url = "https://api.worxlandroid.com:443/api/v2/product-items";
-
-                    $content = "application/json";
-                    $ch      = curl_init($url);
-                    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
-                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                        'Authorization: Bearer ' . $api_token
-                    ));
-
-                    $result = curl_exec($ch);
-                    log::add('worxLandroidS', 'info', 'Connexion result :' . $result);
-
-                    $json3 = json_decode($result, true);
-                    config::save('mqtt_client_id', 'android-uuid/v1', 'worxLandroidS'); //$json_users['id'],'worxLandroidS');
-                    config::save('mqtt_endpoint', $json_users['mqtt_endpoint'], 'worxLandroidS');
-
-                    if (is_null($json3)) {
+                    $elogic_prev = self::byLogicalId($typetondeuse . '/' . $product['mac_address'] . '/commandOut', 'worxLandroidS');
+                    if (is_object($elogic_prev)) {
+                      // created equipement in previous plugin release*
+                      message::add('worxLandroidS', 'Veuillez supprimer la tondeuse ajoutée précédemment: ' . $elogic_prev->getName(), null, null);
+                      log::add('worxLandroidS', 'info', 'Suppress existing first : mac_address ' . $product['mac_address'] . $typetondeuse . $product['product_id']);
                     } else {
-                        // get boards => id => code
-                        $url = "https://api.worxlandroid.com:443/api/v2/boards";
-                        curl_setopt($ch, CURLOPT_URL, $url);
-                        $boards = json_decode(curl_exec($ch), true);
 
-                        // get products => product_id => board_id
-                        $url = "https://api.worxlandroid.com:443/api/v2/products";
-                        curl_setopt($ch, CURLOPT_URL, $url);
-                        $products = json_decode(curl_exec($ch), true);
-                        foreach ($json3 as $key => $product) {
-                            $typetondeuse     = 'DB510';
-                            $found_key        = array_search($product['product_id'], array_column($products, 'id'));
-                            $board_id         = $products[$found_key]['board_id'];
-                            $mowerDescription = $products[$found_key]['code'];
-                            log::add('worxLandroidS', 'info', 'board_id: ' . $board_id . ' / product id:' . $product['product_id']);
-                            $found_key    = array_search($board_id, array_column($boards, 'id'));
-                            $typetondeuse = $boards[$found_key]['code'];
-
-
-                            log::add('worxLandroidS', 'info', 'mac_address ' . $product['mac_address'] . $typetondeuse);
-                            // create Equipement if not already created
-                            $elogic = self::byLogicalId($product['mac_address'], 'worxLandroidS');
-                            if (!is_object($elogic)) {
-
-                                $elogic_prev = self::byLogicalId($typetondeuse . '/' . $product['mac_address'] . '/commandOut', 'worxLandroidS');
-                                if (is_object($elogic_prev)) {
-                                    // created equipement in previous plugin release*
-                                    message::add('worxLandroidS', 'Veuillez supprimer la tondeuse ajoutée précédemment: ' . $elogic_prev->getName(), null, null);
-                                    log::add('worxLandroidS', 'info', 'Suppress existing first : mac_address ' . $product['mac_address'] . $typetondeuse . $product['product_id']);
-                                } else {
-
-                                    log::add('worxLandroidS', 'info', 'mac_address ' . $product['mac_address'] . $typetondeuse . $product['product_id']);
-                                    worxLandroidS::create_equipement($product, $typetondeuse, $mowerDescription);
-                                }
-                            }
-
-                        }
-                        config::save('initCloud', 0, 'worxLandroidS');
+                      log::add('worxLandroidS', 'info', 'mac_address ' . $product['mac_address'] . $typetondeuse . $product['product_id']);
+                      worxLandroidS::create_equipement($product, $typetondeuse, $mowerDescription);
                     }
+                  }
+
                 }
+                config::save('initCloud', 0, 'worxLandroidS');
+              }
             }
+          }
         }
 
         worxLandroidS::refresh_values("true");
 
-    }
+      }
 
-    public function postSave()
-    {
+      public function postSave()
+      {
         self::refresh_values("manual");
         self::newAction('setRainDelay', $commandIn, '{"rd":#slider#}', 'slider', array( "minValue" => 0, "maxValue" => 300, "showNameOndashboard" => false,"showNameOnmobile" => false  ));
         $display = array( 'isvisible' => 1,
-                'name' => __('Lames remplacees', __FILE__));
+        'name' => __('Lames remplacees', __FILE__));
         self::newAction('newBlades', $commandIn, "", 'other', $display);
-    }
+      }
 
-    public static function create_equipement($product, $MowerType, $mowerDescription)
-    {
+      public static function create_equipement($product, $MowerType, $mowerDescription)
+      {
         $elogic = new worxLandroidS();
         $elogic->setEqType_name('worxLandroidS');
         $elogic->setLogicalId($product['mac_address']);
@@ -396,178 +396,178 @@ class worxLandroidS extends eqLogic
         $elogic->newAction('rain_delay_120', $commandIn, "120", 'other');
         $elogic->newAction('rain_delay_240', $commandIn, "240", 'other');
         $display = array( 'isvisible' => 1,
-                'name' => __('Lames remplacees', __FILE__));
-        $elogic->newAction('newBlades', $commandIn, "", 'other', $display);	    
+        'name' => __('Lames remplacees', __FILE__));
+        $elogic->newAction('newBlades', $commandIn, "", 'other', $display);
         $elogic->newInfo('virtualInfo', '', 'string', 0, 'statusCode,statusDescription,batteryLevel,wifiQuality,currentZone');
 
         $display = array(
-                'message_placeholder' => __('num jour;hh:mm;durée mn;bord(0 ou 1)', __FILE__),
-                'isvisible' => 0,
-                'title_disable' => true);
+          'message_placeholder' => __('num jour;hh:mm;durée mn;bord(0 ou 1)', __FILE__),
+          'isvisible' => 0,
+          'title_disable' => true);
 
-        $elogic->newAction('set_schedule', $commandIn, "", 'message', $display);
+          $elogic->newAction('set_schedule', $commandIn, "", 'message', $display);
 
-        for ($i = 0; $i < 7; $i++) {
+          for ($i = 0; $i < 7; $i++) {
             $elogic->newAction('on_' . $i, $commandIn, 'on_' . $i, 'other');
             $elogic->newAction('off_' . $i, $commandIn, 'off_' . $i, 'other');
+          }
+
+          event::add('worxLandroidS::includeEqpt', $elogic->getId());
+
+          $elogic->setStatus('lastCommunication', date('Y-m-d H:i:s'));
+          $elogic->save();
         }
 
-        event::add('worxLandroidS::includeEqpt', $elogic->getId());
+        public static function connect_and_publish($eqptlist, $client, $msg)
+        {
 
-        $elogic->setStatus('lastCommunication', date('Y-m-d H:i:s'));
-        $elogic->save();
-    }
+          $RESOURCE_PATH = realpath(dirname(__FILE__) . '/../../resources/');
+          $CERTFILE      = $RESOURCE_PATH . '/cert.pem';
+          $PKEYFILE      = $RESOURCE_PATH . '/pkey.pem';
+          $ROOT_CA       = $RESOURCE_PATH . '/vs-ca.pem';
 
-    public static function connect_and_publish($eqptlist, $client, $msg)
-    {
-
-        $RESOURCE_PATH = realpath(dirname(__FILE__) . '/../../resources/');
-        $CERTFILE      = $RESOURCE_PATH . '/cert.pem';
-        $PKEYFILE      = $RESOURCE_PATH . '/pkey.pem';
-        $ROOT_CA       = $RESOURCE_PATH . '/vs-ca.pem';
-
-        self::$_client = $client;
-        self::$_client->clearWill();
-        self::$_client->onConnect('worxLandroidS::connect');
-        self::$_client->onDisconnect('worxLandroidS::disconnect');
-        self::$_client->onSubscribe('worxLandroidS::subscribe');
-        self::$_client->onMessage('worxLandroidS::message');
-        self::$_client->onLog('worxLandroidS::logmq');
-        self::$_client->setTlsCertificates($ROOT_CA, $CERTFILE, $PKEYFILE, null);
-        self::$_client->setTlsOptions(Mosquitto\Client::SSL_VERIFY_NONE, "tlsv1.2", null);
-        try {
+          self::$_client = $client;
+          self::$_client->clearWill();
+          self::$_client->onConnect('worxLandroidS::connect');
+          self::$_client->onDisconnect('worxLandroidS::disconnect');
+          self::$_client->onSubscribe('worxLandroidS::subscribe');
+          self::$_client->onMessage('worxLandroidS::message');
+          self::$_client->onLog('worxLandroidS::logmq');
+          self::$_client->setTlsCertificates($ROOT_CA, $CERTFILE, $PKEYFILE, null);
+          self::$_client->setTlsOptions(Mosquitto\Client::SSL_VERIFY_NONE, "tlsv1.2", null);
+          try {
             foreach ($eqptlist as $key => $value) {
-                $topic = $value[0] . '/' . $value[1] . '/commandOut';
-                //'/'.$eqpt->getLogicalId().'/commandOut';
-                self::$_client->setWill($value[0] . "/" . $value[1] . "/commandIn", $msg, 0, 0); // !auto: Subscribe to root topic
+              $topic = $value[0] . '/' . $value[1] . '/commandOut';
+              //'/'.$eqpt->getLogicalId().'/commandOut';
+              self::$_client->setWill($value[0] . "/" . $value[1] . "/commandIn", $msg, 0, 0); // !auto: Subscribe to root topic
             }
 
             self::$_client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883, 5);
 
             foreach ($eqptlist as $key => $value) {
-                $topic = $value[0] . '/' . $value[1] . '/commandOut';
-                //'/'.$eqpt->getLogicalId().'/commandOut';
-                self::$_client->subscribe($topic, 0); // !auto: Subscribe to root topic
+              $topic = $value[0] . '/' . $value[1] . '/commandOut';
+              //'/'.$eqpt->getLogicalId().'/commandOut';
+              self::$_client->subscribe($topic, 0); // !auto: Subscribe to root topic
             }
 
             log::add('worxLandroidS', 'debug', 'Subscribe to mqtt ' . config::byKey('mqtt_endpoint', 'worxLandroidS') . ' msg ' . $msg);
             //self::$_client->loop();
             foreach ($eqptlist as $key => $value) {
-                self::$_client->publish($value[0] . '/' . $value[1] . "/commandIn", $value[2], 0, 0);
+              self::$_client->publish($value[0] . '/' . $value[1] . "/commandIn", $value[2], 0, 0);
             }
 
             //self::$_client->loopForever();
             $start_time = time();
             while (true) {
-                self::$_client->loop(1);
-                if ((time() - $start_time) > 45) {
-                    log::add('worxLandroidS', 'debug', 'Timeout reached');
-                    foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
-                        $eqpt->newInfo('statusDescription', __("Communication timeout", __FILE__), 'string', 1, '');
-                        self::$_client->disconnect();
-                        config::save('status', '0', 'worxLandroidS');
-                    }
-                    return false;
+              self::$_client->loop(1);
+              if ((time() - $start_time) > 45) {
+                log::add('worxLandroidS', 'debug', 'Timeout reached');
+                foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
+                  $eqpt->newInfo('statusDescription', __("Communication timeout", __FILE__), 'string', 1, '');
+                  self::$_client->disconnect();
+                  config::save('status', '0', 'worxLandroidS');
                 }
+                return false;
+              }
             }
-        }
-        catch (Exception $e) {
+          }
+          catch (Exception $e) {
             // log::add('worxLandroidS', 'debug', $e->getMessage());
-        }
-        if (config::byKey('status', 'worxLandroidS') == '1') {
+          }
+          if (config::byKey('status', 'worxLandroidS') == '1') {
             self::$_client->disconnect();
+          }
+
         }
 
-    }
+        public static function connect($r, $message)
+        {
+          log::add('worxLandroidS', 'debug', 'Connexion à Mosquitto avec code ' . $r . ' ' . $message);
+          config::save('status', '1', 'worxLandroidS');
+        }
 
-    public static function connect($r, $message)
-    {
-        log::add('worxLandroidS', 'debug', 'Connexion à Mosquitto avec code ' . $r . ' ' . $message);
-        config::save('status', '1', 'worxLandroidS');
-    }
+        public static function newconnect($r, $message)
+        {
+          log::add('worxLandroidS', 'debug', 'New Connexion à Mosquitto avec code ' . $r . ' ' . $message);
+          config::save('status', '1', 'worxLandroidS');
+        }
 
-    public static function newconnect($r, $message)
-    {
-        log::add('worxLandroidS', 'debug', 'New Connexion à Mosquitto avec code ' . $r . ' ' . $message);
-        config::save('status', '1', 'worxLandroidS');
-    }
+        public static function disconnect($r)
+        {
+          log::add('worxLandroidS', 'debug', 'Déconnexion de Mosquitto avec code ' . $r);
 
-    public static function disconnect($r)
-    {
-        log::add('worxLandroidS', 'debug', 'Déconnexion de Mosquitto avec code ' . $r);
-
-        if ($r == '14') {
+          if ($r == '14') {
             message::add('worxLandroidS', "Vous devez mettre à jour Mosquitto (version minimum 1.4 requise)");
+          }
+
+          config::save('status', '0', 'worxLandroidS');
         }
 
-        config::save('status', '0', 'worxLandroidS');
-    }
+        public static function subscribe()
+        {
+          log::add('worxLandroidS', 'debug', 'Subscribe to topics');
+        }
 
-    public static function subscribe()
-    {
-        log::add('worxLandroidS', 'debug', 'Subscribe to topics');
-    }
-
-    public static function logmq($code, $str)
-    {
-        if (strpos($str, 'PINGREQ') === false && strpos($str, 'PINGRESP') === false) {
+        public static function logmq($code, $str)
+        {
+          if (strpos($str, 'PINGREQ') === false && strpos($str, 'PINGRESP') === false) {
             log::add('worxLandroidS', 'debug', $code . ' : ' . $str);
+          }
         }
-    }
 
-    public static function message($message)
-    {
-        log::add('worxLandroidS', 'debug', 'Message ' . $message->payload . ' sur ' . $message->topic);
-        //json message
-        $nodeid     = $message->topic;
-        $value      = $message->payload;
-        $json2_data = json_decode($value);
+        public static function message($message)
+        {
+          log::add('worxLandroidS', 'debug', 'Message ' . $message->payload . ' sur ' . $message->topic);
+          //json message
+          $nodeid     = $message->topic;
+          $value      = $message->payload;
+          $json2_data = json_decode($value);
 
-        $split_topic = explode('/', $nodeid);
-        $mac_address = $split_topic[1];
+          $split_topic = explode('/', $nodeid);
+          $mac_address = $split_topic[1];
 
-        $elogic = eqlogic::byLogicalId($mac_address, 'worxLandroidS', false);
+          $elogic = eqlogic::byLogicalId($mac_address, 'worxLandroidS', false);
 
-        /*
-        cfg->lg language: string;
-        cfg->dt dateTime: moment.Moment;
-        dat->mac macAddress: string;
-        dat->fw firmware: string;
-        dat->rsi wifiQuality: number;
-        active: boolean;
-        cfg->rd rainDelay: number;
-        timeExtension: number;
-        cfg->sn serialNumber: string;
-        dat->st->wt totalTime: number;
-        dat->st->d totalDistance: number;
-        dat->st->b totalBladeTime: number;
-        dat->bt->nr batteryChargeCycle: number;
-        dat->bt->c batteryCharging: boolean;
-        dat->bt->v batteryVoltage: number;
-        dat->bt->t batteryTemperature: number;
-        dat->bt->p batteryLevel: number;
-        dat->le errorCode: number;
-        errorDescription: string;
-        dat->ls statusCode: number;
-        statusDescription: string;
-        schedule: TimePeriod[];
+          /*
+          cfg->lg language: string;
+          cfg->dt dateTime: moment.Moment;
+          dat->mac macAddress: string;
+          dat->fw firmware: string;
+          dat->rsi wifiQuality: number;
+          active: boolean;
+          cfg->rd rainDelay: number;
+          timeExtension: number;
+          cfg->sn serialNumber: string;
+          dat->st->wt totalTime: number;
+          dat->st->d totalDistance: number;
+          dat->st->b totalBladeTime: number;
+          dat->bt->nr batteryChargeCycle: number;
+          dat->bt->c batteryCharging: boolean;
+          dat->bt->v batteryVoltage: number;
+          dat->bt->t batteryTemperature: number;
+          dat->bt->p batteryLevel: number;
+          dat->le errorCode: number;
+          errorDescription: string;
+          dat->ls statusCode: number;
+          statusDescription: string;
+          schedule: TimePeriod[];
 
 
-        0: "Idle",
-        1: "Home",
-        2: "Start sequence",
-        3: "Leaving home",
-        4: "Follow wire",
-        5: "Searching home",
-        6: "Searching wire",
-        7: "Mowing",
-        8: "Lifted",
-        9: "Trapped",
-        10: "Blade blocked",
-        11: "Debug",
-        12: "Remote control",
-        30: "Going home",
-        32: "Cutting edge"
+          0: "Idle",
+          1: "Home",
+          2: "Start sequence",
+          3: "Leaving home",
+          4: "Follow wire",
+          5: "Searching home",
+          6: "Searching wire",
+          7: "Mowing",
+          8: "Lifted",
+          9: "Trapped",
+          10: "Blade blocked",
+          11: "Debug",
+          12: "Remote control",
+          30: "Going home",
+          32: "Cutting edge"
         };
 
         public static ERROR_CODES = {
@@ -592,7 +592,7 @@ class worxLandroidS extends eqLogic
 
 
         if (config::byKey('status', 'worxLandroidS') == '1') { //&& config::byKey('mowingTime','worxLandroidS') == '0'){
-            self::$_client->disconnect();
+          self::$_client->disconnect();
         }
 
         $elogic->setConfiguration('retryNr', 0);
@@ -621,13 +621,13 @@ class worxLandroidS extends eqLogic
         $elogic->newInfo('zonesList', $json2_data->dat->mz, 'string', 0, '');
 
         if (array_key_exists('conn', $json2_data->dat)) { // for mower with 4G modules
-            $elogic->newInfo('connexion', $json2_data->dat->conn, 'string', 1, '');
-            $elogic->newInfo('GPSLatitude',$json2_data->dat->modules->{'4G'}->gps->coo[0],'string',1, '');
-            $elogic->newInfo('GPSLongitude',$json2_data->dat->modules->{'4G'}->gps->coo[1],'string',1, '');
+          $elogic->newInfo('connexion', $json2_data->dat->conn, 'string', 1, '');
+          $elogic->newInfo('GPSLatitude',$json2_data->dat->modules->{'4G'}->gps->coo[0],'string',1, '');
+          $elogic->newInfo('GPSLongitude',$json2_data->dat->modules->{'4G'}->gps->coo[1],'string',1, '');
         } else {
-            $elogic->newInfo('connexion', ' ', 'string', 0, '');
-            $elogic->newInfo('GPSLatitude', ' ', 'string', 0, '');
-            $elogic->newInfo('GPSLongitude', ' ', 'string', 0, '');
+          $elogic->newInfo('connexion', ' ', 'string', 0, '');
+          $elogic->newInfo('GPSLatitude', ' ', 'string', 0, '');
+          $elogic->newInfo('GPSLongitude', ' ', 'string', 0, '');
         }
 
         //log::add('worxLandroidS', 'Debug', 'zone:' . $json2_data->cfg->mzv[$json2_data->dat->lz]+1 . ' / '.$json2_data->cfg->mz[1]);
@@ -641,9 +641,9 @@ class worxLandroidS extends eqLogic
         //  date début + durée + bordure
 
         for ($i = 0; $i < 7; $i++) {
-            $elogic->newInfo('Planning_startTime_' . $i, $json2_data->cfg->sc->d[$i][0], 'string', 1, '');
-            $elogic->newInfo('Planning_duration_' . $i, $json2_data->cfg->sc->d[$i][1], 'string', 1, '');
-            $elogic->newInfo('Planning_cutEdge_' . $i, $json2_data->cfg->sc->d[$i][2], 'string', 1, '');
+          $elogic->newInfo('Planning_startTime_' . $i, $json2_data->cfg->sc->d[$i][0], 'string', 1, '');
+          $elogic->newInfo('Planning_duration_' . $i, $json2_data->cfg->sc->d[$i][1], 'string', 1, '');
+          $elogic->newInfo('Planning_cutEdge_' . $i, $json2_data->cfg->sc->d[$i][2], 'string', 1, '');
         }
 
         // mise a jour des infos virtuelles séparées par des virgules
@@ -653,19 +653,19 @@ class worxLandroidS extends eqLogic
         $cmdlist = explode(',', $name);
         $value = '';
         foreach ($cmdlist as $cmdname) {
-            if (strstr($cmdname,'#')) {
-                $value .= ',' . strval(jeedom::evaluateExpression($cmdname)); // name = command number
+          if (strstr($cmdname,'#')) {
+            $value .= ',' . strval(jeedom::evaluateExpression($cmdname)); // name = command number
+          } else {
+            $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($elogic->getId(), $cmdname);
+            if(empty($value)) {
+              $value = $cmdlogic->getConfiguration('topic', '');
             } else {
-                $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($elogic->getId(), $cmdname);
-                if(empty($value)) {
-                    $value = $cmdlogic->getConfiguration('topic', '');
-                } else {
-                    $value .= ',' . $cmdlogic->getConfiguration('topic', '');
-                }
-                //log::add('worxLandroidS', 'info', 'liste commande/value:' . $cmdname . '/' . $value);
+              $value .= ',' . $cmdlogic->getConfiguration('topic', '');
             }
+            //log::add('worxLandroidS', 'info', 'liste commande/value:' . $cmdname . '/' . $value);
+          }
         }
-           //log::add('worxLandroidS', 'info', 'liste commande' . $value);
+        //log::add('worxLandroidS', 'info', 'liste commande' . $value);
 
         $cmd->setConfiguration('topic', $value);
         $cmd->save();
@@ -673,186 +673,186 @@ class worxLandroidS extends eqLogic
 
         $elogic->save();
         $elogic->refreshWidget();
-    }
+      }
 
 
-    public static function getErrorDescription($errorcode)
-    {
+      public static function getErrorDescription($errorcode)
+      {
         switch ($errorcode) {
-            /*
-            case '0': return 'No error';         break;
-            case '1': return  'Trapped';         break;
-            case '2': return  'Lifted';         break;
-            case '3': return  'Wire missing';         break;
-            case '4': return  'Outside wire';        break;
-            case '5': return  'Rain delay';  break;
-            case '6': return  'Close door to mow';        break;
-            case '7': return  'Close door to go home';    break;
-            case '8': return  'Blade motor blocked';       break;
-            case '9': return  'Wheel motor blocked';       break;
-            case '10': return  'Trapped timeout';         break;
-            case '11': return  'Upside down';         break;
-            case '12': return  'Battery low';         break;
-            case '13': return  'Reverse wire';         break;
-            case '14': return  'Charge error';         break;
-            case '15': return  'Timeout finding home';        break;
-            default: return 'Unknown';
+          /*
+          case '0': return 'No error';         break;
+          case '1': return  'Trapped';         break;
+          case '2': return  'Lifted';         break;
+          case '3': return  'Wire missing';         break;
+          case '4': return  'Outside wire';        break;
+          case '5': return  'Rain delay';  break;
+          case '6': return  'Close door to mow';        break;
+          case '7': return  'Close door to go home';    break;
+          case '8': return  'Blade motor blocked';       break;
+          case '9': return  'Wheel motor blocked';       break;
+          case '10': return  'Trapped timeout';         break;
+          case '11': return  'Upside down';         break;
+          case '12': return  'Battery low';         break;
+          case '13': return  'Reverse wire';         break;
+          case '14': return  'Charge error';         break;
+          case '15': return  'Timeout finding home';        break;
+          default: return 'Unknown';
 
-            */
-            case '0':
-                return __('Aucune erreur', __FILE__);
-                break;
-            case '1':
-                return __('Bloquée', __FILE__);
-                break;
-            case '2':
-                return __('Soulevée', __FILE__);
-                break;
-            case '3':
-                return __('Câble non trouvé', __FILE__);
-                break;
-            case '4':
-                return __('En dehors des limites', __FILE__);
-                break;
-            case '5':
-                return __('Délai pluie', __FILE__);
-                break;
-            case '6':
-                return 'Close door to mow';
-                break;
-            case '7':
-                return 'Close door to go home';
-                break;
-            case '8':
-                return __('Moteur lames bloqué', __FILE__);
-                break;
-            case '9':
-                return __('Moteur roues bloqué', __FILE__);
-                break;
-            case '10':
-                return __('Timeout après blocage', __FILE__);
-                break;
-            case '11':
-                return __('Renversée', __FILE__);
-                break;
-            case '12':
-                return __('Batterie faible', __FILE__);
-                break;
-            case '13':
-                return __('Câble inversé', __FILE__);
-                break;
-            case '14':
-                return __('Erreur charge batterie', __FILE__);
-                break;
-            case '15':
-                return __('Delai recherche station dépassé', __FILE__);
-                break;
-            default:
-                return 'Unknown';
-                break;
+          */
+          case '0':
+          return __('Aucune erreur', __FILE__);
+          break;
+          case '1':
+          return __('Bloquée', __FILE__);
+          break;
+          case '2':
+          return __('Soulevée', __FILE__);
+          break;
+          case '3':
+          return __('Câble non trouvé', __FILE__);
+          break;
+          case '4':
+          return __('En dehors des limites', __FILE__);
+          break;
+          case '5':
+          return __('Délai pluie', __FILE__);
+          break;
+          case '6':
+          return 'Close door to mow';
+          break;
+          case '7':
+          return 'Close door to go home';
+          break;
+          case '8':
+          return __('Moteur lames bloqué', __FILE__);
+          break;
+          case '9':
+          return __('Moteur roues bloqué', __FILE__);
+          break;
+          case '10':
+          return __('Timeout après blocage', __FILE__);
+          break;
+          case '11':
+          return __('Renversée', __FILE__);
+          break;
+          case '12':
+          return __('Batterie faible', __FILE__);
+          break;
+          case '13':
+          return __('Câble inversé', __FILE__);
+          break;
+          case '14':
+          return __('Erreur charge batterie', __FILE__);
+          break;
+          case '15':
+          return __('Delai recherche station dépassé', __FILE__);
+          break;
+          default:
+          return 'Unknown';
+          break;
         }
-    }
+      }
 
-    public static function getStatusDescription($statuscode)
-    {
+      public static function getStatusDescription($statuscode)
+      {
         switch ($statuscode) {
-            case '0':
-                return __("Inactive", __FILE__);
-                break;
-            case '1':
-                return __("Sur la base", __FILE__);
-                break;
-            case '2':
-                return __("Séquence de démarrage", __FILE__);
-                break;
-            case '3':
-                return __("Quitte la base", __FILE__);
-                break;
-            case '4':
-                return __("Suit le câble", __FILE__);
-                break;
-            case '5':
-                return __("Recherche de la base", __FILE__);
-                break;
-            case '6':
-                return __("Recherche du câble", __FILE__);
-                break;
-            case '7':
-                return __("En cours de tonte", __FILE__);
-                break;
-            case '8':
-                return __("Soulevée", __FILE__);
-                break;
-            case '9':
-                return __("Coincée", __FILE__);
-                break;
-            case '10':
-                return __("Lames bloquées", __FILE__);
-                break;
-            case '11':
-                return "Debug";
-                break;
-            case '12':
-                return __("Remote control", __FILE__);
-                break;
-            case '30':
-                return __("Retour à la base", __FILE__);
-                break;
-            case '31':
-                return __("Création de zones", __FILE__);
-                break;
-            case '32':
-                return __("Coupe la bordure", __FILE__);
-                break;
-            case '33':
-                return __("Départ vers zone de tonte", __FILE__);
-                break;
-            case '34':
-                return __("Pause", __FILE__);
-                break;
+          case '0':
+          return __("Inactive", __FILE__);
+          break;
+          case '1':
+          return __("Sur la base", __FILE__);
+          break;
+          case '2':
+          return __("Séquence de démarrage", __FILE__);
+          break;
+          case '3':
+          return __("Quitte la base", __FILE__);
+          break;
+          case '4':
+          return __("Suit le câble", __FILE__);
+          break;
+          case '5':
+          return __("Recherche de la base", __FILE__);
+          break;
+          case '6':
+          return __("Recherche du câble", __FILE__);
+          break;
+          case '7':
+          return __("En cours de tonte", __FILE__);
+          break;
+          case '8':
+          return __("Soulevée", __FILE__);
+          break;
+          case '9':
+          return __("Coincée", __FILE__);
+          break;
+          case '10':
+          return __("Lames bloquées", __FILE__);
+          break;
+          case '11':
+          return "Debug";
+          break;
+          case '12':
+          return __("Remote control", __FILE__);
+          break;
+          case '30':
+          return __("Retour à la base", __FILE__);
+          break;
+          case '31':
+          return __("Création de zones", __FILE__);
+          break;
+          case '32':
+          return __("Coupe la bordure", __FILE__);
+          break;
+          case '33':
+          return __("Départ vers zone de tonte", __FILE__);
+          break;
+          case '34':
+          return __("Pause", __FILE__);
+          break;
 
-            default:
-                return 'unkown';
-                // code...
-                break;
+          default:
+          return 'unkown';
+          // code...
+          break;
         }
-    }
+      }
 
-    public function newInfo($cmdId, $value, $subtype, $visible, $request=null)
-    {
+      public function newInfo($cmdId, $value, $subtype, $visible, $request=null)
+      {
         $cmdlogic = $this->getCmd(null, $cmdId);
 
         if (!is_object($cmdlogic)) {
-            log::add('worxLandroidS', 'info', 'Cmdlogic n existe pas, creation');
-            $cmdlogic = new worxLandroidSCmd();
-            $cmdlogic->setEqLogic_id($this->getId());
-            $cmdlogic->setEqType('worxLandroidS');
-            $cmdlogic->setSubType($subtype);
-            $cmdlogic->setLogicalId($cmdId);
-            $cmdlogic->setType('info');
-            $cmdlogic->setName($cmdId);
-            $cmdlogic->setIsVisible($visible);
+          log::add('worxLandroidS', 'info', 'Cmdlogic n existe pas, creation');
+          $cmdlogic = new worxLandroidSCmd();
+          $cmdlogic->setEqLogic_id($this->getId());
+          $cmdlogic->setEqType('worxLandroidS');
+          $cmdlogic->setSubType($subtype);
+          $cmdlogic->setLogicalId($cmdId);
+          $cmdlogic->setType('info');
+          $cmdlogic->setName($cmdId);
+          $cmdlogic->setIsVisible($visible);
 
-            $cmdlogic->setConfiguration('topic', $value);
-            if (!is_null($request)) {
-                $cmdlogic->setConfiguration('request', $request);
-            }
-            $cmdlogic->setConfiguration('topic', $value);
-            //$cmdlogic->setValue($value);
-            $cmdlogic->save();
+          $cmdlogic->setConfiguration('topic', $value);
+          if (!is_null($request)) {
+            $cmdlogic->setConfiguration('request', $request);
+          }
+          $cmdlogic->setConfiguration('topic', $value);
+          //$cmdlogic->setValue($value);
+          $cmdlogic->save();
         }
 
         //   log::add('worxLandroidS', 'debug', 'Cmdlogic update'.$cmdId.$value);
 
         if (strstr($cmdId, "Planning_startTime") && $value != '00:00') {
-            // log::add('worxLandroidS', 'debug', 'savedValue time'. $value);
-            $cmdlogic->setConfiguration('savedValue', $value);
-            $cmdlogic->save();
+          // log::add('worxLandroidS', 'debug', 'savedValue time'. $value);
+          $cmdlogic->setConfiguration('savedValue', $value);
+          $cmdlogic->save();
         }
         if (strstr($cmdId, "Planning_duration") && $value != 0) {
-            //log::add('worxLandroidS', 'debug', 'savedValue duration'. $value);
-            $cmdlogic->setConfiguration('savedValue', $value);
-            $cmdlogic->save();
+          //log::add('worxLandroidS', 'debug', 'savedValue duration'. $value);
+          $cmdlogic->setConfiguration('savedValue', $value);
+          $cmdlogic->save();
 
         }
         $cmdlogic->setConfiguration('topic', $value);
@@ -860,45 +860,45 @@ class worxLandroidS extends eqLogic
         $cmdlogic->save();
 
         $this->checkAndUpdateCmd($cmdId, $value);
-    }
+      }
 
-    public function newAction($cmdId, $topic, $payload, $subtype, $params = array())
-    {
-	$cmdlogic = $this->getCmd(null, $cmdId);
+      public function newAction($cmdId, $topic, $payload, $subtype, $params = array())
+      {
+        $cmdlogic = $this->getCmd(null, $cmdId);
 
-	if (!is_object($cmdlogic)) {
-	    log::add('worxLandroidS', 'info', 'nouvelle action par défaut' . $payload);
-	    $cmdlogic = new worxLandroidSCmd();
-	}
-	$cmdlogic->setEqLogic_id($this->getId());
-	$cmdlogic->setEqType('worxLandroidS');
-	$cmdlogic->setSubType($subtype);
-	$cmdlogic->setLogicalId($cmdId);
-	$cmdlogic->setType('action');
-	$cmdlogic->setName(json_encode($params['name']) ?: $cmdId);
-	$cmdlogic->setConfiguration('listValue', json_encode($params['listValue']) ?: null);
+        if (!is_object($cmdlogic)) {
+          log::add('worxLandroidS', 'info', 'nouvelle action par défaut' . $payload);
+          $cmdlogic = new worxLandroidSCmd();
+        }
+        $cmdlogic->setEqLogic_id($this->getId());
+        $cmdlogic->setEqType('worxLandroidS');
+        $cmdlogic->setSubType($subtype);
+        $cmdlogic->setLogicalId($cmdId);
+        $cmdlogic->setType('action');
+        $cmdlogic->setName(json_encode($params['name']) ?: $cmdId);
+        $cmdlogic->setConfiguration('listValue', json_encode($params['listValue']) ?: null);
         $cmdlogic->setConfiguration('minValue', json_encode($params['minValue']) ?: null);
-        $cmdlogic->setConfiguration('maxValue', json_encode($params['maxValue']) ?: null);	    
-	
+        $cmdlogic->setConfiguration('maxValue', json_encode($params['maxValue']) ?: null);
+
         $cmdlogic->setDisplay('showNameOndashboard', isset($params['showNameOndashboard']) ? $params['showNameOndashboard']: true);
-        $cmdlogic->setDisplay('showNameOnmobile', isset($params['showNameOnmobile'])? $params['showNameOndashboard']: true);	
-	$cmdlogic->setDisplay('forceReturnLineBefore', $params['forceReturnLineBefore'] ?: false);
-	$cmdlogic->setDisplay('message_disable', $params['message_disable'] ?: false);
-	$cmdlogic->setDisplay('title_disable', $params['title_disable'] ?: false);
-	$cmdlogic->setDisplay('title_placeholder', $params['title_placeholder'] ?: false);
-	$cmdlogic->setDisplay('icon', $params['icon'] ?: false);
-	$cmdlogic->setDisplay('message_placeholder', $params['message_placeholder'] ?: false);
-	$cmdlogic->setDisplay('title_possibility_list', json_encode($params['title_possibility_list'] ?: null));
-	$cmdlogic->setDisplay('icon', $params['icon'] ?: null);
+        $cmdlogic->setDisplay('showNameOnmobile', isset($params['showNameOnmobile'])? $params['showNameOndashboard']: true);
+        $cmdlogic->setDisplay('forceReturnLineBefore', $params['forceReturnLineBefore'] ?: false);
+        $cmdlogic->setDisplay('message_disable', $params['message_disable'] ?: false);
+        $cmdlogic->setDisplay('title_disable', $params['title_disable'] ?: false);
+        $cmdlogic->setDisplay('title_placeholder', $params['title_placeholder'] ?: false);
+        $cmdlogic->setDisplay('icon', $params['icon'] ?: false);
+        $cmdlogic->setDisplay('message_placeholder', $params['message_placeholder'] ?: false);
+        $cmdlogic->setDisplay('title_possibility_list', json_encode($params['title_possibility_list'] ?: null));
+        $cmdlogic->setDisplay('icon', $params['icon'] ?: null);
         $cmdlogic->setIsVisible($params['isvisible'] ?: 0);
         $cmdlogic->setConfiguration('topic', $topic);
         $cmdlogic->setConfiguration('request', $payload);
         $cmdlogic->save();
 
-    }
+      }
 
-    public static function getSavedDaySchedule($_id, $i)
-    {
+      public static function getSavedDaySchedule($_id, $i)
+      {
         $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning_startTime_' . $i);
         $day[0]   = $cmdlogic->getConfiguration('savedValue', '10:00');
 
@@ -908,53 +908,53 @@ class worxLandroidS extends eqLogic
         $day[2]   = intval($cmdlogic->getConfiguration('topic', 0));
 
         return $day;
-    }
-    public static function getSchedule($_id)
-    {
+      }
+      public static function getSchedule($_id)
+      {
         $schedule = array();
 
         $day = array();
         for ($i = 0; $i < 7; $i++) {
 
-            $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning_startTime_' . $i);
-            $day[0]   = $cmdlogic->getConfiguration('topic', '10:00');
-            $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning_duration_' . $i);
-            $day[1]   = intval($cmdlogic->getConfiguration('topic', 420));
-            $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning_cutEdge_' . $i);
-            $day[2]   = intval($cmdlogic->getConfiguration('topic', 0));
+          $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning_startTime_' . $i);
+          $day[0]   = $cmdlogic->getConfiguration('topic', '10:00');
+          $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning_duration_' . $i);
+          $day[1]   = intval($cmdlogic->getConfiguration('topic', 420));
+          $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning_cutEdge_' . $i);
+          $day[2]   = intval($cmdlogic->getConfiguration('topic', 0));
 
-            $schedule[$i] = $day;
+          $schedule[$i] = $day;
         }
         return $schedule;
-    }
+      }
 
-    public static function setSchedule($_id, $schedule)
-    {
+      public static function setSchedule($_id, $schedule)
+      {
         $_message = '{"sc":' . json_encode(array(
-            'd' => $schedule
+          'd' => $schedule
         )) . "}";
         log::add('worxLandroidS', 'debug', 'message à publier' . $_message);
         worxLandroidS::publishMosquitto($_id, config::byKey('MowerType', 'worxLandroidS') . "/" . $_id->getConfiguration('mac_address', 'worxLandroidS') . "/commandIn", $_message, 0);
-    }
+      }
 
 
-    public static function setDaySchedule($_id, $daynumber, $daySchedule)
-    {
+      public static function setDaySchedule($_id, $daynumber, $daySchedule)
+      {
         $schedule                     = array();
         // $elogic = self::byLogicalId($nodeid, 'worxLandroidS');
         $schedule                     = worxLandroidS::getSchedule($_id);
-       // $daySchedule[2]               = $schedule[intval($daynumber)][2];
+        // $daySchedule[2]               = $schedule[intval($daynumber)][2];
         $schedule[intval($daynumber)] = $daySchedule;
         $_message                     = '{"sc":' . json_encode(array(
-            'd' => $schedule
+          'd' => $schedule
         )) . "}";
         log::add('worxLandroidS', 'debug', '$current schedule: ' . $_message);
         return $_message;
         //  worxLandroidS::setSchedule($eqlogic, $schedule);
-    }
+      }
 
-    public static function publishMosquitto($_id, $_subject, $_message, $_retain)
-    {
+      public static function publishMosquitto($_id, $_subject, $_message, $_retain)
+      {
         // save schedule if setting to 0 - and retrieve from saved value (new values must be set from smartphone
         $cmd = worxLandroidSCmd::byId($_id);
         log::add('worxLandroidS', 'debug', 'Publication du message ' . $cmd->getName() . ' ' . $_message);
@@ -962,124 +962,124 @@ class worxLandroidS extends eqLogic
         $eqlogic   = $cmd->getEqLogic();
 
         if (substr_compare($cmd->getName(), 'off', 0, 3) == 0) {
-            log::add('worxLandroidS', 'debug', 'Envoi du message OFF: ' . $_message);
-            if ($cmd->getName() == 'off_today') {
-                $_message = 'off_' . date('w');
-            }
+          log::add('worxLandroidS', 'debug', 'Envoi du message OFF: ' . $_message);
+          if ($cmd->getName() == 'off_today') {
+            $_message = 'off_' . date('w');
+          }
 
-            $sched    = array(
-                '00:00',
-                0,
-                0
-            );
-            $_message = self::setDaySchedule($eqlogicid, substr($_message, 4, 1), $sched); //  $this->saveConfiguration('savedValue',
+          $sched    = array(
+            '00:00',
+            0,
+            0
+          );
+          $_message = self::setDaySchedule($eqlogicid, substr($_message, 4, 1), $sched); //  $this->saveConfiguration('savedValue',
         }
         if (substr_compare($cmd->getName(), 'on', 0, 2) == 0) {
-            log::add('worxLandroidS', 'debug', 'Envoi du message On: ' . $_message);
-            if ($cmd->getName() == 'on_today') {
-                $_message = 'on_' . date('w');
-            }
+          log::add('worxLandroidS', 'debug', 'Envoi du message On: ' . $_message);
+          if ($cmd->getName() == 'on_today') {
+            $_message = 'on_' . date('w');
+          }
 
-            $sched = self::getSavedDaySchedule($eqlogicid, substr($_message, 3, 1));
+          $sched = self::getSavedDaySchedule($eqlogicid, substr($_message, 3, 1));
 
-            $_message = self::setDaySchedule($eqlogicid, substr($_message, 3, 1), $sched); //  $this->saveConfiguration('savedValue',
+          $_message = self::setDaySchedule($eqlogicid, substr($_message, 3, 1), $sched); //  $this->saveConfiguration('savedValue',
         }
 
         if ($cmd->getName() == 'refreshValue') {
-            $_message = '{}';
-        }
+          $_message = '{}';
+          }
 
-        // send start command
-        if ($cmd->getName() == 'user_message') {
+          // send start command
+          if ($cmd->getName() == 'user_message') {
             $_message = trim($_message, '|');
-        }
+          }
 
-        // send start command
-        if ($cmd->getName() == 'start') {
+          // send start command
+          if ($cmd->getName() == 'start') {
             $_message = '{"cmd":1}';
-        }
-        // send pause command
-        if ($cmd->getName() == 'pause') {
+          }
+          // send pause command
+          if ($cmd->getName() == 'pause') {
             $_message = '{"cmd":2}';
-        }
+          }
 
-        // send stop
-        if ($cmd->getName() == 'stop') {
+          // send stop
+          if ($cmd->getName() == 'stop') {
             $_message = '{"cmd":3}';
-        }
+          }
 
-        // send cutedge
-        if ($cmd->getName() == 'cutEdge') {
+          // send cutedge
+          if ($cmd->getName() == 'cutEdge') {
             $_message = '{"cmd":4}';
-        }
+          }
 
-        // send free command
-        if ($cmd->getName() == 'set_schedule') {
+          // send free command
+          if ($cmd->getName() == 'set_schedule') {
             $req = explode(";", $_message); // format = numéro jour;heure:minute;durée en minutes;0 ou 1 pour la bordure
             $sched = array(
-                $req[1],
-                intval($req[2]),
-                intval($req[3])
+              $req[1],
+              intval($req[2]),
+              intval($req[3])
             );
             $_message = self::setDaySchedule($eqlogicid, intval($req[0]) , $sched);
-        }
-        // rain delay
-        if (substr_compare($cmd->getName(), 'rain_delay', 0, 10) == 0) {
+          }
+          // rain delay
+          if (substr_compare($cmd->getName(), 'rain_delay', 0, 10) == 0) {
             $_message = '{"rd":' . $_message . '}';
             log::add('worxLandroidS', 'debug', 'Envoi du message rain delay: ' . $_message);
-        }
+          }
 
-        $mosqId      = config::byKey('mqtt_client_id', 'worxLandroidS') . substr(md5(rand()), 0, 8);
-        // if ( config::byKey('mowingTime', 'worxLandroidS') == '0' ){
-        $client      = new Mosquitto\Client($mosqId, true);
-        $eqptlist[]  = array();
-        $eqptlist[0] = array(
+          $mosqId      = config::byKey('mqtt_client_id', 'worxLandroidS') . substr(md5(rand()), 0, 8);
+          // if ( config::byKey('mowingTime', 'worxLandroidS') == '0' ){
+          $client      = new Mosquitto\Client($mosqId, true);
+          $eqptlist[]  = array();
+          $eqptlist[0] = array(
             $eqlogic->getConfiguration('MowerType'),
             $eqlogic->getLogicalId(),
             $_message
-        );
-        self::connect_and_publish($eqptlist, $client, $_message);
-        //self::connect_and_publish($eqlogic, $client, $_message);
-	    
-        // send cutedger
-        if ($cmd->getName() == 'cutEdge') {
+          );
+          self::connect_and_publish($eqptlist, $client, $_message);
+          //self::connect_and_publish($eqlogic, $client, $_message);
+
+          // send cutedger
+          if ($cmd->getName() == 'cutEdge') {
             sleep(7);
             $_message = '{"cmd":2}';
-		$mosqId      = config::byKey('mqtt_client_id', 'worxLandroidS') . substr(md5(rand()), 0, 8);
-		// if ( config::byKey('mowingTime', 'worxLandroidS') == '0' ){
-		$client2      = new Mosquitto\Client($mosqId, true);
-		$eqptlist[]  = array();
-		$eqptlist[0] = array(
-		    $eqlogic->getConfiguration('MowerType'),
-		    $eqlogic->getLogicalId(),
-		    $_message
-		);		
-		self::connect_and_publish($eqptlist, $client, $_message);
+            $mosqId      = config::byKey('mqtt_client_id', 'worxLandroidS') . substr(md5(rand()), 0, 8);
+            // if ( config::byKey('mowingTime', 'worxLandroidS') == '0' ){
+            $client2      = new Mosquitto\Client($mosqId, true);
+            $eqptlist[]  = array();
+            $eqptlist[0] = array(
+              $eqlogic->getConfiguration('MowerType'),
+              $eqlogic->getLogicalId(),
+              $_message
+            );
+            self::connect_and_publish($eqptlist, $client, $_message);
             sleep(5);
             $_message = '{"cmd":3}';
-		$mosqId      = config::byKey('mqtt_client_id', 'worxLandroidS') . substr(md5(rand()), 0, 8);
-		// if ( config::byKey('mowingTime', 'worxLandroidS') == '0' ){
-		$client3      = new Mosquitto\Client($mosqId, true);
-		$eqptlist[]  = array();
-		$eqptlist[0] = array(
-		    $eqlogic->getConfiguration('MowerType'),
-		    $eqlogic->getLogicalId(),
-		    $_message
-		);		
-		self::connect_and_publish($eqptlist, $client, $_message);		
-		
-        }	    
+            $mosqId      = config::byKey('mqtt_client_id', 'worxLandroidS') . substr(md5(rand()), 0, 8);
+            // if ( config::byKey('mowingTime', 'worxLandroidS') == '0' ){
+            $client3      = new Mosquitto\Client($mosqId, true);
+            $eqptlist[]  = array();
+            $eqptlist[0] = array(
+              $eqlogic->getConfiguration('MowerType'),
+              $eqlogic->getLogicalId(),
+              $_message
+            );
+            self::connect_and_publish($eqptlist, $client, $_message);
 
-    }
+          }
 
-    public static $_widgetPossibility = array('custom' => array('visibility' => true, 'displayName' => true, 'displayObjectName' => true, 'optionalParameters' => false, 'background-color' => true, 'text-color' => true, 'border' => true, 'border-radius' => true, 'background-opacity' => true));
+        }
+
+        public static $_widgetPossibility = array('custom' => array('visibility' => true, 'displayName' => true, 'displayObjectName' => true, 'optionalParameters' => false, 'background-color' => true, 'text-color' => true, 'border' => true, 'border-radius' => true, 'background-opacity' => true));
 
 
-    public function toHtml($_version = 'dashboard')
-    {
+        public function toHtml($_version = 'dashboard')
+        {
 
-        $automaticWidget = config::byKey('automaticWidget', 'worxLandroidS');
-        $jour            = array(
+          $automaticWidget = config::byKey('automaticWidget', 'worxLandroidS');
+          $jour            = array(
             "Dimanche",
             "Lundi",
             "Mardi",
@@ -1087,20 +1087,20 @@ class worxLandroidS extends eqLogic
             "Jeudi",
             "Vendredi",
             "Samedi"
-        );
-        $replace         = $this->preToHtml($_version);
-        if (!is_array($replace)) {
+          );
+          $replace         = $this->preToHtml($_version);
+          if (!is_array($replace)) {
             return $replace;
-        }
-        $version                 = jeedom::versionAlias($_version);
-        $replace['#worxStatus#'] = '';
-        $today                   = date('w');
-        //if ($version != 'mobile' || $this->getConfiguration('fullMobileDisplay', 0) == 1) {
-        $worxStatus_template     = getTemplate('core', $version, 'worxStatus', 'worxLandroidS');
-        for ($i = 0; $i <= 6; $i++) {
+          }
+          $version                 = jeedom::versionAlias($_version);
+          $replace['#worxStatus#'] = '';
+          $today                   = date('w');
+          //if ($version != 'mobile' || $this->getConfiguration('fullMobileDisplay', 0) == 1) {
+          $worxStatus_template     = getTemplate('core', $version, 'worxStatus', 'worxLandroidS');
+          for ($i = 0; $i <= 6; $i++) {
             $replaceDay                    = array();
             $replaceDay['#day#']           = $jour[$i];
-            $replaceDay['#daynum#']           = $i;		
+            $replaceDay['#daynum#']           = $i;
             $startTime                     = $this->getCmd(null, 'Planning_startTime_' . $i);
             $cutEdge                       = $this->getCmd(null, 'Planning_cutEdge_' . $i);
             $duration                      = $this->getCmd(null, 'Planning_duration_' . $i);
@@ -1114,36 +1114,36 @@ class worxLandroidS extends eqLogic
             //$replaceDay['#on_id#'] = $this->getCmd('action', 'on_1');
             //$replaceDay['#off_id#'] = $this->getCmd('action', 'off_1');
             // transforme au format objet DateTime
-	    if($replaceDay['#duration#'] == 0){
-               $replaceDay['#checkedDaynum#'] = '';
+            if($replaceDay['#duration#'] == 0){
+              $replaceDay['#checkedDaynum#'] = '';
             } else
             {
               $replaceDay['#checkedDaynum#'] = 'checked';
             }
-		
+
             $initDate = DateTime::createFromFormat('H:i', $replaceDay['#startTime#']);
             if ($replaceDay['#duration#'] != '') {
-                $initDate->add(new DateInterval("PT" . $replaceDay['#duration#'] . "M"));
-                $replaceDay['#endTime#'] = $initDate->format("H:i");
+              $initDate->add(new DateInterval("PT" . $replaceDay['#duration#'] . "M"));
+              $replaceDay['#endTime#'] = $initDate->format("H:i");
             } else {
-                $replaceDay['#endTime#'] = '00:00';
+              $replaceDay['#endTime#'] = '00:00';
             }
 
             $replaceDay['#cutEdge#'] = is_object($cutEdge) ? $cutEdge->execCmd() : '';
             $replaceDay['#cutEdgeInfo#'] = $replaceDay['#cutEdge#'];
             if ($replaceDay['#cutEdge#'] == '1') {
-                $replaceDay['#cutEdgeIcon#'] = 'fa nature-grass';
-                $replaceDay['#cutEdge#'] = 'Bord.';
+              $replaceDay['#cutEdgeIcon#'] = 'fa nature-grass';
+              $replaceDay['#cutEdge#'] = 'Bord.';
             } else {
-                $replaceDay['#cutEdgeIcon#'] = 'fa fa-ban';              
-                $replaceDay['#cutEdge#'] = '.';
+              $replaceDay['#cutEdgeIcon#'] = 'fa fa-ban';
+              $replaceDay['#cutEdge#'] = '.';
             }
 
 
-  	    if ($startTime->getIsVisible()) {
-                $replaceDay['#day_status_visible#'] = '';
+            if ($startTime->getIsVisible()) {
+              $replaceDay['#day_status_visible#'] = '';
             } else {
-                $replaceDay['#day_status_visible#'] = 'display:none';
+              $replaceDay['#day_status_visible#'] = 'display:none';
             }
 
             //$replaceDay['#icone#'] = is_object($condition) ? self::getIconFromCondition($condition->execCmd()) : '';
@@ -1151,202 +1151,201 @@ class worxLandroidS extends eqLogic
             $replace['#daySetup#'] .= template_replace($replaceDay, $worxStatus_template);
 
             if ($today == $i) {
-                $replace['#todayStartTime#']      = is_object($startTime) ? $startTime->execCmd() : '';
-                $replace['#todayDuration#']       = is_object($duration) ? $duration->execCmd() : '';
-                $replace['#today_on_daynum_id#']  = $cmdS->getId();
-                $replace['#today_off_daynum_id#'] = $cmdE->getId();
-                if ($replaceDay['#duration#'] != '') {
-                    $replace['#todayEndTime#'] = $initDate->format("H:i");
-                } else {
-                    $replace['#todayEndTime#'] = '00:00';
-                }
+              $replace['#todayStartTime#']      = is_object($startTime) ? $startTime->execCmd() : '';
+              $replace['#todayDuration#']       = is_object($duration) ? $duration->execCmd() : '';
+              $replace['#today_on_daynum_id#']  = $cmdS->getId();
+              $replace['#today_off_daynum_id#'] = $cmdE->getId();
+              if ($replaceDay['#duration#'] != '') {
+                $replace['#todayEndTime#'] = $initDate->format("H:i");
+              } else {
+                $replace['#todayEndTime#'] = '00:00';
+              }
 
 
-                if ($replace['#cutEdge#'] == '1') {
-                    $replace['#cutEdge#'] = 'Bord.';
-                }
-                $replace['#today#'] = $jour[$i];
+              if ($replace['#cutEdge#'] == '1') {
+                $replace['#cutEdge#'] = 'Bord.';
+              }
+              $replace['#today#'] = $jour[$i];
             }
 
 
 
-        }
-        //}
+          }
+          //}
 
-	$theme = jeedom::getThemeConfig();
-	if(strstr($theme['current_desktop_theme'],'Light') or strstr($theme['current_desktop_theme'],'Legacy') ) $replace['#theme#']  = "light";
-        else {   $replace['#theme#']  = "dark";};
-        if( strstr($theme['current_desktop_theme'],'Legacy')) $replace['#backgroundColor#']  = "background-color:white"; 
-      
-        $batteryLevelcmd = $this->getCmd(null, 'batteryLevel');
-        $batteryLevel = is_object($batteryLevelcmd) ? $batteryLevelcmd->execCmd() : '';
-              // BATTERIE
-        if ( $batteryLevel > 90 )  $replace['#batteryIMG#']  = "batterie_full.png";        
-        else if ( $batteryLevel > 75  ) $replace['#batteryIMG#']  = "batterie_high.png";
-		else if ( $batteryLevel> 50  ) $replace['#batteryIMG#']  = 'batterie_medium.png';       
-		else if ( $batteryLevel > 25  ) $replace['#batteryIMG#']  = 'batterie_low.png';        
-        else if ( $batteryLevel > 5  ) $replace['#batteryIMG#']  = 'batterie_highlow.png';        
-        //else  $('.cmd[data-cmd_uid=#uid#] .IMGbatterie#uid#').hide(); 
-      	//$('.cmd[data-cmd_uid=#uid#] .IMGbatterie#uid#').attr('title','Charge : '+batterie+' %');
- 
-        // WIFI
-      
-        $wifiQualitycmd = $this->getCmd(null, 'wifiQuality');
-        $wifiQuality = is_object($wifiQualitycmd) ? $wifiQualitycmd->execCmd() : '';      
-        if ( $wifiQuality < 30 ) $replace['#wifiIMG#']  = 'wifi_high.png';
-		else if ( $wifiQuality <= 80 ) $replace['#wifiIMG#']  = 'wifi_medium.png';            
- 		else if ( $wifiQuality > 80 ) $replace['#wifiIMG#']  = 'wifi_low.png';        
-        //else  $('.cmd[data-cmd_uid=#uid#] .IMGwifi#uid#').hide(); 
-      	//$('.cmd[data-cmd_uid=#uid#] .IMGwifi#uid#').attr('title','Signal : '+wifi+' db');
-      
-        $cmdRainDelay = $this->getCmd(null, 'setRainDelay');
-        $replace['#setRainDelay#'] =  $cmdRainDelay->toHtml($_version, '', $replace['#cmd-background-color#']);
+          $theme = jeedom::getThemeConfig();
+          if(strstr($theme['current_desktop_theme'],'Light') or strstr($theme['current_desktop_theme'],'Legacy') ) $replace['#theme#']  = "light";
+          else {   $replace['#theme#']  = "dark";};
+          if( strstr($theme['current_desktop_theme'],'Legacy')) $replace['#backgroundColor#']  = "background-color:white";
 
-	// calcul durée depuis dernier changement de lame
-        $cmdLast = $this->getCmd(null, 'lastBladesChangeTime');
-        $cmdTotal = $this->getCmd(null, 'totalBladeTime');
-        $replace['#bladesDuration#'] = round( ( ( is_object($cmdTotal) ? $cmdTotal->execCmd() : 0 )
-          		- ( is_object($cmdLast) ? $cmdLast->execCmd() : 0) ) / 60 );  
-         
-        $replace['#bladesDurationColor#'] = 'green';
-        if ($replace['#bladesDuration#'] > $this->getConfiguration('maxBladesDuration')) {
+          $batteryLevelcmd = $this->getCmd(null, 'batteryLevel');
+          $batteryLevel = is_object($batteryLevelcmd) ? $batteryLevelcmd->execCmd() : '';
+          // BATTERIE
+          if ( $batteryLevel > 90 )  $replace['#batteryIMG#']  = "batterie_full.png";
+          else if ( $batteryLevel > 75  ) $replace['#batteryIMG#']  = "batterie_high.png";
+          else if ( $batteryLevel> 50  ) $replace['#batteryIMG#']  = 'batterie_medium.png';
+          else if ( $batteryLevel > 25  ) $replace['#batteryIMG#']  = 'batterie_low.png';
+          else if ( $batteryLevel > 5  ) $replace['#batteryIMG#']  = 'batterie_highlow.png';
+          //else  $('.cmd[data-cmd_uid=#uid#] .IMGbatterie#uid#').hide();
+          //$('.cmd[data-cmd_uid=#uid#] .IMGbatterie#uid#').attr('title','Charge : '+batterie+' %');
+
+          // WIFI
+          $wifiQualitycmd = $this->getCmd(null, 'wifiQuality');
+          $wifiQuality = is_object($wifiQualitycmd) ? $wifiQualitycmd->execCmd() : '';
+          if ( $wifiQuality < 30 ) $replace['#wifiIMG#']  = 'wifi_high.png';
+          else if ( $wifiQuality <= 80 ) $replace['#wifiIMG#']  = 'wifi_medium.png';
+          else if ( $wifiQuality > 80 ) $replace['#wifiIMG#']  = 'wifi_low.png';
+          //else  $('.cmd[data-cmd_uid=#uid#] .IMGwifi#uid#').hide();
+          //$('.cmd[data-cmd_uid=#uid#] .IMGwifi#uid#').attr('title','Signal : '+wifi+' db');
+
+          $cmdRainDelay = $this->getCmd(null, 'setRainDelay');
+          $replace['#setRainDelay#'] =  $cmdRainDelay->toHtml($_version, '', $replace['#cmd-background-color#']);
+
+          // calcul durée depuis dernier changement de lame
+          $cmdLast = $this->getCmd(null, 'lastBladesChangeTime');
+          $cmdTotal = $this->getCmd(null, 'totalBladeTime');
+          $replace['#bladesDuration#'] = round( ( ( is_object($cmdTotal) ? $cmdTotal->execCmd() : 0 )
+          - ( is_object($cmdLast) ? $cmdLast->execCmd() : 0) ) / 60 );
+
+          $replace['#bladesDurationColor#'] = 'green';
+          if ($replace['#bladesDuration#'] > $this->getConfiguration('maxBladesDuration')) {
             $replace['#bladesDurationColor#'] = 'orange';
-        }
+          }
 
-	    
-        $errorCode               = $this->getCmd(null, 'errorCode');
-        $replace['#errorCode#']  = is_object($errorCode) ? $errorCode->execCmd() : '';
-        $replace['#errorColor#'] = 'darkgreen';
-        if ($replace['#errorCode#'] != 0) {
+
+          $errorCode               = $this->getCmd(null, 'errorCode');
+          $replace['#errorCode#']  = is_object($errorCode) ? $errorCode->execCmd() : '';
+          $replace['#errorColor#'] = 'darkgreen';
+          if ($replace['#errorCode#'] != 0) {
             $replace['#errorColor#'] = 'orange';
-        }
-      	switch($replace['#errorCode#']){
-      // affichage icone pluie
-          case '0': $replace['#errorIcon#'] = 'jeedomapp-sun'; break;            
-          case '1': $replace['#errorIcon#'] = 'fas fa-exclamation-circle icon_red'; break;                        
-          case '2': $replace['#errorIcon#'] = 'fas fa-arrow-up'; break;
-          case '4': $replace['#errorIcon#'] = 'fas nature-wood6'; break;                        
-          case '5': $replace['#errorIcon#'] = 'meteo-pluie'; break;
-          case '8': $replace['#errorIcon#'] = 'jeedom-ventilo'; break;
-          case '9': $replace['#errorIcon#'] = 'fas fa-ban'; break;
-          case '12': $replace['#errorIcon#'] = 'jeedom-batterie0'; break;
+          }
+          switch($replace['#errorCode#']){
+            // affichage icone pluie
+            case '0': $replace['#errorIcon#'] = 'jeedomapp-sun'; break;
+            case '1': $replace['#errorIcon#'] = 'fas fa-exclamation-circle icon_red'; break;
+            case '2': $replace['#errorIcon#'] = 'fas fa-arrow-up'; break;
+            case '4': $replace['#errorIcon#'] = 'fas nature-wood6'; break;
+            case '5': $replace['#errorIcon#'] = 'meteo-pluie'; break;
+            case '8': $replace['#errorIcon#'] = 'jeedom-ventilo'; break;
+            case '9': $replace['#errorIcon#'] = 'fas fa-ban'; break;
+            case '12': $replace['#errorIcon#'] = 'jeedom-batterie0'; break;
 
-          default : $replace['#errorIcon#'] = 'fas fa-exclamation-circle icon_red'; break;            
-        }
-        $replace['#errorID#']          = is_object($errorCode) ? $errorCode->getId() : '';
-        $errorDescription              = $this->getCmd(null, 'errorDescription');
-        $replace['#errorDescription#'] = is_object($errorDescription) ? $errorDescription->execCmd() : '';
+            default : $replace['#errorIcon#'] = 'fas fa-exclamation-circle icon_red'; break;
+          }
+          $replace['#errorID#']          = is_object($errorCode) ? $errorCode->getId() : '';
+          $errorDescription              = $this->getCmd(null, 'errorDescription');
+          $replace['#errorDescription#'] = is_object($errorDescription) ? $errorDescription->execCmd() : '';
 
 
-        foreach ($this->getCmd('info') as $cmd) {
+          foreach ($this->getCmd('info') as $cmd) {
             $replace['#' . $cmd->getLogicalId() . '_history#'] = '';
             $replace['#' . $cmd->getLogicalId() . '_id#']      = $cmd->getId();
             $replace['#' . $cmd->getLogicalId() . '#']         = $cmd->execCmd();
             $replace['#' . $cmd->getLogicalId() . '_collect#'] = $cmd->getCollectDate();
             if ($cmd->getLogicalId() == 'encours') {
-                $replace['#batteryLevel#'] = $cmd->getDisplay('icon');
+              $replace['#batteryLevel#'] = $cmd->getDisplay('icon');
             }
 
             if ($cmd->getIsVisible()) {
-                $replace['#' . $cmd->getLogicalId() . '_visible#'] = '';
+              $replace['#' . $cmd->getLogicalId() . '_visible#'] = '';
             } else {
-                $replace['#' . $cmd->getLogicalId() . '_visible#'] = 'display:none';
+              $replace['#' . $cmd->getLogicalId() . '_visible#'] = 'display:none';
 
             }
 
 
             if ($automaticWidget != true or $cmd->getLogicalId() == 'virtualInfo') {
 
-                $templ = $cmd->getTemplate('dashboard', '');
-                //log::add('worxLandroidS', 'debug', 'template: ' . $templ );
-                if ($templ == '') {
-                    $cmd->setTemplate('dashboard', 'badge');
-                }
-                if (substr_compare($cmd->getName(), 'Planning', 0, 8) != 0) {
-                    $cmd_html .= $cmd->toHtml($_version, '', $replace['#cmd-background-color#']);
-                }
+              $templ = $cmd->getTemplate('dashboard', '');
+              //log::add('worxLandroidS', 'debug', 'template: ' . $templ );
+              if ($templ == '') {
+                $cmd->setTemplate('dashboard', 'badge');
+              }
+              if (substr_compare($cmd->getName(), 'Planning', 0, 8) != 0) {
+                $cmd_html .= $cmd->toHtml($_version, '', $replace['#cmd-background-color#']);
+              }
             }
             if ($cmd->getIsHistorized() == 1) {
-                $replace['#' . $cmd->getLogicalId() . '_history#'] = 'history cursor';
+              $replace['#' . $cmd->getLogicalId() . '_history#'] = 'history cursor';
             }
-        }
-       $cmdaction_html = '';
-        foreach ($this->getCmd('action') as $cmd) {
+          }
+          $cmdaction_html = '';
+          foreach ($this->getCmd('action') as $cmd) {
             if ($cmd->getIsVisible()) {
-                $replace['#' . $cmd->getLogicalId() . '_visible#'] = '';
+              $replace['#' . $cmd->getLogicalId() . '_visible#'] = '';
             } else {
-                $replace['#' . $cmd->getLogicalId() . '_visible#'] = 'display:none';
+              $replace['#' . $cmd->getLogicalId() . '_visible#'] = 'display:none';
 
             }
 
             $replace['#' . $cmd->getLogicalId() . '_id#'] = $cmd->getId();
-          $replace['#cmdaction#'] = '';
-           if($cmd->getIsVisible() and ( $cmd->getLogicalId() == 'set_schedule' )  ){
+            $replace['#cmdaction#'] = '';
+            if($cmd->getIsVisible() and ( $cmd->getLogicalId() == 'set_schedule' )  ){
 
-             $cmdaction_html .= $cmd->toHtml($_version,'', $replace['#cmd-background-color#']);
+              $cmdaction_html .= $cmd->toHtml($_version,'', $replace['#cmd-background-color#']);
               $replace['#cmdaction#'] = $cmdaction_html;
-           }
-        }
-	$code = $replace['#statusCode#']; 
-        if($code <  5 or $code ==  10 or $code == 9 or $code == 34){ $replace['#moving#'] = 'display:none'; }
-     
-	// nouveau template
-      	$replaceImg['#worxImg#'] = '';   
-        $replaceImg['#theme#'] = $replace['#theme#'];
-		$worxImg_template     = getTemplate('core', $version, strval($code), 'worxLandroidS');      
-	    $replace['#worxImg#'] .= template_replace($replaceImg, $worxImg_template);      
-        // fin nouveau template   
-        if($cmd->getLogicalId() == 'virtualInfo') $replace['#widget#'] = $cmd_html;
-        $replace['#cmd#'] = $cmd_html;
+            }
+          }
+          $code = $replace['#statusCode#'];
+          if($code <  5 or $code ==  10 or $code == 9 or $code == 34){ $replace['#moving#'] = 'display:none'; }
 
-        if ($automaticWidget == true) {
+          // nouveau template
+          $replaceImg['#worxImg#'] = '';
+          $replaceImg['#theme#'] = $replace['#theme#'];
+          $worxImg_template     = getTemplate('core', $version, strval($code), 'worxLandroidS');
+          $replace['#worxImg#'] .= template_replace($replaceImg, $worxImg_template);
+          // fin nouveau template
+          if($cmd->getLogicalId() == 'virtualInfo') $replace['#widget#'] = $cmd_html;
+          $replace['#cmd#'] = $cmd_html;
+
+          if ($automaticWidget == true) {
             return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'worxMain', 'worxLandroidS')));
-        } else {
+          } else {
             return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'worxMainOwn', 'worxLandroidS')));
+          }
         }
-    }
-}
+      }
 
-class worxLandroidSCmd extends cmd
-{
+      class worxLandroidSCmd extends cmd
+      {
 
-    public function execute($_options = null)
-    {
-        if ($this->getLogicalId() == 'newBlades') {
+        public function execute($_options = null)
+        {
+          if ($this->getLogicalId() == 'newBlades') {
             $elogic = $this->getEqLogic();
             $cmdin = worxLandroidSCmd::byEqLogicIdCmdName($elogic->getId(), 'totalBladeTime');
             $value = $cmdin->execCmd();
             $elogic->newInfo('lastBladesChangeTime', $value, 'numeric', 0);
             return true;
-        } else {
+          } else {
             switch ($this->getType()) {
-                case 'action':
-                    $request = $this->getConfiguration('request', '1');
-                    $topic   = $this->getConfiguration('topic');
-                    switch ($this->getSubType()) {
-                        case 'slider':
-                            $request = str_replace('#slider#', $_options['slider'], $request);
-                            break;
-                        case 'color':
-                            $request = str_replace('#color#', $_options['color'], $request);
-                            break;
-                        case 'message':
-                            $request = str_replace('#title#', $_options['title'], $request);
-                            $request = str_replace('#message#', $_options['message'], $request);
-                            break;
-                    }
+              case 'action':
+              $request = $this->getConfiguration('request', '1');
+              $topic   = $this->getConfiguration('topic');
+              switch ($this->getSubType()) {
+                case 'slider':
+                $request = str_replace('#slider#', $_options['slider'], $request);
+                break;
+                case 'color':
+                $request = str_replace('#color#', $_options['color'], $request);
+                break;
+                case 'message':
+                $request = str_replace('#title#', $_options['title'], $request);
+                $request = str_replace('#message#', $_options['message'], $request);
+                break;
+              }
 
-                    $request = str_replace('\\', '', jeedom::evaluateExpression($request));
-                    if ($this->getName() == 'set_schedule') {
-                        $request = $_options['message'];
-                    }
-                    $request = cmd::cmdToValue($request);
-                    // save schedule if setting to 0 - and retrieve from saved value (new values must be set from smartphone
+              $request = str_replace('\\', '', jeedom::evaluateExpression($request));
+              if ($this->getName() == 'set_schedule') {
+                $request = $_options['message'];
+              }
+              $request = cmd::cmdToValue($request);
+              // save schedule if setting to 0 - and retrieve from saved value (new values must be set from smartphone
 
-                    $eqlogic = $this->getEqLogic();
-                    log::add('worxLandroidS', 'debug', 'Eqlogicname: ' . $eqlogic->getName());
-                    worxLandroidS::publishMosquitto($this->getId(), $topic, $request, $this->getConfiguration('retain', '0'));
+              $eqlogic = $this->getEqLogic();
+              log::add('worxLandroidS', 'debug', 'Eqlogicname: ' . $eqlogic->getName());
+              worxLandroidS::publishMosquitto($this->getId(), $topic, $request, $this->getConfiguration('retain', '0'));
             }
+          }
         }
-    }
-}
+      }
