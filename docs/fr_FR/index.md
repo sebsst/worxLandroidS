@@ -45,7 +45,7 @@ Vous pouvez masquer les infos suivantes:
 
 ![alt text](../images/doc.png)
 
-
+- le lancement de la coupe de la bordure n'est pas une fonction officielle et n'est pas dispo dans le plugin actuellement. 
 
 
 ## Informations utiles pour les scénarios
