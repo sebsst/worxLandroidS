@@ -1,0 +1,11 @@
+<div style="display: flex; flex-wrap: wrap; #day_status_visible#;font-size: 0.8em;margin : auto; margin-top: 4px; width: auto; height: 61px; min-width: 57px; max-width: 80px" class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#daySetup#">
+    <div style="margin-left: auto; margin-right: auto;">
+        <a class="btn cmd" style="display:inline;font-size:1em;padding:2px;background-color:#C04000" data-cmd_id="#off_daynum_id#" title="Off" onclick="jeedom.cmd.execute({id: #off_daynum_id#});"><i class="fa fa-stop" ></i></a>
+        <a class="btn cmd" style="display:inline;font-size:1em;padding:2px;background-color:#008080" data-cmd_id="#on_daynum_id#" title="On" onclick="jeedom.cmd.execute({id: #on_daynum_id#});"><i class="fa fa-play" ></i></a>
+        <br>
+        <span style="line-height: 2em">#day#</span>       
+    </div>
+    <div class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#startTime#" style="font-size:0.8em; width: inherit;margin-left: auto;margin-right: auto;" >#startTime# | #endTime#<br/>
+        #cutEdge#
+    </div>
+</div>

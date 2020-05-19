@@ -38,10 +38,16 @@ Le dashboard affiche:
 - Le planning par jour avec l'heure de démarrage et d'arrêt
 - Le bouton off permet de mettre les horaires à 0
 - Le bouton on permet de récupérer les derniers horaires communiqués au plugin (10H - 17h par défaut)
-- 'Bord.' signifie la coupe des bordures est planifié 
+- 'Bord.' signifie la coupe des bordures est planifié
 
 Vous pouvez masquer les infos suivantes:
-- errorCode, statusCode, totalDistance, batteryChargeCycle, rainDelay
+- errorCode, statusCode, totalDistance, batteryChargeCycle, rainDelay, cacher le jour de planification (schedule_startTime_#)
+
+![alt text](../images/doc.png)
+![alt text](../images/doc2.png)
+
+- le lancement de la coupe de la bordure n'est pas une fonction officielle et n'est pas dispo dans le plugin actuellement.
+
 
 
 ## Informations utiles pour les scénarios
@@ -52,7 +58,7 @@ Penser à mettre off le matin et remettre à on avant minuit pour récupérer le
 Il faut éviter d'envoyer plusieurs demandes de changement de planning sur des jours différents à des intervalles rapides. En effet le changement n'est enregistré dans le plugin qu'à la réponse du serveur. Tout le planning est envoyé à chaque fois et par conséquent on pourrait perdre la précédente demande.
 Donc soit il faut attendre le l'actualisation de l'info dans l'équipement, soit il faut mettre une temporisation.
 
-Pour le planning, les commandes possibles sont: 
+Pour le planning, les commandes possibles sont:
 - on_0 à on_6 où le chiffre représente le numéro du jour de la semaine (0 =dimanche)
 - off_0 à off_6
 - on_today pour activer le jour courant
@@ -156,7 +162,7 @@ Dans certains cas, le fait de réactualiser le code WIFI peut résoudre le probl
 Worx limite volontairement le nombre d'interrogations de l'état de la tondeuse (limite non connue) donc trop de "refresh" pourrait stopper la communication avec le cloud amazon. D'après les tests, il s'agit d'une limite quotidienne.
 
 >Version mosquitto
-Les versions mosquitto 1.3.x et antérieures ne sont pas compatibles avec le plugin. Le script d'installation (dépendances) doit pouvoir installer une version plus récente, toutefois il se peut que certaines distributions ne soient pas prises en compte. 
+Les versions mosquitto 1.3.x et antérieures ne sont pas compatibles avec le plugin. Le script d'installation (dépendances) doit pouvoir installer une version plus récente, toutefois il se peut que certaines distributions ne soient pas prises en compte.
 Dans ce cas là, vous pouvez tenter de la mettre à jour manuellement et si possible m'informer afin que je puisse mettre à jour le script d'installation.
 
 

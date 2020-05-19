@@ -1,14 +1,35 @@
-<div style="display: inline-block;font-size: 0.8em;margin-right : 4px;margin-top:4px" class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#daySetup#">
-    <center>
-   <a class="btn cmd" style="display:inline;font-size:1em;padding:2px;background-color:#C04000" data-cmd_id="#off_daynum_id#" title="Off" onclick="jeedom.cmd.execute({id: #off_daynum_id#});"><i class="fa fa-stop" ></i></a>
-    <a class="btn cmd" style="display:inline;font-size:1em;padding:2px;background-color:#008080" data-cmd_id="#on_daynum_id#" title="On" onclick="jeedom.cmd.execute({id: #on_daynum_id#});"><i class="fa fa-play" ></i></a>
-    <br/>
-        #day#       
-     <br/>
-    </center>
+<div style="display: flex; flex-wrap: wrap; #day_status_visible#;font-size: 0.8em;margin : auto;
+		margin-top: 4px; width: auto; height: 100px; min-width: 62px; max-width: 80px;    border: 1px solid rgb(192, 192, 192);
+    border-radius: 20px;" class="cmd noRefresh"
+        data-type="info" data-subtype="string" data-cmd_id="#daySetup#">
+    <div style="margin-left: auto; margin-right: auto;">
 
-    <center class="cmd noRefresh" data-type="info" data-subtype="string" data-cmd_id="#startTime#" style="font-size:0.8em;" >#startTime# | #endTime#<br/>
-  
-    #cutEdge#
-    </center>
+      <input id="input#daynum#" type="checkbox" name="start_time" #checkedDaynum#  STYLE="margin-bottom:3px;" onchange="setSchedule(document.getElementById('start#daynum#').value,
+ 		document.getElementById('end#daynum#').value,#daynum#,document.getElementById('bordure#daynum#').value,2,this.checked,#on_daynum_id#,#off_daynum_id#);">
+
+        <br>
+        #day#
+      </div>
+    <div class="cmd noRefresh" data-type="info" data-subtype="string"
+    	data-cmd_id="#startTime#" style="font-weight:bold;font-size:0.9em; width: inherit;margin-left: auto;margin-right: auto;" >
+      <style>
+         input[type="time"]::-webkit-clear-button {
+            display: none;
+        }
+	    </style>
+      <input id="start#daynum#" type="time" name="start_time" STYLE="margin:1px;" value='#startTime#' required>
+      <input id="end#daynum#" type="time" name="end_time" STYLE="margin-bottom: 3px" value='#endTime#' required>
+      <input id="bordure#daynum#" type="number" min=0 max=1  name="bordure" STYLE="color: black;display:none" value='#cutEdgeInfo#'>
+
+
+		<a class="btn cmd" style="display:inline;font-size:1.2em;padding:2px; background-color:#008080" data-cmd_id="#on_toggle_id#"
+			title="Enregistrer et inverser indicateur coupe bordure"
+   		     onclick="setSchedule(document.getElementById('start#daynum#').value,
+   	         document.getElementById('end#daynum#').value,#daynum#,document.getElementById('bordure#daynum#').value,1,1,1,1);"><i class="#cutEdgeIcon#" ></i></a>
+       <a class="btn cmd" style="display:inline;font-size:1.2em;padding:2px;background-color:#008080" data-cmd_id="#on_save_id#" title="Enregistrer"
+ 		onclick="setSchedule(document.getElementById('start#daynum#').value,
+ 		document.getElementById('end#daynum#').value,#daynum#,document.getElementById('bordure#daynum#').value,0,1,1,1);"><i class="fa fa-save" ></i></a>
+        <br/>
+      <i style="display:none">#cutEdge#</i>
+    </div>
 </div>
