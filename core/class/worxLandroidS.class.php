@@ -372,7 +372,7 @@ class worxLandroidS extends eqLogic
 
         // ajout des actions par défaut
         log::add('worxLandroidS', 'info', 'Saving device with mac address' . $product['mac_address']);
-        message::add('worxLandroidS', 'Tondeuse ajoutée: ' . $elogic->getName(), null, null);
+        message::add('worxLandroidS', 'Tondeuse ajoutée (en cas d erreur faire un refresh_value dans la liste des commandes pour la premiere utilisation): ' . $elogic->getName(), null, null);
 
         $elogic->save();
         $elogic->setDisplay("width", "450px");
