@@ -1179,7 +1179,7 @@ class worxLandroidS extends eqLogic
           if(strstr($theme['current_desktop_theme'],'Light')  )
           { $replace['#theme#']  = "light";
            }
-          elseif(strstr($theme['current_desktop_theme'],'Dark')   {   $replace['#theme#']  = "dark";}
+          elseif(strstr($theme['current_desktop_theme'],'Dark') )  {   $replace['#theme#']  = "dark";}
           else { $replace['#theme#']  = "light"; $replace['#backgroundColor#']  = "background-color:white";}// legacy?or strstr($theme['current_desktop_theme'],'Legacy')
           
 
