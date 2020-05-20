@@ -382,7 +382,7 @@ class worxLandroidS extends eqLogic
 
         $commandIn = $MowerType . '/' . $product['mac_address'] . '/commandIn'; //config::byKey('MowerType', 'worxLandroidS').'/'. $json2_data->dat->mac .'/commandIn';
         //$elogic->newAction('setRainDelay', $commandIn, '{"rd":"#message#"}', 'message');
-        $elogic::newAction('setRainDelay', $commandIn, '{"rd":#slider#}', 'slider', array( "minValue" => 0, "maxValue" => 300, "showNameOndashboard" => false,"showNameOnmobile" => false  ));
+        $elogic->newAction('setRainDelay', $commandIn, '{"rd":#slider#}', 'slider', array( "minValue" => 0, "maxValue" => 300, "showNameOndashboard" => false,"showNameOnmobile" => false  ));
         $elogic->newAction('start', $commandIn, array('cmd' => 1), 'other');
         $elogic->newAction('pause', $commandIn, array('cmd' => 2), 'other');
         $elogic->newAction('stop', $commandIn, array('cmd' => 3), 'other');
@@ -875,7 +875,8 @@ class worxLandroidS extends eqLogic
         $cmdlogic->setSubType($subtype);
         $cmdlogic->setLogicalId($cmdId);
         $cmdlogic->setType('action');
-        $cmdlogic->setName(json_encode($params['name']) ?: $cmdId);
+        //$cmdlogic->setName(json_encode($params['name']) ?: $cmdId);
+        $cmdlogic->setName($cmdId);
         $cmdlogic->setConfiguration('listValue', json_encode($params['listValue']) ?: null);
         $cmdlogic->setConfiguration('minValue', json_encode($params['minValue']) ?: null);
         $cmdlogic->setConfiguration('maxValue', json_encode($params['maxValue']) ?: null);
