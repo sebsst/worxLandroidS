@@ -2,7 +2,7 @@
     position: absolute;
     height: 233px;
     width: 289px;
-    border: 6px solid rgb(192, 192, 192); 
+    border: 6px solid rgb(192, 192, 192);
     border-radius: 20px;
     overflow: hidden;
     z-index: 1;
@@ -12,7 +12,7 @@
     position: relative;
     height: 273px;
     width: 339px;
-    border: 6px solid rgb(192, 192, 192); 
+    border: 6px solid rgb(192, 192, 192);
     border-radius: 20px;
     overflow: hidden;
     z-index: 1;
@@ -23,8 +23,8 @@
     width: 339px;
     position: absolute;
     z-index: 2;
-	background-size: 100% 100%;  
-    background-image: url('plugins/worxLandroidS/core/template/dashboard/img/dark/Background.png');
+	background-size: 100% 100%;
+    background-image: url('Background.png');
 }
 
 .wheel {
@@ -109,7 +109,7 @@
     margin: 0 30px;
     z-index: 1;
     animation: solanime 0.5s linear infinite;
-    background-image: url('plugins/worxLandroidS/core/template/dashboard/img/dark/4.png');
+    background-image: url('dark/4.png');
 }
 
 .landroidrouge {
