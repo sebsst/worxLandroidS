@@ -1,6 +1,11 @@
 # Changelog
 
 En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que la doc, les traductions et des corrections mineures
+
+## 23/05/2020
+- correction du chemin des images
+- modification de backgound color pour V3 
+
 ## 10/05/2020
 - Changement du template.  (reprise des images d'Antoinekl du widget worklandroid + travail de Tektek pour les animations, merci à eux)
 - correction pour masquer ou afficher certaines zones (planning_starttime permet de masquer ou afficher le jour dans le planning)
@@ -12,7 +17,7 @@ En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que l
 
 ## 27/06/2019
 - correction date de fin de garantie (à la création de l'équipement)
-- suppression code inutile 
+- suppression code inutile
 - correction bug lié à virtualInfo
 
 ## 08/05/2019
@@ -23,7 +28,7 @@ En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que l
 - Diverses corrections
 - Ajout de la fonction set_schedule pour modifier le planning de tonte d'un jour donné. Par défaut l'action n'est pas visible. Le but étant de faire de la planification à l'aide d'un scénario mais il est possible de rendre visible sur le widget si besoin.
 - Format attendu: numéro jour;heure départ;durée en minutes;bordure
-Exemples : 
+Exemples :
   * 1;10:00;120;1 => lundi, démarrage à 10:00 pendant 120 minutes, coupe la bordure
   * 0;08:00;300;0 => dimanche, démarrage à 08:00 pendant 300 minutes, ne coupe pas la bordure
 
@@ -45,7 +50,7 @@ Exemples :
 
 ## 14/09/2018
 
-- Correction de l'affichage sur mobile si le format du widget choisi est le "standard" jeedom. 
+- Correction de l'affichage sur mobile si le format du widget choisi est le "standard" jeedom.
 ("Utiliser le widget préconfiguré" est décoché)
 
 ## 11/09/2018
@@ -61,7 +66,7 @@ Exemples :
 
 ## 03/07/2018
 
-- Ajout message création équipement 
+- Ajout message création équipement
 - Message si version mosquitto non compatible
 - correction bug affichage zone de départ
 
@@ -78,24 +83,24 @@ Exemples :
 ## 14/06/2018
 
 - Corrections des fonctions démarrer/arrêter.
-- Modifications timeout si le serveur mosquitto n'envoie aucun message 
+- Modifications timeout si le serveur mosquitto n'envoie aucun message
 - changement du délai pluie manquant dans certains cas
 
 ## 09/06/2018
 
-Ajout de nouvelles actions: 
+Ajout de nouvelles actions:
 - Ajout des délais de tonte après une pluie
 - Ajout des actions off_today / on_today pour faciliter la gestion de l'activité du jour par scénarios (pour les jours fériés par exemple)
 
 Autres modifications:
 - Widget désormais modifiable (couleur/transparence...)
 - Possibilité d'enlever certaines infos: errorCode, statusCode, totalDistance, batteryChargeCycle, rainDelay
-- Affichage de la prochaine zone de tonte. C'est la zone de départ de la prochaine tonte ou de celle en cours. 
+- Affichage de la prochaine zone de tonte. C'est la zone de départ de la prochaine tonte ou de celle en cours.
 - Changement des infos en numérique pour permettre de faire des statistiques (évolution de la batterie par exemple)
 
 ## 06/06/2018
 
-Modification des fréquences de mise à jour des infos: 
+Modification des fréquences de mise à jour des infos:
 - Toutes les 2 minutes pendant la tonte
 - Toutes les 30 minutes en dehors des periodes de tonte
 - sur demande ou envoi de mise à jour du planning de fonctionnement.
