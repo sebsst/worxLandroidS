@@ -604,7 +604,7 @@ class worxLandroidS extends eqLogic
         */
 
 
-        if (config::byKey('status', 'worxLandroidS') == '1') { //&& config::byKey('mowingTime','worxLandroidS') == '0'){
+        if (config::byKey('status', 'worxLandroidS') == '1' && $topic[2] != 'dummy') { //&& config::byKey('mowingTime','worxLandroidS') == '0'){
           self::$_client->disconnect();
         }
 

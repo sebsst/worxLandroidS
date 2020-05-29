@@ -36,6 +36,14 @@
       title="Couper bordure" onclick="jeedom.cmd.execute({id: #cutEdge_id#});">
       <i style="font-size: 3.5em; padding-top: 2px; margin-right: 2px; z-index:4" class="fas nature-grass pull-right" ></i></a>
 
+      <div style="position: absolute;top:120px;left:230px"  title="inclinaison frontale">↕#pitch#°
+        </div>
+     <div style="position: absolute;top:180px;left:-35px" title="inclinaison latérale" >↕#roll#°
+        </div>
+      <div style="position: absolute;top:90px;left:150px" title="direction">↣#direction#°
+        </div>  
+
+
     </div>
 
   </div>
@@ -48,7 +56,7 @@
 
   <div>
      <div align="center" style="font-size: 0.9em; #currentZone_visible#" > Zone départ: #currentZone# </div>
-    
+
     <div align="center>" style="display: block; font-size: 1em;#totalDistance_visible#;margin: 3px 0;">   Distance totale: #totalDistance# m en  #totalTime# minutes</div>
     <span style="display: block; #batteryChargeCycle_visible#;margin: 3px 0;">  #batteryChargeCycle# cycles de charge batterie </span>
     <span style="display: block; #GPSLatitude_visible#;margin: 3px 0;">  Coordonnées GPS: #GPSLatitude , #GPSLongitude </span>
