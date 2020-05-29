@@ -5,10 +5,13 @@ En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que l
 # 29/05/2020
 - ajout information en cas de non communication avec la tondeuse + 24 hr (dissocier et associer à nouveau sur le compte worx)
 - modif saisie des temps.
+- ajout historique bouton santé du plugin (reinitialisez les données cloud pour activer la modif)
+- ajout information sur l'inclinaison (latérale et frontale) et la direction
+- tentative de suppression erreur 500 si la communication n'est pas possible avec la tondeuse 
 
 ## 23/05/2020
 - correction du chemin des images
-- modification de backgound color pour V3 
+- modification de backgound color pour V3
 
 ## 10/05/2020
 - Changement du template.  (reprise des images d'Antoinekl du widget worklandroid + travail de Tektek pour les animations, merci à eux)
