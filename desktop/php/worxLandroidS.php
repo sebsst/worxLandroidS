@@ -36,7 +36,7 @@ $eqLogics = eqLogic::byType('worxLandroidS');
         <center>
           <i class="fa fa-medkit" style="font-size : 5em;color:#767676;"></i>
         </center>
-        <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#767676"><center>{{Santé}}</center></span>
+        <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#767676"><center>{{Historique santé}}</center></span>
       </div>
     </div>
 
@@ -122,7 +122,7 @@ $eqLogics = eqLogic::byType('worxLandroidS');
               <div class="col-sm-8">
                 <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isEnable" checked/>{{Activer}}</label>
                 <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isVisible" checked/>{{Visible}}</label>
-                
+
               </div>
             </div>
             <div class="form-group">
@@ -137,27 +137,27 @@ $eqLogics = eqLogic::byType('worxLandroidS');
               <div class="col-sm-3">
       			<Input readonly type="text" class="eqLogicAttr form-control" data-l1key="logicalId"  />
               </div>
-            </div>            
+            </div>
             <div class="form-group">
               <label class="col-sm-3 control-label" > {{Numéro de série}}</label>
               <div class="col-sm-3">
       			<Input readonly type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="serialNumber"  />
               </div>
-            </div>   
+            </div>
              <div class="form-group">
               <label class="col-sm-3 control-label" > {{Date de fin de garantie}}</label>
               <div class="col-sm-3">
       			<Input readonly type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="warranty_expiration_date"  />
               </div>
-            </div>              
+            </div>
              <div class="form-group">
               <label class="col-sm-3 control-label" > {{Durée de vie estimée des lames (Hr)}}</label>
               <div class="col-sm-3">
       			<Input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="maxBladesDuration"  />
               </div>
-            </div>  
-            
-            
+            </div>
+
+
         </fieldset>
       </form>
     </div>
@@ -181,7 +181,7 @@ $eqLogics = eqLogic::byType('worxLandroidS');
             <th style="width: 120px;">{{Sous-Type}}</th>
             <th style="width: 250px;">{{Valeur}}</th>
             <th style="width: 250px;">{{Request}}</th>
-            <th style="width: 150px;">{{Paramètres}}</th>            
+            <th style="width: 150px;">{{Paramètres}}</th>
 
             <th style="width: 150px;">{{Options}}</th>
 
