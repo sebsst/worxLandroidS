@@ -187,6 +187,7 @@ class worxLandroidS extends eqLogic
         $CERTFILE      = $RESOURCE_PATH . '/cert.pem';
         $PKEYFILE      = $RESOURCE_PATH . '/pkey.pem';
         $ROOT_CA       = $RESOURCE_PATH . '/vs-ca.pem';
+        $default_message_file = $RESOURCE_PATH . '/message_default.json'
         // log::add('worxLandroidS', 'debug', '$RESOURCE_PATH: ' . $CERTFILE);
         // init first connection
         if (config::byKey('initCloud', 'worxLandroidS') == true) {
@@ -335,6 +336,15 @@ class worxLandroidS extends eqLogic
 
                       log::add('worxLandroidS', 'info', 'mac_address ' . $product['mac_address'] . $typetondeuse . $product['product_id']);
                       worxLandroidS::create_equipement($product, $typetondeuse, $mowerDescription);
+                     // message par défault pour éviter code 500 à la première initialisation
+                      $default_message = file_get_contents($default_message_file);
+                      $message = json_decode($default_message);
+                      $message->topic = $product['product_id'].'/'.$product['mac_address'].'/dummy';
+                      worxLandroidS::message(json_encode($default_message));
+
+
+
+
                     }
                   }
 
