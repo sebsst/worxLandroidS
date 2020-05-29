@@ -34,6 +34,42 @@ $eqLogics = worxLandroidS::byType('worxLandroidS');
 	<tbody>
 	 <?php
 foreach ($eqLogics as $eqLogic) {
+
+	// get history
+	$sn = $eqLogic->getConfiguration('serialNumber');
+	$api_token = $eqLogic->getConfiguration('api_token');
+
+	$url       = 'https://api.worxlandroid.com/api/v2/product-items/'.$sn.'/activity-log';
+
+	$content = "application/json";
+	$ch      = curl_init($url);
+	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_HEADER, FALSE);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+		"Content-Type: application/json",
+		'Authorization: Bearer ' . $api_token
+	));
+
+	$jsonHistory = curl_exec($ch);
+  if(is_null($jsonHistory)){
+		$hist = json_decode($jsonHistory, true);
+
+		foreach ($hist as $value) {
+			// code...
+			echo '<tr><td><a href="' . $value->_id . '" style="text-decoration: none;">' . $value->timestamp . '</a></td>';
+
+		}
+
+
+	}
+
+
+
+
+
+
+
 	echo '<tr><td><a href="' . $eqLogic->getLinkToConfiguration() . '" style="text-decoration: none;">' . $eqLogic->getHumanName(true) . '</a></td>';
 	echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $eqLogic->getId() . '</span></td>';
 	$status = '<span class="label label-success" style="font-size : 1em; cursor : default;">{{OK}}</span>';

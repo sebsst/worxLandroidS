@@ -298,6 +298,8 @@ class worxLandroidS extends eqLogic
               log::add('worxLandroidS', 'info', 'Connexion result :' . $result);
 
               $json3 = json_decode($result, true);
+              config::save('api_token', $api_token, 'worxLandroidS'); //$json_users['id'],'worxLandroidS');
+
               config::save('mqtt_client_id', 'android-uuid/v1', 'worxLandroidS'); //$json_users['id'],'worxLandroidS');
               config::save('mqtt_endpoint', $json_users['mqtt_endpoint'], 'worxLandroidS');
 
