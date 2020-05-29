@@ -187,6 +187,7 @@ class worxLandroidS extends eqLogic
         $CERTFILE      = $RESOURCE_PATH . '/cert.pem';
         $PKEYFILE      = $RESOURCE_PATH . '/pkey.pem';
         $ROOT_CA       = $RESOURCE_PATH . '/vs-ca.pem';
+        $default_message_file = $RESOURCE_PATH . '/message_default.json';
         // log::add('worxLandroidS', 'debug', '$RESOURCE_PATH: ' . $CERTFILE);
         // init first connection
         if (config::byKey('initCloud', 'worxLandroidS') == true) {
@@ -297,6 +298,8 @@ class worxLandroidS extends eqLogic
               log::add('worxLandroidS', 'info', 'Connexion result :' . $result);
 
               $json3 = json_decode($result, true);
+              config::save('api_token', $api_token, 'worxLandroidS'); //$json_users['id'],'worxLandroidS');
+
               config::save('mqtt_client_id', 'android-uuid/v1', 'worxLandroidS'); //$json_users['id'],'worxLandroidS');
               config::save('mqtt_endpoint', $json_users['mqtt_endpoint'], 'worxLandroidS');
 
@@ -335,6 +338,18 @@ class worxLandroidS extends eqLogic
 
                       log::add('worxLandroidS', 'info', 'mac_address ' . $product['mac_address'] . $typetondeuse . $product['product_id']);
                       worxLandroidS::create_equipement($product, $typetondeuse, $mowerDescription);
+                     // message par défault pour éviter code 500 à la première initialisation
+                     // message par défault pour éviter code 500 à la première initialisation
+                      $default_message = file_get_contents($default_message_file,true);
+                      $topic = $product['product_id'].'/'.$product['mac_address'].'/dummy';
+                      $message = json_decode($default_message,true);
+                      $message->topic = $topic;//$product['product_id'].'/'.$product['mac_address'].'/dummy';
+                      log::add('worxLandroidS', 'info', 'default msg:'. $message->payload. '/topic:'. $message->topic);
+                      worxLandroidS::message($message);
+
+
+
+
                     }
                   }
 
@@ -591,7 +606,7 @@ class worxLandroidS extends eqLogic
         */
 
 
-        if (config::byKey('status', 'worxLandroidS') == '1') { //&& config::byKey('mowingTime','worxLandroidS') == '0'){
+        if (config::byKey('status', 'worxLandroidS') == '1' && $topic[2] != 'dummy') { //&& config::byKey('mowingTime','worxLandroidS') == '0'){
           self::$_client->disconnect();
         }
 
@@ -610,6 +625,10 @@ class worxLandroidS extends eqLogic
         $elogic->newInfo('firmware', $json2_data->dat->fw, 'string', 0, '');
         $elogic->newInfo('wifiQuality', $json2_data->dat->rsi, 'numeric', 0, '');
         $elogic->newInfo('rainDelay', $json2_data->cfg->rd, 'numeric', 1, '');
+
+        $elogic->newInfo('pitch', $json2_data->dat->dmp[0], 'numeric', 1, '');
+        $elogic->newInfo('roll', $json2_data->dat->dmp[1], 'numeric', 1, '');
+        $elogic->newInfo('direction', $json2_data->dat->dmp[2], 'numeric', 1, '');
 
         $elogic->newInfo('totalTime', $json2_data->dat->st->wt, 'numeric', 1, '');
         $elogic->newInfo('totalDistance', $json2_data->dat->st->d, 'numeric', 1, '');
@@ -748,7 +767,7 @@ class worxLandroidS extends eqLogic
           return __('Delai recherche station dépassé', __FILE__);
           break;
           default:
-          return 'Unknown';
+          return 'communication tondeuse impossible';
           break;
         }
       }
@@ -823,7 +842,7 @@ class worxLandroidS extends eqLogic
         $cmdlogic = $this->getCmd(null, $cmdId);
 
         if (!is_object($cmdlogic)) {
-          log::add('worxLandroidS', 'info', 'Cmdlogic n existe pas, creation');
+          log::add('worxLandroidS', 'info', 'Cmdlogic n existe pas, creation:'.$cmidId);
           $cmdlogic = new worxLandroidSCmd();
           $cmdlogic->setEqLogic_id($this->getId());
           $cmdlogic->setEqType('worxLandroidS');
@@ -857,7 +876,7 @@ class worxLandroidS extends eqLogic
         }
         $cmdlogic->setConfiguration('topic', $value);
         //$cmdlogic->setValue($value);
-        $cmdlogic->save();
+        //$cmdlogic->save();
 
         $this->checkAndUpdateCmd($cmdId, $value);
       }
