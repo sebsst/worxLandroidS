@@ -2,6 +2,10 @@
 
 En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que la doc, les traductions et des corrections mineures
 
+# 29/05/2020
+- ajout information en cas de non communication avec la tondeuse + 24 hr (dissocier et associer à nouveau sur le compte worx)
+- modif saisie des temps.
+
 ## 23/05/2020
 - correction du chemin des images
 - modification de backgound color pour V3 
