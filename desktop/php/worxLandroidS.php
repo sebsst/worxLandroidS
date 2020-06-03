@@ -79,6 +79,8 @@ $eqLogics = eqLogic::byType('worxLandroidS');
       <li role="presentation"><a href="#" class="eqLogicAction" aria-controls="home" role="tab" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fa fa-arrow-circle-left"></i></a></li>
       <li role="presentation" class="active"><a href="#eqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-tachometer"></i> {{Equipement}}</a></li>
       <li role="presentation"><a href="#commandtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{Commandes}}</a></li>
+      <li role="presentation"><a href="#zones" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{zones}}</a></li>
+
     </ul>
     <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
       <div role="tabpanel" class="tab-pane active" id="eqlogictab">
@@ -194,6 +196,72 @@ $eqLogics = eqLogic::byType('worxLandroidS');
       </table>
 
     </div>
+
+    <div role="tabpanel" class="tab-pane" id="commandtab">
+
+      <form class="form-horizontal">
+        <fieldset>
+          <div class="form-actions">
+            <?php
+              $userMessage = $eqLogic->getCmd('action','userMessage');
+        			$userMessageId = $userMessage->getId();
+        			$refrCmd = $eqLogic->getCmd('action','refreshValue');
+        			$refrCmdId = $refrCmd->getId();
+
+              echo '<a class="btn btn-success eqLogicAction cmdAction pull-left" data-action="save" onclick="updateAreas('.$userMessageId.','.$refrCmdId.');"><i class="fa fa-check-circle"></i> {{Sauvegarder}}</a>';
+            ?>
+
+          </div>
+        </fieldset>
+      </form>
+      <br />
+      <table id="table_zones" class="table table-bordered table-condensed">
+        <thead>
+          <tr>
+            <th style="width: 70px;">{{distance(m) / Distribution %}}</th>
+            <th style="width: 20px;">{{10}}</th>
+            <th style="width: 20px;">{{20}}</th>
+            <th style="width: 20px;">{{30}}</th>
+            <th style="width: 20px;">{{40}}</th>
+            <th style="width: 20px;">{{50}}</th>
+            <th style="width: 20px;">{{60}}</th>
+            <th style="width: 20px;">{{70}}</th>
+            <th style="width: 20px;">{{80}}</th>
+            <th style="width: 20px;">{{90}}</th>
+            <th style="width: 20px;">{{100}}</th>
+            <th style="width: 150px;">{{}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+              $areaListCmd         = $eqLogic->getCmd(null, 'areaList');
+              $areaListCurrent     = $areaListCmd->execCmd();
+              $areaListDistCmd     = $eqLogic->getCmd(null, 'areaListDist');
+              $areaListDistCurrent = $areaListDistCmd->execCmd();
+              $areaList = explode('|',$areaListCurrent);
+              $areaListDist = explode('|',$areaListDistCurrent);
+              echo '<fieldset>';
+              $count = 0;
+              foreach( $areaList as $area){
+
+              echo '<tr><td><input id="area'.$count.'" class="form-control" type="number" name="distance" min="0" max="999" STYLE="margin:1px;" value="'.$area.'" required></td>';
+
+                $countDist = 0;
+                foreach($areaListDist as $dist){
+                  $checked = $dist==$count?'checked':'';
+                 echo '<td><input id="dist'.$count.$countDist.'" type="radio"  name="areaDist'.$countDist.'" STYLE="margin:1px;"'.
+                 ' value="distVal'.$count.$countDist.'" '.$checked.' >'
+                 .'</td>';
+                 $countDist += 1;
+                }
+                echo '</tr>';
+                echo '</fieldset>';
+                $count += 1;
+          }
+          ?>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 </div>
@@ -207,4 +275,44 @@ $( "#sel_icon" ).change(function(){
   //$("#icon_visu").attr('src',text);
   document.icon_visu.src=text;
 });
+///zone
+
+ function updateAreas(cmdId, refreshId){
+  var result = '{"mz":[';
+  var resultv = '"mzv":[';
+  var dist = [0,0,0,0,0,0,0,0,0,0];
+  var valeur = 0;
+
+  for (let i = 0; i < 4; i++) {
+	result += document.getElementById('area'+i).value;
+    result += i==3?'':',';
+
+    for (let j = 0; j < 10; j++) {
+
+      valeur = document.getElementById('dist'+i+j).checked==true?i:dist[j];
+  //alert(document.getElementById('dist'+i+j).checked===null?i:j);
+      dist[j] = valeur;
+    }
+   }
+
+  for (let j = 0; j < 10; j++) {
+      resultv += dist[j];
+      resultv += j==9?'':',';
+  }
+  result += '],';
+  resultv += ']}';
+  result += resultv;
+  alert(result);
+
+  //jeedom.cmd.execute({id: cmdId, value:{ message: result }});
+  jeedom.cmd.execute({id: cmdId, value:{ message: result }});
+  //jeedom.cmd.execute({id: refreshId});
+
+  // $.ajax(
+//$('#div_newEqptMsg').showAlert({message: '{{Un équipement vient d\'être inclu. Veuillez réactualiser la page}}', level: 'warning'});
+//   );
+ }
+
+
+
 </script>
