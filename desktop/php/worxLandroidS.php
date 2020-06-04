@@ -79,8 +79,8 @@ $eqLogics = eqLogic::byType('worxLandroidS');
       <li role="presentation"><a href="#" class="eqLogicAction" aria-controls="home" role="tab" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fa fa-arrow-circle-left"></i></a></li>
       <li role="presentation" class="active"><a href="#eqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-tachometer"></i> {{Equipement}}</a></li>
       <li role="presentation"><a href="#commandtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{Commandes}}</a></li>
-      <li role="presentation"><a href="#zones" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{horaires}}</a></li>
-      <li role="presentation"><a href="#zones" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{zones}}</a></li>
+      <li role="presentation"><a href="#horaires" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa divers-calendar2"></i> {{horaires}}</a></li>
+      <li role="presentation"><a href="#zones" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa divers-table29"></i> {{zones}}</a></li>
 
     </ul>
     <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
@@ -217,7 +217,7 @@ $eqLogics = eqLogic::byType('worxLandroidS');
         </fieldset>
       </form>
       <br />
-      <table id="table_zones" class="table table-bordered table-condensed">
+      <table id="table_horaires" class="table table-bordered table-condensed">
         <thead>
           <tr>
             <th style="width: 70px;">{{Jour}}</th>
