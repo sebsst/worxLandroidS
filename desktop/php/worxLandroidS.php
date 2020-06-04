@@ -79,6 +79,7 @@ $eqLogics = eqLogic::byType('worxLandroidS');
       <li role="presentation"><a href="#" class="eqLogicAction" aria-controls="home" role="tab" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fa fa-arrow-circle-left"></i></a></li>
       <li role="presentation" class="active"><a href="#eqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-tachometer"></i> {{Equipement}}</a></li>
       <li role="presentation"><a href="#commandtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{Commandes}}</a></li>
+      <li role="presentation"><a href="#zones" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{horaires}}</a></li>
       <li role="presentation"><a href="#zones" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{zones}}</a></li>
 
     </ul>
@@ -196,6 +197,72 @@ $eqLogics = eqLogic::byType('worxLandroidS');
       </table>
 
     </div>
+
+
+    <div role="tabpanel" class="tab-pane" id="horaires">
+
+      <form class="form-horizontal">
+        <fieldset>
+          <div class="form-actions">
+            <?php
+              $userMessage = $eqLogic->getCmd('action','userMessage');
+        			$userMessageId = $userMessage->getId();
+        			$refrCmd = $eqLogic->getCmd('action','refreshValue');
+        			$refrCmdId = $refrCmd->getId();
+
+              echo '<a class="btn btn-success eqLogicAction cmdAction pull-left" data-action="save" onclick="updatePlanning('.$userMessageId.','.$refrCmdId.');"><i class="fa fa-check-circle"></i> {{Enregistrer horaires}}</a>';
+            ?>
+
+          </div>
+        </fieldset>
+      </form>
+      <br />
+      <table id="table_zones" class="table table-bordered table-condensed">
+        <thead>
+          <tr>
+            <th style="width: 70px;">{{Jour}}</th>
+            <th style="width: 20px;">{{heure début}}</th>
+            <th style="width: 20px;">{{durée}}</th>
+            <th style="width: 20px;">{{bordure}}</th>
+            <th style="width: 150px;">{{}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+              $planningCmd         = $eqLogic->getCmd(null, 'completePlanning');
+              $planningCurrent     = $areaListCmd->execCmd();
+              $areaListDistCmd     = $eqLogic->getCmd(null, 'areaListDist');
+              $areaListDistCurrent = $areaListDistCmd->execCmd();
+              $planning = explode('|',$planningCurrent);
+              $jour            = array(
+                "Dimanche",
+                "Lundi",
+                "Mardi",
+                "Mercredi",
+                "Jeudi",
+                "Vendredi",
+                "Samedi"
+              );
+              echo '<fieldset>';
+              $count = 0;
+
+              foreach( $planningt as $value){
+                echo '<tr><td>'.$jour[$count].'</td>';
+                $detail = explode(',',$value);
+                $countDist = 0;
+                echo '<td><input class="form-control" type="time" value="'.$value[0].'"></td><td>'.$value[1].'</td><td>'.$value[2].'</td>';
+                //echo '<tr><td><input id="area'.$count.'" class="form-control" type="number" name="distance" min="0" max="999" STYLE="margin:1px;" value="'.$area.'" required></td>';
+
+                echo '</tr>';
+
+                $count += 1;
+          }
+            echo '</fieldset>';
+          ?>
+        </tbody>
+      </table>
+    </div>
+
 
     <div role="tabpanel" class="tab-pane" id="zones">
 
