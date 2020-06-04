@@ -230,9 +230,8 @@ $eqLogics = eqLogic::byType('worxLandroidS');
         <tbody>
           <?php
               $planningCmd         = $eqLogic->getCmd(null, 'completePlanning');
-              $planningCurrent     = $areaListCmd->execCmd();
-              $areaListDistCmd     = $eqLogic->getCmd(null, 'areaListDist');
-              $areaListDistCurrent = $areaListDistCmd->execCmd();
+              $planningCurrent     = $planningCmd->execCmd();
+
               $planning = explode('|',$planningCurrent);
               $jour            = array(
                 "Dimanche",
