@@ -245,7 +245,7 @@ $eqLogics = eqLogic::byType('worxLandroidS');
               echo '<fieldset>';
               $count = 0;
 
-              foreach( $planningt as $value){
+              foreach( $planning as $value){
                 echo '<tr><td>'.$jour[$count].'</td>';
                 $detail = explode(',',$value);
                 $countDist = 0;
