@@ -197,7 +197,7 @@ $eqLogics = eqLogic::byType('worxLandroidS');
 
     </div>
 
-    <div role="tabpanel" class="tab-pane" id="commandtab">
+    <div role="tabpanel" class="tab-pane" id="zones">
 
       <form class="form-horizontal">
         <fieldset>
@@ -208,7 +208,7 @@ $eqLogics = eqLogic::byType('worxLandroidS');
         			$refrCmd = $eqLogic->getCmd('action','refreshValue');
         			$refrCmdId = $refrCmd->getId();
 
-              echo '<a class="btn btn-success eqLogicAction cmdAction pull-left" data-action="save" onclick="updateAreas('.$userMessageId.','.$refrCmdId.');"><i class="fa fa-check-circle"></i> {{Sauvegarder}}</a>';
+              echo '<a class="btn btn-success eqLogicAction cmdAction pull-left" data-action="save" onclick="updateAreas('.$userMessageId.','.$refrCmdId.');"><i class="fa fa-check-circle"></i> {{Enregistrer zones}}</a>';
             ?>
 
           </div>
@@ -218,7 +218,7 @@ $eqLogics = eqLogic::byType('worxLandroidS');
       <table id="table_zones" class="table table-bordered table-condensed">
         <thead>
           <tr>
-            <th style="width: 70px;">{{distance(m) / Distribution %}}</th>
+            <th style="width: 70px;">{{distance(m) / répartition zones départ }}</th>
             <th style="width: 20px;">{{10}}</th>
             <th style="width: 20px;">{{20}}</th>
             <th style="width: 20px;">{{30}}</th>
