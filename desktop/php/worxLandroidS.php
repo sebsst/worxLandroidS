@@ -210,7 +210,7 @@ $eqLogics = eqLogic::byType('worxLandroidS');
         			$refrCmd = $eqLogic->getCmd('action','refreshValue');
         			$refrCmdId = $refrCmd->getId();
 
-              echo '<a id="savePlanning" class="btn btn-success eqLogicAction cmdAction pull-left" data-action="save" onclick="updatePlanning('.$userMessageId.','.$refrCmdId.');"><i class="fa fa-check-circle"></i> {{Enregistrer horaires}}</a>';
+              echo '<a class="btn btn-success eqLogicAction cmdAction pull-left" data-action="save" onclick="updatePlanning('.$userMessageId.','.$refrCmdId.');"><i class="fa fa-check-circle"></i> {{Enregistrer horaires}}</a>';
             ?>
 
           </div>
