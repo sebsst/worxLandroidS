@@ -371,6 +371,7 @@ class worxLandroidS extends eqLogic
         $display = array( 'isvisible' => 1,
         'name' => __('Lames remplacees', __FILE__));
         self::newAction('newBlades', $commandIn, "", 'other', $display);
+        self::newAction('userMessage', $commandIn, "#message#", 'message');
       }
 
       public static function create_equipement($product, $MowerType, $mowerDescription)
@@ -410,6 +411,8 @@ class worxLandroidS extends eqLogic
         $elogic->newAction('rain_delay_60', $commandIn, "60", 'other');
         $elogic->newAction('rain_delay_120', $commandIn, "120", 'other');
         $elogic->newAction('rain_delay_240', $commandIn, "240", 'other');
+        $elogic->newAction('userMessage', $commandIn, "#message#", 'message');
+
         $display = array( 'isvisible' => 1,
         'name' => __('Lames remplacees', __FILE__));
         $elogic->newAction('newBlades', $commandIn, "", 'other', $display);
@@ -638,6 +641,12 @@ class worxLandroidS extends eqLogic
         $elogic->newInfo('batteryVoltage', $json2_data->dat->bt->v, 'numeric', 0, '');
         $elogic->newInfo('batteryTemperature', $json2_data->dat->bt->t, 'numeric', 0, '');
         $elogic->newInfo('zonesList', $json2_data->dat->mz, 'string', 0, '');
+        //area
+        $elogic->newInfo('areaList', $json2_data->cfg->mz[0].'|'.$json2_data->cfg->mz[1].'|'.$json2_data->cfg->mz[2].'|'.$json2_data->cfg->mz[3], 'string', 1, '');
+        $elogic->newInfo('areaListDist', $json2_data->cfg->mzv[0].'|'.$json2_data->cfg->mzv[1].'|'.$json2_data->cfg->mzv[2].'|'.$json2_data->cfg->mzv[3].'|'.
+                         $json2_data->cfg->mzv[4].'|'.$json2_data->cfg->mzv[5].'|'.$json2_data->cfg->mzv[6].'|'.$json2_data->cfg->mzv[7].'|'.
+                         $json2_data->cfg->mzv[8].'|'.$json2_data->cfg->mzv[9]
+                         , 'string', 1, '');
 
         if (array_key_exists('conn', $json2_data->dat)) { // for mower with 4G modules
           $elogic->newInfo('connexion', $json2_data->dat->conn, 'string', 1, '');
@@ -649,20 +658,17 @@ class worxLandroidS extends eqLogic
           $elogic->newInfo('GPSLongitude', ' ', 'string', 0, '');
         }
 
-        //log::add('worxLandroidS', 'Debug', 'zone:' . $json2_data->cfg->mzv[$json2_data->dat->lz]+1 . ' / '.$json2_data->cfg->mz[1]);
-        //    if ($json2_data->cfg->mz[1] != 0){
-        // log::add('worxLandroidS', 'Debug', ' : zone' . $json2_data->cfg->mzv[$json2_data->dat->lz]);
         $elogic->newInfo('currentZone', $json2_data->cfg->mzv[$json2_data->dat->lz] + 1, 'numeric', 0, '');
-        //}
-
-        //        self::getStatusDescription($json2_data->dat->ls);
-
         //  date début + durée + bordure
-
+        $completePlanning = '';
         for ($i = 0; $i < 7; $i++) {
+          $completePlanning .= '';
           $elogic->newInfo('Planning_startTime_' . $i, $json2_data->cfg->sc->d[$i][0], 'string', 1, '');
           $elogic->newInfo('Planning_duration_' . $i, $json2_data->cfg->sc->d[$i][1], 'string', 1, '');
           $elogic->newInfo('Planning_cutEdge_' . $i, $json2_data->cfg->sc->d[$i][2], 'string', 1, '');
+          $completePlanning .= $json2_data->cfg->sc->d[$i][0].','.$json2_data->cfg->sc->d[$i][1].','.$json2_data->cfg->sc->d[$i][2].'|';
+          $elogic->newInfo('completePlanning', $completePlanning, 'string', 1, '');
+
         }
 
         // mise a jour des infos virtuelles séparées par des virgules

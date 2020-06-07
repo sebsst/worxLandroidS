@@ -36,12 +36,12 @@
       title="Couper bordure" onclick="jeedom.cmd.execute({id: #cutEdge_id#});">
       <i style="font-size: 3.5em; padding-top: 2px; margin-right: 2px; z-index:4" class="fas nature-grass pull-right" ></i></a>
 
-      <div style="position: absolute;top:120px;left:230px"  title="inclinaison frontale">↕#pitch#°
+      <div style="position: absolute;top:120px;left:230px;#pitch_visible#"  title="inclinaison frontale">↕#pitch#°
         </div>
-     <div style="position: absolute;top:180px;left:-35px" title="inclinaison latérale" >↕#roll#°
+     <div style="position: absolute;top:180px;left:-35px;#roll_visible#" title="inclinaison latérale" >↕#roll#°
         </div>
-      <div style="position: absolute;top:90px;left:150px" title="direction">↣#direction#°
-        </div>  
+      <div style="position: absolute;top:90px;left:150px;#direction_visible#" title="direction">↣#direction#°
+        </div>
 
 
     </div>
@@ -81,11 +81,9 @@
 </div>
 <script>
   function setSchedule(debut, fin, numjour, bordure, toggle, onoff, on_id, off_id){
-
     if(toggle==2){
       if(onoff){
         jeedom.cmd.execute({id: on_id});
-
       }
       else
       {
