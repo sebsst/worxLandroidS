@@ -2,6 +2,12 @@
 
 En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que la doc, les traductions et des corrections mineures
 
+# 08/06/2020
+- correction de l'image landroid rouge
+- après les mises à jour vous devez éventuellement enregistrer l'équipement et peut-être  réinitialiser les données du cloud (configuration du plugin). erreur execcmd / cmd=>getId().
+- attention la tondeuse doit être connectée, sinon le plugin ne pourra pas se mettre correctement à jour
+
+
 # 06/06/2020
 - ajout onglet gestion des zones de tonte. (distance de départ + % répartition selon chaque zone)
 - possibilité de masquer les infos inclinaison+direction
@@ -11,7 +17,7 @@ En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que l
 - modif saisie des temps.
 - ajout historique bouton santé du plugin (reinitialisez les données cloud pour activer la modif)
 - ajout information sur l'inclinaison (latérale et frontale) et la direction
-- tentative de suppression erreur 500 si la communication n'est pas possible avec la tondeuse 
+- tentative de suppression erreur 500 si la communication n'est pas possible avec la tondeuse
 
 ## 23/05/2020
 - correction du chemin des images
