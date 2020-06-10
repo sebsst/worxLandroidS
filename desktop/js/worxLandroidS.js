@@ -180,10 +180,9 @@ function updatePlanning(cmdId, refreshId) {
 
     }
     result += ']}}';
-    alert(result);
+    //alert(result);
 
     jeedom.cmd.execute({ id: cmdId, value: { message: result } });
-
 };
 
 function updateAreas(cmdId, refreshId) {
@@ -210,8 +209,7 @@ function updateAreas(cmdId, refreshId) {
     result += '],';
     resultv += ']}';
     result += resultv;
-    alert(result);
+    //alert(result);
 
     jeedom.cmd.execute({ id: cmdId, value: { message: result } });
-
 }
