@@ -366,12 +366,13 @@ class worxLandroidS extends eqLogic
 
       public function postSave()
       {
+        $commandIn = $this->getConfiguration('MowerType') . '/' . $this->getLogicalId() . '/commandIn';
+        $this->newAction('setRainDelay', $commandIn, '{"rd":#slider#}', 'slider', array( "minValue" => 0, "maxValue" => 300, "showNameOndashboard" => false,"showNameOnmobile" => false));
+        $display = array( 'isvisible' => 1, 'name' => __('Lames remplacees', __FILE__));
+        $this->newAction('newBlades', $commandIn, "", 'other', $display);
+        $this->newAction('userMessage', $commandIn, "#message#", 'message');
+
         self::refresh_values("manual");
-        self::newAction('setRainDelay', $commandIn, '{"rd":#slider#}', 'slider', array( "minValue" => 0, "maxValue" => 300, "showNameOndashboard" => false,"showNameOnmobile" => false  ));
-        $display = array( 'isvisible' => 1,
-        'name' => __('Lames remplacees', __FILE__));
-        self::newAction('newBlades', $commandIn, "", 'other', $display);
-        self::newAction('userMessage', $commandIn, "#message#", 'message');
       }
 
       public static function create_equipement($product, $MowerType, $mowerDescription)
