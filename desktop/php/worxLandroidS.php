@@ -210,7 +210,8 @@ $eqLogics = eqLogic::byType('worxLandroidS');
         			$refrCmd = $eqLogic->getCmd('action','refreshValue');
         			$refrCmdId = $refrCmd->getId();
 
-              echo '<a class="btn btn-success eqLogicAction cmdAction pull-left" data-action="save" onclick="updatePlanning('.$userMessageId.','.$refrCmdId.');"><i class="fa fa-check-circle"></i> {{Enregistrer horaires}}</a>';
+              echo '<a class="btn btn-success eqLogicAction cmdAction pull-left" data-action="save" onclick="updatePlanning('.$userMessageId.','.$refrCmdId.');">';
+              echo '<i class="fa fa-check-circle"></i> {{Enregistrer horaires}}</a><div>{{la tondeuse doit être connectée}}</div>';
             ?>
 
           </div>
@@ -281,7 +282,8 @@ $eqLogics = eqLogic::byType('worxLandroidS');
               if (is_object($userMessage) && is_object($refrCmd)) {
                 $userMessageId = $userMessage->getId();
                 $refrCmdId = $refrCmd->getId();
-                echo '<a class="btn btn-success eqLogicAction cmdAction pull-left" data-action="save" onclick="updateAreas('.$userMessageId.','.$refrCmdId.');"><i class="fa fa-check-circle"></i> {{Enregistrer zones}}</a>';
+                echo '<a class="btn btn-success eqLogicAction cmdAction pull-left" data-action="save" onclick="updateAreas('.$userMessageId.','.$refrCmdId.');">';
+                echo '<i class="fa fa-check-circle"></i> {{Enregistrer zones}}</a><div>{{la tondeuse doit être connectée}}</div>';
               }
             ?>
           </div>
