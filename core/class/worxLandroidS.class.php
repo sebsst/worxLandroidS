@@ -366,12 +366,13 @@ class worxLandroidS extends eqLogic
 
       public function postSave()
       {
+        $commandIn = $this->getConfiguration('MowerType') . '/' . $this->getLogicalId() . '/commandIn';
+        $this->newAction('setRainDelay', $commandIn, '{"rd":#slider#}', 'slider', array( "minValue" => 0, "maxValue" => 300, "showNameOndashboard" => false,"showNameOnmobile" => false));
+        $display = array( 'isvisible' => 1, 'name' => __('Lames remplacees', __FILE__));
+        $this->newAction('newBlades', $commandIn, "", 'other', $display);
+        $this->newAction('userMessage', $commandIn, "#message#", 'message');
+
         self::refresh_values("manual");
-        self::newAction('setRainDelay', $commandIn, '{"rd":#slider#}', 'slider', array( "minValue" => 0, "maxValue" => 300, "showNameOndashboard" => false,"showNameOnmobile" => false  ));
-        $display = array( 'isvisible' => 1,
-        'name' => __('Lames remplacees', __FILE__));
-        self::newAction('newBlades', $commandIn, "", 'other', $display);
-        self::newAction('userMessage', $commandIn, "#message#", 'message');
       }
 
       public static function create_equipement($product, $MowerType, $mowerDescription)
@@ -609,7 +610,7 @@ class worxLandroidS extends eqLogic
         */
 
 
-        if (config::byKey('status', 'worxLandroidS') == '1' && $topic[2] != 'dummy') { //&& config::byKey('mowingTime','worxLandroidS') == '0'){
+        if (config::byKey('status', 'worxLandroidS') == '1' && $split_topic[2] != 'dummy') { //&& config::byKey('mowingTime','worxLandroidS') == '0'){
           self::$_client->disconnect();
         }
 
@@ -848,7 +849,7 @@ class worxLandroidS extends eqLogic
         $cmdlogic = $this->getCmd(null, $cmdId);
 
         if (!is_object($cmdlogic)) {
-          log::add('worxLandroidS', 'info', 'Cmdlogic n existe pas, creation:'.$cmidId);
+          log::add('worxLandroidS', 'info', 'Cmdlogic n existe pas, creation:'.$cmdId);
           $cmdlogic = new worxLandroidSCmd();
           $cmdlogic->setEqLogic_id($this->getId());
           $cmdlogic->setEqType('worxLandroidS');
@@ -1266,7 +1267,7 @@ class worxLandroidS extends eqLogic
           $errorDescription              = $this->getCmd(null, 'errorDescription');
           $replace['#errorDescription#'] = is_object($errorDescription) ? $errorDescription->execCmd() : '';
 
-
+          $cmd_html = '';
           foreach ($this->getCmd('info') as $cmd) {
             $replace['#' . $cmd->getLogicalId() . '_history#'] = '';
             $replace['#' . $cmd->getLogicalId() . '_id#']      = $cmd->getId();
@@ -1285,10 +1286,7 @@ class worxLandroidS extends eqLogic
 
 
             if ($automaticWidget != true or $cmd->getLogicalId() == 'virtualInfo') {
-
-              $templ = $cmd->getTemplate('dashboard', '');
-              //log::add('worxLandroidS', 'debug', 'template: ' . $templ );
-              if ($templ == '') {
+              if ($cmd->getTemplate('dashboard', '') == '') {
                 $cmd->setTemplate('dashboard', 'badge');
               }
               if (substr_compare($cmd->getName(), 'Planning', 0, 8) != 0) {
@@ -1317,7 +1315,9 @@ class worxLandroidS extends eqLogic
             }
           }
           $code = $replace['#statusCode#'];
-          if($code <  5 or $code ==  10 or $code == 9 or $code == 34){ $replace['#moving#'] = 'display:none'; }
+          if ($code <  5 or $code ==  10 or $code == 9 or $code == 34) {
+            $replace['#moving#'] = 'display:none';
+          }
 
           // nouveau template
           $replaceImg['#worxImg#'] = '';
@@ -1325,8 +1325,10 @@ class worxLandroidS extends eqLogic
           $worxImg_template     = getTemplate('core', $version, strval($code), 'worxLandroidS');
           $replace['#worxImg#'] .= template_replace($replaceImg, $worxImg_template);
           // fin nouveau template
-          if($cmd->getLogicalId() == 'virtualInfo') $replace['#widget#'] = $cmd_html;
-          $replace['#cmd#'] = $cmd_html;
+          if ($cmd->getLogicalId() == 'virtualInfo') {
+            $replace['#widget#'] = $cmd_html; // FIXME $cmd_html assigned to #widget# & #cmd# ?
+          }
+          $replace['#cmd#'] = $cmd_html; // FIXME $cmd_html assigned to #widget# & #cmd# ?
 
           if ($automaticWidget == true) {
             return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'worxMain', 'worxLandroidS')));
