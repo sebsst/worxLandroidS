@@ -231,39 +231,41 @@ $eqLogics = eqLogic::byType('worxLandroidS');
         <tbody>
           <?php
               $planningCmd         = $eqLogic->getCmd(null, 'completePlanning');
-              $planningCurrent     = $planningCmd->execCmd();
+              if (is_object($planningCmd)) {
+                $planningCurrent     = $planningCmd->execCmd();
 
-              $planning = explode('|',$planningCurrent);
-              $jour            = array(
-                "Dimanche",
-                "Lundi",
-                "Mardi",
-                "Mercredi",
-                "Jeudi",
-                "Vendredi",
-                "Samedi"
-              );
-              echo '<fieldset>';
-              $count = 0;
+                $planning = explode('|',$planningCurrent);
+                $jour            = array(
+                  "Dimanche",
+                  "Lundi",
+                  "Mardi",
+                  "Mercredi",
+                  "Jeudi",
+                  "Vendredi",
+                  "Samedi"
+                );
+                echo '<fieldset>';
+                $count = 0;
 
-              foreach( $planning as $value){
-                if($count==7) break;
-                echo '<tr><td>'.$jour[$count].'</td>';
-                $detail = explode(',',$value);
-                $countDist = 0;
-                $checked = $detail[2]==1?'checked':'';
-                echo '<td><input id="startTime'.$count.'" class="form-control" type="time" value="'.$detail[0].'"></td>';
-                echo '<td><input id="duration'.$count.'" class="form-control" type="number" value="'.$detail[1].'"></td>';
-                echo '<td><input id="edge'.$count.'" class="form-control" type="checkbox" '.$checked.'></td>';
+                foreach( $planning as $value){
+                  if($count==7) break;
+                  echo '<tr><td>'.$jour[$count].'</td>';
+                  $detail = explode(',',$value);
+                  $countDist = 0;
+                  $checked = $detail[2]==1?'checked':'';
+                  echo '<td><input id="startTime'.$count.'" class="form-control" type="time" value="'.$detail[0].'"></td>';
+                  echo '<td><input id="duration'.$count.'" class="form-control" type="number" value="'.$detail[1].'"></td>';
+                  echo '<td><input id="edge'.$count.'" class="form-control" type="checkbox" '.$checked.'></td>';
 
-//echo '<td>'.$detail[1].'</td><td>'.$detail[2].'</td>';
-                //echo '<tr><td><input id="area'.$count.'" class="form-control" type="number" name="distance" min="0" max="999" STYLE="margin:1px;" value="'.$area.'" required></td>';
+                  //echo '<td>'.$detail[1].'</td><td>'.$detail[2].'</td>';
+                  //echo '<tr><td><input id="area'.$count.'" class="form-control" type="number" name="distance" min="0" max="999" STYLE="margin:1px;" value="'.$area.'" required></td>';
 
-                echo '</tr>';
+                  echo '</tr>';
 
-                $count += 1;
-          }
-            echo '</fieldset>';
+                  $count += 1;
+                }
+                echo '</fieldset>';
+              }
           ?>
         </tbody>
       </table>
@@ -271,20 +273,19 @@ $eqLogics = eqLogic::byType('worxLandroidS');
 
 
     <div role="tabpanel" class="tab-pane" id="zones">
-
       <form class="form-horizontal">
         <fieldset>
           <div class="form-actions">
             <?php
               $userMessage = $eqLogic->getCmd('action','userMessage');
-        			$userMessageId = $userMessage->getId();
-        			$refrCmd = $eqLogic->getCmd('action','refreshValue');
-        			$refrCmdId = $refrCmd->getId();
-
-              echo '<a class="btn btn-success eqLogicAction cmdAction pull-left" data-action="save" onclick="updateAreas('.$userMessageId.','.$refrCmdId.');">';
-              echo '<i class="fa fa-check-circle"></i> {{Enregistrer zones}}</a><div>{{la tondeuse doit être connectée}}</div>';
+              $refrCmd = $eqLogic->getCmd('action','refreshValue');
+              if (is_object($userMessage) && is_object($refrCmd)) {
+                $userMessageId = $userMessage->getId();
+                $refrCmdId = $refrCmd->getId();
+                echo '<a class="btn btn-success eqLogicAction cmdAction pull-left" data-action="save" onclick="updateAreas('.$userMessageId.','.$refrCmdId.');">';
+                echo '<i class="fa fa-check-circle"></i> {{Enregistrer zones}}</a><div>{{la tondeuse doit être connectée}}</div>';
+              }
             ?>
-
           </div>
         </fieldset>
       </form>
@@ -309,29 +310,31 @@ $eqLogics = eqLogic::byType('worxLandroidS');
         <tbody>
           <?php
               $areaListCmd         = $eqLogic->getCmd(null, 'areaList');
-              $areaListCurrent     = $areaListCmd->execCmd();
               $areaListDistCmd     = $eqLogic->getCmd(null, 'areaListDist');
-              $areaListDistCurrent = $areaListDistCmd->execCmd();
-              $areaList = explode('|',$areaListCurrent);
-              $areaListDist = explode('|',$areaListDistCurrent);
-              echo '<fieldset>';
-              $count = 0;
-              foreach( $areaList as $area){
+              if (is_object($areaListCmd) && is_object($areaListDistCmd)) {
+                $areaListCurrent     = $areaListCmd->execCmd();
+                $areaListDistCurrent = $areaListDistCmd->execCmd();
+                $areaList = explode('|',$areaListCurrent);
+                $areaListDist = explode('|',$areaListDistCurrent);
+                echo '<fieldset>';
+                $count = 0;
+                foreach( $areaList as $area){
 
-              echo '<tr><td><input id="area'.$count.'" class="form-control" type="number" name="distance" min="0" max="999" STYLE="margin:1px;" value="'.$area.'" required></td>';
+                echo '<tr><td><input id="area'.$count.'" class="form-control" type="number" name="distance" min="0" max="999" STYLE="margin:1px;" value="'.$area.'" required></td>';
 
-                $countDist = 0;
-                foreach($areaListDist as $dist){
-                  $checked = $dist==$count?'checked':'';
-                 echo '<td><input id="dist'.$count.$countDist.'" type="radio"  name="areaDist'.$countDist.'" STYLE="margin:1px;"'.
-                 ' value="distVal'.$count.$countDist.'" '.$checked.' >'
-                 .'</td>';
-                 $countDist += 1;
+                  $countDist = 0;
+                  foreach($areaListDist as $dist){
+                    $checked = $dist==$count?'checked':'';
+                   echo '<td><input id="dist'.$count.$countDist.'" type="radio"  name="areaDist'.$countDist.'" STYLE="margin:1px;"'.
+                   ' value="distVal'.$count.$countDist.'" '.$checked.' >'
+                   .'</td>';
+                   $countDist += 1;
+                  }
+                  echo '</tr>';
+                  echo '</fieldset>';
+                  $count += 1;
                 }
-                echo '</tr>';
-                echo '</fieldset>';
-                $count += 1;
-          }
+              }
           ?>
         </tbody>
       </table>
@@ -342,62 +345,3 @@ $eqLogics = eqLogic::byType('worxLandroidS');
 
 <?php include_file('desktop', 'worxLandroidS', 'js', 'worxLandroidS'); ?>
 <?php include_file('core', 'plugin.template', 'js'); ?>
-
-<script>
-$( "#sel_icon" ).change(function(){
-  var text = 'plugins/worxLandroidS/doc/images/node_' + $("#sel_icon").val() + '.png';
-  //$("#icon_visu").attr('src',text);
-  document.icon_visu.src=text;
-});
-///zone
- function updatePlanning(cmdId, refreshId){
-  var result = '{"sc":{"d":[';
-
-  for (let i = 0; i < 7; i++) {
-	result += '["'+document.getElementById('startTime'+i).value;
-	result += '",'+document.getElementById('duration'+i).value;
-    result += ',';
-    result += document.getElementById('edge'+i).checked?1:0;
-
-    result += ']';
-    if(i<6) result += ',';
-
-   }
-  result += ']}}';
-  //alert(result);
-
-  jeedom.cmd.execute({id: cmdId, value:{ message: result }});
-
- };
-
- function updateAreas(cmdId, refreshId){
-  var result = '{"mz":[';
-  var resultv = '"mzv":[';
-  var dist = [0,0,0,0,0,0,0,0,0,0];
-  var valeur = 0;
-
-  for (let i = 0; i < 4; i++) {
-	result += document.getElementById('area'+i).value;
-    result += i==3?'':',';
-
-    for (let j = 0; j < 10; j++) {
-
-      valeur = document.getElementById('dist'+i+j).checked==true?i:dist[j];
-      dist[j] = valeur;
-    }
-   }
-
-  for (let j = 0; j < 10; j++) {
-      resultv += dist[j];
-      resultv += j==9?'':',';
-  }
-  result += '],';
-  resultv += ']}';
-  result += resultv;
-  //alert(result);
-
-  jeedom.cmd.execute({id: cmdId, value:{ message: result }});
-
- }
-
-</script>
