@@ -62,6 +62,7 @@ class worxLandroidS extends eqLogic
           $dur       = $eqpt->getCmd(null, 'Planning_duration_' . $i);
           $duration  = is_object($dur) ? $dur->execCmd() : 0;
           if($duration== ''){ $checkMowingTime = 'manual'; $duration=1;}; //correction pour l'initialisation
+          if($startTime== ''){ $startTime = '00:00';}; //correction pour l'initialisation  
           $initDate = DateTime::createFromFormat('H:i', $startTime);
           //log::add('worxLandroidS', 'debug', 'mower sleeping '.$duration);
           //if(empty($duration){$duration = 0};

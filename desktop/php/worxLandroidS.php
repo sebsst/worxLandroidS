@@ -195,25 +195,22 @@ $eqLogics = eqLogic::byType('worxLandroidS');
 
         </tbody>
       </table>
-
     </div>
 
-
     <div role="tabpanel" class="tab-pane" id="horaires">
-
       <form class="form-horizontal">
         <fieldset>
           <div class="form-actions">
             <?php
               $userMessage = $eqLogic->getCmd('action','userMessage');
-        			$userMessageId = $userMessage->getId();
-        			$refrCmd = $eqLogic->getCmd('action','refreshValue');
-        			$refrCmdId = $refrCmd->getId();
-
-              echo '<a class="btn btn-success eqLogicAction cmdAction pull-left" data-action="save" onclick="updatePlanning('.$userMessageId.','.$refrCmdId.');">';
-              echo '<i class="fa fa-check-circle"></i> {{Enregistrer horaires}}</a><div>{{la tondeuse doit être connectée}}</div>';
+              $refrCmd = $eqLogic->getCmd('action','refreshValue');
+              if (is_object($userMessage) && is_object($refrCmd)) {
+                $userMessageId = $userMessage->getId();
+                $refrCmdId = $refrCmd->getId();
+                echo '<a class="btn btn-success eqLogicAction cmdAction pull-left" data-action="save" onclick="updatePlanning('.$userMessageId.','.$refrCmdId.');">';
+                echo '<i class="fa fa-check-circle"></i> {{Enregistrer horaires}}</a><div>{{la tondeuse doit être connectée}}</div>';
+              }
             ?>
-
           </div>
         </fieldset>
       </form>
