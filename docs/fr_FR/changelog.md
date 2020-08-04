@@ -2,6 +2,9 @@
 
 En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que la doc, les traductions et des corrections mineures
 
+# 04/08/2020
+- correction affichage coordonnées GPS
+
 # 08/06/2020
 - correction de l'image landroid rouge
 - après les mises à jour vous devez éventuellement enregistrer l'équipement et peut-être  réinitialiser les données du cloud (configuration du plugin). erreur execcmd / cmd=>getId().
