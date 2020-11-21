@@ -62,7 +62,7 @@ class worxLandroidS extends eqLogic
           $dur       = $eqpt->getCmd(null, 'Planning_duration_' . $i);
           $duration  = is_object($dur) ? $dur->execCmd() : 0;
           if($duration== ''){ $checkMowingTime = 'manual'; $duration=1;}; //correction pour l'initialisation
-          if($startTime== ''){ $startTime = '00:00';}; //correction pour l'initialisation  
+          if($startTime== ''){ $startTime = '00:00';}; //correction pour l'initialisation
           $initDate = DateTime::createFromFormat('H:i', $startTime);
           //log::add('worxLandroidS', 'debug', 'mower sleeping '.$duration);
           //if(empty($duration){$duration = 0};
@@ -405,6 +405,8 @@ class worxLandroidS extends eqLogic
         $elogic->newAction('pause', $commandIn, array('cmd' => 2), 'other');
         $elogic->newAction('stop', $commandIn, array('cmd' => 3), 'other');
         $elogic->newAction('cutEdge', $commandIn, array('cmd' => 4), 'other');
+        $elogic->newAction('zoneTraining', $commandIn, array('cmd' => 4), 'other');
+
         $elogic->newAction('refreshValue', $commandIn, "", 'other');
         $elogic->newAction('off_today', $commandIn, "off_today", 'other');
         $elogic->newAction('on_today', $commandIn, "on_today", 'other');
@@ -1038,6 +1040,12 @@ class worxLandroidS extends eqLogic
 
           // send cutedge
           if ($cmd->getName() == 'cutEdge') {
+          //  $_message = '{"cmd":4}';
+            $_message = '{"sc":{"ots":{"bc":1,"wtm":0}}}';
+          }
+
+          // send zoneTraining
+          if ($cmd->getName() == 'zoneTraining') {
             $_message = '{"cmd":4}';
           }
 
