@@ -2,6 +2,9 @@
 
 En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que la doc, les traductions et des corrections mineures
 
+# 21/11/2020
+- Modification de la commande pour la coupe de la bordure (compatibilité des modèles à vérifier)
+
 # 04/08/2020
 - correction affichage coordonnées GPS
 
