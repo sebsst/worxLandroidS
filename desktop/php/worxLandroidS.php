@@ -51,7 +51,7 @@ $eqLogics = eqLogic::byType('worxLandroidS');
         <span style="font-size : 1.1em;position:relative; top : 15px;display:none;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;"><center>{{Ajouter}}</center></span>
       </div>
       <?php
-      $dir = dirname(__FILE__) . '/../../doc/images/';
+      $dir = dirname(__FILE__) . '/../../docs/images/';
       $files = scandir($dir);
       foreach ($eqLogics as $eqLogic) {
         $opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
