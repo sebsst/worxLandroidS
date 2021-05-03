@@ -2,6 +2,11 @@
 
 En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que la doc, les traductions et des corrections mineures
 
+# 03/05/2021
+- attention les modèles 2020/2021 avec double planification quotidienne ne sont pas totalement compatible avec le plugin. Une mise à jour est en cours de dev.
+- en attendant il faut gérer la planification à partir de l'application mobile et non depuis jeedom.
+- Les délais de rafraîchissement ne seront pas toujours respectés
+
 # 21/11/2020
 - Modification de la commande pour la coupe de la bordure (compatibilité des modèles à vérifier)
 
