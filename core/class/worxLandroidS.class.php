@@ -323,6 +323,7 @@ class worxLandroidS extends eqLogic
                   log::add('worxLandroidS', 'info', 'board_id: ' . $board_id . ' / product id:' . $product['product_id']);
                   $found_key    = array_search($board_id, array_column($boards, 'id'));
                   $typetondeuse = $boards[$found_key]['code'];
+                  $doubleSchedule = $boards[$found_key]['features']['scheduler_two_slots']; 
 
 
                   log::add('worxLandroidS', 'info', 'mac_address ' . $product['mac_address'] . $typetondeuse);
@@ -338,7 +339,7 @@ class worxLandroidS extends eqLogic
                     } else {
 
                       log::add('worxLandroidS', 'info', 'mac_address ' . $product['mac_address'] . $typetondeuse . $product['product_id']);
-                      worxLandroidS::create_equipement($product, $typetondeuse, $mowerDescription);
+                      worxLandroidS::create_equipement($product, $typetondeuse, $mowerDescription,$doubleSchedule);
                      // message par défault pour éviter code 500 à la première initialisation
                      // message par défault pour éviter code 500 à la première initialisation
                       $default_message = file_get_contents($default_message_file,true);
@@ -376,7 +377,7 @@ class worxLandroidS extends eqLogic
         self::refresh_values("manual");
       }
 
-      public static function create_equipement($product, $MowerType, $mowerDescription)
+      public static function create_equipement($product, $MowerType, $mowerDescription, $doubleSchedule)
       {
         $elogic = new worxLandroidS();
         $elogic->setEqType_name('worxLandroidS');
@@ -387,6 +388,7 @@ class worxLandroidS extends eqLogic
         $elogic->setConfiguration('MowerType', $MowerType);
         $elogic->setConfiguration('maxBladesDuration', 300);
         $elogic->setConfiguration('mowerDescription', $mowerDescription);
+        $elogic->setConfiguration('doubleSchedule', $doubleSchedule);
 
         // ajout des actions par défaut
         log::add('worxLandroidS', 'info', 'Saving device with mac address' . $product['mac_address']);
@@ -674,6 +676,20 @@ class worxLandroidS extends eqLogic
           $elogic->newInfo('completePlanning', $completePlanning, 'string', 1, '');
 
         }
+// scheduler double
+        if($elogic->getConfiguration('doubleSchedule', '')!= ''){
+        for ($i = 0; $i < 7; $i++) {
+          $completePlanning .= '';
+          $elogic->newInfo('Planning_startTime2_' . $i, $json2_data->cfg->sc->dd[$i][0], 'string', 1, '');
+          $elogic->newInfo('Planning_duration2_' . $i, $json2_data->cfg->sc->dd[$i][1], 'string', 1, '');
+          $elogic->newInfo('Planning_cutEdge2_' . $i, $json2_data->cfg->sc->dd[$i][2], 'string', 1, '');
+          $completePlanning .= $json2_data->cfg->sc->dd[$i][0].','.$json2_data->cfg->sc->dd[$i][1].','.$json2_data->cfg->sc->dd[$i][2].'|';
+          $elogic->newInfo('completePlanning', $completePlanning, 'string', 1, '');
+
+        }          
+          
+        }
+         
 
         // mise a jour des infos virtuelles séparées par des virgules
         $cmd = worxLandroidSCmd::byEqLogicIdCmdName($elogic->getId(), 'virtualInfo');
