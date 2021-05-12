@@ -8,3 +8,5 @@ sftp-config.json
 Thumbs.db
 *.php~
 .vscode/settings.json
+resources/cert.pem
+resources/pkey.pem
