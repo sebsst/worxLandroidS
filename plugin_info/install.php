@@ -32,6 +32,21 @@ function worxLandroidS_install() {
         $cron->setTimeout('1440');
         $cron->save();
     }
+
+    $cronRefresh = cron::byClassAndFunction('worxLandroidS', 'daemonRefresh');
+    if (!is_object($cronRefresh)) {
+        $cronRefresh = new cron();
+        $cronRefresh->setClass('worxLandroidS');
+        $cronRefresh->setFunction('daemonRefresh');
+        $cronRefresh->setEnable(1);
+        $cronRefresh->setDeamon(1);
+        $cronRefresh->setDeamonSleepTime(120);
+        $cronRefresh->setSchedule('* * * * *');
+        $cronRefresh->setTimeout('1440');
+        $cronRefresh->save();
+    }
+
+
 }
 
 function worxLandroidS_update() {
@@ -58,6 +73,31 @@ function worxLandroidS_update() {
         $cron->halt;
         $cron->run;
     }
+
+    $cronRefresh = cron::byClassAndFunction('worxLandroidS', 'daemonRefresh');
+    if (is_object($cronRefresh)) {
+        $cronRefresh->stop();
+        $cronRefresh->remove();
+        unset($cronRefresh);
+    }
+    $cronRefresh = cron::byClassAndFunction('worxLandroidS', 'daemonRefresh');
+    if (!is_object($cronRefresh)) {
+        $cronRefresh = new cron();
+        $cronRefresh->setClass('worxLandroidS');
+        $cronRefresh->setFunction('daemonRefresh');
+        $cronRefresh->setEnable(1);
+        $cronRefresh->setDeamon(1);
+        $cronRefresh->setDeamonSleepTime(20);
+        $cronRefresh->setSchedule('* * * * *');
+        $cronRefresh->setTimeout('1440');
+        $cronRefresh->save();
+    } else {
+        $cronRefresh->setDeamonSleepTime(120);
+        $cronRefresh->halt;
+        $cronRefresh->run;
+    }
+
+
 }
 
 function worxLandroidS_remove() {
@@ -66,6 +106,14 @@ function worxLandroidS_remove() {
         $cron->stop();
         $cron->remove();
     }
+
+
+    $cronRefresh = cron::byClassAndFunction('worxLandroidS', 'daemonRefresh');
+    if (is_object($cronRefresh)) {
+        $cronRefresh->stop();
+        $cronRefresh->remove();
+    }
+
     log::add('worxLandroidS','info','Suppression extension');
     $resource_path = realpath(dirname(__FILE__) . '/../resources');
     passthru('sudo /bin/bash ' . $resource_path . '/remove.sh ' . $resource_path . ' > ' . log::getPathToLog('worxLandroidS_dep') . ' 2>&1 &');

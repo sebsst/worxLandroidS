@@ -22,6 +22,7 @@ class worxLandroidS extends eqLogic
 
   public static $_client;
   public static $_client_pub;
+  public static $_permanent_client;
   // Dependancy installation log file
   private static $_depLogFile;
   // Dependancy installation progress value log file
@@ -41,10 +42,12 @@ class worxLandroidS extends eqLogic
     return $return;
   }
 
+  /*
   public static function cron30()
   {
     worxLandroidS::refresh_values("false");
   }
+  */
 
   public static function refresh_values($checkMowingTime = "false")
   {
@@ -69,33 +72,38 @@ class worxLandroidS extends eqLogic
           $initDate->add(new DateInterval("PT" . $duration . "M"));
           $endTime = $initDate->format("H:i");
           // refresh value each 30 minutes if mower is sleeping at home :-)
-          if ($checkMowingTime == "manual" or $checkMowingTime == "false" and ($startTime == '00:00' or $startTime > date('H:i') or date('H:i') > $endTime) or $startTime <= date('H:i') and date('H:i') <= $endTime and $checkMowingTime == "true") {
+          if ($eqpt->getCmd(null, 'statusCode')->execCmd() != 1 ) {
+            log::add('worxLandroidS', 'debug', 'La tondeuse n\'est pas sur la base : Refresh toutes les deux minutes');
+            config::save('realTime', '1', 'worxLandroidS');
+          } elseif ($checkMowingTime == "manual" or $checkMowingTime == "false" and ($startTime == '00:00' or $startTime > date('H:i') or date('H:i') > $endTime) or $startTime <= date('H:i') and date('H:i') <= $endTime and $checkMowingTime == "true") {
+            log::add('worxLandroidS', 'debug', 'Ce n\'est pas l\'heure de tondre : pas de Refresh');
             config::save('realTime', '0', 'worxLandroidS');
-            log::add('worxLandroidS', 'debug', 'mower sleeping ');
+          } else {
+            log::add('worxLandroidS', 'debug', 'La tondeuse est sur la base mais c\'est l\'heure de tondre : Refresh toutes les deux minutes');
+            config::save('realTime', '1', 'worxLandroidS');
+          }
+
+          if (config::byKey('realTime', 'worxLandroidS') == 1) {
             // populate message to be sent
             $eqptlist[$count] = array(
               $eqpt->getConfiguration('MowerType'),
               $eqpt->getLogicalId(),
               '{}'
-              );
-              $count++;
-              if (config::byKey('status', 'worxLandroidS') == '1') {
-                // modification à faire ======>
-                self::$_client->disconnect();
-              }
+            );
+            $count++;
+            if (!empty($eqptlist[0])) {
+              $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . substr(md5(rand()), 0, 8);
+              $client = new Mosquitto\Client($mosqId, true);
+              self::connect_and_publish($eqptlist, $client, '{}');
             }
           }
         }
       }
 
-      if (!empty($eqptlist[0])) {
 
-        $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . substr(md5(rand()), 0, 8);
-        $client = new Mosquitto\Client($mosqId, true);
-        self::connect_and_publish($eqptlist, $client, '{}');
-        }
+    }
 
-      }
+  }
 
       public static function deamon_info()
       {
@@ -103,7 +111,8 @@ class worxLandroidS extends eqLogic
         $return['log']   = '';
         $return['state'] = 'nok';
         $cron            = cron::byClassAndFunction('worxLandroidS', 'daemon');
-        if (is_object($cron) && $cron->running()) {
+        $cronRefresh            = cron::byClassAndFunction('worxLandroidS', 'daemonRefresh');
+        if (is_object($cron) && $cron->running() && is_object($cronRefresh) && $cronRefresh->running()) {
           $return['state'] = 'ok';
         }
         $dependancy_info = self::dependancy_info();
@@ -113,7 +122,67 @@ class worxLandroidS extends eqLogic
         return $return;
       }
 
-
+      public static function connect_permanent_client()
+      {
+        $RESOURCE_PATH = realpath(dirname(__FILE__) . '/../../resources/');
+        $CERTFILE      = $RESOURCE_PATH . '/cert.pem';
+        $PKEYFILE      = $RESOURCE_PATH . '/pkey.pem';
+        $ROOT_CA       = $RESOURCE_PATH . '/vs-ca.pem';
+        $count      = 0;
+        $eqptlist[] = array();
+        foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
+          if ($eqpt->getIsEnable() == true) {
+            if (config::byKey('permanent_client', 'worxLandroidS') != 1) { //on se connecte seulement si on est pas déjà connecté
+              // populate message to be sent
+              $eqptlist[$count] = array(
+                $eqpt->getConfiguration('MowerType'),
+                $eqpt->getLogicalId()
+              );
+              $count++;
+            }
+          }
+        }
+        if (!empty($eqptlist[0])) {
+          $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . substr(md5(rand()), 0, 8);
+          self::$_permanent_client = new Mosquitto\Client($mosqId, true);
+          //self::$_permanent_client = $client;
+          self::$_permanent_client->clearWill();
+          self::$_permanent_client->onConnect('worxLandroidS::connect');
+          self::$_permanent_client->onDisconnect('worxLandroidS::disconnect');
+          self::$_permanent_client->onSubscribe('worxLandroidS::subscribe');
+          self::$_permanent_client->onMessage('worxLandroidS::message');
+          self::$_permanent_client->onLog('worxLandroidS::logmq');
+          self::$_permanent_client->setTlsCertificates($ROOT_CA, $CERTFILE, $PKEYFILE, null);
+          self::$_permanent_client->setTlsOptions(Mosquitto\Client::SSL_VERIFY_NONE, "tlsv1.2", null);
+          try {
+            //foreach ($eqptlist as $key => $value) {
+              //$topic = $value[0] . '/' . $value[1] . '/commandOut';
+              //self::$_client->setWill($value[0] . "/" . $value[1] . "/commandIn", $msg, 0, 0); // !auto: Subscribe to root topic
+            //}
+            //self::$_permanent_client->connect('localhost', 1883, 5);
+            self::$_permanent_client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883, 300);
+            foreach ($eqptlist as $key => $value) {
+              $topic = $value[0] . '/' . $value[1] . '/commandOut';
+              self::$_permanent_client->subscribe($topic, 0); // !auto: Subscribe to root topic
+            }
+            $start_time = time();
+            config::save('permanent_client', '1', 'worxLandroidS');
+            log::add('worxLandroidS', 'info', 'Client permanent en écoute : '.$mosqId);
+            while (true) {
+              self::$_permanent_client->loop();
+            }
+            config::save('permanent_client', '0', 'worxLandroidS');
+          }
+          catch (Exception $e) {
+            // log::add('worxLandroidS', 'debug', $e->getMessage());
+          }
+          //if (config::byKey('status', 'worxLandroidS') == '1') {
+            //self::$_permanent_client->disconnect();
+          //}
+        }
+        config::save('permanent_client', 0, 'worxLandroidS');
+      }
+    
       public static function deamon_start($_debug = false)
       {
         self::deamon_stop();
@@ -125,7 +194,16 @@ class worxLandroidS extends eqLogic
         if (!is_object($cron)) {
           throw new Exception(__('Tache cron introuvable', __FILE__));
         }
+        config::save('permanent_client', '0', 'worxLandroidS');
+        config::save('status', '0', 'worxLandroidS');
+
         $cron->run();
+
+        $cronRefresh = cron::byClassAndFunction('worxLandroidS', 'daemonRefresh');
+        if (!is_object($cron)) {
+          throw new Exception(__('Tache cron introuvable', __FILE__));
+        }
+        $cronRefresh->run();
       }
 
       public static function deamon_stop()
@@ -135,6 +213,12 @@ class worxLandroidS extends eqLogic
           throw new Exception(__('Tache cron introuvable', __FILE__));
         }
         $cron->halt();
+
+        $cronRefresh = cron::byClassAndFunction('worxLandroidS', 'daemonRefresh');
+        if (!is_object($cron)) {
+          throw new Exception(__('Tache cron introuvable', __FILE__));
+        }
+        $cronRefresh->halt();
       }
 
       /**
@@ -361,8 +445,20 @@ class worxLandroidS extends eqLogic
           }
         }
 
-        worxLandroidS::refresh_values("true");
+        if (config::byKey('permanent_client', 'worxLandroidS') == 0) {
+          self::connect_permanent_client();
+          //log::add('worxLandroidS', 'debug', 'sortie de connect_permanent_client, avec config = : '.config::byKey('permanent_client', 'worxLandroidS'));
+        } else {
+          log::add('worxLandroidS', 'debug', 'connect_permanent_client est déjà en cours');
+        }
+      }
 
+      public static function daemonRefresh()
+      {
+        //log::add('worxLandroidS', 'debug', 'Début du Refresh');
+        self::refresh_values();
+        log::add('worxLandroidS', 'info', 'Fin du Refresh');
+       
       }
 
       public function postSave()
@@ -373,7 +469,7 @@ class worxLandroidS extends eqLogic
         $this->newAction('newBlades', $commandIn, "", 'other', $display);
         $this->newAction('userMessage', $commandIn, "#message#", 'message');
 
-        self::refresh_values("manual");
+        //self::refresh_values("manual");
       }
 
       public static function create_equipement($product, $MowerType, $mowerDescription)
@@ -464,13 +560,17 @@ class worxLandroidS extends eqLogic
               self::$_client->setWill($value[0] . "/" . $value[1] . "/commandIn", $msg, 0, 0); // !auto: Subscribe to root topic
             }
 
-            self::$_client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883, 5);
+            self::$_client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883, 300);
 
+            //self::$_client->connect('localhost', 1883, 5);
+            config::save('status', '1', 'worxLandroidS');
+            /*
             foreach ($eqptlist as $key => $value) {
               $topic = $value[0] . '/' . $value[1] . '/commandOut';
               //'/'.$eqpt->getLogicalId().'/commandOut';
               self::$_client->subscribe($topic, 0); // !auto: Subscribe to root topic
             }
+            */
 
             log::add('worxLandroidS', 'debug', 'Subscribe to mqtt ' . config::byKey('mqtt_endpoint', 'worxLandroidS') . ' msg ' . $msg);
             //self::$_client->loop();
@@ -481,8 +581,8 @@ class worxLandroidS extends eqLogic
             //self::$_client->loopForever();
             $start_time = time();
             while (true) {
-              self::$_client->loop(1);
-              if ((time() - $start_time) > 45) {
+              self::$_client->loop(1000);
+              if ((time() - $start_time) > 1) {
                 log::add('worxLandroidS', 'debug', 'Timeout reached');
                 foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
                   $eqpt->newInfo('statusDescription', __("Communication timeout", __FILE__), 'string', 1, '');
@@ -505,7 +605,7 @@ class worxLandroidS extends eqLogic
         public static function connect($r, $message)
         {
           log::add('worxLandroidS', 'debug', 'Connexion à Mosquitto avec code ' . $r . ' ' . $message);
-          config::save('status', '1', 'worxLandroidS');
+          //config::save('status', '1', 'worxLandroidS');
         }
 
         public static function newconnect($r, $message)
@@ -613,9 +713,11 @@ class worxLandroidS extends eqLogic
         */
 
 
+        /*
         if (config::byKey('status', 'worxLandroidS') == '1' && $split_topic[2] != 'dummy') { //&& config::byKey('mowingTime','worxLandroidS') == '0'){
           self::$_client->disconnect();
         }
+        */
 
         $elogic->setConfiguration('retryNr', 0);
         $elogic->newInfo('errorCode', $json2_data->dat->le, 'numeric', 1, '' );
