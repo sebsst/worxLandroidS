@@ -585,7 +585,7 @@ class worxLandroidS extends eqLogic
               if ((time() - $start_time) > 1) {
                 log::add('worxLandroidS', 'debug', 'Timeout reached');
                 foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
-                  $eqpt->newInfo('statusDescription', __("Communication timeout", __FILE__), 'string', 1, '');
+                  //$eqpt->newInfo('statusDescription', __("Communication timeout", __FILE__), 'string', 1, '');
                   self::$_client->disconnect();
                   config::save('status', '0', 'worxLandroidS');
                 }
