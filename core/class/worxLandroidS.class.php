@@ -453,9 +453,13 @@ class worxLandroidS extends eqLogic
 
       public static function daemonRefresh()
       {
-        //log::add('worxLandroidS', 'debug', 'Début du Refresh');
-        self::refresh_values();
-        log::add('worxLandroidS', 'info', 'Fin du Refresh');
+        if (config::byKey('automaticRefresh', 'worxLandroidS') == true) {
+          //log::add('worxLandroidS', 'debug', 'Début du Refresh');
+          self::refresh_values();
+          log::add('worxLandroidS', 'info', 'Fin du Refresh');
+        } else {
+          log::add('worxLandroidS', 'info', 'Le rafraîchissement forcé est désactivé : pas de Refresh');
+        }
        
       }
 

@@ -21,6 +21,7 @@ require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 function worxLandroidS_install() {
     $cron = cron::byClassAndFunction('worxLandroidS', 'daemon');
     config::save('initCloud', 1 ,'worxLandroidS');
+    config::save('automaticRefresh', 0 ,'worxLandroidS');
     if (!is_object($cron)) {
         $cron = new cron();
         $cron->setClass('worxLandroidS');
@@ -58,6 +59,7 @@ function worxLandroidS_update() {
     }
     $cron = cron::byClassAndFunction('worxLandroidS', 'daemon');
     config::save('initCloud', 1 ,'worxLandroidS');
+    config::save('automaticRefresh', 0 ,'worxLandroidS');
     if (!is_object($cron)) {
         $cron = new cron();
         $cron->setClass('worxLandroidS');

@@ -50,6 +50,12 @@ if (!isConnect()) {
 				<input id="automaticWidget" type="checkbox" class="configKey autoCheck" data-l1key="automaticWidget"/>
 			</div>
 		</div>
+		<div class="form-group">
+			<label class="col-sm-4 control-label">{{Activer le rafraîchissement forcé : }}</label>
+			<div class="col-sm-2">
+				<input id="automaticRefresh" type="checkbox" class="configKey autoCheck" data-l1key="automaticRefresh"/>
+			</div>
+		</div>
 	</fieldset>
 </form>
 <legend>
