@@ -1181,7 +1181,6 @@ class worxLandroidS extends eqLogic
 
           // send cutedge
           if ($cmd->getName() == 'cutEdge') {
-          //  $_message = '{"cmd":4}';
             $_message = '{"sc":{"ots":{"bc":1,"wtm":0}}}';
           }
 
@@ -1215,29 +1214,6 @@ class worxLandroidS extends eqLogic
           );
           self::connect_and_publish($eqptlist, $_message);
           // send cutedger
-          if ($cmd->getName() == 'cutEdge') {
-            sleep(7);
-            $_message = '{"cmd":2}';
-            // if ( config::byKey('mowingTime', 'worxLandroidS') == '0' ){
-            $eqptlist[]  = array();
-            $eqptlist[0] = array(
-              $eqlogic->getConfiguration('MowerType'),
-              $eqlogic->getLogicalId(),
-              $_message
-            );
-            self::connect_and_publish($eqptlist, $_message);
-            sleep(5);
-            $_message = '{"cmd":3}';
-            // if ( config::byKey('mowingTime', 'worxLandroidS') == '0' ){
-            $eqptlist[]  = array();
-            $eqptlist[0] = array(
-              $eqlogic->getConfiguration('MowerType'),
-              $eqlogic->getLogicalId(),
-              $_message
-            );
-            self::connect_and_publish($eqptlist, $_message);
-
-          }
 
         }
 
