@@ -81,7 +81,6 @@ class worxLandroidS extends eqLogic
     if (!empty($eqptlist[0])) {
       $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . substr(md5(rand()), 0, 8);
       self::$_permanent_client = new Mosquitto\Client($mosqId, true);
-      //self::$_permanent_client = $client;
       self::$_permanent_client->clearWill();
       self::$_permanent_client->onConnect('worxLandroidS::connect');
       self::$_permanent_client->onDisconnect('worxLandroidS::disconnect');
@@ -95,7 +94,6 @@ class worxLandroidS extends eqLogic
         //$topic = $value[0] . '/' . $value[1] . '/commandOut';
         //self::$_client->setWill($value[0] . "/" . $value[1] . "/commandIn", $msg, 0, 0); // !auto: Subscribe to root topic
         //}
-        //self::$_permanent_client->connect('localhost', 1883, 5);
         self::$_permanent_client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883, 300);
         foreach ($eqptlist as $key => $value) {
           $topic = $value[0] . '/' . $value[1] . '/commandOut';
@@ -111,9 +109,6 @@ class worxLandroidS extends eqLogic
       } catch (Exception $e) {
         // log::add('worxLandroidS', 'debug', $e->getMessage());
       }
-      //if (config::byKey('status', 'worxLandroidS') == '1') {
-      //self::$_permanent_client->disconnect();
-      //}
     }
     config::save('permanent_client', 0, 'worxLandroidS');
   }
@@ -482,22 +477,11 @@ class worxLandroidS extends eqLogic
     $client->disconnect();
     log::add('worxLandroidS', 'debug', 'Message publié');
   }
-  public static function onConnectRefresh($r, $message)
-  {
-    log::add('worxLandroidS', 'debug', 'Connexion à Mosquitto avec code ' . $r . ' ' . $message);
-    //config::save('status', '1', 'worxLandroidS');
-  }
 
   public static function connect($r, $message)
   {
     log::add('worxLandroidS', 'debug', 'Connexion à Mosquitto avec code ' . $r . ' ' . $message);
     //config::save('status', '1', 'worxLandroidS');
-  }
-
-  public static function newconnect($r, $message)
-  {
-    log::add('worxLandroidS', 'debug', 'New Connexion à Mosquitto avec code ' . $r . ' ' . $message);
-    config::save('status', '1', 'worxLandroidS');
   }
 
   public static function disconnect($r)
@@ -598,13 +582,6 @@ class worxLandroidS extends eqLogic
 
         */
 
-
-    /*
-        if (config::byKey('status', 'worxLandroidS') == '1' && $split_topic[2] != 'dummy') { //&& config::byKey('mowingTime','worxLandroidS') == '0'){
-          self::$_client->disconnect();
-        }
-        */
-
     $elogic->setConfiguration('retryNr', 0);
     $elogic->newInfo('errorCode', $json2_data->dat->le, 'numeric', 1, '');
     $elogic->newInfo('errorDescription', self::getErrorDescription($json2_data->dat->le), 'string', 1, '');
@@ -700,26 +677,25 @@ class worxLandroidS extends eqLogic
   public static function getErrorDescription($errorcode)
   {
     switch ($errorcode) {
-        /*
-          case '0': return 'No error';         break;
-          case '1': return  'Trapped';         break;
-          case '2': return  'Lifted';         break;
-          case '3': return  'Wire missing';         break;
-          case '4': return  'Outside wire';        break;
-          case '5': return  'Rain delay';  break;
-          case '6': return  'Close door to mow';        break;
-          case '7': return  'Close door to go home';    break;
-          case '8': return  'Blade motor blocked';       break;
-          case '9': return  'Wheel motor blocked';       break;
-          case '10': return  'Trapped timeout';         break;
-          case '11': return  'Upside down';         break;
-          case '12': return  'Battery low';         break;
-          case '13': return  'Reverse wire';         break;
-          case '14': return  'Charge error';         break;
-          case '15': return  'Timeout finding home';        break;
-          default: return 'Unknown';
-
-          */
+      /*
+      case '0': return 'No error';         break;
+      case '1': return  'Trapped';         break;
+      case '2': return  'Lifted';         break;
+      case '3': return  'Wire missing';         break;
+      case '4': return  'Outside wire';        break;
+      case '5': return  'Rain delay';  break;
+      case '6': return  'Close door to mow';        break;
+      case '7': return  'Close door to go home';    break;
+      case '8': return  'Blade motor blocked';       break;
+      case '9': return  'Wheel motor blocked';       break;
+      case '10': return  'Trapped timeout';         break;
+      case '11': return  'Upside down';         break;
+      case '12': return  'Battery low';         break;
+      case '13': return  'Reverse wire';         break;
+      case '14': return  'Charge error';         break;
+      case '15': return  'Timeout finding home';        break;
+      default: return 'Unknown';
+      */
       case '0':
         return __('Aucune erreur', __FILE__);
         break;
@@ -956,7 +932,6 @@ class worxLandroidS extends eqLogic
     log::add('worxLandroidS', 'debug', 'message à publier' . $_message);
     worxLandroidS::publishMosquitto($_id, config::byKey('MowerType', 'worxLandroidS') . "/" . $_id->getConfiguration('mac_address', 'worxLandroidS') . "/commandIn", $_message, 0);
   }
-
 
   public static function setDaySchedule($_id, $daynumber, $daySchedule)
   {
