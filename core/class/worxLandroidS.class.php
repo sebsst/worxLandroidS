@@ -92,9 +92,7 @@ class worxLandroidS extends eqLogic
             );
             $count++;
             if (!empty($eqptlist[0])) {
-              $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . substr(md5(rand()), 0, 8);
-              $client = new Mosquitto\Client($mosqId, true);
-              self::connect_and_publish($eqptlist, $client, '{}');
+              self::connect_and_publish($eqptlist, '{}');
             }
           }
         }
@@ -455,9 +453,13 @@ class worxLandroidS extends eqLogic
 
       public static function daemonRefresh()
       {
-        //log::add('worxLandroidS', 'debug', 'Début du Refresh');
-        self::refresh_values();
-        log::add('worxLandroidS', 'info', 'Fin du Refresh');
+        if (config::byKey('automaticRefresh', 'worxLandroidS') == true) {
+          //log::add('worxLandroidS', 'debug', 'Début du Refresh');
+          self::refresh_values();
+          log::add('worxLandroidS', 'info', 'Fin du Refresh');
+        } else {
+          log::add('worxLandroidS', 'info', 'Le rafraîchissement forcé est désactivé : pas de Refresh');
+        }
        
       }
 
@@ -536,7 +538,7 @@ class worxLandroidS extends eqLogic
           $elogic->save();
         }
 
-        public static function connect_and_publish($eqptlist, $client, $msg)
+        public static function old_connect_and_publish($eqptlist, $client, $msg)
         {
 
           $RESOURCE_PATH = realpath(dirname(__FILE__) . '/../../resources/');
@@ -600,6 +602,47 @@ class worxLandroidS extends eqLogic
             self::$_client->disconnect();
           }
 
+        }
+
+
+        public function connect_and_publish($eqptlist, $msg) {
+          $RESOURCE_PATH = realpath(dirname(__FILE__) . '/../../resources/');
+          $CERTFILE      = $RESOURCE_PATH . '/cert.pem';
+          $PKEYFILE      = $RESOURCE_PATH . '/pkey.pem';
+          $ROOT_CA       = $RESOURCE_PATH . '/vs-ca.pem';
+
+          $mosqId = config::byKey('mqtt_client_id', 'worxLandroidS') . substr(md5(rand()), 0, 8);
+          $client = new Mosquitto\Client($mosqId, true);
+
+          $client->clearWill();
+          $client->onDisconnect('worxLandroidS::disconnect');
+          $client->onSubscribe('worxLandroidS::subscribe');
+          $client->onMessage('worxLandroidS::message');
+          $client->onLog('worxLandroidS::logmq');
+          $client->setTlsCertificates($ROOT_CA, $CERTFILE, $PKEYFILE, null);
+          $client->setTlsOptions(Mosquitto\Client::SSL_VERIFY_NONE, "tlsv1.2", null);
+          $client->onConnect(
+            function () use ($client, $eqptlist, $msg) {              
+                config::save('status', '1', 'worxLandroidS');
+                foreach ($eqptlist as $key => $value) {
+                  $topic = $eqptlist[0][0] . '/' . $eqptlist[0][1] . "/commandIn";
+                  log::add('worxLandroidS', 'debug', 'Publication du message : ' . $topic . ', msg : ' . $msg);
+                  $client->publish($topic, $eqptlist[0][2], 0, 0);
+                }
+                $client->exitLoop();
+            
+          });
+
+          $client->connect(config::byKey('mqtt_endpoint', 'worxLandroidS'), 8883, 300);       
+          $client->loopForever();
+          config::save('status', '0', 'worxLandroidS');
+          $client->disconnect();
+          log::add('worxLandroidS', 'debug', 'Message publié');
+        }
+        public static function onConnectRefresh($r, $message)
+        {
+          log::add('worxLandroidS', 'debug', 'Connexion à Mosquitto avec code ' . $r . ' ' . $message);
+          //config::save('status', '1', 'worxLandroidS');
         }
 
         public static function connect($r, $message)
@@ -1142,7 +1185,6 @@ class worxLandroidS extends eqLogic
 
           // send cutedge
           if ($cmd->getName() == 'cutEdge') {
-          //  $_message = '{"cmd":4}';
             $_message = '{"sc":{"ots":{"bc":1,"wtm":0}}}';
           }
 
@@ -1167,46 +1209,15 @@ class worxLandroidS extends eqLogic
             log::add('worxLandroidS', 'debug', 'Envoi du message rain delay: ' . $_message);
           }
 
-          $mosqId      = config::byKey('mqtt_client_id', 'worxLandroidS') . substr(md5(rand()), 0, 8);
           // if ( config::byKey('mowingTime', 'worxLandroidS') == '0' ){
-          $client      = new Mosquitto\Client($mosqId, true);
           $eqptlist[]  = array();
           $eqptlist[0] = array(
             $eqlogic->getConfiguration('MowerType'),
             $eqlogic->getLogicalId(),
             $_message
           );
-          self::connect_and_publish($eqptlist, $client, $_message);
-          //self::connect_and_publish($eqlogic, $client, $_message);
-
+          self::connect_and_publish($eqptlist, $_message);
           // send cutedger
-          if ($cmd->getName() == 'cutEdge') {
-            sleep(7);
-            $_message = '{"cmd":2}';
-            $mosqId      = config::byKey('mqtt_client_id', 'worxLandroidS') . substr(md5(rand()), 0, 8);
-            // if ( config::byKey('mowingTime', 'worxLandroidS') == '0' ){
-            $client2      = new Mosquitto\Client($mosqId, true);
-            $eqptlist[]  = array();
-            $eqptlist[0] = array(
-              $eqlogic->getConfiguration('MowerType'),
-              $eqlogic->getLogicalId(),
-              $_message
-            );
-            self::connect_and_publish($eqptlist, $client, $_message);
-            sleep(5);
-            $_message = '{"cmd":3}';
-            $mosqId      = config::byKey('mqtt_client_id', 'worxLandroidS') . substr(md5(rand()), 0, 8);
-            // if ( config::byKey('mowingTime', 'worxLandroidS') == '0' ){
-            $client3      = new Mosquitto\Client($mosqId, true);
-            $eqptlist[]  = array();
-            $eqptlist[0] = array(
-              $eqlogic->getConfiguration('MowerType'),
-              $eqlogic->getLogicalId(),
-              $_message
-            );
-            self::connect_and_publish($eqptlist, $client, $_message);
-
-          }
 
         }
 
