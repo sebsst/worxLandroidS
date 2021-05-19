@@ -42,75 +42,13 @@ class worxLandroidS extends eqLogic
     return $return;
   }
 
-  /*
-  public static function cron30()
-  {
-    worxLandroidS::refresh_values("false");
-  }
-  */
-
-  public static function refresh_values($checkMowingTime = "false")
-  {
-    $count      = 0;
-    $eqptlist[] = array();
-    foreach (eqLogic::byType('worxLandroidS', false) as $eqpt) {
-      if ($eqpt->getIsEnable() == true) {
-        if (config::byKey('status', 'worxLandroidS') == '0') { //on se connecte seulement si on est pas déjà connecté
-          $i         = date('w');
-          if( $start='' ) {
-            $start = '08:00';
-          }
-          $start     = $eqpt->getCmd(null, 'Planning_startTime_' . $i);
-          $startTime = is_object($start) ? $start->execCmd() : '00:00';
-          $dur       = $eqpt->getCmd(null, 'Planning_duration_' . $i);
-          $duration  = is_object($dur) ? $dur->execCmd() : 0;
-          if($duration== ''){ $checkMowingTime = 'manual'; $duration=1;}; //correction pour l'initialisation
-          if($startTime== ''){ $startTime = '00:00';}; //correction pour l'initialisation
-          $initDate = DateTime::createFromFormat('H:i', $startTime);
-          //log::add('worxLandroidS', 'debug', 'mower sleeping '.$duration);
-          //if(empty($duration){$duration = 0};
-          $initDate->add(new DateInterval("PT" . $duration . "M"));
-          $endTime = $initDate->format("H:i");
-          // refresh value each 30 minutes if mower is sleeping at home :-)
-          if ($eqpt->getCmd(null, 'statusCode')->execCmd() != 1 ) {
-            log::add('worxLandroidS', 'debug', 'La tondeuse n\'est pas sur la base : Refresh toutes les deux minutes');
-            config::save('realTime', '1', 'worxLandroidS');
-          } elseif ($checkMowingTime == "manual" or $checkMowingTime == "false" and ($startTime == '00:00' or $startTime > date('H:i') or date('H:i') > $endTime) or $startTime <= date('H:i') and date('H:i') <= $endTime and $checkMowingTime == "true") {
-            log::add('worxLandroidS', 'debug', 'Ce n\'est pas l\'heure de tondre : pas de Refresh');
-            config::save('realTime', '0', 'worxLandroidS');
-          } else {
-            log::add('worxLandroidS', 'debug', 'La tondeuse est sur la base mais c\'est l\'heure de tondre : Refresh toutes les deux minutes');
-            config::save('realTime', '1', 'worxLandroidS');
-          }
-
-          if (config::byKey('realTime', 'worxLandroidS') == 1) {
-            // populate message to be sent
-            $eqptlist[$count] = array(
-              $eqpt->getConfiguration('MowerType'),
-              $eqpt->getLogicalId(),
-              '{}'
-            );
-            $count++;
-            if (!empty($eqptlist[0])) {
-              self::connect_and_publish($eqptlist, '{}');
-            }
-          }
-        }
-      }
-
-
-    }
-
-  }
-
       public static function deamon_info()
       {
         $return          = array();
         $return['log']   = '';
         $return['state'] = 'nok';
         $cron            = cron::byClassAndFunction('worxLandroidS', 'daemon');
-        $cronRefresh            = cron::byClassAndFunction('worxLandroidS', 'daemonRefresh');
-        if (is_object($cron) && $cron->running() && is_object($cronRefresh) && $cronRefresh->running()) {
+        if (is_object($cron) && $cron->running()) {
           $return['state'] = 'ok';
         }
         $dependancy_info = self::dependancy_info();
@@ -196,12 +134,6 @@ class worxLandroidS extends eqLogic
         config::save('status', '0', 'worxLandroidS');
 
         $cron->run();
-
-        $cronRefresh = cron::byClassAndFunction('worxLandroidS', 'daemonRefresh');
-        if (!is_object($cron)) {
-          throw new Exception(__('Tache cron introuvable', __FILE__));
-        }
-        $cronRefresh->run();
       }
 
       public static function deamon_stop()
@@ -211,12 +143,6 @@ class worxLandroidS extends eqLogic
           throw new Exception(__('Tache cron introuvable', __FILE__));
         }
         $cron->halt();
-
-        $cronRefresh = cron::byClassAndFunction('worxLandroidS', 'daemonRefresh');
-        if (!is_object($cron)) {
-          throw new Exception(__('Tache cron introuvable', __FILE__));
-        }
-        $cronRefresh->halt();
       }
 
       /**
@@ -451,18 +377,6 @@ class worxLandroidS extends eqLogic
         }
       }
 
-      public static function daemonRefresh()
-      {
-        if (config::byKey('automaticRefresh', 'worxLandroidS') == true) {
-          //log::add('worxLandroidS', 'debug', 'Début du Refresh');
-          self::refresh_values();
-          log::add('worxLandroidS', 'info', 'Fin du Refresh');
-        } else {
-          log::add('worxLandroidS', 'info', 'Le rafraîchissement forcé est désactivé : pas de Refresh');
-        }
-       
-      }
-
       public function postSave()
       {
         $commandIn = $this->getConfiguration('MowerType') . '/' . $this->getLogicalId() . '/commandIn';
@@ -470,8 +384,6 @@ class worxLandroidS extends eqLogic
         $display = array( 'isvisible' => 1, 'name' => __('Lames remplacees', __FILE__));
         $this->newAction('newBlades', $commandIn, "", 'other', $display);
         $this->newAction('userMessage', $commandIn, "#message#", 'message');
-
-        //self::refresh_values("manual");
       }
 
       public static function create_equipement($product, $MowerType, $mowerDescription)
