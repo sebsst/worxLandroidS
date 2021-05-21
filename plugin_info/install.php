@@ -89,7 +89,7 @@ function worxLandroidS_update() {
         $cronRefresh->setFunction('daemonRefresh');
         $cronRefresh->setEnable(1);
         $cronRefresh->setDeamon(1);
-        $cronRefresh->setDeamonSleepTime(20);
+        $cronRefresh->setDeamonSleepTime(600);
         $cronRefresh->setSchedule('* * * * *');
         $cronRefresh->setTimeout('1440');
         $cronRefresh->save();
