@@ -65,6 +65,7 @@ function worxLandroidS_update() {
         $cronRefresh->remove();
         unset($cronRefresh);
     }
+
 }
 
 function worxLandroidS_remove() {
