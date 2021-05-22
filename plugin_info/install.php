@@ -21,7 +21,6 @@ require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 function worxLandroidS_install() {
     $cron = cron::byClassAndFunction('worxLandroidS', 'daemon');
     config::save('initCloud', 1 ,'worxLandroidS');
-    config::save('automaticRefresh', 0 ,'worxLandroidS');
     if (!is_object($cron)) {
         $cron = new cron();
         $cron->setClass('worxLandroidS');
@@ -33,21 +32,6 @@ function worxLandroidS_install() {
         $cron->setTimeout('1440');
         $cron->save();
     }
-
-    $cronRefresh = cron::byClassAndFunction('worxLandroidS', 'daemonRefresh');
-    if (!is_object($cronRefresh)) {
-        $cronRefresh = new cron();
-        $cronRefresh->setClass('worxLandroidS');
-        $cronRefresh->setFunction('daemonRefresh');
-        $cronRefresh->setEnable(1);
-        $cronRefresh->setDeamon(1);
-        $cronRefresh->setDeamonSleepTime(120);
-        $cronRefresh->setSchedule('* * * * *');
-        $cronRefresh->setTimeout('1440');
-        $cronRefresh->save();
-    }
-
-
 }
 
 function worxLandroidS_update() {
@@ -59,7 +43,6 @@ function worxLandroidS_update() {
     }
     $cron = cron::byClassAndFunction('worxLandroidS', 'daemon');
     config::save('initCloud', 1 ,'worxLandroidS');
-    config::save('automaticRefresh', 0 ,'worxLandroidS');
     if (!is_object($cron)) {
         $cron = new cron();
         $cron->setClass('worxLandroidS');
@@ -82,23 +65,6 @@ function worxLandroidS_update() {
         $cronRefresh->remove();
         unset($cronRefresh);
     }
-    $cronRefresh = cron::byClassAndFunction('worxLandroidS', 'daemonRefresh');
-    if (!is_object($cronRefresh)) {
-        $cronRefresh = new cron();
-        $cronRefresh->setClass('worxLandroidS');
-        $cronRefresh->setFunction('daemonRefresh');
-        $cronRefresh->setEnable(1);
-        $cronRefresh->setDeamon(1);
-        $cronRefresh->setDeamonSleepTime(600);
-        $cronRefresh->setSchedule('* * * * *');
-        $cronRefresh->setTimeout('1440');
-        $cronRefresh->save();
-    } else {
-        $cronRefresh->setDeamonSleepTime(120);
-        $cronRefresh->halt;
-        $cronRefresh->run;
-    }
-
 
 }
 
