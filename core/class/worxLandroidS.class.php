@@ -985,8 +985,8 @@ class worxLandroidS extends eqLogic
     }
 
     // send start command
-    if ($cmd->getName() == 'user_message') {
-      $_message = trim($_message, '|');
+    if ($cmd->getName() == 'userMessage') {
+     $_message = str_replace('|','',$_message);
     }
 
     // send start command
