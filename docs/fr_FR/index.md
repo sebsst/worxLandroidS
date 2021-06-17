@@ -85,8 +85,8 @@ Pour les tondeuses avec double planif (uniquement les derniers modèles), on peu
 ## FAQ
 
 >A quelle fréquence, les données sont-elles réactualisées?
-
-Toutes les 2 minutes si la tondeuse est en activité et toutes les 30 minutes lorsqu'elle est en veille.
+A chaque mise à jour de la tondeuse ou à la demande avec la commande refreshValue (ne pas le faire trop fréquemment pour éviter un blocage temporaire par Worx). 
+    
 
 >Le plugin m'indique que la tondeuse est coincée mais ce n'est pas le cas, pourquoi?
 
