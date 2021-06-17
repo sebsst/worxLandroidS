@@ -4,6 +4,7 @@ En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que l
 
 # 16/06/2021
 - correction userMessage (utilisable depuis scénario avec || autour du message json)
+- mise à jour de la doc pour la fonction userMessage
 
 # 03/05/2021
 - attention les modèles 2020/2021 avec double planification quotidienne ne sont pas totalement compatible avec le plugin. Une mise à jour est en cours de dev.
