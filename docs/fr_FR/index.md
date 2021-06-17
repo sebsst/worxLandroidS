@@ -67,6 +67,16 @@ Pour le planning, les commandes possibles sont:
 Format attendu: numéro jour;heure départ;durée en minutes;bordure Exemples :
 1;10:00;120;1 => lundi, démarrage à 10:00 pendant 120 minutes, coupe la bordure
 0;08:00;300;0 => dimanche, démarrage à 08:00 pendant 300 minutes, ne coupe pas la bordure
+- userMessage permet d'envoyer n'importe quelle commande. il faut entourer la commande de "|" pour que ça fonctionne et pour qu'on puisse le stocker dans le scénario.<br>
+**Gestion de zones**  <br>
+si on veut des 3 zones à 0m, 10m et 20m => répartition de la tonte: 20% sur 1ere zone 40% sur deuxième zone et 40% sur la dernière.<br>
+`|{"mz":[0,10,20,0],"mzv":[0,0,1,1,1,1,2,2,2,2]}|`<br>
+Les 4 premiers nombres représentent les distances des zones et les 10 suivants correspondent au numéro de zone et à 10% de tonte sur cette zone. (de 0 à 3)<BR>
+**Gestion des horaires**<br>
+Dans l'ordre : heure de départ, durée en minutes, bordure (0 ou 1) 7 fois pour chaque jour du dimanche au samedi<br>
+    `|{"sc":{"d":[["00:00",0,0],["10:00",420,0],["10:00",420,1],["11:00",360,1],["10:00",420,0],["10:00",420,0],["10:00",420,0]]}}|`<br>
+Pour les tondeuses avec double planif (uniquement les derniers modèles), on peut ajouter "dd" en plus du "d"<br>
+    `|{"sc":{"d":[["00:00",0,0],["10:00",420,0],["10:00",420,1],["11:00",360,1],["10:00",420,0],["10:00",420,0],["10:00",420,0]],"dd":[["00:00",0,0],["22:00",60,0],["22:00",60,0],["22:00",60,1],["22:00",60,0],["22:00",60,0],["22:00",60,0]]}}|`<br>
 
 ## Widget
 - un widget (workAndroid) est disponible sur le market pour un affichage avec des images. Pour cela Il est possible d'utiliser l'info virtualInfo: cocher afficher dans la liste des commandes, sélectionner le widget dans la configuration avancée.
