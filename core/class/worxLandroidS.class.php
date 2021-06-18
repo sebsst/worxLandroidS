@@ -635,7 +635,6 @@ class worxLandroidS extends eqLogic
     $elogic->newInfo('currentZone', $json2_data->cfg->mzv[$json2_data->dat->lz] + 1, 'numeric', 0, '');
     //  date début + durée + bordure
     $completePlanning = '';
-    $firstSchedule = json_encode($json2_data->cfg->sc->d);
     for ($i = 0; $i < 7; $i++) {
       $completePlanning .= '';
       $elogic->newInfo('Planning_startTime_' . $i, $json2_data->cfg->sc->d[$i][0], 'string', 1, '');
@@ -643,17 +642,20 @@ class worxLandroidS extends eqLogic
       $elogic->newInfo('Planning_cutEdge_' . $i, $json2_data->cfg->sc->d[$i][2], 'string', 1, '');
       $completePlanning .= $json2_data->cfg->sc->d[$i][0] . ',' . $json2_data->cfg->sc->d[$i][1] . ',' . $json2_data->cfg->sc->d[$i][2] . '|';
       $elogic->newInfo('completePlanning', $completePlanning, 'string', 1, '');
+      if(!is_null($json2_data->cfg->sc->dd)){
+        $elogic->newInfo('Planning_startTime2_' . $i, $json2_data->cfg->sc->dd[$i][0], 'string', 1, '');
+        $elogic->newInfo('Planning_duration2_' . $i, $json2_data->cfg->sc->dd[$i][1], 'string', 1, '');
+        $elogic->newInfo('Planning_cutEdge2_' . $i, $json2_data->cfg->sc->dd[$i][2], 'string', 1, '');
+      }
+      
     }
-     $fullSchedule["d"] = json_encode($json2_data->cfg->sc->d);    
+    /*
     if(!is_null($json2_data->cfg->sc->dd)){
-           $fullSchedule["dd"] = = json_encode($json2_data->cfg->sc->dd);
-     // double schedul 
-    }
-     
- 
- //   $elogic->newInfo('fullSchedule', $fullSchedule, 'string', 1, '');
-    
-
+     // double schedule 
+      $fullSchedule["sc"] = array( "d"=>$json2_data->cfg->sc->d, "dd"=>json_encode($json2_data->cfg->sc->dd);
+    }else  $fullSchedule["sc"] = array( "d"=>$json2_data->cfg->sc->d);
+    $elogic->setConfiguration('fullSchedule', json_decode($fullSchedule));*/
+                                  
     // mise a jour des infos virtuelles séparées par des virgules
     $cmd = worxLandroidSCmd::byEqLogicIdCmdName($elogic->getId(), 'virtualInfo');
     $name = $cmd->getConfiguration('request', '');
@@ -971,12 +973,8 @@ class worxLandroidS extends eqLogic
       if ($cmd->getName() == 'off_today') {
         $_message = 'off_' . date('w');
       }
-
-      $sched    = array(
-        '00:00',
-        0,
-        0
-      );
+      $sched    = array( '00:00',  0,  0  );
+      $fullSchedule = $eqlogic
       $_message = self::setDaySchedule($eqlogicid, substr($_message, 4, 1), $sched); //  $this->saveConfiguration('savedValue',
     }
     if (substr_compare($cmd->getName(), 'on', 0, 2) == 0) {
