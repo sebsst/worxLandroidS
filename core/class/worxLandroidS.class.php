@@ -635,6 +635,7 @@ class worxLandroidS extends eqLogic
     $elogic->newInfo('currentZone', $json2_data->cfg->mzv[$json2_data->dat->lz] + 1, 'numeric', 0, '');
     //  date début + durée + bordure
     $completePlanning = '';
+    $firstSchedule = json_encode($json2_data->cfg->sc->d);
     for ($i = 0; $i < 7; $i++) {
       $completePlanning .= '';
       $elogic->newInfo('Planning_startTime_' . $i, $json2_data->cfg->sc->d[$i][0], 'string', 1, '');
@@ -643,6 +644,15 @@ class worxLandroidS extends eqLogic
       $completePlanning .= $json2_data->cfg->sc->d[$i][0] . ',' . $json2_data->cfg->sc->d[$i][1] . ',' . $json2_data->cfg->sc->d[$i][2] . '|';
       $elogic->newInfo('completePlanning', $completePlanning, 'string', 1, '');
     }
+     $fullSchedule["d"] = json_encode($json2_data->cfg->sc->d);    
+    if(!is_null($json2_data->cfg->sc->dd)){
+           $fullSchedule["dd"] = = json_encode($json2_data->cfg->sc->dd);
+     // double schedul 
+    }
+     
+ 
+ //   $elogic->newInfo('fullSchedule', $fullSchedule, 'string', 1, '');
+    
 
     // mise a jour des infos virtuelles séparées par des virgules
     $cmd = worxLandroidSCmd::byEqLogicIdCmdName($elogic->getId(), 'virtualInfo');
