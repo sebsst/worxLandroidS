@@ -640,12 +640,13 @@ class worxLandroidS extends eqLogic
       $elogic->newInfo('Planning_startTime_' . $i, $json2_data->cfg->sc->d[$i][0], 'string', 1, '');
       $elogic->newInfo('Planning_duration_' . $i, $json2_data->cfg->sc->d[$i][1], 'string', 1, '');
       $elogic->newInfo('Planning_cutEdge_' . $i, $json2_data->cfg->sc->d[$i][2], 'string', 1, '');
-      $completePlanning .= $json2_data->cfg->sc->d[$i][0] . ',' . $json2_data->cfg->sc->d[$i][1] . ',' . $json2_data->cfg->sc->d[$i][2] . '|';
-      $elogic->newInfo('completePlanning', $completePlanning, 'string', 1, '');
+      $completePlanning .= $json2_data->cfg->sc->d[$i][0] . ',' . $json2_data->cfg->sc->d[$i][1] . ',' . $json2_data->cfg->sc->d[$i][2];
+
       if(!is_null($json2_data->cfg->sc->dd)){
         $elogic->newInfo('Planning_startTim2_' . $i, $json2_data->cfg->sc->dd[$i][0], 'string', 1, '');
         $elogic->newInfo('Planning_duratio2_' . $i, $json2_data->cfg->sc->dd[$i][1], 'string', 1, '');
         $elogic->newInfo('Planning_cutEdg2_' . $i, $json2_data->cfg->sc->dd[$i][2], 'string', 1, '');
+        $completePlanning .= $json2_data->cfg->sc->dd[$i][0] . ',' . $json2_data->cfg->sc->dd[$i][1] . ',' . $json2_data->cfg->sc->dd[$i][2];        
 // gestion des heures sauvegardées        
         // 2eme planif sauvegardée si la première contient une valeur (planif maitresse)
         if($json2_data->cfg->sc->d[$i][0] != "00:00" && $json2_data->cfg->sc->d[$i][1] != 0 )
@@ -662,10 +663,10 @@ class worxLandroidS extends eqLogic
       		$cmdlogic->save();
            
           }
-        }        
-        
-        
+        }   
       }
+      $completePlanning .=  '|';
+      $elogic->newInfo('completePlanning', $completePlanning, 'string', 1, '');      
       
     }
     /*
