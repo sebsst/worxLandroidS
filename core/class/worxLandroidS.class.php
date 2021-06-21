@@ -652,13 +652,13 @@ class worxLandroidS extends eqLogic
         {
           $cmdlogic = $elogic->getCmd(null, 'Planning_startTim2_' . $i);
           if(is_object($cmdlogic)){
-            $cmdlogic->setConfiguration('savedValue', $value);
+            $cmdlogic->setConfiguration('savedValue', $json2_data->cfg->sc->dd[$i][0]);
       		$cmdlogic->save();
             $cmdlogic = $elogic->getCmd(null, 'Planning_duratio2_' . $i);
-            $cmdlogic->setConfiguration('savedValue', $value);
+            $cmdlogic->setConfiguration('savedValue', $json2_data->cfg->sc->dd[$i][1]);
       		$cmdlogic->save();
             $cmdlogic = $elogic->getCmd(null, 'Planning_cutEdg2_' . $i);
-            $cmdlogic->setConfiguration('savedValue', $value);
+            $cmdlogic->setConfiguration('savedValue', $json2_data->cfg->sc->dd[$i][2]);
       		$cmdlogic->save();
            
           }
