@@ -643,9 +643,28 @@ class worxLandroidS extends eqLogic
       $completePlanning .= $json2_data->cfg->sc->d[$i][0] . ',' . $json2_data->cfg->sc->d[$i][1] . ',' . $json2_data->cfg->sc->d[$i][2] . '|';
       $elogic->newInfo('completePlanning', $completePlanning, 'string', 1, '');
       if(!is_null($json2_data->cfg->sc->dd)){
-        $elogic->newInfo('Planning_startTime2_' . $i, $json2_data->cfg->sc->dd[$i][0], 'string', 1, '');
-        $elogic->newInfo('Planning_duration2_' . $i, $json2_data->cfg->sc->dd[$i][1], 'string', 1, '');
-        $elogic->newInfo('Planning_cutEdge2_' . $i, $json2_data->cfg->sc->dd[$i][2], 'string', 1, '');
+        $elogic->newInfo('Planning_startTim2_' . $i, $json2_data->cfg->sc->dd[$i][0], 'string', 1, '');
+        $elogic->newInfo('Planning_duratio2_' . $i, $json2_data->cfg->sc->dd[$i][1], 'string', 1, '');
+        $elogic->newInfo('Planning_cutEdg2_' . $i, $json2_data->cfg->sc->dd[$i][2], 'string', 1, '');
+// gestion des heures sauvegardées        
+        // 2eme planif sauvegardée si la première contient une valeur (planif maitresse)
+        if($json2_data->cfg->sc->d[$i][0] != "00:00" && $json2_data->cfg->sc->d[$i][1] != 0 )
+        {
+          $cmdlogic = $elogic->getCmd(null, 'Planning_startTim2_' . $i);
+          if(is_object($cmdlogic)){
+            $cmdlogic->setConfiguration('savedValue', $value);
+      		$cmdlogic->save();
+            $cmdlogic = $elogic->getCmd(null, 'Planning_duratio2_' . $i);
+            $cmdlogic->setConfiguration('savedValue', $value);
+      		$cmdlogic->save();
+            $cmdlogic = $elogic->getCmd(null, 'Planning_cutEdg2_' . $i);
+            $cmdlogic->setConfiguration('savedValue', $value);
+      		$cmdlogic->save();
+           
+          }
+        }        
+        
+        
       }
       
     }
@@ -914,11 +933,11 @@ class worxLandroidS extends eqLogic
     $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning_cutEdge_' . $i);
     $day[2]   = intval($cmdlogic->getConfiguration('topic', 0));
     
-    $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning_startTime2_' . $i);
+    $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning_startTim2_' . $i);
     if(is_object($cmdlogic)) $day[3]   = $cmdlogic->getConfiguration('savedValue', '00:00');
-    $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning_duration2_' . $i);
+    $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning_duratio2_' . $i);
     if(is_object($cmdlogic)) $day[4]   = intval($cmdlogic->getConfiguration('savedValue', 0));
-    $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning_cutEdge2_' . $i);
+    $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning_cutEdg2_' . $i);
     if(is_object($cmdlogic)) $day[5]   = intval($cmdlogic->getConfiguration('topic', 0));
     return $day;
   }
