@@ -259,9 +259,9 @@ $eqLogics = eqLogic::byType('worxLandroidS');
                  // ajout double plannif
                   if(isset($detail[3])){
                   $checked = $detail[5]==1?'checked':'';
-                  echo '<td><input id="startTime2'.$count.'" class="form-control" type="time" value="'.$detail[3].'"></td>';
-                  echo '<td><input id="duration2'.$count.'" class="form-control" type="number" value="'.$detail[4].'"></td>';
-                  echo '<td><input id="edge2'.$count.'" class="form-control" type="checkbox" '.$checked.'></td>';
+                  echo '<td><input id="startTim2'.$count.'" class="form-control" type="time" value="'.$detail[3].'"></td>';
+                  echo '<td><input id="duratio2'.$count.'" class="form-control" type="number" value="'.$detail[4].'"></td>';
+                  echo '<td><input id="edg2'.$count.'" class="form-control" type="checkbox" '.$checked.'></td>';
 				                  
                   }
                   //echo '<td>'.$detail[1].'</td><td>'.$detail[2].'</td>';
