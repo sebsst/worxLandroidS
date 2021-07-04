@@ -661,7 +661,10 @@ class worxLandroidS extends eqLogic
             $cmdlogic = $elogic->getCmd(null, 'Planning_cutEdg2_' . $i);
             $cmdlogic->setConfiguration('savedValue', $json2_data->cfg->sc->dd[$i][2]);
       		$cmdlogic->save();
-           
+            $cmdlogic = $elogic->getCmd(null, 'Planning_cutEdge_' . $i);
+            $cmdlogic->setConfiguration('savedValue', $json2_data->cfg->sc->d[$i][2]);
+      		$cmdlogic->save();
+            
           }
         }   
       } else $completePlanning .=  '|';
