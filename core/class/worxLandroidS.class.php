@@ -488,9 +488,9 @@ class worxLandroidS extends eqLogic
   {
     log::add('worxLandroidS', 'debug', 'Déconnexion de Mosquitto avec code ' . $r);
 
-    if ($r == '14') {
-      message::add('worxLandroidS', "Vous devez mettre à jour Mosquitto (version minimum 1.4 requise)");
-    }
+//    if ($r == '14') {
+//      message::add('worxLandroidS', "Vous devez mettre à jour Mosquitto (version minimum 1.4 requise)");
+ //   }
 
     config::save('status', '0', 'worxLandroidS');
   }
