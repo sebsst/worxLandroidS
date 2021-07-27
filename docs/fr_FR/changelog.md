@@ -4,6 +4,7 @@ En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que l
 
 # 27/07/2021
 - distance en km et durée en heures
+- compatibilités modèles double planification. Modification des horaires non disponible sur le widget - uniquement dans la configuration de l'équipement.
 
 # 16/06/2021
 - correction userMessage utilisable depuis scénario avec signe \| autour du message json
