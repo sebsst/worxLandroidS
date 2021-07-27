@@ -1265,7 +1265,7 @@ class worxLandroidS extends eqLogic
     $replace['#errorID#']          = is_object($errorCode) ? $errorCode->getId() : '';
     $errorDescription              = $this->getCmd(null, 'errorDescription');
     $replace['#errorDescription#'] = is_object($errorDescription) ? $errorDescription->execCmd() : '';
-    //if($this->getConfiguration('doubleSchedule')==1)  $replace['#' . $cmd->getLogicalId() . '_visible#'] = 'display:none';
+
     $cmd_html = '';
     foreach ($this->getCmd('info') as $cmd) {
       $replace['#' . $cmd->getLogicalId() . '_history#'] = '';
@@ -1303,6 +1303,7 @@ class worxLandroidS extends eqLogic
         $replace['#' . $cmd->getLogicalId() . '_visible#'] = 'display:none';
       }
 
+      
       $replace['#' . $cmd->getLogicalId() . '_id#'] = $cmd->getId();
       $replace['#cmdaction#'] = '';
       if ($cmd->getIsVisible() and ($cmd->getLogicalId() == 'set_schedule')) {
@@ -1326,7 +1327,9 @@ class worxLandroidS extends eqLogic
       $replace['#widget#'] = $cmd_html; // FIXME $cmd_html assigned to #widget# & #cmd# ?
     }
     $replace['#cmd#'] = $cmd_html; // FIXME $cmd_html assigned to #widget# & #cmd# ?
-
+    if($this->getConfiguration('doubleSchedule')==1)  $replace['#set_schedule_visible#'] = 'display:none';
+    
+    
     if ($automaticWidget == true) {
       return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'worxMain', 'worxLandroidS')));
     } else {
