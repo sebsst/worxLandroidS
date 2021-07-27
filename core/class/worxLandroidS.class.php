@@ -1327,7 +1327,7 @@ class worxLandroidS extends eqLogic
       $replace['#widget#'] = $cmd_html; // FIXME $cmd_html assigned to #widget# & #cmd# ?
     }
     $replace['#cmd#'] = $cmd_html; // FIXME $cmd_html assigned to #widget# & #cmd# ?
-    if($this->getConfiguration('doubleSchedule')==1)  $replace['#set_schedule_visible#'] = 'display:none';
+    if($this->getConfiguration('doubleSchedule')==1)  $replace['#doubleSchedule#'] = 'display:none';
     
     
     if ($automaticWidget == true) {
