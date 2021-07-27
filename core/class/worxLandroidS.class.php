@@ -643,6 +643,7 @@ class worxLandroidS extends eqLogic
       $completePlanning .= $json2_data->cfg->sc->d[$i][0] . ',' . $json2_data->cfg->sc->d[$i][1] . ',' . $json2_data->cfg->sc->d[$i][2];
 
       if(!is_null($json2_data->cfg->sc->dd)){
+        $elogic->setConfiguration('doubleSchedule', 1);
         $elogic->newInfo('Planning_startTim2_' . $i, $json2_data->cfg->sc->dd[$i][0], 'string', 1, '');
         $elogic->newInfo('Planning_duratio2_' . $i, $json2_data->cfg->sc->dd[$i][1], 'string', 1, '');
         $elogic->newInfo('Planning_cutEdg2_' . $i, $json2_data->cfg->sc->dd[$i][2], 'string', 1, '');
@@ -1264,7 +1265,7 @@ class worxLandroidS extends eqLogic
     $replace['#errorID#']          = is_object($errorCode) ? $errorCode->getId() : '';
     $errorDescription              = $this->getCmd(null, 'errorDescription');
     $replace['#errorDescription#'] = is_object($errorDescription) ? $errorDescription->execCmd() : '';
-
+    //if($this->getConfiguration('doubleSchedule')==1)  $replace['#' . $cmd->getLogicalId() . '_visible#'] = 'display:none';
     $cmd_html = '';
     foreach ($this->getCmd('info') as $cmd) {
       $replace['#' . $cmd->getLogicalId() . '_history#'] = '';
