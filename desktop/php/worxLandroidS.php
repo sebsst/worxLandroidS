@@ -222,6 +222,9 @@ $eqLogics = eqLogic::byType('worxLandroidS');
             <th style="width: 20px;">{{heure début}}</th>
             <th style="width: 20px;">{{durée}}</th>
             <th style="width: 20px;">{{bordure}}</th>
+            <th style="width: 20px;">{{heure début 2}}</th>
+            <th style="width: 20px;">{{durée 2}}</th>
+            <th style="width: 20px;">{{bordure 2}}</th>                
             <th style="width: 150px;">{{}}</th>
           </tr>
         </thead>
@@ -253,7 +256,14 @@ $eqLogics = eqLogic::byType('worxLandroidS');
                   echo '<td><input id="startTime'.$count.'" class="form-control" type="time" value="'.$detail[0].'"></td>';
                   echo '<td><input id="duration'.$count.'" class="form-control" type="number" value="'.$detail[1].'"></td>';
                   echo '<td><input id="edge'.$count.'" class="form-control" type="checkbox" '.$checked.'></td>';
-
+                 // ajout double plannif
+                  if(isset($detail[3])){
+                  $checked = $detail[5]==1?'checked':'';
+                  echo '<td><input id="startTim2'.$count.'" class="form-control" type="time" value="'.$detail[3].'"></td>';
+                  echo '<td><input id="duratio2'.$count.'" class="form-control" type="number" value="'.$detail[4].'"></td>';
+                  echo '<td><input id="edg2'.$count.'" class="form-control" type="checkbox" '.$checked.'></td>';
+				                  
+                  }
                   //echo '<td>'.$detail[1].'</td><td>'.$detail[2].'</td>';
                   //echo '<tr><td><input id="area'.$count.'" class="form-control" type="number" name="distance" min="0" max="999" STYLE="margin:1px;" value="'.$area.'" required></td>';
 

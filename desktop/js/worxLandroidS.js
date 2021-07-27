@@ -179,6 +179,24 @@ function updatePlanning(cmdId, refreshId) {
         if (i < 6) result += ',';
 
     }
+    // gestion double planning
+  	if(!!document.getElementById("startTim21")){
+      
+        result += '],"dd":[';
+        for (let i = 0; i < 7; i++) {  
+      
+          result += '["' + document.getElementById('startTim' + i).value;
+          result += '",' + document.getElementById('duratio2' + i).value;
+          result += ',';
+          result += document.getElementById('edg2' + i).checked ? 1 : 0;
+
+          result += ']';
+          if (i < 6) result += ',';
+        }
+      
+    }
+    
+    
     result += ']}}';
     //alert(result);
 

@@ -488,9 +488,9 @@ class worxLandroidS extends eqLogic
   {
     log::add('worxLandroidS', 'debug', 'Déconnexion de Mosquitto avec code ' . $r);
 
-    if ($r == '14') {
-      message::add('worxLandroidS', "Vous devez mettre à jour Mosquitto (version minimum 1.4 requise)");
-    }
+//    if ($r == '14') {
+//      message::add('worxLandroidS', "Vous devez mettre à jour Mosquitto (version minimum 1.4 requise)");
+ //   }
 
     config::save('status', '0', 'worxLandroidS');
   }
@@ -602,8 +602,8 @@ class worxLandroidS extends eqLogic
     $elogic->newInfo('roll', $json2_data->dat->dmp[1], 'numeric', 1, '');
     $elogic->newInfo('direction', $json2_data->dat->dmp[2], 'numeric', 1, '');
 
-    $elogic->newInfo('totalTime', $json2_data->dat->st->wt, 'numeric', 1, '');
-    $elogic->newInfo('totalDistance', $json2_data->dat->st->d, 'numeric', 1, '');
+    $elogic->newInfo('totalTime', round($json2_data->dat->st->wt/60,0), 'numeric', 1, '');
+    $elogic->newInfo('totalDistance',  round($json2_data->dat->st->d/1000,1), 'numeric', 1, '');
     $elogic->newInfo('totalBladeTime', $json2_data->dat->st->b, 'numeric', 0, '');
     $elogic->newInfo('batteryChargeCycle', $json2_data->dat->bt->nr, 'numeric', 1, '');
     $elogic->newInfo('batteryCharging', $json2_data->dat->bt->c, 'binary', 1, '');
@@ -640,10 +640,45 @@ class worxLandroidS extends eqLogic
       $elogic->newInfo('Planning_startTime_' . $i, $json2_data->cfg->sc->d[$i][0], 'string', 1, '');
       $elogic->newInfo('Planning_duration_' . $i, $json2_data->cfg->sc->d[$i][1], 'string', 1, '');
       $elogic->newInfo('Planning_cutEdge_' . $i, $json2_data->cfg->sc->d[$i][2], 'string', 1, '');
-      $completePlanning .= $json2_data->cfg->sc->d[$i][0] . ',' . $json2_data->cfg->sc->d[$i][1] . ',' . $json2_data->cfg->sc->d[$i][2] . '|';
-      $elogic->newInfo('completePlanning', $completePlanning, 'string', 1, '');
-    }
+      $completePlanning .= $json2_data->cfg->sc->d[$i][0] . ',' . $json2_data->cfg->sc->d[$i][1] . ',' . $json2_data->cfg->sc->d[$i][2];
 
+      if(!is_null($json2_data->cfg->sc->dd)){
+        $elogic->setConfiguration('doubleSchedule', 1);
+        $elogic->newInfo('Planning_startTim2_' . $i, $json2_data->cfg->sc->dd[$i][0], 'string', 1, '');
+        $elogic->newInfo('Planning_duratio2_' . $i, $json2_data->cfg->sc->dd[$i][1], 'string', 1, '');
+        $elogic->newInfo('Planning_cutEdg2_' . $i, $json2_data->cfg->sc->dd[$i][2], 'string', 1, '');
+        $completePlanning .= ','. $json2_data->cfg->sc->dd[$i][0] . ',' . $json2_data->cfg->sc->dd[$i][1] . ',' . $json2_data->cfg->sc->dd[$i][2] . '|';        
+// gestion des heures sauvegardées        
+        // 2eme planif sauvegardée si la première contient une valeur (planif maitresse)
+        if($json2_data->cfg->sc->d[$i][0] != "00:00" && $json2_data->cfg->sc->d[$i][1] != 0 )
+        {
+          $cmdlogic = $elogic->getCmd(null, 'Planning_startTim2_' . $i);
+          if(is_object($cmdlogic)){
+            $cmdlogic->setConfiguration('savedValue', $json2_data->cfg->sc->dd[$i][0]);
+      		$cmdlogic->save();
+            $cmdlogic = $elogic->getCmd(null, 'Planning_duratio2_' . $i);
+            $cmdlogic->setConfiguration('savedValue', $json2_data->cfg->sc->dd[$i][1]);
+      		$cmdlogic->save();
+            $cmdlogic = $elogic->getCmd(null, 'Planning_cutEdg2_' . $i);
+            $cmdlogic->setConfiguration('savedValue', $json2_data->cfg->sc->dd[$i][2]);
+      		$cmdlogic->save();
+            $cmdlogic = $elogic->getCmd(null, 'Planning_cutEdge_' . $i);
+            $cmdlogic->setConfiguration('savedValue', $json2_data->cfg->sc->d[$i][2]);
+      		$cmdlogic->save();
+            
+          }
+        }   
+      } else $completePlanning .=  '|';
+      $elogic->newInfo('completePlanning', $completePlanning, 'string', 1, '');      
+      
+    }
+    /*
+    if(!is_null($json2_data->cfg->sc->dd)){
+     // double schedule 
+      $fullSchedule["sc"] = array( "d"=>$json2_data->cfg->sc->d, "dd"=>json_encode($json2_data->cfg->sc->dd);
+    }else  $fullSchedule["sc"] = array( "d"=>$json2_data->cfg->sc->d);
+    $elogic->setConfiguration('fullSchedule', json_decode($fullSchedule));*/
+                                  
     // mise a jour des infos virtuelles séparées par des virgules
     $cmd = worxLandroidSCmd::byEqLogicIdCmdName($elogic->getId(), 'virtualInfo');
     $name = $cmd->getConfiguration('request', '');
@@ -897,12 +932,17 @@ class worxLandroidS extends eqLogic
   {
     $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning_startTime_' . $i);
     $day[0]   = $cmdlogic->getConfiguration('savedValue', '10:00');
-
     $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning_duration_' . $i);
     $day[1]   = intval($cmdlogic->getConfiguration('savedValue', 420));
     $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning_cutEdge_' . $i);
     $day[2]   = intval($cmdlogic->getConfiguration('topic', 0));
-
+    
+    $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning_startTim2_' . $i);
+    if(is_object($cmdlogic)) $day[3]   = $cmdlogic->getConfiguration('savedValue', '00:00');
+    $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning_duratio2_' . $i);
+    if(is_object($cmdlogic)) $day[4]   = intval($cmdlogic->getConfiguration('savedValue', 0));
+    $cmdlogic = worxLandroidSCmd::byEqLogicIdCmdName($_id, 'Planning_cutEdg2_' . $i);
+    if(is_object($cmdlogic)) $day[5]   = intval($cmdlogic->getConfiguration('topic', 0));
     return $day;
   }
   public static function getSchedule($_id)
@@ -958,26 +998,26 @@ class worxLandroidS extends eqLogic
 
     if (substr_compare($cmd->getName(), 'off', 0, 3) == 0) {
       log::add('worxLandroidS', 'debug', 'Envoi du message OFF: ' . $_message);
-      if ($cmd->getName() == 'off_today') {
-        $_message = 'off_' . date('w');
-      }
-
-      $sched    = array(
-        '00:00',
-        0,
-        0
-      );
-      $_message = self::setDaySchedule($eqlogicid, substr($_message, 4, 1), $sched); //  $this->saveConfiguration('savedValue',
+      for ($i = 0; $i <= 7; $i++) $dd[$i] = $d[$i] = array( );
+      if ($cmd->getName() == 'off_today')  $_message = 'off_' . date('w');
+      
+      $dd[substr($_message, 4, 1)]  =  $d[substr($_message, 4, 1)] = array("00:00",0,0); 
+      $_message = json_encode( array("sc"=>array("d"=>$d,"dd"=>$dd))); 
+      //      $sched    = array( '00:00',  0,  0  );
+//      $_message = self::setDaySchedule($eqlogicid, substr($_message, 4, 1), $sched); //  $this->saveConfiguration('savedValue',
     }
     if (substr_compare($cmd->getName(), 'on', 0, 2) == 0) {
       log::add('worxLandroidS', 'debug', 'Envoi du message On: ' . $_message);
       if ($cmd->getName() == 'on_today') {
         $_message = 'on_' . date('w');
       }
-
       $sched = self::getSavedDaySchedule($eqlogicid, substr($_message, 3, 1));
-
-      $_message = self::setDaySchedule($eqlogicid, substr($_message, 3, 1), $sched); //  $this->saveConfiguration('savedValue',
+      for ($i = 0; $i <= 7; $i++) $dd[$i] = $d[$i] = array( );
+      $d[substr($_message, 3, 1)]  = array($sched[0],intval($sched[1]),$sched[2]); 
+      if(isset($sched[3])) $dd[substr($_message, 3, 1)] = array($sched[3],$sched[4],$sched[5]); 
+      $_message = json_encode( array("sc"=>array("d"=>$d,"dd"=>$dd))); 
+      
+     // $_message = self::setDaySchedule($eqlogicid, substr($_message, 3, 1), $sched); //  $this->saveConfiguration('savedValue',
     }
 
     if ($cmd->getName() == 'refreshValue') {
@@ -1263,6 +1303,7 @@ class worxLandroidS extends eqLogic
         $replace['#' . $cmd->getLogicalId() . '_visible#'] = 'display:none';
       }
 
+      
       $replace['#' . $cmd->getLogicalId() . '_id#'] = $cmd->getId();
       $replace['#cmdaction#'] = '';
       if ($cmd->getIsVisible() and ($cmd->getLogicalId() == 'set_schedule')) {
@@ -1286,7 +1327,9 @@ class worxLandroidS extends eqLogic
       $replace['#widget#'] = $cmd_html; // FIXME $cmd_html assigned to #widget# & #cmd# ?
     }
     $replace['#cmd#'] = $cmd_html; // FIXME $cmd_html assigned to #widget# & #cmd# ?
-
+    if($this->getConfiguration('doubleSchedule')==1)  $replace['#doubleSchedule#'] = 'display:none';
+    
+    
     if ($automaticWidget == true) {
       return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'worxMain', 'worxLandroidS')));
     } else {
