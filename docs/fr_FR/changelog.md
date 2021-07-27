@@ -2,6 +2,9 @@
 
 En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que la doc, les traductions et des corrections mineures
 
+# 27/07/2021
+- distance en km et durée en heures
+
 # 16/06/2021
 - correction userMessage utilisable depuis scénario avec signe \| autour du message json
 - mise à jour de la doc pour la fonction userMessage
