@@ -1337,7 +1337,6 @@ class worxLandroidS extends eqLogic
     }
   }
 }
-
 class worxLandroidSCmd extends cmd
 {
 
