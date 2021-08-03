@@ -3,7 +3,7 @@
 En cas d'absence de note dans ce chapitre, les mises à jour ne concernent que la doc, les traductions et des corrections mineures
 
 # 27/07/2021
-- distance en km et durée en heures
+- distance en km et durée en heures (uniquement à l'affichage chg 03/08/2021)
 - compatibilités modèles double planification. Modification des horaires non disponible sur le widget - uniquement dans la configuration de l'équipement.
 
 # 16/06/2021
