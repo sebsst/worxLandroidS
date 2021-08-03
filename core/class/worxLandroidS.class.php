@@ -602,8 +602,8 @@ class worxLandroidS extends eqLogic
     $elogic->newInfo('roll', $json2_data->dat->dmp[1], 'numeric', 1, '');
     $elogic->newInfo('direction', $json2_data->dat->dmp[2], 'numeric', 1, '');
 
-    $elogic->newInfo('totalTime', round($json2_data->dat->st->wt/60,0), 'numeric', 1, '');
-    $elogic->newInfo('totalDistance',  round($json2_data->dat->st->d/1000,1), 'numeric', 1, '');
+    $elogic->newInfo('totalTime', round($json2_data->dat->st->wt,0), 'numeric', 1, '');
+    $elogic->newInfo('totalDistance',  round($json2_data->dat->st->d,1), 'numeric', 1, '');
     $elogic->newInfo('totalBladeTime', $json2_data->dat->st->b, 'numeric', 0, '');
     $elogic->newInfo('batteryChargeCycle', $json2_data->dat->bt->nr, 'numeric', 1, '');
     $elogic->newInfo('batteryCharging', $json2_data->dat->bt->c, 'binary', 1, '');
@@ -1216,6 +1216,9 @@ class worxLandroidS extends eqLogic
     // calcul durée depuis dernier changement de lame
     $cmdLast = $this->getCmd(null, 'lastBladesChangeTime');
     $cmdTotal = $this->getCmd(null, 'totalBladeTime');
+    $cmdTotalDistance = $this->getCmd(null, 'totalDistance');    
+    $replace['#totalDistance2#']  =  round($cmdTotalDistance->execCmd() / 1000,0);
+    $replace['#totalTime2#']  =  round($cmdTotal->execCmd() / 60,0);    
     $replace['#bladesDuration#'] = round(((is_object($cmdTotal) ? $cmdTotal->execCmd() : 0)
       - (is_object($cmdLast) ? $cmdLast->execCmd() : 0)) / 60);
 
